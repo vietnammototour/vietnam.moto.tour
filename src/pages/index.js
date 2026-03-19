@@ -596,52 +596,52 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="why-choose">
-          <div className="why-choose__container">
-            <div className="why-choose__left">
-              <div className="why-choose__left-bg"
-                   style={{ backgroundImage: "url(https://static.vinwonders.com/production/vietnam-nature-2.jpeg)" }}></div>
-              <div className="why-choose__toggle">
-                <p>Trips <br/> & tours</p>
-              </div>
-            </div>
-            <div className="why-choose__right">
-              <div className="why-choose__right-map"
-                   style={{ backgroundImage: `url(${getUrl('assets/images/shapes/why-choose-right-map.png')})` }}></div>
-              <div className="why-choose__right-content">
-                <div className="section-title text-left">
-                  <span className="section-title__tagline">Our benefit lists</span>
-                  <h2 className="section-title__title">Why Choose Us</h2>
-                </div>
-                <p className="why-choose__right-text">
-                  Our team is highly skilled in crafting and leading motorcycle tours. With over 10 years of varied riding experience, we know these roads inside and out
-                </p>
-                <ul className="list-unstyled why-choose__list">
-                  <li>
-                    <div className="icon">
-                      <span className="icon-travel-map"></span>
-                    </div>
-                    <div className="text">
-                      <h4>Professional and Certified</h4>
-                      <p>
-                        We are specialized Motorcycle Tour Company, dedicated to delivering a unique adventure motorcycle experiences
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <span className="icon-phone-call"></span>
-                    </div>
-                    <div className="text">
-                      <h4>Get Instant Tour Bookings</h4>
-                      <p>Our journey starts and ends in anywhere Vietnam.</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/*<section className="why-choose">*/}
+        {/*  <div className="why-choose__container">*/}
+        {/*    <div className="why-choose__left">*/}
+        {/*      <div className="why-choose__left-bg"*/}
+        {/*           style={{ backgroundImage: "url(https://static.vinwonders.com/production/vietnam-nature-2.jpeg)" }}></div>*/}
+        {/*      <div className="why-choose__toggle">*/}
+        {/*        <p>Trips <br/> & tours</p>*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*    <div className="why-choose__right">*/}
+        {/*      <div className="why-choose__right-map"*/}
+        {/*           style={{ backgroundImage: `url(${getUrl('assets/images/shapes/why-choose-right-map.png')})` }}></div>*/}
+        {/*      <div className="why-choose__right-content">*/}
+        {/*        <div className="section-title text-left">*/}
+        {/*          <span className="section-title__tagline">Our benefit lists</span>*/}
+        {/*          <h2 className="section-title__title">Why Choose Us</h2>*/}
+        {/*        </div>*/}
+        {/*        <p className="why-choose__right-text">*/}
+        {/*          Our team is highly skilled in crafting and leading motorcycle tours. With over 10 years of varied riding experience, we know these roads inside and out*/}
+        {/*        </p>*/}
+        {/*        <ul className="list-unstyled why-choose__list">*/}
+        {/*          <li>*/}
+        {/*            <div className="icon">*/}
+        {/*              <span className="icon-travel-map"></span>*/}
+        {/*            </div>*/}
+        {/*            <div className="text">*/}
+        {/*              <h4>Professional and Certified</h4>*/}
+        {/*              <p>*/}
+        {/*                We are specialized Motorcycle Tour Company, dedicated to delivering a unique adventure motorcycle experiences*/}
+        {/*              </p>*/}
+        {/*            </div>*/}
+        {/*          </li>*/}
+        {/*          <li>*/}
+        {/*            <div className="icon">*/}
+        {/*              <span className="icon-phone-call"></span>*/}
+        {/*            </div>*/}
+        {/*            <div className="text">*/}
+        {/*              <h4>Get Instant Tour Bookings</h4>*/}
+        {/*              <p>Our journey starts and ends in anywhere Vietnam.</p>*/}
+        {/*            </div>*/}
+        {/*          </li>*/}
+        {/*        </ul>*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*</section>*/}
 
         {/*<section className="news-one">*/}
         {/*  <div className="container">*/}
