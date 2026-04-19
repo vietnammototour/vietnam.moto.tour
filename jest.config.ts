@@ -13,6 +13,8 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.css$': '<rootDir>/src/__mocks__/styleMock.ts',
+    '^swiper/css$': '<rootDir>/src/__mocks__/styleMock.ts',
+    '^swiper/css/(.*)$': '<rootDir>/src/__mocks__/styleMock.ts',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testMatch: [
