@@ -1,528 +1,144 @@
-import Script from "next/script";
-import { HeaderMobile } from "@/components/header-mobile";
-import { getUrl } from "@/utils";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { PageHeader } from '@/components/page-header';
+import { VideoModal } from '@/components/video-modal';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 export default function AboutUs() {
+  const [videoOpen, setVideoOpen] = useState(false);
+
   return (
-    <div>
-      <div className="page-wrapper">
+    <>
+      <PageHeader
+        title="About"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Pages' },
+          { label: 'About' },
+        ]}
+        backgroundImage="https://vietnamamazingtours.com/uploads/Northern-Vietnam-Tours.jpeg"
+      />
 
-        <section className="page-header">
-          <div className="page-header__top">
-            <div className="page-header-bg" style={{ backgroundImage: 'url(https://vietnamamazingtours.com/uploads/Northern-Vietnam-Tours.jpeg)' }}>
-            </div>
-            <div className="page-header-bg-overly"></div>
-            <div className="container">
-              <div className="page-header__top-inner">
-                <h2>About</h2>
+      <section className="py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="rounded-lg overflow-hidden">
+                <img
+                  src="assets/images/resources/about-page-img.jpg"
+                  alt="About us"
+                  className="w-full object-cover"
+                />
               </div>
-            </div>
-          </div>
-          <div className="page-header__bottom">
-            <div className="container">
-              <div className="page-header__bottom-inner">
-                <ul className="thm-breadcrumb list-unstyled">
-                  <li><a href="index.html">Home</a></li>
-                  <li><span>.</span></li>
-                  <li>Pages</li>
-                  <li><span>.</span></li>
-                  <li className="active">About</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="about-page">
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-6">
-                <div className="about-page__left">
-                  <div className="about-page__img">
-                    <img src="assets/images/resources/about-page-img.jpg" alt=""/>
+            </motion.div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">Learn about us</span>
+              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">Dare to Explore with Us</h2>
+              <p className="text-primary font-semibold mb-4">A Simply Perfect Place to Get Lost</p>
+              <p className="text-neutral-500 mb-8">
+                We are trusted by our clients and have a reputation for the best services in the field.
+                Our team is highly skilled in crafting and leading motorcycle tours. With over 10 years
+                of varied riding experience, we know these roads inside and out.
+              </p>
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h4 className="text-sm font-bold text-neutral-900">Best Services</h4>
+                    <span className="text-sm font-bold text-primary">77%</span>
+                  </div>
+                  <div className="w-full bg-neutral-200 rounded-full h-2">
+                    <div className="bg-primary h-2 rounded-full" style={{ width: '77%' }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <h4 className="text-sm font-bold text-neutral-900">Tour Agents</h4>
+                    <span className="text-sm font-bold text-primary">38%</span>
+                  </div>
+                  <div className="w-full bg-neutral-200 rounded-full h-2">
+                    <div className="bg-primary h-2 rounded-full" style={{ width: '38%' }} />
                   </div>
                 </div>
               </div>
-              <div className="col-xl-6">
-                <div className="about-page__right">
-                  <div className="section-title text-left">
-                    <span className="section-title__tagline">Learn about us</span>
-                    <h2 className="section-title__title">Dare to Explore with Tevily Agency</h2>
-                  </div>
-                  <p className="about-page__text-1">A Simply Perfect Place to Get Lost</p>
-                  <p className="about-page__text-2">We are trusted by our clients and have a reputation for the
-                    best services in the field. Lorem ipsum is simply free text dolor sit amett consectetur
-                    adipiscing elit. It is a long established fact that a reader will be distracted by the
-                    readable content of a page.</p>
-                  <div className="about-page__progress">
-                    <div className="about-page__progress-single">
-                      <h4 className="about-page__progress-title">Best Services</h4>
-                      <div className="bar">
-                        <div className="bar-inner count-bar" data-percent="77%">
-                          <div className="count-text">77%</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="about-page__progress-single">
-                      <h4 className="about-page__progress-title">Tour Agents</h4>
-                      <div className="bar marb-0">
-                        <div className="bar-inner count-bar" data-percent="38%">
-                          <div className="count-text">38%</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="book-now">
-          <div className="book-now-shape" style={{ backgroundImage: 'url(assets/images/shapes/book-now-shape.png)' }}></div>
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="book-now__inner">
-                  <div className="book-now__left">
-                    <p>Plan your trip with us</p>
-                    <h2>Ready for an unforgetable tour?</h2>
-                  </div>
-                  <div className="book-now__right">
-                    <a href="#" className="thm-btn book-now__btn">Book tour now</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="testimonial-one about-page-testimonial">
-          <div className="about-page-testimonial-map"
-               style={{ backgroundImage: 'url(assets/images/shapes/about-page-testimonial-map.png)' }}></div>
-          <div className="container">
-            <div className="section-title text-center">
-              <span className="section-title__tagline">Testimonials & reviews</span>
-              <h2 className="section-title__title">What They’re Saying</h2>
-            </div>
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="testimonial-one__carousel owl-theme owl-carousel">
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-1.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Shirley Smith</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-2.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Kevin Martin</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-3.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Jessica Brown</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-1.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Shirley Smith</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-2.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Kevin Martin</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-3.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Jessica Brown</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-1.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Shirley Smith</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-2.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Kevin Martin</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="testimonial-one__single">
-                    <div className="testimonial-one__img">
-                      <img src="assets/images/testimonial/testimonial-one-img-3.png" alt=""/>
-                    </div>
-                    <div className="testimonail-one__content">
-                      <div className="testimonial-one__top-revivew-box">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </div>
-                      <p className="testimonial-one__text">This is due to their best service, pricing and
-                        customer support. It’s throughly refresing to such a personal touch. Duis aute
-                        irure lupsum reprehenderit.</p>
-                      <div className="testimonial-one__client-info">
-                        <h3 className="testimonial-one__client-name">Jessica Brown</h3>
-                        <p className="testimonial-one__client-title">Customer</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="video-two">
-          <div className="video-two-bg jarallax" data-jarallax data-speed="0.2" data-imgPosition="50% 0%"
-               style={{ backgroundImage: 'url(assets/images/backgrounds/video-one-two-bg.jpg)' }}></div>
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="video-two__inner">
-                  <div className="video-one__video-link">
-                    <a href="https://www.youtube.com/watch?v=Get7rqXYrbQ" className="video-popup">
-                      <div className="video-one__video-icon">
-                        <span className="icon-play-button"></span>
-                        <i className="ripple"></i>
-                      </div>
-                    </a>
-                  </div>
-                  <p className="video-one__tagline">Are you ready to travel?</p>
-                  <h2 className="video-one__title">Tevily is a World Leading <br/> Online Tour Booking Platform
-                  </h2>
-                </div>
-              </div>
-            </div>
+            </motion.div>
           </div>
         </div>
+      </section>
 
-        <div className="counter-one">
-          <div className="counter-one__container">
-            <ul className="list-unstyled counters-one__box">
-              <li className="counter-one__single wow fadeInUp" data-wow-delay="100ms">
-                <h3 className="odometer" data-count="870">00</h3>
-                <p className="counter-one__text">Total Donations</p>
-              </li>
-              <li className="counter-one__single wow fadeInUp" data-wow-delay="200ms">
-                <h3 className="odometer" data-count="480">00</h3>
-                <p className="counter-one__text">Campaigns Closed</p>
-              </li>
-              <li className="counter-one__single wow fadeInUp" data-wow-delay="300ms">
-                <h3 className="odometer" data-count="930">00</h3>
-                <p className="counter-one__text">Happy People</p>
-              </li>
-              <li className="counter-one__single wow fadeInUp" data-wow-delay="400ms">
-                <h3 className="odometer" data-count="63">00</h3>
-                <p className="counter-one__text">Our Volunteers</p>
-              </li>
-            </ul>
+      <section className="bg-primary py-12 lg:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-6">
+          <div className="text-white text-center lg:text-left">
+            <p className="text-sm opacity-80 mb-1">Plan your trip with us</p>
+            <h2 className="text-2xl lg:text-3xl font-bold">Ready for an unforgettable tour?</h2>
+          </div>
+          <a
+            href="/contact"
+            className="bg-white text-primary hover:bg-neutral-100 font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors flex-shrink-0"
+          >
+            Book tour now
+          </a>
+        </div>
+      </section>
+
+      <section className="relative py-24 lg:py-32">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          style={{ backgroundImage: 'url(assets/images/backgrounds/video-one-two-bg.jpg)' }}
+        />
+        <div className="absolute inset-0 bg-overlay" />
+        <div className="relative z-10 text-center text-white">
+          <button
+            onClick={() => setVideoOpen(true)}
+            className="mx-auto mb-6 w-20 h-20 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse"
+            aria-label="Play video"
+          >
+            <i className="fa fa-play text-xl ml-1" />
+          </button>
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
+            Are you ready to travel?
+          </p>
+          <h2 className="text-3xl lg:text-4xl font-bold max-w-2xl mx-auto leading-tight">
+            Vietnam Motorcycle Tour — A World Leading Adventure Platform
+          </h2>
+        </div>
+      </section>
+      <VideoModal
+        videoUrl="https://www.youtube.com/watch?v=Get7rqXYrbQ"
+        isOpen={videoOpen}
+        onClose={() => setVideoOpen(false)}
+      />
+
+      <section className="bg-secondary py-12 lg:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+            {[
+              { value: '870+', label: 'Total Tours' },
+              { value: '480+', label: 'Happy Riders' },
+              { value: '930+', label: 'Happy People' },
+              { value: '15+', label: 'Years Experience' },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <h3 className="text-3xl lg:text-4xl font-bold mb-1">{stat.value}</h3>
+                <p className="text-sm text-white/70">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
-
-        <section className="team-one">
-          <div className="team-one-map" style={{ backgroundImage: 'url(assets/images/shapes/team-one-map.png)' }}></div>
-          <div className="container">
-            <div className="section-title text-center">
-              <span className="section-title__tagline">Professional people</span>
-              <h2 className="section-title__title">Meet the Team</h2>
-            </div>
-            <div className="row">
-              <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInLeft" data-wow-delay="0ms"
-                   data-wow-duration="1000ms">
-                <div className="team-one__single">
-                  <div className="team-one__img">
-                    <img src="assets/images/team/team-1-1.jpg" alt=""/>
-                  </div>
-                  <div className="team-one__content">
-                    <h4 className="team-one__name">Jessica Brown</h4>
-                    <p className="team-one__title">consultant</p>
-                    <div className="team-one__social">
-                      <a href="#"><i className="fab fa-facebook"></i></a>
-                      <a href="#"><i className="fab fa-twitter"></i></a>
-                      <a href="#"><i className="fab fa-instagram"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInLeft" data-wow-delay="100ms"
-                   data-wow-duration="1000ms">
-                <div className="team-one__single">
-                  <div className="team-one__img">
-                    <img src="assets/images/team/team-1-2.jpg" alt=""/>
-                  </div>
-                  <div className="team-one__content">
-                    <h4 className="team-one__name">Mike Hardson</h4>
-                    <p className="team-one__title">consultant</p>
-                    <div className="team-one__social">
-                      <a href="#"><i className="fab fa-facebook"></i></a>
-                      <a href="#"><i className="fab fa-twitter"></i></a>
-                      <a href="#"><i className="fab fa-instagram"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInRight" data-wow-delay="0ms"
-                   data-wow-duration="1000ms">
-                <div className="team-one__single">
-                  <div className="team-one__img">
-                    <img src="assets/images/team/team-1-3.jpg" alt=""/>
-                  </div>
-                  <div className="team-one__content">
-                    <h4 className="team-one__name">Sarah Albert</h4>
-                    <p className="team-one__title">consultant</p>
-                    <div className="team-one__social">
-                      <a href="#"><i className="fab fa-facebook"></i></a>
-                      <a href="#"><i className="fab fa-twitter"></i></a>
-                      <a href="#"><i className="fab fa-instagram"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInRight" data-wow-delay="100ms"
-                   data-wow-duration="1000ms">
-                <div className="team-one__single">
-                  <div className="team-one__img">
-                    <img src="assets/images/team/team-1-4.jpg" alt=""/>
-                  </div>
-                  <div className="team-one__content">
-                    <h4 className="team-one__name">Kevin Smith</h4>
-                    <p className="team-one__title">consultant</p>
-                    <div className="team-one__social">
-                      <a href="#"><i className="fab fa-facebook"></i></a>
-                      <a href="#"><i className="fab fa-twitter"></i></a>
-                      <a href="#"><i className="fab fa-instagram"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="brand-two brand-three">
-          <div className="container">
-            <div className="thm-swiper__slider swiper-container" data-swiper-options='{"spaceBetween": 100, "slidesPerView": 5, "autoplay": { "delay": 5000 }, "breakpoints": {
-                    "0": {
-                        "spaceBetween": 30,
-                        "slidesPerView": 2
-                    },
-                    "375": {
-                        "spaceBetween": 30,
-                        "slidesPerView": 2
-                    },
-                    "575": {
-                        "spaceBetween": 30,
-                        "slidesPerView": 3
-                    },
-                    "767": {
-                        "spaceBetween": 50,
-                        "slidesPerView": 4
-                    },
-                    "991": {
-                        "spaceBetween": 50,
-                        "slidesPerView": 5
-                    },
-                    "1199": {
-                        "spaceBetween": 100,
-                        "slidesPerView": 5
-                    }
-                }}'>
-              <div className="swiper-wrapper">
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-1.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-2.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-3.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-4.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-5.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-1.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-2.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-3.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-4.png" alt=""/>
-                </div>
-                <div className="swiper-slide">
-                  <img src="assets/images/brand/brand-2-5.png" alt=""/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <HeaderMobile />
-
-      <Script src={getUrl("assets/vendors/jquery/jquery-3.6.0.min.js")} strategy="beforeInteractive" defer></Script>
-      <Script src={getUrl("assets/vendors/bootstrap/js/bootstrap.bundle.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jarallax/jarallax.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-appear/jquery.appear.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-validate/jquery.validate.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/nouislider/nouislider.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/odometer/odometer.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/swiper/swiper.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/tiny-slider/tiny-slider.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/wnumb/wNumb.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/wow/wow.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/isotope/isotope.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/countdown/countdown.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/owl-carousel/owl.carousel.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/twentytwenty/twentytwenty.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/twentytwenty/jquery.event.move.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/vendors/bxslider/jquery.bxslider.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/bootstrap-select/js/bootstrap-select.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/vegas/vegas.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-ui/jquery-ui.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/vendors/timepicker/timePicker.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/js/tevily.js")} strategy="afterInteractive"></Script>
-
-    </div>
+      </section>
+    </>
   );
 }
