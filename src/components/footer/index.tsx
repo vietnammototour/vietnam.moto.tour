@@ -7,159 +7,47 @@ export const Footer = () => {
 
   return (
     <footer className="bg-surface-inverse text-on-surface-secondary">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-10">
-          {/* About */}
-          <div className="xl:col-span-4">
-            <Link href="/" className="inline-block mb-6">
-              <img
-                src={getUrl('assets/images/logo/logo-white.png')}
-                alt="Logo"
-                className="h-11 opacity-90"
-              />
+      {/* Top tier: Logo | Nav links | Social icons */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+          {/* Logo */}
+          <Link href="/" className="shrink-0">
+            <img
+              src={getUrl('assets/images/logo/logo-white.png')}
+              alt="Logo"
+              className="h-11 opacity-90"
+            />
+          </Link>
+
+          {/* Nav links */}
+          <nav className="flex flex-wrap justify-center gap-x-8 gap-y-2 type-body-sm">
+            <Link
+              href="/about-us"
+              className="hover:text-on-surface-inverse transition-colors"
+            >
+              {t('aboutUs')}
             </Link>
-            <p className="type-body-sm mb-6">{t('aboutText')}</p>
-            <ul className="space-y-3 type-body-sm">
-              <li className="flex items-center gap-3">
-                <i className="fas fa-phone-square-alt text-primary" />
-                <a
-                  href={`tel:${contactInfo.phone}`}
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {contactInfo.phone}
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <i className="fas fa-envelope text-primary" />
-                <a
-                  href={`mailto:${contactInfo.email}`}
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {contactInfo.email}
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <i className="fas fa-map-marker-alt text-primary" />
-                <span>{contactInfo.address}</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <i className="fas fa-map-marker-alt text-primary" />
-                <span>{contactInfo.city}, Vietnam</span>
-              </li>
-            </ul>
-          </div>
+            <Link
+              href="/tours"
+              className="hover:text-on-surface-inverse transition-colors"
+            >
+              {t('tours')}
+            </Link>
+            <Link
+              href="/rental"
+              className="hover:text-on-surface-inverse transition-colors"
+            >
+              {t('rental')}
+            </Link>
+            <Link
+              href="/contact"
+              className="hover:text-on-surface-inverse transition-colors"
+            >
+              {t('contactUs')}
+            </Link>
+          </nav>
 
-          {/* Company links */}
-          <div className="xl:col-span-2">
-            <h3 className="text-on-surface-inverse type-title-sm mb-6">
-              {t('company')}
-            </h3>
-            <ul className="space-y-3 type-body-sm">
-              <li>
-                <Link
-                  href="/about-us"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('aboutUs')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('contactUs')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rental"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('rental')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/tours"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('tours')}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Explore links */}
-          <div className="xl:col-span-2">
-            <h3 className="text-on-surface-inverse type-title-sm mb-6">
-              {t('explore')}
-            </h3>
-            <ul className="space-y-3 type-body-sm">
-              <li>
-                <Link
-                  href="/tours"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('tours')}
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('legal')}
-                </a>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('contact')}
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-on-surface-inverse transition-colors"
-                >
-                  {t('privacyPolicy')}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div className="xl:col-span-4">
-            <h3 className="text-on-surface-inverse type-title-sm mb-6">
-              {t('newsletter')}
-            </h3>
-            <form className="flex gap-0">
-              <input
-                type="email"
-                placeholder={t('emailPlaceholder')}
-                className="flex-1 bg-on-surface-inverse/10 border border-on-surface-inverse/10 rounded-l-lg px-4 py-3 type-body-sm text-on-surface-inverse placeholder:text-on-surface-secondary focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <button
-                type="submit"
-                className="bg-primary hover:bg-primary-light text-on-surface-inverse type-label-sm uppercase px-6 py-3 rounded-r-lg transition-colors"
-              >
-                {t('subscribe')}
-              </button>
-            </form>
-            <label className="flex items-center gap-2 mt-4 type-label-sm font-normal">
-              <i className="fa fa-check text-primary" />
-              {t('agreeTerms')}
-            </label>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div className="border-t border-on-surface-inverse/10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Social icons */}
           <div className="flex items-center gap-4">
             <a
               href={contactInfo.youtubeLink}
@@ -180,9 +68,31 @@ export const Footer = () => {
               <i className="fab fa-whatsapp" />
             </a>
           </div>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="border-t border-on-surface-inverse/10">
+        {/* Bottom tier: Copyright | Contact info */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="type-body-sm">
             {t('copyright', {year: new Date().getFullYear()})}
           </p>
+          <div className="flex items-center gap-2 type-body-sm">
+            <a
+              href={`tel:${contactInfo.phone}`}
+              className="hover:text-on-surface-inverse transition-colors"
+            >
+              {contactInfo.phone}
+            </a>
+            <span>·</span>
+            <a
+              href={`mailto:${contactInfo.email}`}
+              className="hover:text-on-surface-inverse transition-colors"
+            >
+              {contactInfo.email}
+            </a>
+          </div>
         </div>
       </div>
     </footer>
