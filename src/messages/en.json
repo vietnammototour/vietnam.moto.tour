@@ -9,25 +9,11 @@
     "car": "Car"
   },
   "footer": {
-    "aboutText": "Our Guides have many years of experience motorcycling and was established in 2008",
-    "company": "Company",
-    "explore": "Explore",
-    "newsletter": "Newsletter",
-    "aboutUs": "About Us",
-    "contactUs": "Contact Us",
-    "rental": "Rental",
-    "tours": "Tours",
-    "legal": "Legal",
-    "privacyPolicy": "Privacy Policy",
-    "emailPlaceholder": "Email address",
-    "subscribe": "Subscribe",
-    "agreeTerms": "I agree to all terms and policies",
-    "copyright": "© All Copyright {year}",
-    "contact": "Contact"
+    "copyright": "© All Copyright {year}"
   },
   "home": {
     "heroTitle": "Travel & Adventures",
-    "heroSubtitle": "Your Next Adventure Starts Here",
+    "heroSubtitle": "Your next adventure starts here",
     "destinationLists": "Destination lists",
     "goExoticPlaces": "Go Exotic Places",
     "getToKnowUs": "Get to know us",

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type {ReactNode} from 'react';
 
 export interface Tour {
   id: number;
@@ -16,7 +16,7 @@ export interface Destination {
   name: string;
   imageUrl: string;
   tours: number;
-  size: "small" | "large";
+  size: 'small' | 'large';
 }
 
 export interface ContactInfo {
@@ -24,7 +24,6 @@ export interface ContactInfo {
   email: string;
   youtubeLink: string;
   tripadvisorLink: string;
-  instagramLink: string;
   whatsApp: string;
   address: string;
   city: string;
@@ -53,7 +52,7 @@ export interface GalleryItemProps {
 
 export interface PageHeaderProps {
   title: string;
-  breadcrumbs: { label: string; href?: string }[];
+  breadcrumbs: {label: string; href?: string}[];
   backgroundImage: string;
 }
 

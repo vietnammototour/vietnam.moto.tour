@@ -61,7 +61,7 @@ export default function Home() {
           <h2 className="type-display-sm md:type-display-lg mb-4 text-white">
             {t('heroTitle')}
           </h2>
-          <p className="type-body-lg md:type-headline-sm text-white">
+          <p className="type-body-lg md:type-headline-sm text-amber-400">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -271,7 +271,7 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.icon}
-                  className="bg-surface-elevated/15 backdrop-blur-sm rounded-lg p-6 text-center text-white hover:bg-surface-elevated/25 transition-colors"
+                  className="bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/10 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
                 >
                   <span
                     className={`${item.icon} text-3xl text-primary-light block mb-3`}
