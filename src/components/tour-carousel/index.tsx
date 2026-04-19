@@ -8,10 +8,11 @@ import 'swiper/css/navigation';
 
 import { TourCard } from '../tour-card';
 import type { TourCarouselProps } from '@/types';
+import styles from './TourCarousel.module.css';
 
 export const TourCarousel = ({ tours }: TourCarouselProps) => {
   return (
-    <div className="relative [&_.swiper-button-prev]:text-primary [&_.swiper-button-prev]:after:text-lg [&_.swiper-button-next]:text-primary [&_.swiper-button-next]:after:text-lg">
+    <div className={`relative ${styles.carousel}`}>
       <Swiper
         modules={[Navigation, Autoplay]}
         spaceBetween={24}
