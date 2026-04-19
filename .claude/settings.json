@@ -38,7 +38,9 @@
       "Bash(echo $*SECRET*)",
       "Bash(echo $*KEY*)",
       "Bash(echo $*TOKEN*)",
-      "Bash(echo $*PASSWORD*)"
+      "Bash(echo $*PASSWORD*)",
+      "WebSearch",
+      "WebFetch"
     ]
   }
 }
