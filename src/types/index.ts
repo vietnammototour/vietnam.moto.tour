@@ -16,9 +16,7 @@ export interface Destination {
   name: string;
   imageUrl: string;
   tours: number;
-  width: string;
-  height: string;
-  colClass: string;
+  size: 'small' | 'large';
 }
 
 export interface ContactInfo {
@@ -51,4 +49,16 @@ export interface DestinationCardProps {
 export interface GalleryItemProps {
   imageSrc: string;
   delay: number;
+}
+
+export interface PageHeaderProps {
+  title: string;
+  breadcrumbs: { label: string; href?: string }[];
+  backgroundImage: string;
+}
+
+export interface VideoModalProps {
+  videoUrl: string;
+  isOpen: boolean;
+  onClose: () => void;
 }

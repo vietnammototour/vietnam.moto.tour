@@ -1,224 +1,77 @@
-import { HeaderMobile } from "@/components/header-mobile";
-import Script from "next/script";
-import {getUrl} from "@/utils";
+import { motion } from 'framer-motion';
+import { PageHeader } from '@/components/page-header';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const rentalItems = [
+  { title: 'Honda Winner X', price: 25, image: 'assets/images/resources/popular-tours-two__img-1.jpg', rating: '8.0 Superb', category: 'Motorbike' },
+  { title: 'Honda XR 150', price: 30, image: 'assets/images/resources/popular-tours-two__img-2.jpg', rating: '8.5 Superb', category: 'Motorbike' },
+  { title: 'Yamaha Exciter', price: 20, image: 'assets/images/resources/popular-tours-two__img-3.jpg', rating: '8.0 Superb', category: 'Motorbike' },
+  { title: 'Honda CB500X', price: 55, image: 'assets/images/resources/popular-tours-two__img-4.jpg', rating: '9.0 Superb', category: 'Motorbike' },
+  { title: 'Toyota Vios', price: 45, image: 'assets/images/resources/popular-tours-two__img-5.jpg', rating: '8.0 Superb', category: 'Car' },
+  { title: 'Ford Ranger', price: 65, image: 'assets/images/resources/popular-tours-two__img-6.jpg', rating: '8.2 Superb', category: 'Car' },
+];
 
 export default function Rental() {
   return (
-    <div>
-      <div className="page-wrapper">
-        <div className="stricky-header stricked-menu main-menu">
-          <div className="sticky-header__content"></div>
+    <>
+      <PageHeader
+        title="Rental"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Rental' },
+        ]}
+        backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg"
+      />
+
+      <section className="py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {rentalItems.map((item, i) => (
+              <motion.div
+                key={i}
+                className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+              >
+                <div className="relative overflow-hidden aspect-[3/2]">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/10" />
+                  <span className="absolute top-3 left-3 bg-secondary text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
+                    {item.category}
+                  </span>
+                  <button
+                    className="absolute top-3 right-3 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center text-neutral-500 hover:text-primary hover:bg-white transition-all"
+                    aria-label="Add to favorites"
+                  >
+                    <i className="fa fa-heart text-sm" />
+                  </button>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-center gap-1 text-sm text-primary font-semibold mb-2">
+                    <i className="fa fa-star text-xs" /> {item.rating}
+                  </div>
+                  <h3 className="text-lg font-bold text-neutral-900 mb-2 group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-neutral-500 text-sm">
+                    <span className="text-primary font-bold text-lg">${item.price}</span> / Per Day
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-
-
-        <section className="page-header">
-          <div className="page-header__top">
-            <div className="page-header-bg" style={{ backgroundImage: 'url(https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg)' }}>
-            </div>
-            <div className="page-header-bg-overly"></div>
-            <div className="container">
-              <div className="page-header__top-inner">
-                <h2>Rental</h2>
-              </div>
-            </div>
-          </div>
-          <div className="page-header__bottom">
-            <div className="container">
-              <div className="page-header__bottom-inner">
-                <ul className="thm-breadcrumb list-unstyled">
-                  <li><a href="index.html">Home</a></li>
-                  <li><span>.</span></li>
-                  <li className="active">Rental</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="popular-tours-two">
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
-                <div className="popular-tours__single">
-                  <div className="popular-tours__img">
-                    <img src="assets/images/resources/popular-tours-two__img-1.jpg" alt=""/>
-                    <div className="popular-tours__icon">
-                      <a href="tour-details.html">
-                        <i className="fa fa-heart"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="popular-tours__content">
-                    <div className="popular-tours__stars">
-                      <i className="fa fa-star"></i> 8.0 Superb
-                    </div>
-                    <h3 className="popular-tours__title"><a href="tour-details.html">National Park 2 Days
-                      Tour</a></h3>
-                    <p className="popular-tours__rate"><span>$1870</span> / Per Person</p>
-                    <ul className="popular-tours__meta list-unstyled">
-                      <li><a href="tour-details.html">3 Days</a></li>
-                      <li><a href="tour-details.html">12+</a></li>
-                      <li><a href="tour-details.html">Los Angeles</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="200ms">
-                <div className="popular-tours__single">
-                  <div className="popular-tours__img">
-                    <img src="assets/images/resources/popular-tours-two__img-2.jpg" alt=""/>
-                    <div className="popular-tours__icon">
-                      <a href="tour-details.html">
-                        <i className="fa fa-heart"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="popular-tours__content">
-                    <div className="popular-tours__stars">
-                      <i className="fa fa-star"></i> 8.0 Superb
-                    </div>
-                    <h3 className="popular-tours__title"><a href="tour-details.html">The Dark Forest</a></h3>
-                    <p className="popular-tours__rate"><span>$1870</span> / Per Person</p>
-                    <ul className="popular-tours__meta list-unstyled">
-                      <li><a href="tour-details.html">3 Days</a></li>
-                      <li><a href="tour-details.html">12+</a></li>
-                      <li><a href="tour-details.html">Los Angeles</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
-                <div className="popular-tours__single">
-                  <div className="popular-tours__img">
-                    <img src="assets/images/resources/popular-tours-two__img-3.jpg" alt=""/>
-                    <div className="popular-tours__icon">
-                      <a href="tour-details.html">
-                        <i className="fa fa-heart"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="popular-tours__content">
-                    <div className="popular-tours__stars">
-                      <i className="fa fa-star"></i> 8.0 Superb
-                    </div>
-                    <h3 className="popular-tours__title"><a href="tour-details.html">Discover Depth of Beach</a>
-                    </h3>
-                    <p className="popular-tours__rate"><span>$1870</span> / Per Person</p>
-                    <ul className="popular-tours__meta list-unstyled">
-                      <li><a href="tour-details.html">3 Days</a></li>
-                      <li><a href="tour-details.html">12+</a></li>
-                      <li><a href="tour-details.html">Los Angeles</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-                <div className="popular-tours__single">
-                  <div className="popular-tours__img">
-                    <img src="assets/images/resources/popular-tours-two__img-4.jpg" alt=""/>
-                    <div className="popular-tours__icon">
-                      <a href="tour-details.html">
-                        <i className="fa fa-heart"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="popular-tours__content">
-                    <div className="popular-tours__stars">
-                      <i className="fa fa-star"></i> 8.0 Superb
-                    </div>
-                    <h3 className="popular-tours__title"><a href="tour-details.html">Moscow Red City Land</a>
-                    </h3>
-                    <p className="popular-tours__rate"><span>$1870</span> / Per Person</p>
-                    <ul className="popular-tours__meta list-unstyled">
-                      <li><a href="tour-details.html">3 Days</a></li>
-                      <li><a href="tour-details.html">12+</a></li>
-                      <li><a href="tour-details.html">Los Angeles</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="500ms">
-                <div className="popular-tours__single">
-                  <div className="popular-tours__img">
-                    <img src="assets/images/resources/popular-tours-two__img-5.jpg" alt=""/>
-                    <div className="popular-tours__icon">
-                      <a href="tour-details.html">
-                        <i className="fa fa-heart"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="popular-tours__content">
-                    <div className="popular-tours__stars">
-                      <i className="fa fa-star"></i> 8.0 Superb
-                    </div>
-                    <h3 className="popular-tours__title"><a href="tour-details.html">Magic of Italy Tours</a>
-                    </h3>
-                    <p className="popular-tours__rate"><span>$1870</span> / Per Person</p>
-                    <ul className="popular-tours__meta list-unstyled">
-                      <li><a href="tour-details.html">3 Days</a></li>
-                      <li><a href="tour-details.html">12+</a></li>
-                      <li><a href="tour-details.html">Los Angeles</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="600ms">
-                <div className="popular-tours__single">
-                  <div className="popular-tours__img">
-                    <img src="assets/images/resources/popular-tours-two__img-6.jpg" alt=""/>
-                    <div className="popular-tours__icon">
-                      <a href="tour-details.html">
-                        <i className="fa fa-heart"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="popular-tours__content">
-                    <div className="popular-tours__stars">
-                      <i className="fa fa-star"></i> 8.0 Superb
-                    </div>
-                    <h3 className="popular-tours__title"><a href="tour-details.html">Discover Depth of Beach</a>
-                    </h3>
-                    <p className="popular-tours__rate"><span>$1870</span> / Per Person</p>
-                    <ul className="popular-tours__meta list-unstyled">
-                      <li><a href="tour-details.html">3 Days</a></li>
-                      <li><a href="tour-details.html">12+</a></li>
-                      <li><a href="tour-details.html">Los Angeles</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <HeaderMobile />
-
-      <Script src={getUrl("assets/vendors/jquery/jquery-3.6.0.min.js")} strategy="beforeInteractive" defer></Script>
-      <Script src={getUrl("assets/vendors/bootstrap/js/bootstrap.bundle.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jarallax/jarallax.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-appear/jquery.appear.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-validate/jquery.validate.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/nouislider/nouislider.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/odometer/odometer.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/swiper/swiper.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/tiny-slider/tiny-slider.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/wnumb/wNumb.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/wow/wow.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/isotope/isotope.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/countdown/countdown.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/owl-carousel/owl.carousel.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/twentytwenty/twentytwenty.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/twentytwenty/jquery.event.move.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/vendors/bxslider/jquery.bxslider.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/bootstrap-select/js/bootstrap-select.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/vegas/vegas.min.js")} strategy="afterInteractive"></Script>
-      <Script src={getUrl("assets/vendors/jquery-ui/jquery-ui.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/vendors/timepicker/timePicker.js")} strategy="beforeInteractive"></Script>
-      <Script src={getUrl("assets/js/tevily.js")} strategy="afterInteractive"></Script>
-    </div>
-  )
+      </section>
+    </>
+  );
 }
