@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center justify-center overflow-hidden">
         <video
           autoPlay
           muted
@@ -49,11 +49,11 @@ export default function Home() {
           <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-overlay" />
-        <div className="relative z-10 text-center text-white px-4">
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4">
+        <div className="relative z-10 text-center text-white px-4 drop-shadow-lg">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 text-white">
             Travel & Adventures
           </h2>
-          <p className="text-lg sm:text-xl md:text-2xl font-light opacity-90">
+          <p className="text-lg sm:text-xl md:text-2xl font-light text-white">
             Your Next Adventure Starts Here
           </p>
         </div>
@@ -74,20 +74,45 @@ export default function Home() {
             </span>
             <h2 className="text-3xl lg:text-4xl font-bold mt-2">Go Exotic Places</h2>
           </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
-            {destinationsData.map((destination, i) => (
+          {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <motion.div
+              className="sm:col-span-2 sm:row-span-2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <DestinationCard destination={destinationsData[0]} className="h-full" />
+            </motion.div>
+            {destinationsData.slice(1, 5).map((destination, i) => (
               <motion.div
                 key={destination.id}
-                className={destination.size === 'large' ? 'lg:col-span-6' : 'lg:col-span-3'}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: (i + 1) * 0.1 } } }}
               >
                 <DestinationCard destination={destination} />
               </motion.div>
             ))}
           </div>
+          {/* Bottom row: additional destinations aligned under the hero */}
+          {destinationsData.length > 5 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+              {destinationsData.slice(5).map((destination, i) => (
+                <motion.div
+                  key={destination.id}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: (i + 5) * 0.1 } } }}
+                >
+                  <DestinationCard destination={destination} />
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -193,7 +218,7 @@ export default function Home() {
               <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
                 Are you ready to travel?
               </p>
-              <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
+              <h2 className="text-3xl lg:text-4xl font-bold leading-tight text-white drop-shadow-lg">
                 We are leading day tour and multi-day tour on organizer in Nha Trang
               </h2>
             </div>
@@ -206,10 +231,10 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.icon}
-                  className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-center text-white hover:bg-white/20 transition-colors"
+                  className="bg-white/15 backdrop-blur-sm rounded-lg p-6 text-center text-white hover:bg-white/25 transition-colors"
                 >
                   <span className={`${item.icon} text-3xl text-primary-light block mb-3`} />
-                  <h4 className="text-sm font-semibold whitespace-pre-line">{item.label}</h4>
+                  <h4 className="text-sm font-semibold whitespace-pre-line drop-shadow-md">{item.label}</h4>
                 </div>
               ))}
             </div>
