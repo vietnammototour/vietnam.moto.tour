@@ -8,6 +8,7 @@ import {DestinationCard} from '@/components/destination-card';
 import {TourCarousel} from '@/components/tour-carousel';
 import {GalleryItem} from '@/components/gallery-item';
 import {VideoModal} from '@/components/video-modal';
+import {contactInfo} from '@/utils';
 
 import {destinationsData, toursData} from '@/data';
 import {getUrl} from '@/utils';
@@ -159,17 +160,17 @@ export default function Home() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-4 shadow-lg flex items-center gap-3">
-                <span className="icon-phone-call text-2xl text-primary" />
+              <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-4 shadow-lg flex items-center gap-6">
+                <span className="icon-phone-call text-sm text-primary" />
                 <div>
                   <p className="type-label-sm font-normal text-on-surface-secondary">
                     {t('bookTourNow')}
                   </p>
                   <a
-                    href="tel:+84-935-797-550"
-                    className="type-title-sm text-on-surface hover:text-on-surface-accent transition-colors"
+                    href={`tel:${contactInfo.phone}`}
+                    className="text-[0.6rem] text-on-surface hover:text-on-surface-accent transition-colors"
                   >
-                    +84 935 797 550
+                    {contactInfo.phone}
                   </a>
                 </div>
               </div>
@@ -264,19 +265,35 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
               {[
-                {icon: 'icon-travel-map', label: t('localExperts')},
-                {icon: 'icon-flag', label: t('yearsOnRoad')},
-                {icon: 'icon-place', label: t('hiddenRoutes')},
-                {icon: 'icon-clock', label: t('dayAndMultiDay')},
-                {icon: 'icon-user', label: t('smallGroups')},
-                {icon: 'icon-cashback', label: t('allInclusive')},
+                {
+                  icon: 'icon-travel-map',
+                  label: t('localExperts'),
+                  accent: 'primary',
+                },
+                {
+                  icon: 'icon-place',
+                  label: t('hiddenRoutes'),
+                  accent: 'secondary',
+                },
+                {icon: 'icon-flag', label: t('yearsOnRoad'), accent: 'primary'},
+                {
+                  icon: 'icon-clock',
+                  label: t('dayAndMultiDay'),
+                  accent: 'secondary',
+                },
+                {icon: 'icon-user', label: t('smallGroups'), accent: 'primary'},
+                {
+                  icon: 'icon-cashback',
+                  label: t('allInclusive'),
+                  accent: 'secondary',
+                },
               ].map((item) => (
                 <div
                   key={item.icon}
                   className="bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
                 >
                   <span
-                    className={`${item.icon} text-3xl text-primary-light block mb-3`}
+                    className={`${item.icon} text-4xl block mb-3 ${item.accent === 'primary' ? 'text-primary-light' : 'text-secondary-light'}`}
                   />
                   <h4 className="type-label-lg whitespace-pre-line text-white drop-shadow-md">
                     {item.label}
