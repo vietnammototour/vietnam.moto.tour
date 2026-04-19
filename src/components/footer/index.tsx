@@ -18,8 +18,8 @@ export const Footer = () => {
                 className="h-11 opacity-90"
               />
             </Link>
-            <p className="text-sm leading-relaxed mb-6">{t('aboutText')}</p>
-            <ul className="space-y-3 text-sm">
+            <p className="type-body-sm mb-6">{t('aboutText')}</p>
+            <ul className="space-y-3 type-body-sm">
               <li className="flex items-center gap-3">
                 <i className="fas fa-phone-square-alt text-primary" />
                 <a
@@ -51,10 +51,10 @@ export const Footer = () => {
 
           {/* Company links */}
           <div className="xl:col-span-2">
-            <h3 className="text-on-surface-inverse font-bold text-lg mb-6">
+            <h3 className="text-on-surface-inverse type-title-sm mb-6">
               {t('company')}
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3 type-body-sm">
               <li>
                 <Link
                   href="/about-us"
@@ -92,10 +92,10 @@ export const Footer = () => {
 
           {/* Explore links */}
           <div className="xl:col-span-2">
-            <h3 className="text-on-surface-inverse font-bold text-lg mb-6">
+            <h3 className="text-on-surface-inverse type-title-sm mb-6">
               {t('explore')}
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3 type-body-sm">
               <li>
                 <Link
                   href="/tours"
@@ -133,23 +133,23 @@ export const Footer = () => {
 
           {/* Newsletter */}
           <div className="xl:col-span-4">
-            <h3 className="text-on-surface-inverse font-bold text-lg mb-6">
+            <h3 className="text-on-surface-inverse type-title-sm mb-6">
               {t('newsletter')}
             </h3>
             <form className="flex gap-0">
               <input
                 type="email"
                 placeholder={t('emailPlaceholder')}
-                className="flex-1 bg-on-surface-inverse/10 border border-on-surface-inverse/10 rounded-l-lg px-4 py-3 text-sm text-on-surface-inverse placeholder:text-on-surface-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+                className="flex-1 bg-on-surface-inverse/10 border border-on-surface-inverse/10 rounded-l-lg px-4 py-3 type-body-sm text-on-surface-inverse placeholder:text-on-surface-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <button
                 type="submit"
-                className="bg-primary hover:bg-primary-light text-on-surface-inverse font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-r-lg transition-colors"
+                className="bg-primary hover:bg-primary-light text-on-surface-inverse type-label-sm uppercase px-6 py-3 rounded-r-lg transition-colors"
               >
                 {t('subscribe')}
               </button>
             </form>
-            <label className="flex items-center gap-2 mt-4 text-xs">
+            <label className="flex items-center gap-2 mt-4 type-label-sm font-normal">
               <i className="fa fa-check text-primary" />
               {t('agreeTerms')}
             </label>
@@ -180,7 +180,7 @@ export const Footer = () => {
               <i className="fab fa-whatsapp" />
             </a>
           </div>
-          <p className="text-sm">
+          <p className="type-body-sm">
             {t('copyright', {year: new Date().getFullYear()})}
           </p>
         </div>
