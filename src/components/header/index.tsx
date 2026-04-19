@@ -56,23 +56,7 @@ export const Header = () => {
     <>
       {/* Top bar */}
       <div className="bg-surface-inverse text-on-surface-inverse type-body-sm hidden lg:block">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2">
-          <div className="flex items-center gap-6">
-            <a
-              href={`tel:${contactInfo.phone}`}
-              className="flex items-center gap-2 hover:text-primary-light transition-colors"
-            >
-              <span className="icon-phone-call" />
-              {contactInfo.phone}
-            </a>
-            <a
-              href={`mailto:${contactInfo.email}`}
-              className="flex items-center gap-2 hover:text-primary-light transition-colors"
-            >
-              <span className="icon-at" />
-              {contactInfo.email}
-            </a>
-          </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-end py-2">
           <div className="flex items-center gap-4">
             <a
               href={contactInfo.youtubeLink}
@@ -110,7 +94,7 @@ export const Header = () => {
           <div className="flex items-center justify-between h-16 lg:h-20">
             <Link href="/" className="flex-shrink-0">
               <img
-                src={getUrl('assets/images/logo/logo.jpeg')}
+                src={getUrl('assets/images/logo/logo-amber.png')}
                 alt="Vietnam Motorcycle Tour"
                 className="h-11 lg:h-14"
               />
@@ -207,18 +191,6 @@ export const Header = () => {
           ))}
         </nav>
         <div className="p-4 mt-4">
-          <a
-            href={`mailto:${contactInfo.email}`}
-            className="flex items-center gap-2 type-body-sm text-on-surface-secondary hover:text-on-surface-inverse mb-3"
-          >
-            <i className="fa fa-envelope" /> {contactInfo.email}
-          </a>
-          <a
-            href={`tel:${contactInfo.phone}`}
-            className="flex items-center gap-2 type-body-sm text-on-surface-secondary hover:text-on-surface-inverse mb-4"
-          >
-            <i className="fa fa-phone-alt" /> {contactInfo.phone}
-          </a>
           <div className="flex gap-4">
             <a
               href={contactInfo.youtubeLink}
