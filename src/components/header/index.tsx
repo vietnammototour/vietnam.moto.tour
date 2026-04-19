@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getUrl } from "../../utils/index";
+import destinationsData from "../../data/destinations.json";
 
 export const Header = () => {
   const router = useRouter();
@@ -64,12 +65,9 @@ export const Header = () => {
                     <li className={`dropdown ${router.pathname.startsWith('/tours') ? 'current' : ''}`}>
                       <Link href="/tours">Tours</Link>
                       <ul>
-                        <li><Link href="/tours">Nha Trang</Link></li>
-                        <li><Link href="/tours">Dalat</Link></li>
-                        <li><Link href="/tours">Mui Ne</Link></li>
-                        <li><Link href="/tours">Sai Gon</Link></li>
-                        <li><Link href="/tours">Hoi An</Link></li>
-                        <li><Link href="/tours">Ha No</Link></li>
+                        {destinationsData.map((d) => (
+                          <li key={d.id}><Link href="/tours">{d.name}</Link></li>
+                        ))}
                       </ul>
                     </li>
                     <li className={`dropdown ${router.pathname.startsWith('/rental') ? 'current' : ''}`}>
