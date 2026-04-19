@@ -61,7 +61,7 @@ export default function Home() {
           <h2 className="type-display-sm md:type-display-lg mb-4 text-white">
             {t('heroTitle')}
           </h2>
-          <p className="type-body-lg md:type-headline-sm text-amber-400">
+          <p className="type-body-lg md:type-headline-sm text-primary">
             {t('heroSubtitle')}
           </p>
         </div>
