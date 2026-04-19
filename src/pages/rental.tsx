@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import type { GetStaticPropsContext } from 'next';
+import Head from 'next/head';
 import { PageHeader } from '@/components/page-header';
 
 const fadeInUp = {
@@ -16,13 +19,21 @@ const rentalItems = [
 ];
 
 export default function Rental() {
+  const t = useTranslations('rental');
+  const tMeta = useTranslations('meta');
+
   return (
     <>
+      <Head>
+        <title>{tMeta('rentalTitle')}</title>
+        <meta name="description" content={tMeta('rentalDescription')} />
+      </Head>
+
       <PageHeader
-        title="Rental"
+        title={t('title')}
         breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Rental' },
+          { label: t('breadcrumbHome'), href: '/' },
+          { label: t('breadcrumbRental') },
         ]}
         backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg"
       />
@@ -64,7 +75,7 @@ export default function Rental() {
                     {item.title}
                   </h3>
                   <p className="text-neutral-500 text-sm">
-                    <span className="text-primary font-bold text-lg">${item.price}</span> / Per Day
+                    <span className="text-primary font-bold text-lg">${item.price}</span> {t('perDay')}
                   </p>
                 </div>
               </motion.div>
@@ -74,4 +85,12 @@ export default function Rental() {
       </section>
     </>
   );
+}
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`@/messages/${locale}.json`)).default,
+    },
+  };
 }
