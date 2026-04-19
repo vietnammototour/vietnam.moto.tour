@@ -1,27 +1,49 @@
-import React from 'react';
-import { getUrl } from '../../utils/index';
+'use client';
+
+import { useState } from 'react';
 import type { GalleryItemProps } from '@/types';
 
-export const GalleryItem = ({ imageSrc, delay }: GalleryItemProps) => {
+export const GalleryItem = ({ imageSrc }: GalleryItemProps) => {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
   return (
-    <li className="wow fadeInUp" data-wow-delay={`${delay}ms`}>
-      <div className="gallery-one__img-box">
-        <picture style={{ display: 'block', width: '310px', height: '317px', overflow: 'hidden' }}>
-          <source srcSet={imageSrc} type="image/webp" />
+    <>
+      <button
+        onClick={() => setLightboxOpen(true)}
+        className="group relative block overflow-hidden rounded-lg aspect-square cursor-pointer"
+      >
+        <img
+          src={imageSrc}
+          alt=""
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <span className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center text-neutral-900">
+            <i className="fa fa-expand" />
+          </span>
+        </div>
+      </button>
+
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            className="absolute top-6 right-6 text-white text-2xl hover:text-neutral-300 transition-colors"
+            onClick={() => setLightboxOpen(false)}
+            aria-label="Close lightbox"
+          >
+            <i className="fa fa-times" />
+          </button>
           <img
             src={imageSrc}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', position: 'absolute' }}
+            alt=""
+            className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
+            onClick={(e) => e.stopPropagation()}
           />
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0, 0, 0, 0.4)' }} />
-        </picture>
-
-        <div className="gallery-one__iocn">
-          <a className="img-popup" href={getUrl(imageSrc)}>
-            <i className="fab fa-whatsapp"></i>
-          </a>
         </div>
-      </div>
-    </li>
+      )}
+    </>
   );
 };
-
