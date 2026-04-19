@@ -11,7 +11,7 @@ import { GalleryItem } from '../components/gallery-item/index';
 import { destinationsData, toursData } from '../data/index';
 import { getUrl } from "../utils/index";
 
-import styles from "@/styles/Home.module.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <>
       <div
-        className={`${styles.page} ${geistSans.variable} ${geistMono.variable} ${outBrave.variable}`}
+        className={`${geistSans.variable} ${geistMono.variable} ${outBrave.variable}`}
       >
       <div className="page-wrapper">
 
