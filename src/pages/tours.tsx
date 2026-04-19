@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import { PageHeader } from '@/components/page-header';
-import { TourCard } from '@/components/tour-card';
-import { toursData } from '@/data';
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { PageHeader } from "@/components/page-header";
+import { TourCard } from "@/components/tour-card";
+import { toursData } from "@/data";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -12,21 +12,21 @@ const fadeInUp = {
 };
 
 export default function Tours() {
-  const t = useTranslations('tours');
-  const tMeta = useTranslations('meta');
+  const t = useTranslations("tours");
+  const tMeta = useTranslations("meta");
 
   return (
     <>
       <Head>
-        <title>{tMeta('toursTitle')}</title>
-        <meta name="description" content={tMeta('toursDescription')} />
+        <title>{tMeta("toursTitle")}</title>
+        <meta name="description" content={tMeta("toursDescription")} />
       </Head>
 
       <PageHeader
-        title={t('title')}
+        title={t("title")}
         breadcrumbs={[
-          { label: t('breadcrumbHome'), href: '/' },
-          { label: t('breadcrumbTours') },
+          { label: t("breadcrumbHome"), href: "/" },
+          { label: t("breadcrumbTours") },
         ]}
         backgroundImage="https://data.agatetravel.com/images/photogallery/2025/halong-bay-hanoi-vietnam.jpg"
       />
@@ -40,7 +40,13 @@ export default function Tours() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: { duration: 0.6, delay: i * 0.1 },
+                  },
+                }}
               >
                 <TourCard tour={tour} />
               </motion.div>

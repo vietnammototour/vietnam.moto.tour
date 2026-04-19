@@ -1,14 +1,14 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import Head from "next/head";
+import { useRouter } from "next/router";
 
-const SITE_URL = 'https://vietnammototour.com';
+const SITE_URL = "https://vietnammototour.com";
 
 export const HrefLang = () => {
   const { asPath } = useRouter();
   const pathWithoutLocale = asPath;
 
   const viUrl = `${SITE_URL}${pathWithoutLocale}`;
-  const enUrl = `${SITE_URL}/en${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`;
+  const enUrl = `${SITE_URL}/en${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
 
   return (
     <Head>

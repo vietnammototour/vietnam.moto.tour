@@ -1,10 +1,10 @@
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import type { TourCardProps } from '@/types';
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import type { TourCardProps } from "@/types";
 
 export const TourCard = ({ tour }: TourCardProps) => {
   const { title, imageUrl, rating, price, duration, distance, location } = tour;
-  const t = useTranslations('common');
+  const t = useTranslations("common");
 
   return (
     <div className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden h-full flex flex-col">
@@ -21,12 +21,19 @@ export const TourCard = ({ tour }: TourCardProps) => {
           <Link href="/tours">{title}</Link>
         </h3>
         <p className="text-neutral-500 text-sm mb-4">
-          <span className="text-primary font-bold text-lg">${price}</span> {t('perPerson')}
+          <span className="text-primary font-bold text-lg">${price}</span>{" "}
+          {t("perPerson")}
         </p>
         <ul className="flex items-center gap-4 text-xs text-neutral-500 mt-auto pt-4 border-t border-neutral-100">
-          <li className="flex items-center gap-1"><i className="fa fa-clock text-neutral-400" /> {duration}</li>
-          <li className="flex items-center gap-1"><i className="fa fa-road text-neutral-400" /> {distance}</li>
-          <li className="flex items-center gap-1"><i className="fa fa-map-marker-alt text-neutral-400" /> {location}</li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-clock text-neutral-400" /> {duration}
+          </li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-road text-neutral-400" /> {distance}
+          </li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-map-marker-alt text-neutral-400" /> {location}
+          </li>
         </ul>
       </div>
     </div>

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
 
-import 'swiper/css';
-import 'swiper/css/navigation';
+import "swiper/css";
+import "swiper/css/navigation";
 
-import { TourCard } from '../tour-card';
-import type { TourCarouselProps } from '@/types';
-import styles from './TourCarousel.module.css';
+import { TourCard } from "../tour-card";
+import type { TourCarouselProps } from "@/types";
+import styles from "./TourCarousel.module.css";
 
 export const TourCarousel = ({ tours }: TourCarouselProps) => {
   return (

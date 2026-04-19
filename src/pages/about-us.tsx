@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import { PageHeader } from '@/components/page-header';
-import { VideoModal } from '@/components/video-modal';
+import { useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { PageHeader } from "@/components/page-header";
+import { VideoModal } from "@/components/video-modal";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -14,22 +14,22 @@ const fadeInUp = {
 
 export default function AboutUs() {
   const [videoOpen, setVideoOpen] = useState(false);
-  const t = useTranslations('about');
-  const tMeta = useTranslations('meta');
+  const t = useTranslations("about");
+  const tMeta = useTranslations("meta");
 
   return (
     <>
       <Head>
-        <title>{tMeta('aboutTitle')}</title>
-        <meta name="description" content={tMeta('aboutDescription')} />
+        <title>{tMeta("aboutTitle")}</title>
+        <meta name="description" content={tMeta("aboutDescription")} />
       </Head>
 
       <PageHeader
-        title={t('title')}
+        title={t("title")}
         breadcrumbs={[
-          { label: t('breadcrumbHome'), href: '/' },
-          { label: t('breadcrumbPages') },
-          { label: t('breadcrumbAbout') },
+          { label: t("breadcrumbHome"), href: "/" },
+          { label: t("breadcrumbPages") },
+          { label: t("breadcrumbAbout") },
         ]}
         backgroundImage="https://vietnamamazingtours.com/uploads/Northern-Vietnam-Tours.jpeg"
       />
@@ -57,29 +57,43 @@ export default function AboutUs() {
               viewport={{ once: true }}
               variants={fadeInUp}
             >
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">{t('learnAboutUs')}</span>
-              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">{t('dareToExplore')}</h2>
-              <p className="text-primary font-semibold mb-4">{t('perfectPlace')}</p>
-              <p className="text-neutral-500 mb-8">
-                {t('aboutDescription')}
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                {t("learnAboutUs")}
+              </span>
+              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">
+                {t("dareToExplore")}
+              </h2>
+              <p className="text-primary font-semibold mb-4">
+                {t("perfectPlace")}
               </p>
+              <p className="text-neutral-500 mb-8">{t("aboutDescription")}</p>
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-neutral-900">{t('bestServices')}</h4>
+                    <h4 className="text-sm font-bold text-neutral-900">
+                      {t("bestServices")}
+                    </h4>
                     <span className="text-sm font-bold text-primary">77%</span>
                   </div>
                   <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '77%' }} />
+                    <div
+                      className="bg-primary h-2 rounded-full"
+                      style={{ width: "77%" }}
+                    />
                   </div>
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-neutral-900">{t('tourAgents')}</h4>
+                    <h4 className="text-sm font-bold text-neutral-900">
+                      {t("tourAgents")}
+                    </h4>
                     <span className="text-sm font-bold text-primary">38%</span>
                   </div>
                   <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '38%' }} />
+                    <div
+                      className="bg-primary h-2 rounded-full"
+                      style={{ width: "38%" }}
+                    />
                   </div>
                 </div>
               </div>
@@ -91,14 +105,18 @@ export default function AboutUs() {
       <section className="bg-primary py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="text-white text-center lg:text-left">
-            <p className="font-display text-sm opacity-80 mb-1">{t('planYourTrip')}</p>
-            <h2 className="text-2xl lg:text-3xl font-bold">{t('readyForTour')}</h2>
+            <p className="font-display text-sm opacity-80 mb-1">
+              {t("planYourTrip")}
+            </p>
+            <h2 className="text-2xl lg:text-3xl font-bold">
+              {t("readyForTour")}
+            </h2>
           </div>
           <Link
             href="/contact"
             className="bg-white text-primary hover:bg-neutral-100 font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors flex-shrink-0"
           >
-            {t('bookTourNow')}
+            {t("bookTourNow")}
           </Link>
         </div>
       </section>
@@ -106,7 +124,10 @@ export default function AboutUs() {
       <section className="relative py-24 lg:py-32">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: 'url(assets/images/backgrounds/video-one-two-bg.jpg)' }}
+          style={{
+            backgroundImage:
+              "url(assets/images/backgrounds/video-one-two-bg.jpg)",
+          }}
         />
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 text-center text-white">
@@ -118,10 +139,10 @@ export default function AboutUs() {
             <i className="fa fa-play text-xl ml-1" />
           </button>
           <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
-            {t('readyToTravel')}
+            {t("readyToTravel")}
           </p>
           <h2 className="text-3xl lg:text-4xl font-bold max-w-2xl mx-auto leading-tight">
-            {t('platformDescription')}
+            {t("platformDescription")}
           </h2>
         </div>
       </section>
@@ -135,13 +156,15 @@ export default function AboutUs() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
             {[
-              { value: '870+', label: t('totalTours') },
-              { value: '480+', label: t('happyRiders') },
-              { value: '930+', label: t('happyPeople') },
-              { value: '15+', label: t('yearsExperience') },
+              { value: "870+", label: t("totalTours") },
+              { value: "480+", label: t("happyRiders") },
+              { value: "930+", label: t("happyPeople") },
+              { value: "15+", label: t("yearsExperience") },
             ].map((stat) => (
               <div key={stat.label}>
-                <h3 className="text-3xl lg:text-4xl font-bold mb-1">{stat.value}</h3>
+                <h3 className="text-3xl lg:text-4xl font-bold mb-1">
+                  {stat.value}
+                </h3>
                 <p className="text-sm text-white/70">{stat.label}</p>
               </div>
             ))}

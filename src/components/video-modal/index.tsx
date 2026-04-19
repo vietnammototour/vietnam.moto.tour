@@ -1,22 +1,24 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import type { VideoModalProps } from '@/types';
+import { useEffect } from "react";
+import type { VideoModalProps } from "@/types";
 
 export function VideoModal({ videoUrl, isOpen, onClose }: VideoModalProps) {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   // Convert YouTube watch URL to embed URL
-  const embedUrl = videoUrl.replace('watch?v=', 'embed/') + '?autoplay=1';
+  const embedUrl = videoUrl.replace("watch?v=", "embed/") + "?autoplay=1";
 
   return (
     <div
