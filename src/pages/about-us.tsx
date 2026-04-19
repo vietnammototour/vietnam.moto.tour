@@ -83,7 +83,7 @@ export default function AboutUs() {
       <section className="bg-primary py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="text-white text-center lg:text-left">
-            <p className="text-sm opacity-80 mb-1">Plan your trip with us</p>
+            <p className="font-display text-sm opacity-80 mb-1">Plan your trip with us</p>
             <h2 className="text-2xl lg:text-3xl font-bold">Ready for an unforgettable tour?</h2>
           </div>
           <Link

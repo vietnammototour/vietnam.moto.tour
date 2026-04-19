@@ -1,0 +1,93 @@
+<h2>Card Aspect Ratio</h2>
+<p class="subtitle">All cards will share the same row height. Which proportion feels best for showcasing these landscapes?</p>
+
+<div class="cards" style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+
+  <!-- Option A: 16:9 -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:24px; background:#f8f8f8;">
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+        <div style="aspect-ratio:16/9; background:url('https://www.agoda.com/wp-content/uploads/2024/02/Nha-Trang-Cable-Vietnam-1244x700.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Nha Trang</span>
+        </div>
+        <div style="aspect-ratio:16/9; background:url('https://localvietnam.de/wp-content/uploads/2023/09/tuyen-lam-see-1-1024x683.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Dalat</span>
+        </div>
+        <div style="aspect-ratio:16/9; background:url('https://images.ctfassets.net/wv75stsetqy3/6gzFoj0ORIEj3yIGsB1Q08/5797e277832264a11c9bae10fb2f7772/Retire_in_Mui_Ne.jpg?q=60&fit=fill&fm=webp') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Mui Ne</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:8px; margin-top:8px;">
+        <div style="aspect-ratio:16/9; background:url('https://cdnen.thesaigontimes.vn/wp-content/uploads/2024/07/Mot-thoang-Ho-Ba-Be_Thong-Lam.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Sai Gon</span>
+        </div>
+        <div style="aspect-ratio:16/9; background:url('https://cdn.kimkim.com/files/a/content_articles/featured_photos/5022fa3d9e45c25486f8bcc9adcfdb44a09ded12/big-94f2b85fd88b035fb52518c04d9cfd63.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Hoi An</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Cinematic (16:9)</h3>
+      <p>Wide and panoramic. Great for landscapes, feels modern. Cards are short and wide.</p>
+    </div>
+  </div>
+
+  <!-- Option B: 3:2 -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:24px; background:#f8f8f8;">
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+        <div style="aspect-ratio:3/2; background:url('https://www.agoda.com/wp-content/uploads/2024/02/Nha-Trang-Cable-Vietnam-1244x700.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Nha Trang</span>
+        </div>
+        <div style="aspect-ratio:3/2; background:url('https://localvietnam.de/wp-content/uploads/2023/09/tuyen-lam-see-1-1024x683.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Dalat</span>
+        </div>
+        <div style="aspect-ratio:3/2; background:url('https://images.ctfassets.net/wv75stsetqy3/6gzFoj0ORIEj3yIGsB1Q08/5797e277832264a11c9bae10fb2f7772/Retire_in_Mui_Ne.jpg?q=60&fit=fill&fm=webp') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Mui Ne</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:8px; margin-top:8px;">
+        <div style="aspect-ratio:3/2; background:url('https://cdnen.thesaigontimes.vn/wp-content/uploads/2024/07/Mot-thoang-Ho-Ba-Be_Thong-Lam.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Sai Gon</span>
+        </div>
+        <div style="aspect-ratio:3/2; background:url('https://cdn.kimkim.com/files/a/content_articles/featured_photos/5022fa3d9e45c25486f8bcc9adcfdb44a09ded12/big-94f2b85fd88b035fb52518c04d9cfd63.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Hoi An</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Classic Photo (3:2)</h3>
+      <p>Traditional photo ratio. Balanced between width and height — shows scenery well without feeling cramped or too flat.</p>
+    </div>
+  </div>
+
+  <!-- Option C: 4:3 -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:24px; background:#f8f8f8;">
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+        <div style="aspect-ratio:4/3; background:url('https://www.agoda.com/wp-content/uploads/2024/02/Nha-Trang-Cable-Vietnam-1244x700.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Nha Trang</span>
+        </div>
+        <div style="aspect-ratio:4/3; background:url('https://localvietnam.de/wp-content/uploads/2023/09/tuyen-lam-see-1-1024x683.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Dalat</span>
+        </div>
+        <div style="aspect-ratio:4/3; background:url('https://images.ctfassets.net/wv75stsetqy3/6gzFoj0ORIEj3yIGsB1Q08/5797e277832264a11c9bae10fb2f7772/Retire_in_Mui_Ne.jpg?q=60&fit=fill&fm=webp') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Mui Ne</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:8px; margin-top:8px;">
+        <div style="aspect-ratio:4/3; background:url('https://cdnen.thesaigontimes.vn/wp-content/uploads/2024/07/Mot-thoang-Ho-Ba-Be_Thong-Lam.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Sai Gon</span>
+        </div>
+        <div style="aspect-ratio:4/3; background:url('https://cdn.kimkim.com/files/a/content_articles/featured_photos/5022fa3d9e45c25486f8bcc9adcfdb44a09ded12/big-94f2b85fd88b035fb52518c04d9cfd63.jpg') center/cover; border-radius:6px; position:relative;">
+          <span style="position:absolute;bottom:8px;left:8px;color:white;font-weight:bold;font-size:11px;text-shadow:0 1px 3px rgba(0,0,0,.6)">Hoi An</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Taller (4:3)</h3>
+      <p>More vertical space per card. Shows more of the image, feels substantial. Closer to the original square but not as extreme.</p>
+    </div>
+  </div>
+
+</div>

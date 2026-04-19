@@ -72,7 +72,7 @@ export default function Home() {
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
               Destination lists
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold mt-2">Go Exotic Places</h2>
+            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">Go Exotic Places</h2>
           </motion.div>
           {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -154,8 +154,8 @@ export default function Home() {
               <span className="text-xs font-bold uppercase tracking-widest text-primary">
                 Get to know us
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-6">Plan Your Trip with Us</h2>
-              <p className="text-neutral-500 mb-6">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2 mb-6">Plan Your Trip with Us</h2>
+              <p className="font-display text-neutral-500 mb-6">
                 We are leading day tour and multi-day tour on organizer in Nha Trang, Vietnam
               </p>
               <ul className="space-y-4 mb-8">
@@ -192,7 +192,7 @@ export default function Home() {
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
               Featured tours
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold mt-2">Most Popular Tours</h2>
+            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">Most Popular Tours</h2>
           </motion.div>
           <TourCarousel tours={toursData} />
         </div>
@@ -218,7 +218,7 @@ export default function Home() {
               <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
                 Are you ready to travel?
               </p>
-              <h2 className="text-3xl lg:text-4xl font-bold leading-tight text-white drop-shadow-lg">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold leading-tight text-white drop-shadow-lg">
                 We are leading day tour and multi-day tour on organizer in Nha Trang
               </h2>
             </div>
@@ -234,7 +234,7 @@ export default function Home() {
                   className="bg-white/15 backdrop-blur-sm rounded-lg p-6 text-center text-white hover:bg-white/25 transition-colors"
                 >
                   <span className={`${item.icon} text-3xl text-primary-light block mb-3`} />
-                  <h4 className="text-sm font-semibold whitespace-pre-line drop-shadow-md">{item.label}</h4>
+                  <h4 className="text-sm font-semibold whitespace-pre-line text-white drop-shadow-md">{item.label}</h4>
                 </div>
               ))}
             </div>
