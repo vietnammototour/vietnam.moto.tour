@@ -58,10 +58,10 @@ export default function Home() {
         </video>
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 text-center text-white px-4 drop-shadow-lg">
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 text-white">
+          <h2 className="type-display-sm md:type-display-lg mb-4 text-white">
             {t('heroTitle')}
           </h2>
-          <p className="text-lg sm:text-xl md:text-2xl font-light text-white">
+          <p className="type-body-lg md:type-headline-sm text-white">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -77,10 +77,10 @@ export default function Home() {
             viewport={{once: true}}
             variants={fadeInUp}
           >
-            <span className="text-xs font-bold uppercase tracking-widest text-primary">
+            <span className="type-label-sm uppercase text-on-surface-accent">
               {t('destinationLists')}
             </span>
-            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">
+            <h2 className="type-headline-sm lg:type-headline-lg mt-2">
               {t('goExoticPlaces')}
             </h2>
           </motion.div>
@@ -162,12 +162,12 @@ export default function Home() {
               <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-4 shadow-lg flex items-center gap-3">
                 <span className="icon-phone-call text-2xl text-primary" />
                 <div>
-                  <p className="text-xs text-on-surface-secondary">
+                  <p className="type-label-sm font-normal text-on-surface-secondary">
                     {t('bookTourNow')}
                   </p>
                   <a
                     href="tel:+84-935-797-550"
-                    className="font-bold text-on-surface hover:text-primary transition-colors"
+                    className="type-title-sm text-on-surface hover:text-on-surface-accent transition-colors"
                   >
                     +84 935 797 550
                   </a>
@@ -181,13 +181,13 @@ export default function Home() {
               viewport={{once: true}}
               variants={fadeInUp}
             >
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+              <span className="type-label-sm uppercase text-on-surface-accent">
                 {t('getToKnowUs')}
               </span>
-              <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2 mb-6">
+              <h2 className="type-headline-sm lg:type-headline-lg mt-2 mb-6">
                 {t('planYourTrip')}
               </h2>
-              <p className="font-display text-on-surface-secondary mb-6">
+              <p className="type-body-lg text-on-surface-secondary mb-6">
                 {t('aboutDescription')}
               </p>
               <ul className="space-y-4 mb-8">
@@ -206,7 +206,7 @@ export default function Home() {
               </ul>
               <a
                 href="#"
-                className="inline-block bg-primary hover:bg-primary-light text-on-primary font-bold text-xs uppercase tracking-wider px-8 py-3 rounded-lg transition-colors"
+                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg transition-colors"
               >
                 {t('bookWithUsNow')}
               </a>
@@ -225,10 +225,10 @@ export default function Home() {
             viewport={{once: true}}
             variants={fadeInUp}
           >
-            <span className="text-xs font-bold uppercase tracking-widest text-primary">
+            <span className="type-label-sm uppercase text-on-surface-accent">
               {t('featuredTours')}
             </span>
-            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">
+            <h2 className="type-headline-sm lg:type-headline-lg mt-2">
               {t('mostPopularTours')}
             </h2>
           </motion.div>
@@ -255,10 +255,10 @@ export default function Home() {
               >
                 <i className="fa fa-play ml-1" />
               </button>
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
+              <p className="type-label-lg uppercase text-primary-light mb-2">
                 {t('readyToTravel')}
               </p>
-              <h2 className="font-display text-3xl lg:text-4xl font-bold leading-tight text-white drop-shadow-lg">
+              <h2 className="type-headline-sm lg:type-headline-lg text-white drop-shadow-lg">
                 {t('videoSectionHeading')}
               </h2>
             </div>
@@ -276,7 +276,7 @@ export default function Home() {
                   <span
                     className={`${item.icon} text-3xl text-primary-light block mb-3`}
                   />
-                  <h4 className="text-sm font-semibold whitespace-pre-line text-white drop-shadow-md">
+                  <h4 className="type-label-lg whitespace-pre-line text-white drop-shadow-md">
                     {item.label}
                   </h4>
                 </div>
