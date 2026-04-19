@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import type { GetStaticPropsContext } from 'next';
+import Head from 'next/head';
 import { PageHeader } from '@/components/page-header';
 import { TourCard } from '@/components/tour-card';
 import { toursData } from '@/data';
@@ -9,13 +12,21 @@ const fadeInUp = {
 };
 
 export default function Tours() {
+  const t = useTranslations('tours');
+  const tMeta = useTranslations('meta');
+
   return (
     <>
+      <Head>
+        <title>{tMeta('toursTitle')}</title>
+        <meta name="description" content={tMeta('toursDescription')} />
+      </Head>
+
       <PageHeader
-        title="Popular Tours"
+        title={t('title')}
         breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Tours' },
+          { label: t('breadcrumbHome'), href: '/' },
+          { label: t('breadcrumbTours') },
         ]}
         backgroundImage="https://data.agatetravel.com/images/photogallery/2025/halong-bay-hanoi-vietnam.jpg"
       />
@@ -39,4 +50,12 @@ export default function Tours() {
       </section>
     </>
   );
+}
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`@/messages/${locale}.json`)).default,
+    },
+  };
 }

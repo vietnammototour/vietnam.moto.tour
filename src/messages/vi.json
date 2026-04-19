@@ -1,0 +1,109 @@
+{
+  "header": {
+    "home": "Trang Chủ",
+    "tours": "Tour",
+    "rental": "Cho Thuê",
+    "aboutUs": "Về Chúng Tôi",
+    "contact": "Liên Hệ",
+    "motorbike": "Xe Máy",
+    "car": "Ô Tô"
+  },
+  "footer": {
+    "aboutText": "Hướng dẫn viên của chúng tôi có nhiều năm kinh nghiệm đi xe máy và được thành lập từ năm 2008",
+    "company": "Công Ty",
+    "explore": "Khám Phá",
+    "newsletter": "Bản Tin",
+    "aboutUs": "Về Chúng Tôi",
+    "contactUs": "Liên Hệ",
+    "rental": "Cho Thuê",
+    "tours": "Tour",
+    "legal": "Pháp Lý",
+    "privacyPolicy": "Chính Sách Bảo Mật",
+    "emailPlaceholder": "Địa chỉ email",
+    "subscribe": "Đăng Ký",
+    "agreeTerms": "Tôi đồng ý với tất cả điều khoản và chính sách",
+    "copyright": "© Bản quyền {year}",
+    "contact": "Liên Hệ"
+  },
+  "home": {
+    "heroTitle": "Du Lịch & Phiêu Lưu",
+    "heroSubtitle": "Cuộc Phiêu Lưu Tiếp Theo Của Bạn Bắt Đầu Từ Đây",
+    "destinationLists": "Danh sách điểm đến",
+    "goExoticPlaces": "Khám Phá Những Điểm Đến Kỳ Thú",
+    "getToKnowUs": "Tìm hiểu về chúng tôi",
+    "planYourTrip": "Lên Kế Hoạch Chuyến Đi Cùng Chúng Tôi",
+    "aboutDescription": "Chúng tôi là đơn vị tổ chức tour trong ngày và nhiều ngày hàng đầu tại Nha Trang, Việt Nam",
+    "bulletMotorbike": "Tour xe máy và ô tô",
+    "bulletFriendly": "Đội ngũ thân thiện và hướng dẫn viên địa phương giỏi",
+    "bulletExperience": "Trải nghiệm trên vùng đất tuyệt vời",
+    "bookWithUsNow": "Đặt tour ngay",
+    "bookTourNow": "Đặt Tour Ngay",
+    "featuredTours": "Tour nổi bật",
+    "mostPopularTours": "Tour Phổ Biến Nhất",
+    "readyToTravel": "Bạn đã sẵn sàng du lịch?",
+    "videoSectionHeading": "Chúng tôi là đơn vị tổ chức tour trong ngày và nhiều ngày hàng đầu tại Nha Trang",
+    "wildlifeTours": "Tour\nThiên Nhiên",
+    "bikeTours": "Tour\nXe Máy",
+    "adventureTours": "Tour\nPhiêu Lưu",
+    "fullDayTours": "Tour\nCả Ngày"
+  },
+  "tours": {
+    "title": "Tour Phổ Biến",
+    "breadcrumbHome": "Trang Chủ",
+    "breadcrumbTours": "Tour"
+  },
+  "contact": {
+    "title": "Liên Hệ",
+    "breadcrumbHome": "Trang Chủ",
+    "breadcrumbContact": "Liên Hệ",
+    "talkWithTeam": "Trò chuyện với đội ngũ của chúng tôi",
+    "anyQuestion": "Có Câu Hỏi? Hãy Liên Hệ Với Chúng Tôi",
+    "namePlaceholder": "Tên của bạn",
+    "emailPlaceholder": "Địa chỉ email",
+    "messagePlaceholder": "Viết tin nhắn của bạn",
+    "sendMessage": "Gửi tin nhắn"
+  },
+  "about": {
+    "title": "Giới Thiệu",
+    "breadcrumbHome": "Trang Chủ",
+    "breadcrumbPages": "Trang",
+    "breadcrumbAbout": "Giới Thiệu",
+    "learnAboutUs": "Tìm hiểu về chúng tôi",
+    "dareToExplore": "Dám Khám Phá Cùng Chúng Tôi",
+    "perfectPlace": "Một Nơi Hoàn Hảo Để Lạc Lối",
+    "aboutDescription": "Chúng tôi được khách hàng tin tưởng và có danh tiếng về dịch vụ tốt nhất trong lĩnh vực. Đội ngũ của chúng tôi có tay nghề cao trong việc tổ chức và dẫn đoàn tour xe máy. Với hơn 10 năm kinh nghiệm lái xe đa dạng, chúng tôi thuộc lòng những con đường này.",
+    "bestServices": "Dịch Vụ Tốt Nhất",
+    "tourAgents": "Đại Lý Tour",
+    "planYourTrip": "Lên kế hoạch chuyến đi cùng chúng tôi",
+    "readyForTour": "Sẵn sàng cho một chuyến tour khó quên?",
+    "bookTourNow": "Đặt tour ngay",
+    "readyToTravel": "Bạn đã sẵn sàng du lịch?",
+    "platformDescription": "Vietnam Motorcycle Tour — Nền Tảng Phiêu Lưu Hàng Đầu Thế Giới",
+    "totalTours": "Tổng Số Tour",
+    "happyRiders": "Tài Xế Hài Lòng",
+    "happyPeople": "Khách Hàng Hạnh Phúc",
+    "yearsExperience": "Năm Kinh Nghiệm"
+  },
+  "rental": {
+    "title": "Cho Thuê",
+    "breadcrumbHome": "Trang Chủ",
+    "breadcrumbRental": "Cho Thuê",
+    "perDay": "/ Mỗi Ngày"
+  },
+  "common": {
+    "perPerson": "/ Mỗi Người",
+    "tours": "tour"
+  },
+  "meta": {
+    "homeTitle": "Vietnam Motorcycle Tour — Tour Phiêu Lưu Tại Nha Trang",
+    "homeDescription": "Vietnam Motorcycle Tour — Tour phiêu lưu tại Nha Trang và các vùng lân cận. Tour trong ngày, tour nhiều ngày, cho thuê xe máy và ô tô.",
+    "toursTitle": "Tour Phổ Biến — Vietnam Motorcycle Tour",
+    "toursDescription": "Khám phá các tour xe máy và phiêu lưu phổ biến tại Việt Nam. Tour trong ngày và nhiều ngày từ Nha Trang.",
+    "contactTitle": "Liên Hệ — Vietnam Motorcycle Tour",
+    "contactDescription": "Liên hệ với Vietnam Motorcycle Tour. Đặt tour phiêu lưu tại Nha Trang và các vùng lân cận.",
+    "aboutTitle": "Giới Thiệu — Vietnam Motorcycle Tour",
+    "aboutDescription": "Tìm hiểu về Vietnam Motorcycle Tour — hướng dẫn viên giàu kinh nghiệm, hơn 10 năm tour xe máy tại Việt Nam.",
+    "rentalTitle": "Cho Thuê Xe Máy & Ô Tô — Vietnam Motorcycle Tour",
+    "rentalDescription": "Cho thuê xe máy và ô tô tại Nha Trang, Việt Nam. Honda, Yamaha, Toyota và nhiều hãng khác."
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "header": {
+    "home": "Home",
+    "tours": "Tours",
+    "rental": "Rental",
+    "aboutUs": "About Us",
+    "contact": "Contact",
+    "motorbike": "Motorbike",
+    "car": "Car"
+  },
+  "footer": {
+    "aboutText": "Our Guides have many years of experience motorcycling and was established in 2008",
+    "company": "Company",
+    "explore": "Explore",
+    "newsletter": "Newsletter",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "rental": "Rental",
+    "tours": "Tours",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "emailPlaceholder": "Email address",
+    "subscribe": "Subscribe",
+    "agreeTerms": "I agree to all terms and policies",
+    "copyright": "© All Copyright {year}",
+    "contact": "Contact"
+  },
+  "home": {
+    "heroTitle": "Travel & Adventures",
+    "heroSubtitle": "Your Next Adventure Starts Here",
+    "destinationLists": "Destination lists",
+    "goExoticPlaces": "Go Exotic Places",
+    "getToKnowUs": "Get to know us",
+    "planYourTrip": "Plan Your Trip with Us",
+    "aboutDescription": "We are leading day tour and multi-day tour on organizer in Nha Trang, Vietnam",
+    "bulletMotorbike": "Motorbike and car tour",
+    "bulletFriendly": "Friendly team and expert local guide",
+    "bulletExperience": "Experience in truly remarkable land",
+    "bookWithUsNow": "Book with us now",
+    "bookTourNow": "Book Tour Now",
+    "featuredTours": "Featured tours",
+    "mostPopularTours": "Most Popular Tours",
+    "readyToTravel": "Are you ready to travel?",
+    "videoSectionHeading": "We are leading day tour and multi-day tour on organizer in Nha Trang",
+    "wildlifeTours": "Wildlife\nTours",
+    "bikeTours": "Bike\nTours",
+    "adventureTours": "Adventure\nTours",
+    "fullDayTours": "Full day\nTours"
+  },
+  "tours": {
+    "title": "Popular Tours",
+    "breadcrumbHome": "Home",
+    "breadcrumbTours": "Tours"
+  },
+  "contact": {
+    "title": "Contact",
+    "breadcrumbHome": "Home",
+    "breadcrumbContact": "Contact",
+    "talkWithTeam": "Talk with our team",
+    "anyQuestion": "Any Question? Feel Free to Contact",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "Email address",
+    "messagePlaceholder": "Write your message",
+    "sendMessage": "Send a message"
+  },
+  "about": {
+    "title": "About",
+    "breadcrumbHome": "Home",
+    "breadcrumbPages": "Pages",
+    "breadcrumbAbout": "About",
+    "learnAboutUs": "Learn about us",
+    "dareToExplore": "Dare to Explore with Us",
+    "perfectPlace": "A Simply Perfect Place to Get Lost",
+    "aboutDescription": "We are trusted by our clients and have a reputation for the best services in the field. Our team is highly skilled in crafting and leading motorcycle tours. With over 10 years of varied riding experience, we know these roads inside and out.",
+    "bestServices": "Best Services",
+    "tourAgents": "Tour Agents",
+    "planYourTrip": "Plan your trip with us",
+    "readyForTour": "Ready for an unforgettable tour?",
+    "bookTourNow": "Book tour now",
+    "readyToTravel": "Are you ready to travel?",
+    "platformDescription": "Vietnam Motorcycle Tour — A World Leading Adventure Platform",
+    "totalTours": "Total Tours",
+    "happyRiders": "Happy Riders",
+    "happyPeople": "Happy People",
+    "yearsExperience": "Years Experience"
+  },
+  "rental": {
+    "title": "Rental",
+    "breadcrumbHome": "Home",
+    "breadcrumbRental": "Rental",
+    "perDay": "/ Per Day"
+  },
+  "common": {
+    "perPerson": "/ Per Person",
+    "tours": "tours"
+  },
+  "meta": {
+    "homeTitle": "Vietnam Motorcycle Tour — Adventure Tours in Nha Trang",
+    "homeDescription": "Vietnam Motorcycle Tour — Adventure tours in Nha Trang and beyond. Day tours, multi-day tours, motorbike and car rental.",
+    "toursTitle": "Popular Tours — Vietnam Motorcycle Tour",
+    "toursDescription": "Explore our popular motorcycle and adventure tours in Vietnam. Day trips and multi-day tours from Nha Trang.",
+    "contactTitle": "Contact Us — Vietnam Motorcycle Tour",
+    "contactDescription": "Get in touch with Vietnam Motorcycle Tour. Book your adventure tour in Nha Trang and beyond.",
+    "aboutTitle": "About Us — Vietnam Motorcycle Tour",
+    "aboutDescription": "Learn about Vietnam Motorcycle Tour — experienced guides, over 10 years of motorcycle touring in Vietnam.",
+    "rentalTitle": "Motorbike & Car Rental — Vietnam Motorcycle Tour",
+    "rentalDescription": "Rent motorbikes and cars in Nha Trang, Vietnam. Honda, Yamaha, Toyota and more."
+  }
+}

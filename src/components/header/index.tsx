@@ -3,38 +3,41 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useTranslations } from 'next-intl';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { getUrl } from '@/utils';
 import { contactInfo } from '@/utils';
 import destinationsData from '@/data/destinations.json';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 export const Header = () => {
   const router = useRouter();
   const { scrollDirection, scrollY } = useScrollDirection();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const t = useTranslations('header');
 
   const isSticky = scrollY > 100;
   const isHidden = scrollDirection === 'down' && scrollY > 200;
 
   const navLinks = [
-    { href: '/', label: 'Home', active: router.pathname === '/' },
+    { href: '/', label: t('home'), active: router.pathname === '/' },
     {
       href: '/tours',
-      label: 'Tours',
+      label: t('tours'),
       active: router.pathname.startsWith('/tours'),
       children: destinationsData.map((d) => ({ href: '/tours', label: d.name })),
     },
     {
       href: '/rental',
-      label: 'Rental',
+      label: t('rental'),
       active: router.pathname.startsWith('/rental'),
       children: [
-        { href: '/rental', label: 'Motorbike' },
-        { href: '/rental', label: 'Car' },
+        { href: '/rental', label: t('motorbike') },
+        { href: '/rental', label: t('car') },
       ],
     },
-    { href: '/about-us', label: 'About Us', active: router.pathname === '/about-us' },
-    { href: '/contact', label: 'Contact', active: router.pathname === '/contact' },
+    { href: '/about-us', label: t('aboutUs'), active: router.pathname === '/about-us' },
+    { href: '/contact', label: t('contact'), active: router.pathname === '/contact' },
   ];
 
   return (
@@ -96,6 +99,9 @@ export const Header = () => {
                 </div>
               ))}
             </nav>
+            <div className="hidden lg:flex items-center ml-4">
+              <LanguageSwitcher />
+            </div>
             <button className="lg:hidden flex flex-col gap-1.5 p-2" onClick={() => setMobileOpen(true)} aria-label="Open menu">
               <span className="block w-6 h-0.5 bg-neutral-900" />
               <span className="block w-6 h-0.5 bg-neutral-900" />
@@ -150,6 +156,9 @@ export const Header = () => {
             <a href={contactInfo.youtubeLink} className="text-neutral-400 hover:text-white"><i className="fab fa-youtube" /></a>
             <a href={contactInfo.tripadvisorLink} className="text-neutral-400 hover:text-white"><i className="fab fa-tripadvisor" /></a>
             <a href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`} className="text-neutral-400 hover:text-white"><i className="fab fa-whatsapp" /></a>
+          </div>
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
