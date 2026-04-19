@@ -87,9 +87,6 @@ export const Footer = () => {
       <div className="border-t border-on-surface-inverse/10">
         {/* Bottom tier: Copyright | Contact info */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="type-body-sm">
-            {t('copyright', {year: new Date().getFullYear()})}
-          </p>
           <div className="flex items-center gap-2 type-body-sm">
             <a
               href={`tel:${contactInfo.phone}`}
@@ -107,6 +104,9 @@ export const Footer = () => {
               {contactInfo.email}
             </a>
           </div>
+          <p className="type-body-sm">
+            {t('copyright', {year: new Date().getFullYear()})}
+          </p>
         </div>
       </div>
     </footer>

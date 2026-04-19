@@ -100,10 +100,10 @@ export default function Contact() {
                 className="bg-surface-elevated rounded-lg p-8 text-center shadow-sm"
               >
                 <span
-                  className={`${info.icon} text-4xl text-primary block mb-4`}
+                  className={`${info.icon} text-xl text-primary block mb-8`}
                 />
                 {info.lines.map((line, j) => (
-                  <p key={j} className="text-on-surface type-body-sm">
+                  <p key={j} className="text-on-surface text-[0.6rem]">
                     {line}
                   </p>
                 ))}
