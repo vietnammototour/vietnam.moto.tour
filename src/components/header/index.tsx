@@ -55,7 +55,7 @@ export const Header = () => {
   return (
     <>
       {/* Top bar */}
-      <div className="bg-surface-inverse text-on-surface-inverse text-sm hidden lg:block">
+      <div className="bg-surface-inverse text-on-surface-inverse type-body-sm hidden lg:block">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2">
           <div className="flex items-center gap-6">
             <a
@@ -120,7 +120,7 @@ export const Header = () => {
                 <div key={link.href + link.label} className="relative group">
                   <Link
                     href={link.href}
-                    className={`text-sm font-semibold uppercase tracking-wide transition-colors py-6 ${
+                    className={`type-label-lg uppercase transition-colors py-6 ${
                       link.active
                         ? 'text-primary'
                         : 'text-on-surface hover:text-primary'
@@ -135,7 +135,7 @@ export const Header = () => {
                           <Link
                             key={i}
                             href={child.href}
-                            className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-alt hover:text-primary transition-colors"
+                            className="block px-4 py-2 type-body-sm text-on-surface hover:bg-surface-alt hover:text-primary transition-colors"
                           >
                             {child.label}
                           </Link>
@@ -196,7 +196,7 @@ export const Header = () => {
               key={link.href + link.label}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className={`block py-3 border-b border-on-surface-inverse/10 text-sm font-medium uppercase tracking-wide transition-colors ${
+              className={`block py-3 border-b border-on-surface-inverse/10 type-label-lg uppercase transition-colors ${
                 link.active
                   ? 'text-primary-light'
                   : 'text-on-surface-inverse hover:text-primary-light'
@@ -209,13 +209,13 @@ export const Header = () => {
         <div className="p-4 mt-4">
           <a
             href={`mailto:${contactInfo.email}`}
-            className="flex items-center gap-2 text-sm text-on-surface-secondary hover:text-on-surface-inverse mb-3"
+            className="flex items-center gap-2 type-body-sm text-on-surface-secondary hover:text-on-surface-inverse mb-3"
           >
             <i className="fa fa-envelope" /> {contactInfo.email}
           </a>
           <a
             href={`tel:${contactInfo.phone}`}
-            className="flex items-center gap-2 text-sm text-on-surface-secondary hover:text-on-surface-inverse mb-4"
+            className="flex items-center gap-2 type-body-sm text-on-surface-secondary hover:text-on-surface-inverse mb-4"
           >
             <i className="fa fa-phone-alt" /> {contactInfo.phone}
           </a>
