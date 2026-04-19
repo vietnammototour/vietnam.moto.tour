@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import type { DestinationCardProps } from '@/types';
 
 export const DestinationCard = ({ destination, className }: DestinationCardProps & { className?: string }) => {
   const { name, imageUrl, tours } = destination;
+  const t = useTranslations('common');
 
   return (
     <div className={`group relative rounded-lg overflow-hidden ${className ?? 'aspect-[3/2]'}`}>
@@ -17,7 +19,7 @@ export const DestinationCard = ({ destination, className }: DestinationCardProps
           <Link href="/tours" className="hover:text-primary-light transition-colors">{name}</Link>
         </h2>
         <span className="inline-block bg-primary/90 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full">
-          {tours} tours
+          {tours} {t('tours')}
         </span>
       </div>
     </div>
