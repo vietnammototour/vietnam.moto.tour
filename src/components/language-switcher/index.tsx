@@ -15,7 +15,7 @@ export const LanguageSwitcher = () => {
     <div className="flex items-center gap-1 text-sm font-semibold">
       <button
         onClick={() => switchLocale('vi')}
-        className={`px-1.5 py-0.5 rounded transition-colors ${
+        className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
           locale === 'vi'
             ? 'text-primary font-bold'
             : 'text-neutral-500 hover:text-neutral-900'
@@ -26,7 +26,7 @@ export const LanguageSwitcher = () => {
       <span className="text-neutral-300">|</span>
       <button
         onClick={() => switchLocale('en')}
-        className={`px-1.5 py-0.5 rounded transition-colors ${
+        className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
           locale === 'en'
             ? 'text-primary font-bold'
             : 'text-neutral-500 hover:text-neutral-900'
