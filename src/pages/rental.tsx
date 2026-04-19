@@ -99,7 +99,7 @@ export default function Rental() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-overlay/20" />
-                  <span className="absolute top-3 left-3 bg-secondary text-on-primary text-xs font-bold uppercase px-3 py-1 rounded-full">
+                  <span className="absolute top-3 left-3 bg-secondary text-on-primary type-label-sm uppercase px-3 py-1 rounded-full">
                     {item.category}
                   </span>
                   <button
@@ -110,14 +110,14 @@ export default function Rental() {
                   </button>
                 </div>
                 <div className="p-5">
-                  <div className="flex items-center gap-1 text-sm text-primary font-semibold mb-2">
+                  <div className="flex items-center gap-1 type-label-lg text-on-surface-accent mb-2">
                     <i className="fa fa-star text-xs" /> {item.rating}
                   </div>
-                  <h3 className="text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="type-title-sm text-on-surface mb-2 group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-on-surface-secondary text-sm">
-                    <span className="text-primary font-bold text-lg">
+                  <p className="text-on-surface-secondary type-body-sm">
+                    <span className="text-on-surface-accent type-title-sm">
                       ${item.price}
                     </span>{' '}
                     {t('perDay')}

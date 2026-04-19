@@ -11,7 +11,9 @@ export default function ThemeToggle() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-on-surface-inverse">{t('label')}</span>
+      <span className="type-label-lg text-on-surface-inverse">
+        {t('label')}
+      </span>
       <button
         role="switch"
         aria-checked={isDark}

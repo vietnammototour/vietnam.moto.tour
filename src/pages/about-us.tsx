@@ -57,13 +57,13 @@ export default function AboutUs() {
               viewport={{once: true}}
               variants={fadeInUp}
             >
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+              <span className="type-label-sm uppercase text-on-surface-accent">
                 {t('learnAboutUs')}
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">
+              <h2 className="type-headline-sm lg:type-headline-lg mt-2 mb-4">
                 {t('dareToExplore')}
               </h2>
-              <p className="text-primary font-semibold mb-4">
+              <p className="type-title-sm text-on-surface-accent mb-4">
                 {t('perfectPlace')}
               </p>
               <p className="text-on-surface-secondary mb-8">
@@ -72,10 +72,12 @@ export default function AboutUs() {
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-on-surface">
+                    <h4 className="type-label-lg text-on-surface">
                       {t('bestServices')}
                     </h4>
-                    <span className="text-sm font-bold text-primary">77%</span>
+                    <span className="type-label-lg text-on-surface-accent">
+                      77%
+                    </span>
                   </div>
                   <div className="w-full bg-surface-alt rounded-full h-2">
                     <div
@@ -86,10 +88,12 @@ export default function AboutUs() {
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-on-surface">
+                    <h4 className="type-label-lg text-on-surface">
                       {t('tourAgents')}
                     </h4>
-                    <span className="text-sm font-bold text-primary">38%</span>
+                    <span className="type-label-lg text-on-surface-accent">
+                      38%
+                    </span>
                   </div>
                   <div className="w-full bg-surface-alt rounded-full h-2">
                     <div
@@ -107,16 +111,14 @@ export default function AboutUs() {
       <section className="bg-primary py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="text-white text-center lg:text-left">
-            <p className="font-display text-sm opacity-80 mb-1">
-              {t('planYourTrip')}
-            </p>
-            <h2 className="text-2xl lg:text-3xl font-bold">
+            <p className="type-label-lg opacity-80 mb-1">{t('planYourTrip')}</p>
+            <h2 className="type-headline-sm lg:type-headline-lg">
               {t('readyForTour')}
             </h2>
           </div>
           <Link
             href="/contact"
-            className="bg-surface-elevated text-primary hover:bg-surface-alt font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors flex-shrink-0"
+            className="bg-surface-elevated text-on-surface-accent hover:bg-surface-alt type-label-sm uppercase px-8 py-4 rounded-lg transition-colors flex-shrink-0"
           >
             {t('bookTourNow')}
           </Link>
@@ -140,10 +142,10 @@ export default function AboutUs() {
           >
             <i className="fa fa-play text-xl ml-1" />
           </button>
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
+          <p className="type-label-lg uppercase text-primary-light mb-2">
             {t('readyToTravel')}
           </p>
-          <h2 className="text-3xl lg:text-4xl font-bold max-w-2xl mx-auto leading-tight">
+          <h2 className="type-headline-sm lg:type-headline-lg max-w-2xl mx-auto">
             {t('platformDescription')}
           </h2>
         </div>
@@ -164,10 +166,12 @@ export default function AboutUs() {
               {value: '15+', label: t('yearsExperience')},
             ].map((stat) => (
               <div key={stat.label}>
-                <h3 className="text-3xl lg:text-4xl font-bold mb-1">
+                <h3 className="type-headline-sm lg:type-headline-lg mb-1">
                   {stat.value}
                 </h3>
-                <p className="text-sm text-white/70">{stat.label}</p>
+                <p className="type-label-lg font-normal text-white/70">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
