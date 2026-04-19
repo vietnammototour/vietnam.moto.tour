@@ -28,12 +28,10 @@ export default function Contact() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-4">
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+              <span className="type-label-sm uppercase text-on-surface-accent">
                 {t('talkWithTeam')}
               </span>
-              <h2 className="text-3xl font-bold mt-2 mb-6">
-                {t('anyQuestion')}
-              </h2>
+              <h2 className="type-headline-lg mt-2 mb-6">{t('anyQuestion')}</h2>
               <div className="flex gap-3">
                 <a
                   href="#"
@@ -61,22 +59,22 @@ export default function Contact() {
                   <input
                     type="text"
                     placeholder={t('namePlaceholder')}
-                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <input
                     type="email"
                     placeholder={t('emailPlaceholder')}
-                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <textarea
                   placeholder={t('messagePlaceholder')}
                   rows={6}
-                  className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                 />
                 <button
                   type="submit"
-                  className="bg-primary hover:bg-primary-light text-on-primary font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors"
+                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 rounded-lg transition-colors"
                 >
                   {t('sendMessage')}
                 </button>
@@ -105,7 +103,7 @@ export default function Contact() {
                   className={`${info.icon} text-4xl text-primary block mb-4`}
                 />
                 {info.lines.map((line, j) => (
-                  <p key={j} className="text-on-surface text-sm">
+                  <p key={j} className="text-on-surface type-body-sm">
                     {line}
                   </p>
                 ))}
