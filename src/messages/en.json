@@ -28,10 +28,12 @@
     "mostPopularTours": "Most Popular Tours",
     "readyToTravel": "Are you ready to travel?",
     "videoSectionHeading": "We are leading day tour and multi-day tour on organizer in Nha Trang",
-    "wildlifeTours": "Wildlife\nTours",
-    "bikeTours": "Bike\nTours",
-    "adventureTours": "Adventure\nTours",
-    "fullDayTours": "Full day\nTours"
+    "localExperts": "Local Expert\nGuides",
+    "yearsOnRoad": "10+ Years\nExperience",
+    "hiddenRoutes": "Hidden\nRoutes",
+    "dayAndMultiDay": "Day &\nMulti-Day",
+    "smallGroups": "Small\nGroups",
+    "allInclusive": "All\nInclusive"
   },
   "tours": {
     "title": "Popular Tours",

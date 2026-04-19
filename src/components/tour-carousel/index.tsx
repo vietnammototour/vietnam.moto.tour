@@ -1,20 +1,21 @@
-"use client";
+'use client';
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Navigation, Autoplay, Pagination} from 'swiper/modules';
 
-import "swiper/css";
-import "swiper/css/navigation";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
-import { TourCard } from "../tour-card";
-import type { TourCarouselProps } from "@/types";
-import styles from "./TourCarousel.module.css";
+import {TourCard} from '../tour-card';
+import type {TourCarouselProps} from '@/types';
+import styles from './TourCarousel.module.css';
 
-export const TourCarousel = ({ tours }: TourCarouselProps) => {
+export const TourCarousel = ({tours}: TourCarouselProps) => {
   return (
     <div className={`relative ${styles.carousel}`}>
       <Swiper
-        modules={[Navigation, Autoplay]}
+        modules={[Navigation, Autoplay, Pagination]}
         spaceBetween={24}
         slidesPerView={1}
         navigation
@@ -22,12 +23,13 @@ export const TourCarousel = ({ tours }: TourCarouselProps) => {
           delay: 3000,
           disableOnInteraction: false,
         }}
-        loop={true}
+        loop={false}
+        pagination={{clickable: true}}
         breakpoints={{
-          640: { slidesPerView: 2, spaceBetween: 20 },
-          768: { slidesPerView: 2, spaceBetween: 24 },
-          1024: { slidesPerView: 3, spaceBetween: 24 },
-          1280: { slidesPerView: 4, spaceBetween: 24 },
+          640: {slidesPerView: 2, spaceBetween: 20},
+          768: {slidesPerView: 2, spaceBetween: 24},
+          1024: {slidesPerView: 3, spaceBetween: 24},
+          1280: {slidesPerView: 4, spaceBetween: 24},
         }}
       >
         {tours.map((tour) => (
