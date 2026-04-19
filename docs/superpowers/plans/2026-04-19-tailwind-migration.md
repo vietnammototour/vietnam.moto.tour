@@ -1546,7 +1546,7 @@ export default function Home() {
                 Get to know us
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-6">
-                Plan Your Trip with Us
+                Plan your trip with us
               </h2>
               <p className="text-neutral-500 mb-6">
                 We are leading day tour and multi-day tour on organizer in Nha

@@ -100,7 +100,7 @@ git commit -m "feat(i18n): install next-intl and configure i18n routing"
     "destinationLists": "Destination lists",
     "goExoticPlaces": "Go Exotic Places",
     "getToKnowUs": "Get to know us",
-    "planYourTrip": "Plan Your Trip with Us",
+    "planYourTrip": "Plan your trip with us",
     "aboutDescription": "We are leading day tour and multi-day tour on organizer in Nha Trang, Vietnam",
     "bulletMotorbike": "Motorbike and car tour",
     "bulletFriendly": "Friendly team and expert local guide",
@@ -922,7 +922,7 @@ Replace each hardcoded string with its `t()` call:
 - `"Go Exotic Places"` → `{t('goExoticPlaces')}`
 - `"Book Tour Now"` → `{t('bookTourNow')}`
 - `"Get to know us"` → `{t('getToKnowUs')}`
-- `"Plan Your Trip with Us"` → `{t('planYourTrip')}`
+- `"Plan your trip with us"` → `{t('planYourTrip')}`
 - The paragraph `"We are leading day tour..."` → `{t('aboutDescription')}`
 - The bullet items array `['Motorbike and car tour', 'Friendly team...', 'Experience in...']` → `[t('bulletMotorbike'), t('bulletFriendly'), t('bulletExperience')]`
 - `"Book with us now"` → `{t('bookWithUsNow')}`
