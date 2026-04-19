@@ -41,7 +41,7 @@ const outBrave = localFont({
 });
 
 export default function Home() {
-  const bannerVideoRef = useRef(null);
+  const bannerVideoRef = useRef<HTMLVideoElement>(null);
 
   // Gallery images data
   const galleryImages = [
@@ -53,7 +53,9 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    bannerVideoRef.current.playbackRate = 0.8;
+    if (bannerVideoRef.current) {
+      bannerVideoRef.current.playbackRate = 0.8;
+    }
   }, []);
 
   return (
