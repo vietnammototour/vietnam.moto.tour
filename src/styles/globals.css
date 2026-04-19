@@ -64,10 +64,6 @@
     border-color 200ms ease !important;
 }
 
-@utility font-display {
-  font-family: var(--font-outbrave), sans-serif;
-}
-
 @utility type-display-lg {
   font-family: var(--font-outbrave), sans-serif;
   font-size: var(--font-size-display-lg);
