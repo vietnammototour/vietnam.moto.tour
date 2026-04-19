@@ -9,21 +9,11 @@
     "car": "Ô Tô"
   },
   "footer": {
-    "aboutText": "Hướng dẫn viên của chúng tôi có nhiều năm kinh nghiệm đi xe máy và được thành lập từ năm 2008",
-    "company": "Công Ty",
-    "explore": "Khám Phá",
-    "newsletter": "Bản Tin",
     "aboutUs": "Về Chúng Tôi",
     "contactUs": "Liên Hệ",
     "rental": "Cho Thuê",
     "tours": "Tour",
-    "legal": "Pháp Lý",
-    "privacyPolicy": "Chính Sách Bảo Mật",
-    "emailPlaceholder": "Địa chỉ email",
-    "subscribe": "Đăng Ký",
-    "agreeTerms": "Tôi đồng ý với tất cả điều khoản và chính sách",
-    "copyright": "© Bản quyền {year}",
-    "contact": "Liên Hệ"
+    "copyright": "© Bản quyền {year}"
   },
   "home": {
     "heroTitle": "Du Lịch & Phiêu Lưu",
