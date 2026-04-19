@@ -12,12 +12,12 @@ export const LanguageSwitcher = () => {
   };
 
   return (
-    <div className="flex items-center gap-1 text-sm font-semibold">
+    <div className="flex items-center gap-1 type-label-lg">
       <button
         onClick={() => switchLocale('vi')}
         className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
           locale === 'vi'
-            ? 'text-primary font-bold'
+            ? 'text-on-surface-accent'
             : 'text-on-surface-secondary hover:text-on-surface'
         }`}
       >
@@ -28,7 +28,7 @@ export const LanguageSwitcher = () => {
         onClick={() => switchLocale('en')}
         className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
           locale === 'en'
-            ? 'text-primary font-bold'
+            ? 'text-on-surface-accent'
             : 'text-on-surface-secondary hover:text-on-surface'
         }`}
       >
