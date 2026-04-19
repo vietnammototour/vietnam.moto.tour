@@ -1,35 +1,35 @@
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
-import type { GetStaticPropsContext } from "next";
-import Head from "next/head";
+import {useEffect, useRef, useState} from 'react';
+import {motion} from 'framer-motion';
+import {useTranslations} from 'next-intl';
+import type {GetStaticPropsContext} from 'next';
+import Head from 'next/head';
 
-import { DestinationCard } from "@/components/destination-card";
-import { TourCarousel } from "@/components/tour-carousel";
-import { GalleryItem } from "@/components/gallery-item";
-import { VideoModal } from "@/components/video-modal";
+import {DestinationCard} from '@/components/destination-card';
+import {TourCarousel} from '@/components/tour-carousel';
+import {GalleryItem} from '@/components/gallery-item';
+import {VideoModal} from '@/components/video-modal';
 
-import { destinationsData, toursData } from "@/data";
-import { getUrl } from "@/utils";
+import {destinationsData, toursData} from '@/data';
+import {getUrl} from '@/utils';
 
 const galleryImages = [
-  getUrl("assets/images/gallery/gallery-one-img-1.jpeg"),
-  getUrl("assets/images/gallery/gallery-one-img-2.jpeg"),
-  getUrl("assets/images/gallery/gallery-one-img-3.jpeg"),
-  getUrl("assets/images/gallery/gallery-one-img-4.jpeg"),
-  getUrl("assets/images/gallery/gallery-one-img-5.jpeg"),
+  getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
 ];
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: {opacity: 0, y: 30},
+  visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
 };
 
 export default function Home() {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const t = useTranslations("home");
-  const tMeta = useTranslations("meta");
+  const t = useTranslations('home');
+  const tMeta = useTranslations('meta');
 
   useEffect(() => {
     if (bannerVideoRef.current) {
@@ -40,8 +40,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>{tMeta("homeTitle")}</title>
-        <meta name="description" content={tMeta("homeDescription")} />
+        <title>{tMeta('homeTitle')}</title>
+        <meta name="description" content={tMeta('homeDescription')} />
       </Head>
 
       {/* Hero */}
@@ -54,15 +54,15 @@ export default function Home() {
           ref={bannerVideoRef}
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src={getUrl("assets/videos/banner-0.MOV")} type="video/mp4" />
+          <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 text-center text-white px-4 drop-shadow-lg">
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 text-white">
-            {t("heroTitle")}
+            {t('heroTitle')}
           </h2>
           <p className="text-lg sm:text-xl md:text-2xl font-light text-white">
-            {t("heroSubtitle")}
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -74,14 +74,14 @@ export default function Home() {
             className="text-center mb-12"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{once: true}}
             variants={fadeInUp}
           >
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
-              {t("destinationLists")}
+              {t('destinationLists')}
             </span>
             <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">
-              {t("goExoticPlaces")}
+              {t('goExoticPlaces')}
             </h2>
           </motion.div>
           {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
@@ -90,7 +90,7 @@ export default function Home() {
               className="sm:col-span-2 sm:row-span-2"
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{once: true}}
               variants={fadeInUp}
             >
               <DestinationCard
@@ -103,12 +103,12 @@ export default function Home() {
                 key={destination.id}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{once: true}}
                 variants={{
                   ...fadeInUp,
                   visible: {
                     ...fadeInUp.visible,
-                    transition: { duration: 0.6, delay: (i + 1) * 0.1 },
+                    transition: {duration: 0.6, delay: (i + 1) * 0.1},
                   },
                 }}
               >
@@ -124,12 +124,12 @@ export default function Home() {
                   key={destination.id}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true }}
+                  viewport={{once: true}}
                   variants={{
                     ...fadeInUp,
                     visible: {
                       ...fadeInUp.visible,
-                      transition: { duration: 0.6, delay: (i + 5) * 0.1 },
+                      transition: {duration: 0.6, delay: (i + 5) * 0.1},
                     },
                   }}
                 >
@@ -142,14 +142,14 @@ export default function Home() {
       </section>
 
       {/* About */}
-      <section className="py-16 lg:py-24 bg-neutral-100">
+      <section className="py-16 lg:py-24 bg-surface-alt">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
             <motion.div
               className="relative"
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{once: true}}
               variants={fadeInUp}
             >
               <div className="rounded-lg overflow-hidden aspect-[4/3]">
@@ -159,13 +159,15 @@ export default function Home() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute bottom-6 left-6 bg-white rounded-lg p-4 shadow-lg flex items-center gap-3">
+              <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-4 shadow-lg flex items-center gap-3">
                 <span className="icon-phone-call text-2xl text-primary" />
                 <div>
-                  <p className="text-xs text-neutral-500">{t("bookTourNow")}</p>
+                  <p className="text-xs text-on-surface-secondary">
+                    {t('bookTourNow')}
+                  </p>
                   <a
                     href="tel:+84-935-797-550"
-                    className="font-bold text-neutral-900 hover:text-primary transition-colors"
+                    className="font-bold text-on-surface hover:text-primary transition-colors"
                   >
                     +84 935 797 550
                   </a>
@@ -176,37 +178,37 @@ export default function Home() {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{once: true}}
               variants={fadeInUp}
             >
               <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                {t("getToKnowUs")}
+                {t('getToKnowUs')}
               </span>
               <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2 mb-6">
-                {t("planYourTrip")}
+                {t('planYourTrip')}
               </h2>
-              <p className="font-display text-neutral-500 mb-6">
-                {t("aboutDescription")}
+              <p className="font-display text-on-surface-secondary mb-6">
+                {t('aboutDescription')}
               </p>
               <ul className="space-y-4 mb-8">
                 {[
-                  t("bulletMotorbike"),
-                  t("bulletFriendly"),
-                  t("bulletExperience"),
+                  t('bulletMotorbike'),
+                  t('bulletFriendly'),
+                  t('bulletExperience'),
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
                       <i className="fa fa-check text-primary text-xs" />
                     </span>
-                    <span className="text-neutral-700">{item}</span>
+                    <span className="text-on-surface">{item}</span>
                   </li>
                 ))}
               </ul>
               <a
                 href="#"
-                className="inline-block bg-primary hover:bg-primary-light text-white font-bold text-xs uppercase tracking-wider px-8 py-3 rounded-lg transition-colors"
+                className="inline-block bg-primary hover:bg-primary-light text-on-primary font-bold text-xs uppercase tracking-wider px-8 py-3 rounded-lg transition-colors"
               >
-                {t("bookWithUsNow")}
+                {t('bookWithUsNow')}
               </a>
             </motion.div>
           </div>
@@ -220,14 +222,14 @@ export default function Home() {
             className="text-center mb-12"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{once: true}}
             variants={fadeInUp}
           >
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
-              {t("featuredTours")}
+              {t('featuredTours')}
             </span>
             <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">
-              {t("mostPopularTours")}
+              {t('mostPopularTours')}
             </h2>
           </motion.div>
           <TourCarousel tours={toursData} />
@@ -239,7 +241,7 @@ export default function Home() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
           style={{
-            backgroundImage: `url(${getUrl("assets/images/backgrounds/video-one-bg-0.jpeg")})`,
+            backgroundImage: `url(${getUrl('assets/images/backgrounds/video-one-bg-0.jpeg')})`,
           }}
         />
         <div className="absolute inset-0 bg-overlay" />
@@ -254,22 +256,22 @@ export default function Home() {
                 <i className="fa fa-play ml-1" />
               </button>
               <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
-                {t("readyToTravel")}
+                {t('readyToTravel')}
               </p>
               <h2 className="font-display text-3xl lg:text-4xl font-bold leading-tight text-white drop-shadow-lg">
-                {t("videoSectionHeading")}
+                {t('videoSectionHeading')}
               </h2>
             </div>
             <div className="grid grid-cols-2 gap-6">
               {[
-                { icon: "icon-travel-map", label: t("wildlifeTours") },
-                { icon: "icon-place", label: t("bikeTours") },
-                { icon: "icon-flag", label: t("adventureTours") },
-                { icon: "icon-clock", label: t("fullDayTours") },
+                {icon: 'icon-travel-map', label: t('wildlifeTours')},
+                {icon: 'icon-place', label: t('bikeTours')},
+                {icon: 'icon-flag', label: t('adventureTours')},
+                {icon: 'icon-clock', label: t('fullDayTours')},
               ].map((item) => (
                 <div
                   key={item.icon}
-                  className="bg-white/15 backdrop-blur-sm rounded-lg p-6 text-center text-white hover:bg-white/25 transition-colors"
+                  className="bg-surface-elevated/15 backdrop-blur-sm rounded-lg p-6 text-center text-white hover:bg-surface-elevated/25 transition-colors"
                 >
                   <span
                     className={`${item.icon} text-3xl text-primary-light block mb-3`}
@@ -290,7 +292,7 @@ export default function Home() {
       />
 
       {/* Gallery */}
-      <section className="py-16 lg:py-24 bg-neutral-100">
+      <section className="py-16 lg:py-24 bg-surface-alt">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {galleryImages.map((imageSrc, index) => (
@@ -307,7 +309,7 @@ export default function Home() {
   );
 }
 
-export async function getStaticProps({ locale }: GetStaticPropsContext) {
+export async function getStaticProps({locale}: GetStaticPropsContext) {
   return {
     props: {
       messages: (await import(`@/messages/${locale}.json`)).default,
