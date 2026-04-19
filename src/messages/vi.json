@@ -94,6 +94,11 @@
     "perPerson": "/ Mỗi Người",
     "tours": "tour"
   },
+  "ThemeToggle": {
+    "label": "Giao dien",
+    "light": "Sang",
+    "dark": "Toi"
+  },
   "meta": {
     "homeTitle": "Vietnam Motorcycle Tour — Tour Phiêu Lưu Tại Nha Trang",
     "homeDescription": "Vietnam Motorcycle Tour — Tour phiêu lưu tại Nha Trang và các vùng lân cận. Tour trong ngày, tour nhiều ngày, cho thuê xe máy và ô tô.",
