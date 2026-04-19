@@ -38,15 +38,16 @@ export const Header = () => {
         label: d.name,
       })),
     },
-    {
-      href: '/rental',
-      label: t('rental'),
-      active: router.pathname.startsWith('/rental'),
-      children: [
-        {href: '/rental', label: t('motorbike')},
-        {href: '/rental', label: t('car')},
-      ],
-    },
+    // TODO: unhide when rental page is ready
+    // {
+    //   href: '/rental',
+    //   label: t('rental'),
+    //   active: router.pathname.startsWith('/rental'),
+    //   children: [
+    //     {href: '/rental', label: t('motorbike')},
+    //     {href: '/rental', label: t('car')},
+    //   ],
+    // },
     {
       href: '/about-us',
       label: t('aboutUs'),

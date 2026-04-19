@@ -23,22 +23,24 @@ export const Footer = () => {
           {/* Nav links */}
           <nav className="flex flex-wrap justify-center gap-x-8 gap-y-2 type-body-sm">
             <Link
-              href="/about-us"
-              className="hover:text-on-surface-inverse transition-colors"
-            >
-              {tNav('aboutUs')}
-            </Link>
-            <Link
               href="/tours"
               className="hover:text-on-surface-inverse transition-colors"
             >
               {tNav('tours')}
             </Link>
+            {/* TODO: unhide when rental page is ready
             <Link
               href="/rental"
               className="hover:text-on-surface-inverse transition-colors"
             >
               {tNav('rental')}
+            </Link>
+            */}
+            <Link
+              href="/about-us"
+              className="hover:text-on-surface-inverse transition-colors"
+            >
+              {tNav('aboutUs')}
             </Link>
             <Link
               href="/contact"
