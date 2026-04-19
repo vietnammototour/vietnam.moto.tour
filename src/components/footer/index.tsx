@@ -91,15 +91,17 @@ export const Footer = () => {
           <div className="flex items-center gap-2 type-body-sm">
             <a
               href={`tel:${contactInfo.phone}`}
-              className="hover:text-on-surface-inverse transition-colors"
+              className="flex items-center gap-1.5 hover:text-on-surface-inverse transition-colors"
             >
+              <i className="fa fa-phone-alt" aria-hidden="true" />
               {contactInfo.phone}
             </a>
             <span>·</span>
             <a
               href={`mailto:${contactInfo.email}`}
-              className="hover:text-on-surface-inverse transition-colors"
+              className="flex items-center gap-1.5 hover:text-on-surface-inverse transition-colors"
             >
+              <i className="fa fa-envelope" aria-hidden="true" />
               {contactInfo.email}
             </a>
           </div>
