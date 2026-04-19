@@ -12,8 +12,11 @@
   --color-neutral-100: #F3F4F6;
   --color-overlay: rgba(26, 26, 46, 0.55);
 
-  --font-display: var(--font-outbrave), sans-serif;
   --font-sans: var(--font-dm-sans), "DM Sans", sans-serif;
+}
+
+@utility font-display {
+  font-family: var(--font-outbrave), sans-serif;
 }
 
 @layer base {

@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import type { DestinationCardProps } from '@/types';
 
-export const DestinationCard = ({ destination }: DestinationCardProps) => {
+export const DestinationCard = ({ destination, className }: DestinationCardProps & { className?: string }) => {
   const { name, imageUrl, tours } = destination;
 
   return (
-    <div className="group relative rounded-lg overflow-hidden aspect-square">
+    <div className={`group relative rounded-lg overflow-hidden ${className ?? 'aspect-[3/2]'}`}>
       <img
         src={imageUrl}
         alt={name}
