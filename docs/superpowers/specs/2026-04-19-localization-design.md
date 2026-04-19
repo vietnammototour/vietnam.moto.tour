@@ -32,20 +32,24 @@ i18n: {
 ```
 
 Next.js automatically:
+
 - Routes `/en/*` requests with `locale: 'en'`
 - Routes unprefixed requests with `locale: 'vi'`
 - Sets `<html lang="...">` accordingly
 
-### _app.tsx
+### \_app.tsx
 
 Wrap with `NextIntlClientProvider`, receiving messages from page-level `getStaticProps`:
 
 ```tsx
-import { NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider } from "next-intl";
 
 function App({ Component, pageProps }) {
   return (
-    <NextIntlClientProvider locale={pageProps.locale} messages={pageProps.messages}>
+    <NextIntlClientProvider
+      locale={pageProps.locale}
+      messages={pageProps.messages}
+    >
       <Layout>
         <Component {...pageProps} />
       </Layout>
@@ -173,8 +177,8 @@ Single flat file per locale. Keys grouped by namespace:
 Each component/page calls `useTranslations()` with its namespace:
 
 ```tsx
-const t = useTranslations('header');
-return <a>{t('home')}</a>;
+const t = useTranslations("header");
+return <a>{t("home")}</a>;
 ```
 
 ### Page-level data loading
@@ -185,8 +189,8 @@ Every page exports `getStaticProps` to load messages:
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`@/messages/${locale}.json`)).default
-    }
+      messages: (await import(`@/messages/${locale}.json`)).default,
+    },
   };
 }
 ```
@@ -198,19 +202,21 @@ For dynamic values (stats, counts):
 ```json
 { "totalTours": "{count}+ Total Tours" }
 ```
+
 ```tsx
-t('totalTours', { count: 870 })
+t("totalTours", { count: 870 });
 ```
 
 ### Components affected
 
 All components that contain user-visible text will be modified to use `useTranslations()`:
+
 - Header — `header` namespace
 - Footer — `footer` namespace
 - TourCard — `common` namespace
 - DestinationCard — `common` namespace
 - All 5 page files (index, tours, contact, about-us, rental) — their respective namespaces
-- _document.tsx — no change needed (Next.js handles `<html lang>`)
+- \_document.tsx — no change needed (Next.js handles `<html lang>`)
 
 ## Language Switcher
 
@@ -237,11 +243,11 @@ Rendered inside the Header component, visible on both desktop and mobile views.
 Each page renders translated `<title>` and `<meta name="description">` via the `meta` namespace:
 
 ```tsx
-const t = useTranslations('meta');
+const t = useTranslations("meta");
 <Head>
-  <title>{t('toursTitle')}</title>
-  <meta name="description" content={t('toursDescription')} />
-</Head>
+  <title>{t("toursTitle")}</title>
+  <meta name="description" content={t("toursDescription")} />
+</Head>;
 ```
 
 ### hreflang alternate links
@@ -262,27 +268,27 @@ Handled automatically by Next.js `i18n` config — sets `<html lang="vi">` or `<
 
 ## Files to Create
 
-| File | Purpose |
-|------|---------|
-| `src/messages/vi.json` | Vietnamese translation strings |
-| `src/messages/en.json` | English translation strings |
-| `src/components/language-switcher/index.tsx` | Language toggle component |
+| File                                         | Purpose                        |
+| -------------------------------------------- | ------------------------------ |
+| `src/messages/vi.json`                       | Vietnamese translation strings |
+| `src/messages/en.json`                       | English translation strings    |
+| `src/components/language-switcher/index.tsx` | Language toggle component      |
 
 ## Files to Modify
 
-| File | Change |
-|------|--------|
-| `next.config.ts` | Add `i18n` block |
-| `src/pages/_app.tsx` | Wrap with `NextIntlClientProvider` |
-| `src/pages/index.tsx` | Add `getStaticProps`, replace hardcoded text with `t()` calls |
-| `src/pages/tours.tsx` | Same |
-| `src/pages/contact.tsx` | Same |
-| `src/pages/about-us.tsx` | Same |
-| `src/pages/rental.tsx` | Same |
-| `src/components/header/index.tsx` | Use `t()` for nav labels, render `LanguageSwitcher` |
-| `src/components/footer/index.tsx` | Use `t()` for all visible text |
-| `src/components/tour-card/index.tsx` | Use `t()` for "/ Per Person" |
-| `src/components/destination-card/index.tsx` | Use `t()` for "tours" |
+| File                                        | Change                                                        |
+| ------------------------------------------- | ------------------------------------------------------------- |
+| `next.config.ts`                            | Add `i18n` block                                              |
+| `src/pages/_app.tsx`                        | Wrap with `NextIntlClientProvider`                            |
+| `src/pages/index.tsx`                       | Add `getStaticProps`, replace hardcoded text with `t()` calls |
+| `src/pages/tours.tsx`                       | Same                                                          |
+| `src/pages/contact.tsx`                     | Same                                                          |
+| `src/pages/about-us.tsx`                    | Same                                                          |
+| `src/pages/rental.tsx`                      | Same                                                          |
+| `src/components/header/index.tsx`           | Use `t()` for nav labels, render `LanguageSwitcher`           |
+| `src/components/footer/index.tsx`           | Use `t()` for all visible text                                |
+| `src/components/tour-card/index.tsx`        | Use `t()` for "/ Per Person"                                  |
+| `src/components/destination-card/index.tsx` | Use `t()` for "tours"                                         |
 
 ## Dependencies
 

@@ -59,30 +59,30 @@ Full migration from the Tevily HTML template (Bootstrap 5 grid + 7,600 lines of 
 
 ### Color Palette
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `primary` | `#C2491D` (burnt terracotta) | CTAs, active states, primary actions |
-| `primary-light` | `#E8604C` | Hover states, highlights |
-| `secondary` | `#1B4332` (deep jungle green) | Secondary buttons, accents, badges |
-| `secondary-light` | `#2D6A4F` | Hover states for secondary |
-| `neutral-900` | `#1A1A2E` | Headings, primary text |
-| `neutral-700` | `#374151` | Body text |
-| `neutral-500` | `#6B7280` | Muted text, captions |
-| `neutral-200` | `#E5E7EB` | Borders, dividers |
-| `neutral-100` | `#F3F4F6` | Alternating section backgrounds |
-| `white` | `#FFFFFF` | Cards, primary backgrounds |
-| `overlay` | `rgba(26, 26, 46, 0.55)` | Hero image overlays |
+| Token             | Value                         | Usage                                |
+| ----------------- | ----------------------------- | ------------------------------------ |
+| `primary`         | `#C2491D` (burnt terracotta)  | CTAs, active states, primary actions |
+| `primary-light`   | `#E8604C`                     | Hover states, highlights             |
+| `secondary`       | `#1B4332` (deep jungle green) | Secondary buttons, accents, badges   |
+| `secondary-light` | `#2D6A4F`                     | Hover states for secondary           |
+| `neutral-900`     | `#1A1A2E`                     | Headings, primary text               |
+| `neutral-700`     | `#374151`                     | Body text                            |
+| `neutral-500`     | `#6B7280`                     | Muted text, captions                 |
+| `neutral-200`     | `#E5E7EB`                     | Borders, dividers                    |
+| `neutral-100`     | `#F3F4F6`                     | Alternating section backgrounds      |
+| `white`           | `#FFFFFF`                     | Cards, primary backgrounds           |
+| `overlay`         | `rgba(26, 26, 46, 0.55)`      | Hero image overlays                  |
 
 ### Typography
 
-| Role | Font | Weight | Size (mobile / desktop) |
-|------|------|--------|------------------------|
-| Display (hero) | outBrave | 400 | 2.5rem / 4.5rem |
-| Headings (h1-h3) | DM Sans | 700 | scale from 1.5rem to 2.5rem |
-| Subheadings (h4-h6) | DM Sans | 600 | scale from 1.125rem to 1.5rem |
-| Body | DM Sans | 400 | 1rem / 1.125rem |
-| Small / captions | DM Sans | 400 | 0.875rem |
-| Taglines | DM Sans | 700, uppercase, tracking-wide | 0.75rem |
+| Role                | Font     | Weight                        | Size (mobile / desktop)       |
+| ------------------- | -------- | ----------------------------- | ----------------------------- |
+| Display (hero)      | outBrave | 400                           | 2.5rem / 4.5rem               |
+| Headings (h1-h3)    | DM Sans  | 700                           | scale from 1.5rem to 2.5rem   |
+| Subheadings (h4-h6) | DM Sans  | 600                           | scale from 1.125rem to 1.5rem |
+| Body                | DM Sans  | 400                           | 1rem / 1.125rem               |
+| Small / captions    | DM Sans  | 400                           | 0.875rem                      |
+| Taglines            | DM Sans  | 700, uppercase, tracking-wide | 0.75rem                       |
 
 ### Spacing
 
@@ -125,23 +125,23 @@ No negative margins. Full-bleed sections: outer div is full-width with backgroun
 
 ### Grid Replacement Mapping
 
-| Bootstrap | Tailwind |
-|---|---|
-| `.container` | `mx-auto max-w-7xl px-4 sm:px-6 lg:px-8` |
-| `.row` | `grid grid-cols-12 gap-8` |
+| Bootstrap                       | Tailwind                                  |
+| ------------------------------- | ----------------------------------------- |
+| `.container`                    | `mx-auto max-w-7xl px-4 sm:px-6 lg:px-8`  |
+| `.row`                          | `grid grid-cols-12 gap-8`                 |
 | `.col-xl-4 .col-lg-6 .col-md-6` | `col-span-12 md:col-span-6 xl:col-span-4` |
-| `.col-xl-6` | `col-span-12 xl:col-span-6` |
-| `.col-xl-8 .col-lg-7` | `col-span-12 lg:col-span-7 xl:col-span-8` |
-| `.col-xl-2` | `col-span-12 md:col-span-6 xl:col-span-2` |
-| `.col-xl-12` | `col-span-12` |
+| `.col-xl-6`                     | `col-span-12 xl:col-span-6`               |
+| `.col-xl-8 .col-lg-7`           | `col-span-12 lg:col-span-7 xl:col-span-8` |
+| `.col-xl-2`                     | `col-span-12 md:col-span-6 xl:col-span-2` |
+| `.col-xl-12`                    | `col-span-12`                             |
 
 ### Interactive Replacements
 
-| jQuery feature | React replacement |
-|---|---|
-| Sticky header class toggle | `useScrollDirection` hook + `position: sticky` |
-| Mobile nav toggler | React state + CSS `translate-x` transition |
-| Scroll-to-top | `window.scrollTo({ top: 0, behavior: 'smooth' })` |
+| jQuery feature             | React replacement                                 |
+| -------------------------- | ------------------------------------------------- |
+| Sticky header class toggle | `useScrollDirection` hook + `position: sticky`    |
+| Mobile nav toggler         | React state + CSS `translate-x` transition        |
+| Scroll-to-top              | `window.scrollTo({ top: 0, behavior: 'smooth' })` |
 
 ---
 
@@ -192,19 +192,19 @@ One responsive component replacing two separate components.
 
 ### New Utilities
 
-| Name | Purpose |
-|---|---|
-| `useScrollDirection` hook | Sticky header show/hide on scroll direction |
-| `ScrollToTop` component | Floating button, visible after scrolling down |
-| `MobileNav` (part of Header) | Slide-in mobile navigation panel |
+| Name                         | Purpose                                       |
+| ---------------------------- | --------------------------------------------- |
+| `useScrollDirection` hook    | Sticky header show/hide on scroll direction   |
+| `ScrollToTop` component      | Floating button, visible after scrolling down |
+| `MobileNav` (part of Header) | Slide-in mobile navigation panel              |
 
 ### Animation Strategy
 
-| Current | Replacement |
-|---|---|
+| Current                  | Replacement                                                             |
+| ------------------------ | ----------------------------------------------------------------------- |
 | WOW.js fade-in-on-scroll | framer-motion `whileInView` or Intersection Observer + CSS `@keyframes` |
-| Jarallax parallax | CSS `bg-fixed` or lightweight `useParallax` hook |
-| Float-bob-y | Pure CSS `@keyframes` in globals.css |
+| Jarallax parallax        | CSS `bg-fixed` or lightweight `useParallax` hook                        |
+| Float-bob-y              | Pure CSS `@keyframes` in globals.css                                    |
 
 ---
 
@@ -285,26 +285,28 @@ interface Destination {
 
 ### Packages to Add (requires user approval)
 
-| Package | Purpose |
-|---|---|
-| `tailwindcss` | Core styling framework |
-| `@tailwindcss/postcss` | PostCSS integration for Tailwind |
-| `framer-motion` | Scroll-triggered animations (replaces WOW.js + jarallax) |
+| Package                | Purpose                                                  |
+| ---------------------- | -------------------------------------------------------- |
+| `tailwindcss`          | Core styling framework                                   |
+| `@tailwindcss/postcss` | PostCSS integration for Tailwind                         |
+| `framer-motion`        | Scroll-triggered animations (replaces WOW.js + jarallax) |
 
 ### Optional Packages (user's choice)
 
-| Package | Purpose | Alternative |
-|---|---|---|
-| `react-icons` | Replace FontAwesome CDN | Keep FontAwesome CDN link |
-| `yet-another-react-lightbox` | Gallery lightbox | Custom `<dialog>` modal |
+| Package                      | Purpose                 | Alternative               |
+| ---------------------------- | ----------------------- | ------------------------- |
+| `react-icons`                | Replace FontAwesome CDN | Keep FontAwesome CDN link |
+| `yet-another-react-lightbox` | Gallery lightbox        | Custom `<dialog>` modal   |
 
 ### Vendor Directories to Delete
 
 All directories under `public/assets/vendors/` except:
+
 - `fontawesome/` — keep unless migrating to `react-icons`
 - `tevily-icons/` — custom icon font, keep
 
 Also delete:
+
 - `public/assets/css/tevily.css`
 - `public/assets/css/tevily-responsive.css`
 - `public/assets/js/tevily.js`

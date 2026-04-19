@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import { PageHeader } from '@/components/page-header';
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { PageHeader } from "@/components/page-header";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -10,30 +10,66 @@ const fadeInUp = {
 };
 
 const rentalItems = [
-  { title: 'Honda Winner X', price: 25, image: 'assets/images/resources/popular-tours-two__img-1.jpg', rating: '8.0 Superb', category: 'Motorbike' },
-  { title: 'Honda XR 150', price: 30, image: 'assets/images/resources/popular-tours-two__img-2.jpg', rating: '8.5 Superb', category: 'Motorbike' },
-  { title: 'Yamaha Exciter', price: 20, image: 'assets/images/resources/popular-tours-two__img-3.jpg', rating: '8.0 Superb', category: 'Motorbike' },
-  { title: 'Honda CB500X', price: 55, image: 'assets/images/resources/popular-tours-two__img-4.jpg', rating: '9.0 Superb', category: 'Motorbike' },
-  { title: 'Toyota Vios', price: 45, image: 'assets/images/resources/popular-tours-two__img-5.jpg', rating: '8.0 Superb', category: 'Car' },
-  { title: 'Ford Ranger', price: 65, image: 'assets/images/resources/popular-tours-two__img-6.jpg', rating: '8.2 Superb', category: 'Car' },
+  {
+    title: "Honda Winner X",
+    price: 25,
+    image: "assets/images/resources/popular-tours-two__img-1.jpg",
+    rating: "8.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Honda XR 150",
+    price: 30,
+    image: "assets/images/resources/popular-tours-two__img-2.jpg",
+    rating: "8.5 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Yamaha Exciter",
+    price: 20,
+    image: "assets/images/resources/popular-tours-two__img-3.jpg",
+    rating: "8.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Honda CB500X",
+    price: 55,
+    image: "assets/images/resources/popular-tours-two__img-4.jpg",
+    rating: "9.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Toyota Vios",
+    price: 45,
+    image: "assets/images/resources/popular-tours-two__img-5.jpg",
+    rating: "8.0 Superb",
+    category: "Car",
+  },
+  {
+    title: "Ford Ranger",
+    price: 65,
+    image: "assets/images/resources/popular-tours-two__img-6.jpg",
+    rating: "8.2 Superb",
+    category: "Car",
+  },
 ];
 
 export default function Rental() {
-  const t = useTranslations('rental');
-  const tMeta = useTranslations('meta');
+  const t = useTranslations("rental");
+  const tMeta = useTranslations("meta");
 
   return (
     <>
       <Head>
-        <title>{tMeta('rentalTitle')}</title>
-        <meta name="description" content={tMeta('rentalDescription')} />
+        <title>{tMeta("rentalTitle")}</title>
+        <meta name="description" content={tMeta("rentalDescription")} />
       </Head>
 
       <PageHeader
-        title={t('title')}
+        title={t("title")}
         breadcrumbs={[
-          { label: t('breadcrumbHome'), href: '/' },
-          { label: t('breadcrumbRental') },
+          { label: t("breadcrumbHome"), href: "/" },
+          { label: t("breadcrumbRental") },
         ]}
         backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg"
       />
@@ -48,7 +84,13 @@ export default function Rental() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: { duration: 0.6, delay: i * 0.1 },
+                  },
+                }}
               >
                 <div className="relative overflow-hidden aspect-[3/2]">
                   <img
@@ -75,7 +117,10 @@ export default function Rental() {
                     {item.title}
                   </h3>
                   <p className="text-neutral-500 text-sm">
-                    <span className="text-primary font-bold text-lg">${item.price}</span> {t('perDay')}
+                    <span className="text-primary font-bold text-lg">
+                      ${item.price}
+                    </span>{" "}
+                    {t("perDay")}
                   </p>
                 </div>
               </motion.div>

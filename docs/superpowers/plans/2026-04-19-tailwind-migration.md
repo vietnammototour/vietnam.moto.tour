@@ -13,6 +13,7 @@
 ## File Map
 
 ### Created
+
 - `postcss.config.mjs` — PostCSS config with Tailwind plugin
 - `src/hooks/useScrollDirection.ts` — scroll direction detection hook
 - `src/components/scroll-to-top/index.tsx` — floating scroll-to-top button
@@ -20,6 +21,7 @@
 - `src/components/page-header/index.tsx` — reusable page header with breadcrumb
 
 ### Modified
+
 - `package.json` — add tailwindcss, @tailwindcss/postcss, framer-motion
 - `src/styles/globals.css` — Tailwind entry point + theme tokens + custom keyframes
 - `src/pages/_document.tsx` — strip all vendor CSS links
@@ -41,6 +43,7 @@
 - `src/pages/rental.tsx` — full rewrite
 
 ### Deleted
+
 - `src/components/header-mobile/index.tsx` — merged into Header
 - `src/components/tour-carousel/TourCarousel.module.css` — replaced by Tailwind
 - `src/styles/Home.module.css` — unused
@@ -54,6 +57,7 @@
 ### Task 1: Install Dependencies & Configure Tailwind
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `postcss.config.mjs`
 - Modify: `src/styles/globals.css`
@@ -86,15 +90,15 @@ Replace contents of `src/styles/globals.css`:
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #C2491D;
-  --color-primary-light: #E8604C;
-  --color-secondary: #1B4332;
-  --color-secondary-light: #2D6A4F;
-  --color-neutral-900: #1A1A2E;
+  --color-primary: #c2491d;
+  --color-primary-light: #e8604c;
+  --color-secondary: #1b4332;
+  --color-secondary-light: #2d6a4f;
+  --color-neutral-900: #1a1a2e;
   --color-neutral-700: #374151;
-  --color-neutral-500: #6B7280;
-  --color-neutral-200: #E5E7EB;
-  --color-neutral-100: #F3F4F6;
+  --color-neutral-500: #6b7280;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-100: #f3f4f6;
   --color-overlay: rgba(26, 26, 46, 0.55);
 
   --font-display: var(--font-outbrave), sans-serif;
@@ -108,7 +112,12 @@ Replace contents of `src/styles/globals.css`:
     @apply text-base leading-relaxed antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: var(--color-neutral-900);
     @apply font-bold;
   }
@@ -121,9 +130,15 @@ Replace contents of `src/styles/globals.css`:
 
 /* Float bob animation — kept from original template */
 @keyframes float-bob-y {
-  0% { transform: translateY(-20px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(-20px); }
+  0% {
+    transform: translateY(-20px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(-20px);
+  }
 }
 
 .animate-float-bob-y {
@@ -148,14 +163,15 @@ git commit -m "feat: install Tailwind CSS v4 and configure theme tokens"
 
 ---
 
-### Task 2: Strip _document.tsx & Clean _app.tsx
+### Task 2: Strip \_document.tsx & Clean \_app.tsx
 
 **Files:**
+
 - Modify: `src/pages/_document.tsx`
 - Modify: `src/pages/_app.tsx`
 - Delete: `src/styles/Home.module.css`
 
-- [ ] **Step 1: Rewrite _document.tsx — remove all vendor CSS links**
+- [ ] **Step 1: Rewrite \_document.tsx — remove all vendor CSS links**
 
 Replace `src/pages/_document.tsx`:
 
@@ -168,14 +184,40 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta charSet="UTF-8" />
-        <link rel="apple-touch-icon" sizes="180x180" href={getUrl("assets/images/favicons/apple-touch-icon.png")} />
-        <link rel="icon" type="image/png" sizes="32x32" href={getUrl("assets/images/favicons/favicon-32x32.png")} />
-        <link rel="icon" type="image/png" sizes="16x16" href={getUrl("assets/images/favicons/favicon-16x16.png")} />
-        <link rel="manifest" href={getUrl("assets/images/favicons/site.webmanifest")} />
-        <meta name="description" content="Vietnam Motorcycle Tour — Adventure tours in Nha Trang and beyond" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href={getUrl("assets/images/favicons/apple-touch-icon.png")}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href={getUrl("assets/images/favicons/favicon-32x32.png")}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href={getUrl("assets/images/favicons/favicon-16x16.png")}
+        />
+        <link
+          rel="manifest"
+          href={getUrl("assets/images/favicons/site.webmanifest")}
+        />
+        <meta
+          name="description"
+          content="Vietnam Motorcycle Tour — Adventure tours in Nha Trang and beyond"
+        />
 
-        <link rel="stylesheet" href={getUrl("assets/vendors/fontawesome/css/all.min.css")} />
-        <link rel="stylesheet" href={getUrl("assets/vendors/tevily-icons/style.css")} />
+        <link
+          rel="stylesheet"
+          href={getUrl("assets/vendors/fontawesome/css/all.min.css")}
+        />
+        <link
+          rel="stylesheet"
+          href={getUrl("assets/vendors/tevily-icons/style.css")}
+        />
       </Head>
       <body>
         <Main />
@@ -186,31 +228,39 @@ export default function Document() {
 }
 ```
 
-- [ ] **Step 2: Update _app.tsx to load fonts via next/font**
+- [ ] **Step 2: Update \_app.tsx to load fonts via next/font**
 
 Replace `src/pages/_app.tsx`:
 
 ```tsx
-import type { AppProps } from 'next/app';
-import { DM_Sans } from 'next/font/google';
-import localFont from 'next/font/local';
-import { Layout } from '../components/layout/index';
+import type { AppProps } from "next/app";
+import { DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
+import { Layout } from "../components/layout/index";
 import "@/styles/globals.css";
 
 const dmSans = DM_Sans({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 const outBrave = localFont({
   src: [
-    { path: '../../public/assets/fonts/outbrave.ttf', weight: '400', style: 'normal' },
-    { path: '../../public/assets/fonts/outbrave.otf', weight: '400', style: 'normal' },
+    {
+      path: "../../public/assets/fonts/outbrave.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/assets/fonts/outbrave.otf",
+      weight: "400",
+      style: "normal",
+    },
   ],
-  variable: '--font-outbrave',
-  display: 'swap',
+  variable: "--font-outbrave",
+  display: "swap",
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -243,6 +293,7 @@ git commit -m "feat: strip vendor CSS from _document, add font loading to _app"
 ### Task 3: Update Data Layer & Types
 
 **Files:**
+
 - Modify: `src/types/index.ts`
 - Modify: `src/data/destinations.json`
 
@@ -251,7 +302,7 @@ git commit -m "feat: strip vendor CSS from _document, add font loading to _app"
 Replace `src/types/index.ts`:
 
 ```ts
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 export interface Tour {
   id: number;
@@ -269,7 +320,7 @@ export interface Destination {
   name: string;
   imageUrl: string;
   tours: number;
-  size: 'small' | 'large';
+  size: "small" | "large";
 }
 
 export interface ContactInfo {
@@ -381,6 +432,7 @@ git commit -m "refactor: update Destination type — remove presentational field
 ### Task 4: Create Utility Hooks & Shared Components
 
 **Files:**
+
 - Create: `src/hooks/useScrollDirection.ts`
 - Create: `src/components/scroll-to-top/index.tsx`
 - Create: `src/components/video-modal/index.tsx`
@@ -391,10 +443,10 @@ git commit -m "refactor: update Destination type — remove presentational field
 Create `src/hooks/useScrollDirection.ts`:
 
 ```ts
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useScrollDirection() {
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
@@ -404,15 +456,15 @@ export function useScrollDirection() {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
       if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        setScrollDirection('down');
+        setScrollDirection("down");
       } else {
-        setScrollDirection('up');
+        setScrollDirection("up");
       }
       lastScrollY = currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return { scrollDirection, scrollY };
@@ -424,9 +476,9 @@ export function useScrollDirection() {
 Create `src/components/scroll-to-top/index.tsx`:
 
 ```tsx
-'use client';
+"use client";
 
-import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 export function ScrollToTop() {
   const { scrollY } = useScrollDirection();
@@ -434,9 +486,11 @@ export function ScrollToTop() {
 
   return (
     <button
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       className={`fixed bottom-8 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-all duration-300 hover:bg-primary-light ${
-        visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
+        visible
+          ? "translate-y-0 opacity-100"
+          : "translate-y-4 opacity-0 pointer-events-none"
       }`}
       aria-label="Scroll to top"
     >
@@ -451,25 +505,27 @@ export function ScrollToTop() {
 Create `src/components/video-modal/index.tsx`:
 
 ```tsx
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import type { VideoModalProps } from '@/types';
+import { useEffect } from "react";
+import type { VideoModalProps } from "@/types";
 
 export function VideoModal({ videoUrl, isOpen, onClose }: VideoModalProps) {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   // Convert YouTube watch URL to embed URL
-  const embedUrl = videoUrl.replace('watch?v=', 'embed/') + '?autoplay=1';
+  const embedUrl = videoUrl.replace("watch?v=", "embed/") + "?autoplay=1";
 
   return (
     <div
@@ -505,10 +561,14 @@ export function VideoModal({ videoUrl, isOpen, onClose }: VideoModalProps) {
 Create `src/components/page-header/index.tsx`:
 
 ```tsx
-import Link from 'next/link';
-import type { PageHeaderProps } from '@/types';
+import Link from "next/link";
+import type { PageHeaderProps } from "@/types";
 
-export function PageHeader({ title, breadcrumbs, backgroundImage }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  breadcrumbs,
+  backgroundImage,
+}: PageHeaderProps) {
   return (
     <section className="relative">
       <div className="relative h-64 md:h-80 overflow-hidden">
@@ -528,11 +588,16 @@ export function PageHeader({ title, breadcrumbs, backgroundImage }: PageHeaderPr
               <span key={i} className="flex items-center gap-2">
                 {i > 0 && <span className="text-neutral-300">/</span>}
                 {crumb.href ? (
-                  <Link href={crumb.href} className="hover:text-primary transition-colors">
+                  <Link
+                    href={crumb.href}
+                    className="hover:text-primary transition-colors"
+                  >
                     {crumb.label}
                   </Link>
                 ) : (
-                  <span className="text-neutral-900 font-medium">{crumb.label}</span>
+                  <span className="text-neutral-900 font-medium">
+                    {crumb.label}
+                  </span>
                 )}
               </span>
             ))}
@@ -556,6 +621,7 @@ git commit -m "feat: add useScrollDirection hook, ScrollToTop, VideoModal, PageH
 ### Task 5: Rewrite Header (Merge Desktop + Mobile)
 
 **Files:**
+
 - Modify: `src/components/header/index.tsx`
 - Delete: `src/components/header-mobile/index.tsx`
 
@@ -564,15 +630,15 @@ git commit -m "feat: add useScrollDirection hook, ScrollToTop, VideoModal, PageH
 Replace `src/components/header/index.tsx`:
 
 ```tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useScrollDirection } from '@/hooks/useScrollDirection';
-import { getUrl } from '@/utils';
-import { contactInfo } from '@/utils';
-import destinationsData from '@/data/destinations.json';
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { getUrl } from "@/utils";
+import { contactInfo } from "@/utils";
+import destinationsData from "@/data/destinations.json";
 
 export const Header = () => {
   const router = useRouter();
@@ -580,27 +646,38 @@ export const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isSticky = scrollY > 100;
-  const isHidden = scrollDirection === 'down' && scrollY > 200;
+  const isHidden = scrollDirection === "down" && scrollY > 200;
 
   const navLinks = [
-    { href: '/', label: 'Home', active: router.pathname === '/' },
+    { href: "/", label: "Home", active: router.pathname === "/" },
     {
-      href: '/tours',
-      label: 'Tours',
-      active: router.pathname.startsWith('/tours'),
-      children: destinationsData.map((d) => ({ href: '/tours', label: d.name })),
+      href: "/tours",
+      label: "Tours",
+      active: router.pathname.startsWith("/tours"),
+      children: destinationsData.map((d) => ({
+        href: "/tours",
+        label: d.name,
+      })),
     },
     {
-      href: '/rental',
-      label: 'Rental',
-      active: router.pathname.startsWith('/rental'),
+      href: "/rental",
+      label: "Rental",
+      active: router.pathname.startsWith("/rental"),
       children: [
-        { href: '/rental', label: 'Motorbike' },
-        { href: '/rental', label: 'Car' },
+        { href: "/rental", label: "Motorbike" },
+        { href: "/rental", label: "Car" },
       ],
     },
-    { href: '/about-us', label: 'About Us', active: router.pathname === '/about-us' },
-    { href: '/contact', label: 'Contact', active: router.pathname === '/contact' },
+    {
+      href: "/about-us",
+      label: "About Us",
+      active: router.pathname === "/about-us",
+    },
+    {
+      href: "/contact",
+      label: "Contact",
+      active: router.pathname === "/contact",
+    },
   ];
 
   return (
@@ -609,19 +686,40 @@ export const Header = () => {
       <div className="bg-neutral-900 text-white text-sm hidden lg:block">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2">
           <div className="flex items-center gap-6">
-            <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-2 hover:text-primary-light transition-colors">
+            <a
+              href={`tel:${contactInfo.phone}`}
+              className="flex items-center gap-2 hover:text-primary-light transition-colors"
+            >
               <span className="icon-phone-call" />
               {contactInfo.phone}
             </a>
-            <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-2 hover:text-primary-light transition-colors">
+            <a
+              href={`mailto:${contactInfo.email}`}
+              className="flex items-center gap-2 hover:text-primary-light transition-colors"
+            >
               <span className="icon-at" />
               {contactInfo.email}
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <a href={contactInfo.youtubeLink} className="hover:text-primary-light transition-colors"><i className="fab fa-youtube" /></a>
-            <a href={contactInfo.tripadvisorLink} className="hover:text-primary-light transition-colors"><i className="fab fa-tripadvisor" /></a>
-            <a href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`} className="hover:text-primary-light transition-colors"><i className="fab fa-whatsapp" /></a>
+            <a
+              href={contactInfo.youtubeLink}
+              className="hover:text-primary-light transition-colors"
+            >
+              <i className="fab fa-youtube" />
+            </a>
+            <a
+              href={contactInfo.tripadvisorLink}
+              className="hover:text-primary-light transition-colors"
+            >
+              <i className="fab fa-tripadvisor" />
+            </a>
+            <a
+              href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, "")}`}
+              className="hover:text-primary-light transition-colors"
+            >
+              <i className="fab fa-whatsapp" />
+            </a>
           </div>
         </div>
       </div>
@@ -629,15 +727,15 @@ export const Header = () => {
       {/* Main nav */}
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
-          isSticky ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white'
-        } ${isHidden ? '-translate-y-full' : 'translate-y-0'}`}
+          isSticky ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white"
+        } ${isHidden ? "-translate-y-full" : "translate-y-0"}`}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <img
-                src={getUrl('assets/images/logo/logo.jpeg')}
+                src={getUrl("assets/images/logo/logo.jpeg")}
                 alt="Vietnam Motorcycle Tour"
                 className="h-11 lg:h-14"
               />
@@ -650,7 +748,9 @@ export const Header = () => {
                   <Link
                     href={link.href}
                     className={`text-sm font-semibold uppercase tracking-wide transition-colors py-6 ${
-                      link.active ? 'text-primary' : 'text-neutral-900 hover:text-primary'
+                      link.active
+                        ? "text-primary"
+                        : "text-neutral-900 hover:text-primary"
                     }`}
                   >
                     {link.label}
@@ -691,7 +791,7 @@ export const Header = () => {
       {/* Mobile nav overlay */}
       <div
         className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 lg:hidden ${
-          mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setMobileOpen(false)}
       />
@@ -699,12 +799,12 @@ export const Header = () => {
       {/* Mobile nav panel */}
       <div
         className={`fixed top-0 right-0 z-[70] h-full w-72 bg-neutral-900 text-white transition-transform duration-300 lg:hidden ${
-          mobileOpen ? 'translate-x-0' : 'translate-x-full'
+          mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <img
-            src={getUrl('assets/images/logo/logo-white.png')}
+            src={getUrl("assets/images/logo/logo-white.png")}
             alt="Logo"
             className="h-10"
           />
@@ -723,7 +823,9 @@ export const Header = () => {
               href={link.href}
               onClick={() => setMobileOpen(false)}
               className={`block py-3 border-b border-white/10 text-sm font-medium uppercase tracking-wide transition-colors ${
-                link.active ? 'text-primary-light' : 'text-white hover:text-primary-light'
+                link.active
+                  ? "text-primary-light"
+                  : "text-white hover:text-primary-light"
               }`}
             >
               {link.label}
@@ -731,16 +833,37 @@ export const Header = () => {
           ))}
         </nav>
         <div className="p-4 mt-4">
-          <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-2 text-sm text-neutral-400 hover:text-white mb-3">
+          <a
+            href={`mailto:${contactInfo.email}`}
+            className="flex items-center gap-2 text-sm text-neutral-400 hover:text-white mb-3"
+          >
             <i className="fa fa-envelope" /> {contactInfo.email}
           </a>
-          <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-2 text-sm text-neutral-400 hover:text-white mb-4">
+          <a
+            href={`tel:${contactInfo.phone}`}
+            className="flex items-center gap-2 text-sm text-neutral-400 hover:text-white mb-4"
+          >
             <i className="fa fa-phone-alt" /> {contactInfo.phone}
           </a>
           <div className="flex gap-4">
-            <a href={contactInfo.youtubeLink} className="text-neutral-400 hover:text-white"><i className="fab fa-youtube" /></a>
-            <a href={contactInfo.tripadvisorLink} className="text-neutral-400 hover:text-white"><i className="fab fa-tripadvisor" /></a>
-            <a href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`} className="text-neutral-400 hover:text-white"><i className="fab fa-whatsapp" /></a>
+            <a
+              href={contactInfo.youtubeLink}
+              className="text-neutral-400 hover:text-white"
+            >
+              <i className="fab fa-youtube" />
+            </a>
+            <a
+              href={contactInfo.tripadvisorLink}
+              className="text-neutral-400 hover:text-white"
+            >
+              <i className="fab fa-tripadvisor" />
+            </a>
+            <a
+              href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, "")}`}
+              className="text-neutral-400 hover:text-white"
+            >
+              <i className="fab fa-whatsapp" />
+            </a>
           </div>
         </div>
       </div>
@@ -768,6 +891,7 @@ git commit -m "feat: rewrite Header with Tailwind, merge mobile nav into single 
 ### Task 6: Rewrite Footer
 
 **Files:**
+
 - Modify: `src/components/footer/index.tsx`
 
 - [ ] **Step 1: Rewrite Footer with Tailwind**
@@ -775,9 +899,9 @@ git commit -m "feat: rewrite Header with Tailwind, merge mobile nav into single 
 Replace `src/components/footer/index.tsx`:
 
 ```tsx
-import Link from 'next/link';
-import { getUrl } from '@/utils';
-import { contactInfo } from '@/utils';
+import Link from "next/link";
+import { getUrl } from "@/utils";
+import { contactInfo } from "@/utils";
 
 export const Footer = () => (
   <footer className="bg-neutral-900 text-neutral-400">
@@ -787,22 +911,33 @@ export const Footer = () => (
         <div className="xl:col-span-4">
           <Link href="/" className="inline-block mb-6">
             <img
-              src={getUrl('assets/images/logo/logo-white.png')}
+              src={getUrl("assets/images/logo/logo-white.png")}
               alt="Logo"
               className="h-11 opacity-90"
             />
           </Link>
           <p className="text-sm leading-relaxed mb-6">
-            Our Guides have many years of experience motorcycling and was established in 2008
+            Our Guides have many years of experience motorcycling and was
+            established in 2008
           </p>
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-3">
               <i className="fas fa-phone-square-alt text-primary" />
-              <a href={`tel:${contactInfo.phone}`} className="hover:text-white transition-colors">{contactInfo.phone}</a>
+              <a
+                href={`tel:${contactInfo.phone}`}
+                className="hover:text-white transition-colors"
+              >
+                {contactInfo.phone}
+              </a>
             </li>
             <li className="flex items-center gap-3">
               <i className="fas fa-envelope text-primary" />
-              <a href={`mailto:${contactInfo.email}`} className="hover:text-white transition-colors">{contactInfo.email}</a>
+              <a
+                href={`mailto:${contactInfo.email}`}
+                className="hover:text-white transition-colors"
+              >
+                {contactInfo.email}
+              </a>
             </li>
             <li className="flex items-center gap-3">
               <i className="fas fa-map-marker-alt text-primary" />
@@ -819,10 +954,38 @@ export const Footer = () => (
         <div className="xl:col-span-2">
           <h3 className="text-white font-bold text-lg mb-6">Company</h3>
           <ul className="space-y-3 text-sm">
-            <li><Link href="/about-us" className="hover:text-white transition-colors">About Us</Link></li>
-            <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-            <li><Link href="/rental" className="hover:text-white transition-colors">Rental</Link></li>
-            <li><Link href="/tours" className="hover:text-white transition-colors">Tours</Link></li>
+            <li>
+              <Link
+                href="/about-us"
+                className="hover:text-white transition-colors"
+              >
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="hover:text-white transition-colors"
+              >
+                Contact Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/rental"
+                className="hover:text-white transition-colors"
+              >
+                Rental
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/tours"
+                className="hover:text-white transition-colors"
+              >
+                Tours
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -830,10 +993,32 @@ export const Footer = () => (
         <div className="xl:col-span-2">
           <h3 className="text-white font-bold text-lg mb-6">Explore</h3>
           <ul className="space-y-3 text-sm">
-            <li><Link href="/tours" className="hover:text-white transition-colors">Tours</Link></li>
-            <li><a href="#" className="hover:text-white transition-colors">Legal</a></li>
-            <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-            <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+            <li>
+              <Link
+                href="/tours"
+                className="hover:text-white transition-colors"
+              >
+                Tours
+              </Link>
+            </li>
+            <li>
+              <a href="#" className="hover:text-white transition-colors">
+                Legal
+              </a>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="hover:text-white transition-colors"
+              >
+                Contact
+              </Link>
+            </li>
+            <li>
+              <a href="#" className="hover:text-white transition-colors">
+                Privacy Policy
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -854,8 +1039,8 @@ export const Footer = () => (
             </button>
           </form>
           <label className="flex items-center gap-2 mt-4 text-xs">
-            <i className="fa fa-check text-primary" />
-            I agree to all terms and policies
+            <i className="fa fa-check text-primary" />I agree to all terms and
+            policies
           </label>
         </div>
       </div>
@@ -865,11 +1050,28 @@ export const Footer = () => (
     <div className="border-t border-white/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <a href={contactInfo.youtubeLink} className="hover:text-white transition-colors"><i className="fab fa-youtube" /></a>
-          <a href={contactInfo.tripadvisorLink} className="hover:text-white transition-colors"><i className="fab fa-tripadvisor" /></a>
-          <a href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`} className="hover:text-white transition-colors"><i className="fab fa-whatsapp" /></a>
+          <a
+            href={contactInfo.youtubeLink}
+            className="hover:text-white transition-colors"
+          >
+            <i className="fab fa-youtube" />
+          </a>
+          <a
+            href={contactInfo.tripadvisorLink}
+            className="hover:text-white transition-colors"
+          >
+            <i className="fab fa-tripadvisor" />
+          </a>
+          <a
+            href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, "")}`}
+            className="hover:text-white transition-colors"
+          >
+            <i className="fab fa-whatsapp" />
+          </a>
         </div>
-        <p className="text-sm">&copy; All Copyright {new Date().getFullYear()}</p>
+        <p className="text-sm">
+          &copy; All Copyright {new Date().getFullYear()}
+        </p>
       </div>
     </div>
   </footer>
@@ -888,6 +1090,7 @@ git commit -m "feat: rewrite Footer with Tailwind grid layout"
 ### Task 7: Rewrite Layout & Update Component Exports
 
 **Files:**
+
 - Modify: `src/components/layout/index.tsx`
 
 - [ ] **Step 1: Update Layout to include ScrollToTop**
@@ -895,10 +1098,10 @@ git commit -m "feat: rewrite Footer with Tailwind grid layout"
 Replace `src/components/layout/index.tsx`:
 
 ```tsx
-import type { LayoutProps } from '@/types';
-import { Header } from '../header/index';
-import { Footer } from '../footer/index';
-import { ScrollToTop } from '../scroll-to-top/index';
+import type { LayoutProps } from "@/types";
+import { Header } from "../header/index";
+import { Footer } from "../footer/index";
+import { ScrollToTop } from "../scroll-to-top/index";
 
 export function Layout({ children }: LayoutProps) {
   return (
@@ -924,6 +1127,7 @@ git commit -m "feat: add ScrollToTop to Layout"
 ### Task 8: Rewrite TourCard
 
 **Files:**
+
 - Modify: `src/components/tour-card/index.tsx`
 
 - [ ] **Step 1: Rewrite TourCard with Tailwind**
@@ -931,8 +1135,8 @@ git commit -m "feat: add ScrollToTop to Layout"
 Replace `src/components/tour-card/index.tsx`:
 
 ```tsx
-import Link from 'next/link';
-import type { TourCardProps } from '@/types';
+import Link from "next/link";
+import type { TourCardProps } from "@/types";
 
 export const TourCard = ({ tour }: TourCardProps) => {
   const { title, imageUrl, rating, price, duration, distance, location } = tour;
@@ -961,12 +1165,19 @@ export const TourCard = ({ tour }: TourCardProps) => {
           <Link href="/tours">{title}</Link>
         </h3>
         <p className="text-neutral-500 text-sm mb-4">
-          <span className="text-primary font-bold text-lg">${price}</span> / Per Person
+          <span className="text-primary font-bold text-lg">${price}</span> / Per
+          Person
         </p>
         <ul className="flex items-center gap-4 text-xs text-neutral-500 mt-auto pt-4 border-t border-neutral-100">
-          <li className="flex items-center gap-1"><i className="fa fa-clock text-primary" /> {duration}</li>
-          <li className="flex items-center gap-1"><i className="fa fa-road text-primary" /> {distance}</li>
-          <li className="flex items-center gap-1"><i className="fa fa-map-marker-alt text-primary" /> {location}</li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-clock text-primary" /> {duration}
+          </li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-road text-primary" /> {distance}
+          </li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-map-marker-alt text-primary" /> {location}
+          </li>
         </ul>
       </div>
     </div>
@@ -986,6 +1197,7 @@ git commit -m "feat: rewrite TourCard with Tailwind"
 ### Task 9: Rewrite DestinationCard
 
 **Files:**
+
 - Modify: `src/components/destination-card/index.tsx`
 
 - [ ] **Step 1: Rewrite DestinationCard with Tailwind — no colClass prop**
@@ -993,8 +1205,8 @@ git commit -m "feat: rewrite TourCard with Tailwind"
 Replace `src/components/destination-card/index.tsx`:
 
 ```tsx
-import Link from 'next/link';
-import type { DestinationCardProps } from '@/types';
+import Link from "next/link";
+import type { DestinationCardProps } from "@/types";
 
 export const DestinationCard = ({ destination }: DestinationCardProps) => {
   const { name, imageUrl, tours } = destination;
@@ -1009,7 +1221,12 @@ export const DestinationCard = ({ destination }: DestinationCardProps) => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-5">
         <h2 className="text-xl font-bold text-white mb-1">
-          <Link href="/tours" className="hover:text-primary-light transition-colors">{name}</Link>
+          <Link
+            href="/tours"
+            className="hover:text-primary-light transition-colors"
+          >
+            {name}
+          </Link>
         </h2>
         <span className="inline-block bg-primary/90 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full">
           {tours} tours
@@ -1032,6 +1249,7 @@ git commit -m "feat: rewrite DestinationCard with Tailwind, remove colClass coup
 ### Task 10: Rewrite GalleryItem
 
 **Files:**
+
 - Modify: `src/components/gallery-item/index.tsx`
 
 - [ ] **Step 1: Rewrite GalleryItem with Tailwind**
@@ -1039,10 +1257,10 @@ git commit -m "feat: rewrite DestinationCard with Tailwind, remove colClass coup
 Replace `src/components/gallery-item/index.tsx`:
 
 ```tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import type { GalleryItemProps } from '@/types';
+import { useState } from "react";
+import type { GalleryItemProps } from "@/types";
 
 export const GalleryItem = ({ imageSrc }: GalleryItemProps) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -1103,6 +1321,7 @@ git commit -m "feat: rewrite GalleryItem with Tailwind + built-in lightbox"
 ### Task 11: Rewrite TourCarousel
 
 **Files:**
+
 - Modify: `src/components/tour-carousel/index.tsx`
 - Delete: `src/components/tour-carousel/TourCarousel.module.css`
 
@@ -1111,16 +1330,16 @@ git commit -m "feat: rewrite GalleryItem with Tailwind + built-in lightbox"
 Replace `src/components/tour-carousel/index.tsx`:
 
 ```tsx
-'use client';
+"use client";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
 
-import 'swiper/css';
-import 'swiper/css/navigation';
+import "swiper/css";
+import "swiper/css/navigation";
 
-import { TourCard } from '../tour-card';
-import type { TourCarouselProps } from '@/types';
+import { TourCard } from "../tour-card";
+import type { TourCarouselProps } from "@/types";
 
 export const TourCarousel = ({ tours }: TourCarouselProps) => {
   return (
@@ -1172,6 +1391,7 @@ git commit -m "feat: rewrite TourCarousel with Tailwind, remove CSS Module"
 ### Task 12: Rewrite Home Page
 
 **Files:**
+
 - Modify: `src/pages/index.tsx`
 
 - [ ] **Step 1: Rewrite index.tsx — full Tailwind, no vendor scripts, no page-wrapper**
@@ -1179,25 +1399,25 @@ git commit -m "feat: rewrite TourCarousel with Tailwind, remove CSS Module"
 Replace `src/pages/index.tsx`:
 
 ```tsx
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
-import { DestinationCard } from '@/components/destination-card';
-import { TourCarousel } from '@/components/tour-carousel';
-import { GalleryItem } from '@/components/gallery-item';
-import { VideoModal } from '@/components/video-modal';
+import { DestinationCard } from "@/components/destination-card";
+import { TourCarousel } from "@/components/tour-carousel";
+import { GalleryItem } from "@/components/gallery-item";
+import { VideoModal } from "@/components/video-modal";
 
-import { destinationsData, toursData } from '@/data';
-import { getUrl } from '@/utils';
+import { destinationsData, toursData } from "@/data";
+import { getUrl } from "@/utils";
 
 const galleryImages = [
-  getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
+  getUrl("assets/images/gallery/gallery-one-img-1.jpeg"),
+  getUrl("assets/images/gallery/gallery-one-img-2.jpeg"),
+  getUrl("assets/images/gallery/gallery-one-img-3.jpeg"),
+  getUrl("assets/images/gallery/gallery-one-img-4.jpeg"),
+  getUrl("assets/images/gallery/gallery-one-img-5.jpeg"),
 ];
 
 const fadeInUp = {
@@ -1227,7 +1447,7 @@ export default function Home() {
           ref={bannerVideoRef}
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
+          <source src={getUrl("assets/videos/banner-0.MOV")} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 text-center text-white px-4">
@@ -1253,17 +1473,29 @@ export default function Home() {
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
               Destination lists
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold mt-2">Go Exotic Places</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold mt-2">
+              Go Exotic Places
+            </h2>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
             {destinationsData.map((destination, i) => (
               <motion.div
                 key={destination.id}
-                className={destination.size === 'large' ? 'lg:col-span-6' : 'lg:col-span-3'}
+                className={
+                  destination.size === "large"
+                    ? "lg:col-span-6"
+                    : "lg:col-span-3"
+                }
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: { duration: 0.6, delay: i * 0.1 },
+                  },
+                }}
               >
                 <DestinationCard destination={destination} />
               </motion.div>
@@ -1294,7 +1526,10 @@ export default function Home() {
                 <span className="icon-phone-call text-2xl text-primary" />
                 <div>
                   <p className="text-xs text-neutral-500">Book Tour Now</p>
-                  <a href="tel:+84-935-797-550" className="font-bold text-neutral-900 hover:text-primary transition-colors">
+                  <a
+                    href="tel:+84-935-797-550"
+                    className="font-bold text-neutral-900 hover:text-primary transition-colors"
+                  >
                     +84 935 797 550
                   </a>
                 </div>
@@ -1310,12 +1545,19 @@ export default function Home() {
               <span className="text-xs font-bold uppercase tracking-widest text-primary">
                 Get to know us
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-6">Plan Your Trip with Us</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-6">
+                Plan Your Trip with Us
+              </h2>
               <p className="text-neutral-500 mb-6">
-                We are leading day tour and multi-day tour on organizer in Nha Trang, Vietnam
+                We are leading day tour and multi-day tour on organizer in Nha
+                Trang, Vietnam
               </p>
               <ul className="space-y-4 mb-8">
-                {['Motorbike and car tour', 'Friendly team and expert local guide', 'Experience in truly remarkable land'].map((item) => (
+                {[
+                  "Motorbike and car tour",
+                  "Friendly team and expert local guide",
+                  "Experience in truly remarkable land",
+                ].map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
                       <i className="fa fa-check text-primary text-xs" />
@@ -1348,7 +1590,9 @@ export default function Home() {
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
               Featured tours
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold mt-2">Most Popular Tours</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold mt-2">
+              Most Popular Tours
+            </h2>
           </motion.div>
           <TourCarousel tours={toursData} />
         </div>
@@ -1358,7 +1602,9 @@ export default function Home() {
       <section className="relative py-24 lg:py-32">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: `url(${getUrl('assets/images/backgrounds/video-one-bg-0.jpeg')})` }}
+          style={{
+            backgroundImage: `url(${getUrl("assets/images/backgrounds/video-one-bg-0.jpeg")})`,
+          }}
         />
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -1375,22 +1621,27 @@ export default function Home() {
                 Are you ready to travel?
               </p>
               <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
-                We are leading day tour and multi-day tour on organizer in Nha Trang
+                We are leading day tour and multi-day tour on organizer in Nha
+                Trang
               </h2>
             </div>
             <div className="grid grid-cols-2 gap-6">
               {[
-                { icon: 'icon-travel-map', label: 'Wildlife\nTours' },
-                { icon: 'icon-place', label: 'Bike\nTours' },
-                { icon: 'icon-flag', label: 'Adventure\nTours' },
-                { icon: 'icon-clock', label: 'Full day\nTours' },
+                { icon: "icon-travel-map", label: "Wildlife\nTours" },
+                { icon: "icon-place", label: "Bike\nTours" },
+                { icon: "icon-flag", label: "Adventure\nTours" },
+                { icon: "icon-clock", label: "Full day\nTours" },
               ].map((item) => (
                 <div
                   key={item.icon}
                   className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-center text-white hover:bg-white/20 transition-colors"
                 >
-                  <span className={`${item.icon} text-3xl text-primary-light block mb-3`} />
-                  <h4 className="text-sm font-semibold whitespace-pre-line">{item.label}</h4>
+                  <span
+                    className={`${item.icon} text-3xl text-primary-light block mb-3`}
+                  />
+                  <h4 className="text-sm font-semibold whitespace-pre-line">
+                    {item.label}
+                  </h4>
                 </div>
               ))}
             </div>
@@ -1408,7 +1659,11 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {galleryImages.map((imageSrc, index) => (
-              <GalleryItem key={index} imageSrc={imageSrc} delay={(index + 1) * 100} />
+              <GalleryItem
+                key={index}
+                imageSrc={imageSrc}
+                delay={(index + 1) * 100}
+              />
             ))}
           </div>
         </div>
@@ -1430,6 +1685,7 @@ git commit -m "feat: rewrite Home page with Tailwind + framer-motion, remove all
 ### Task 13: Rewrite Tours Page
 
 **Files:**
+
 - Modify: `src/pages/tours.tsx`
 
 - [ ] **Step 1: Rewrite tours.tsx**
@@ -1437,10 +1693,10 @@ git commit -m "feat: rewrite Home page with Tailwind + framer-motion, remove all
 Replace `src/pages/tours.tsx`:
 
 ```tsx
-import { motion } from 'framer-motion';
-import { PageHeader } from '@/components/page-header';
-import { TourCard } from '@/components/tour-card';
-import { toursData } from '@/data';
+import { motion } from "framer-motion";
+import { PageHeader } from "@/components/page-header";
+import { TourCard } from "@/components/tour-card";
+import { toursData } from "@/data";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1452,10 +1708,7 @@ export default function Tours() {
     <>
       <PageHeader
         title="Popular Tours"
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Tours' },
-        ]}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Tours" }]}
         backgroundImage="https://data.agatetravel.com/images/photogallery/2025/halong-bay-hanoi-vietnam.jpg"
       />
 
@@ -1468,7 +1721,13 @@ export default function Tours() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: { duration: 0.6, delay: i * 0.1 },
+                  },
+                }}
               >
                 <TourCard tour={tour} />
               </motion.div>
@@ -1493,6 +1752,7 @@ git commit -m "feat: rewrite Tours page with Tailwind + PageHeader"
 ### Task 14: Rewrite Contact Page
 
 **Files:**
+
 - Modify: `src/pages/contact.tsx`
 
 - [ ] **Step 1: Rewrite contact.tsx**
@@ -1500,18 +1760,15 @@ git commit -m "feat: rewrite Tours page with Tailwind + PageHeader"
 Replace `src/pages/contact.tsx`:
 
 ```tsx
-import { PageHeader } from '@/components/page-header';
-import { contactInfo } from '@/utils';
+import { PageHeader } from "@/components/page-header";
+import { contactInfo } from "@/utils";
 
 export default function Contact() {
   return (
     <>
       <PageHeader
         title="Contact"
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Contact' },
-        ]}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
         backgroundImage="https://media.gadventures.com/media-server/cache/59/d0/59d0b4d7c98928e2b9bf2e208409d5d6.jpg"
       />
 
@@ -1527,13 +1784,22 @@ export default function Contact() {
                 Any Question? Feel Free to Contact
               </h2>
               <div className="flex gap-3">
-                <a href="#" className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all"
+                >
                   <i className="fab fa-facebook" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all"
+                >
                   <i className="fab fa-twitter" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all"
+                >
                   <i className="fab fa-instagram" />
                 </a>
               </div>
@@ -1574,14 +1840,24 @@ export default function Contact() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: 'icon-place', lines: [contactInfo.address, `${contactInfo.city}, Vietnam`] },
-              { icon: 'icon-phone-call', lines: [contactInfo.phone] },
-              { icon: 'icon-at', lines: [contactInfo.email] },
+              {
+                icon: "icon-place",
+                lines: [contactInfo.address, `${contactInfo.city}, Vietnam`],
+              },
+              { icon: "icon-phone-call", lines: [contactInfo.phone] },
+              { icon: "icon-at", lines: [contactInfo.email] },
             ].map((info, i) => (
-              <div key={i} className="bg-white rounded-lg p-8 text-center shadow-sm">
-                <span className={`${info.icon} text-4xl text-primary block mb-4`} />
+              <div
+                key={i}
+                className="bg-white rounded-lg p-8 text-center shadow-sm"
+              >
+                <span
+                  className={`${info.icon} text-4xl text-primary block mb-4`}
+                />
                 {info.lines.map((line, j) => (
-                  <p key={j} className="text-neutral-700 text-sm">{line}</p>
+                  <p key={j} className="text-neutral-700 text-sm">
+                    {line}
+                  </p>
                 ))}
               </div>
             ))}
@@ -1615,6 +1891,7 @@ git commit -m "feat: rewrite Contact page with Tailwind"
 ### Task 15: Rewrite About Us Page
 
 **Files:**
+
 - Modify: `src/pages/about-us.tsx`
 
 - [ ] **Step 1: Rewrite about-us.tsx**
@@ -1622,10 +1899,10 @@ git commit -m "feat: rewrite Contact page with Tailwind"
 Replace `src/pages/about-us.tsx`:
 
 ```tsx
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { PageHeader } from '@/components/page-header';
-import { VideoModal } from '@/components/video-modal';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { PageHeader } from "@/components/page-header";
+import { VideoModal } from "@/components/video-modal";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1640,9 +1917,9 @@ export default function AboutUs() {
       <PageHeader
         title="About"
         breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Pages' },
-          { label: 'About' },
+          { label: "Home", href: "/" },
+          { label: "Pages" },
+          { label: "About" },
         ]}
         backgroundImage="https://vietnamamazingtours.com/uploads/Northern-Vietnam-Tours.jpeg"
       />
@@ -1671,31 +1948,48 @@ export default function AboutUs() {
               viewport={{ once: true }}
               variants={fadeInUp}
             >
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">Learn about us</span>
-              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">Dare to Explore with Us</h2>
-              <p className="text-primary font-semibold mb-4">A Simply Perfect Place to Get Lost</p>
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                Learn about us
+              </span>
+              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">
+                Dare to Explore with Us
+              </h2>
+              <p className="text-primary font-semibold mb-4">
+                A Simply Perfect Place to Get Lost
+              </p>
               <p className="text-neutral-500 mb-8">
-                We are trusted by our clients and have a reputation for the best services in the field.
-                Our team is highly skilled in crafting and leading motorcycle tours. With over 10 years
-                of varied riding experience, we know these roads inside and out.
+                We are trusted by our clients and have a reputation for the best
+                services in the field. Our team is highly skilled in crafting
+                and leading motorcycle tours. With over 10 years of varied
+                riding experience, we know these roads inside and out.
               </p>
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-neutral-900">Best Services</h4>
+                    <h4 className="text-sm font-bold text-neutral-900">
+                      Best Services
+                    </h4>
                     <span className="text-sm font-bold text-primary">77%</span>
                   </div>
                   <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '77%' }} />
+                    <div
+                      className="bg-primary h-2 rounded-full"
+                      style={{ width: "77%" }}
+                    />
                   </div>
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-neutral-900">Tour Agents</h4>
+                    <h4 className="text-sm font-bold text-neutral-900">
+                      Tour Agents
+                    </h4>
                     <span className="text-sm font-bold text-primary">38%</span>
                   </div>
                   <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '38%' }} />
+                    <div
+                      className="bg-primary h-2 rounded-full"
+                      style={{ width: "38%" }}
+                    />
                   </div>
                 </div>
               </div>
@@ -1709,7 +2003,9 @@ export default function AboutUs() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="text-white text-center lg:text-left">
             <p className="text-sm opacity-80 mb-1">Plan your trip with us</p>
-            <h2 className="text-2xl lg:text-3xl font-bold">Ready for an unforgettable tour?</h2>
+            <h2 className="text-2xl lg:text-3xl font-bold">
+              Ready for an unforgettable tour?
+            </h2>
           </div>
           <a
             href="/contact"
@@ -1724,7 +2020,10 @@ export default function AboutUs() {
       <section className="relative py-24 lg:py-32">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: 'url(assets/images/backgrounds/video-one-two-bg.jpg)' }}
+          style={{
+            backgroundImage:
+              "url(assets/images/backgrounds/video-one-two-bg.jpg)",
+          }}
         />
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 text-center text-white">
@@ -1754,13 +2053,15 @@ export default function AboutUs() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
             {[
-              { value: '870+', label: 'Total Tours' },
-              { value: '480+', label: 'Happy Riders' },
-              { value: '930+', label: 'Happy People' },
-              { value: '15+', label: 'Years Experience' },
+              { value: "870+", label: "Total Tours" },
+              { value: "480+", label: "Happy Riders" },
+              { value: "930+", label: "Happy People" },
+              { value: "15+", label: "Years Experience" },
             ].map((stat) => (
               <div key={stat.label}>
-                <h3 className="text-3xl lg:text-4xl font-bold mb-1">{stat.value}</h3>
+                <h3 className="text-3xl lg:text-4xl font-bold mb-1">
+                  {stat.value}
+                </h3>
                 <p className="text-sm text-white/70">{stat.label}</p>
               </div>
             ))}
@@ -1784,6 +2085,7 @@ git commit -m "feat: rewrite About Us page with Tailwind"
 ### Task 16: Rewrite Rental Page
 
 **Files:**
+
 - Modify: `src/pages/rental.tsx`
 
 - [ ] **Step 1: Rewrite rental.tsx**
@@ -1791,8 +2093,8 @@ git commit -m "feat: rewrite About Us page with Tailwind"
 Replace `src/pages/rental.tsx`:
 
 ```tsx
-import { motion } from 'framer-motion';
-import { PageHeader } from '@/components/page-header';
+import { motion } from "framer-motion";
+import { PageHeader } from "@/components/page-header";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1800,12 +2102,48 @@ const fadeInUp = {
 };
 
 const rentalItems = [
-  { title: 'Honda Winner X', price: 25, image: 'assets/images/resources/popular-tours-two__img-1.jpg', rating: '8.0 Superb', category: 'Motorbike' },
-  { title: 'Honda XR 150', price: 30, image: 'assets/images/resources/popular-tours-two__img-2.jpg', rating: '8.5 Superb', category: 'Motorbike' },
-  { title: 'Yamaha Exciter', price: 20, image: 'assets/images/resources/popular-tours-two__img-3.jpg', rating: '8.0 Superb', category: 'Motorbike' },
-  { title: 'Honda CB500X', price: 55, image: 'assets/images/resources/popular-tours-two__img-4.jpg', rating: '9.0 Superb', category: 'Motorbike' },
-  { title: 'Toyota Vios', price: 45, image: 'assets/images/resources/popular-tours-two__img-5.jpg', rating: '8.0 Superb', category: 'Car' },
-  { title: 'Ford Ranger', price: 65, image: 'assets/images/resources/popular-tours-two__img-6.jpg', rating: '8.2 Superb', category: 'Car' },
+  {
+    title: "Honda Winner X",
+    price: 25,
+    image: "assets/images/resources/popular-tours-two__img-1.jpg",
+    rating: "8.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Honda XR 150",
+    price: 30,
+    image: "assets/images/resources/popular-tours-two__img-2.jpg",
+    rating: "8.5 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Yamaha Exciter",
+    price: 20,
+    image: "assets/images/resources/popular-tours-two__img-3.jpg",
+    rating: "8.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Honda CB500X",
+    price: 55,
+    image: "assets/images/resources/popular-tours-two__img-4.jpg",
+    rating: "9.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Toyota Vios",
+    price: 45,
+    image: "assets/images/resources/popular-tours-two__img-5.jpg",
+    rating: "8.0 Superb",
+    category: "Car",
+  },
+  {
+    title: "Ford Ranger",
+    price: 65,
+    image: "assets/images/resources/popular-tours-two__img-6.jpg",
+    rating: "8.2 Superb",
+    category: "Car",
+  },
 ];
 
 export default function Rental() {
@@ -1813,10 +2151,7 @@ export default function Rental() {
     <>
       <PageHeader
         title="Rental"
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Rental' },
-        ]}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Rental" }]}
         backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg"
       />
 
@@ -1830,7 +2165,13 @@ export default function Rental() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: { duration: 0.6, delay: i * 0.1 },
+                  },
+                }}
               >
                 <div className="relative overflow-hidden aspect-[3/2]">
                   <img
@@ -1857,7 +2198,10 @@ export default function Rental() {
                     {item.title}
                   </h3>
                   <p className="text-neutral-500 text-sm">
-                    <span className="text-primary font-bold text-lg">${item.price}</span> / Per Day
+                    <span className="text-primary font-bold text-lg">
+                      ${item.price}
+                    </span>{" "}
+                    / Per Day
                   </p>
                 </div>
               </motion.div>
@@ -1882,6 +2226,7 @@ git commit -m "feat: rewrite Rental page with Tailwind"
 ### Task 17: Delete Vendor Files
 
 **Files:**
+
 - Delete: multiple directories and files under `public/assets/`
 
 - [ ] **Step 1: Delete vendor directories (keep fontawesome and tevily-icons)**
@@ -1936,6 +2281,7 @@ git commit -m "chore: delete all vendor CSS/JS — Bootstrap, jQuery, Tevily tem
 ### Task 18: Build Verification & Fix
 
 **Files:**
+
 - Potentially any file from previous tasks
 
 - [ ] **Step 1: Run type check and build**
@@ -1961,6 +2307,7 @@ pnpm dev
 ```
 
 Open `http://localhost:3000` and verify:
+
 - Home page loads with video hero, destinations grid, about section, tour carousel, video CTA, gallery
 - All pages navigate correctly
 - Mobile nav opens/closes

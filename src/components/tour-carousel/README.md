@@ -16,17 +16,17 @@ A modern React carousel component for displaying tour cards using Swiper.js.
 ## Usage
 
 ```jsx
-import { TourCarousel } from '@/components/tour-carousel';
-import { toursData } from '@/data';
+import { TourCarousel } from "@/components/tour-carousel";
+import { toursData } from "@/data";
 
-<TourCarousel tours={toursData} />
+<TourCarousel tours={toursData} />;
 ```
 
 ## Props
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| tours | Array | Yes | Array of tour objects |
+| Prop  | Type  | Required | Description           |
+| ----- | ----- | -------- | --------------------- |
+| tours | Array | Yes      | Array of tour objects |
 
 ## Tour Object Structure
 
@@ -91,4 +91,3 @@ This component replaces the legacy owl-carousel implementation with modern Swipe
 - The component uses `'use client'` directive for Next.js App Router compatibility
 - Swiper styles are imported automatically
 - Custom styles are scoped to `.popular-tours__carousel` class
-

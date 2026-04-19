@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 
 interface HelloResponse {
   name: string;
@@ -6,7 +6,7 @@ interface HelloResponse {
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<HelloResponse>
+  res: NextApiResponse<HelloResponse>,
 ) {
   res.status(200).json({ name: "John Doe" });
 }

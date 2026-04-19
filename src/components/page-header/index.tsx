@@ -1,7 +1,11 @@
-import Link from 'next/link';
-import type { PageHeaderProps } from '@/types';
+import Link from "next/link";
+import type { PageHeaderProps } from "@/types";
 
-export function PageHeader({ title, breadcrumbs, backgroundImage }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  breadcrumbs,
+  backgroundImage,
+}: PageHeaderProps) {
   return (
     <section className="relative">
       <div className="relative h-64 md:h-80 overflow-hidden">
@@ -21,11 +25,16 @@ export function PageHeader({ title, breadcrumbs, backgroundImage }: PageHeaderPr
               <span key={i} className="flex items-center gap-2">
                 {i > 0 && <span className="text-neutral-300">/</span>}
                 {crumb.href ? (
-                  <Link href={crumb.href} className="hover:text-primary transition-colors">
+                  <Link
+                    href={crumb.href}
+                    className="hover:text-primary transition-colors"
+                  >
                     {crumb.label}
                   </Link>
                 ) : (
-                  <span className="text-neutral-900 font-medium">{crumb.label}</span>
+                  <span className="text-neutral-900 font-medium">
+                    {crumb.label}
+                  </span>
                 )}
               </span>
             ))}

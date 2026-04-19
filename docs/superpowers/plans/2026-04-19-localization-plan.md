@@ -13,6 +13,7 @@
 ### Task 1: Install `next-intl` and configure Next.js i18n routing
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `next.config.mjs`
 
@@ -31,8 +32,8 @@ Replace the contents of `next.config.mjs` with:
 const nextConfig = {
   reactStrictMode: true,
   i18n: {
-    locales: ['vi', 'en'],
-    defaultLocale: 'vi',
+    locales: ["vi", "en"],
+    defaultLocale: "vi",
   },
 };
 
@@ -59,6 +60,7 @@ git commit -m "feat(i18n): install next-intl and configure i18n routing"
 ### Task 2: Create translation JSON files
 
 **Files:**
+
 - Create: `src/messages/en.json`
 - Create: `src/messages/vi.json`
 
@@ -302,6 +304,7 @@ git commit -m "feat(i18n): add English and Vietnamese translation files"
 ### Task 3: Wire up `next-intl` provider in `_app.tsx`
 
 **Files:**
+
 - Modify: `src/pages/_app.tsx`
 
 - [ ] **Step 1: Update `_app.tsx` to wrap with NextIntlClientProvider**
@@ -309,28 +312,36 @@ git commit -m "feat(i18n): add English and Vietnamese translation files"
 Replace the contents of `src/pages/_app.tsx` with:
 
 ```tsx
-import type { AppProps } from 'next/app';
-import { NextIntlClientProvider } from 'next-intl';
-import { useRouter } from 'next/router';
-import { DM_Sans } from 'next/font/google';
-import localFont from 'next/font/local';
-import { Layout } from '../components/layout/index';
+import type { AppProps } from "next/app";
+import { NextIntlClientProvider } from "next-intl";
+import { useRouter } from "next/router";
+import { DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
+import { Layout } from "../components/layout/index";
 import "@/styles/globals.css";
 
 const dmSans = DM_Sans({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 const outBrave = localFont({
   src: [
-    { path: '../../public/assets/fonts/outbrave.ttf', weight: '400', style: 'normal' },
-    { path: '../../public/assets/fonts/outbrave.otf', weight: '400', style: 'normal' },
+    {
+      path: "../../public/assets/fonts/outbrave.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/assets/fonts/outbrave.otf",
+      weight: "400",
+      style: "normal",
+    },
   ],
-  variable: '--font-outbrave',
-  display: 'swap',
+  variable: "--font-outbrave",
+  display: "swap",
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -372,6 +383,7 @@ git commit -m "feat(i18n): wire NextIntlClientProvider in _app.tsx"
 ### Task 4: Create LanguageSwitcher component
 
 **Files:**
+
 - Create: `src/components/language-switcher/index.tsx`
 
 - [ ] **Step 1: Create the LanguageSwitcher component**
@@ -379,9 +391,9 @@ git commit -m "feat(i18n): wire NextIntlClientProvider in _app.tsx"
 Create `src/components/language-switcher/index.tsx`:
 
 ```tsx
-'use client';
+"use client";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 export const LanguageSwitcher = () => {
   const router = useRouter();
@@ -395,22 +407,22 @@ export const LanguageSwitcher = () => {
   return (
     <div className="flex items-center gap-1 text-sm font-semibold">
       <button
-        onClick={() => switchLocale('vi')}
+        onClick={() => switchLocale("vi")}
         className={`px-1.5 py-0.5 rounded transition-colors ${
-          locale === 'vi'
-            ? 'text-primary font-bold'
-            : 'text-neutral-500 hover:text-neutral-900'
+          locale === "vi"
+            ? "text-primary font-bold"
+            : "text-neutral-500 hover:text-neutral-900"
         }`}
       >
         VI
       </button>
       <span className="text-neutral-300">|</span>
       <button
-        onClick={() => switchLocale('en')}
+        onClick={() => switchLocale("en")}
         className={`px-1.5 py-0.5 rounded transition-colors ${
-          locale === 'en'
-            ? 'text-primary font-bold'
-            : 'text-neutral-500 hover:text-neutral-900'
+          locale === "en"
+            ? "text-primary font-bold"
+            : "text-neutral-500 hover:text-neutral-900"
         }`}
       >
         EN
@@ -432,6 +444,7 @@ git commit -m "feat(i18n): create LanguageSwitcher component"
 ### Task 5: Localize Header component
 
 **Files:**
+
 - Modify: `src/components/header/index.tsx`
 
 - [ ] **Step 1: Add imports and translation hook to Header**
@@ -439,14 +452,14 @@ git commit -m "feat(i18n): create LanguageSwitcher component"
 At the top of `src/components/header/index.tsx`, add the `useTranslations` import and `LanguageSwitcher` import:
 
 ```tsx
-import { useTranslations } from 'next-intl';
-import { LanguageSwitcher } from '@/components/language-switcher';
+import { useTranslations } from "next-intl";
+import { LanguageSwitcher } from "@/components/language-switcher";
 ```
 
 Inside the `Header` component, add right after `const [mobileOpen, setMobileOpen] = useState(false);`:
 
 ```tsx
-const t = useTranslations('header');
+const t = useTranslations("header");
 ```
 
 - [ ] **Step 2: Replace hardcoded nav labels with `t()` calls**
@@ -455,24 +468,32 @@ Replace the `navLinks` array with:
 
 ```tsx
 const navLinks = [
-  { href: '/', label: t('home'), active: router.pathname === '/' },
+  { href: "/", label: t("home"), active: router.pathname === "/" },
   {
-    href: '/tours',
-    label: t('tours'),
-    active: router.pathname.startsWith('/tours'),
-    children: destinationsData.map((d) => ({ href: '/tours', label: d.name })),
+    href: "/tours",
+    label: t("tours"),
+    active: router.pathname.startsWith("/tours"),
+    children: destinationsData.map((d) => ({ href: "/tours", label: d.name })),
   },
   {
-    href: '/rental',
-    label: t('rental'),
-    active: router.pathname.startsWith('/rental'),
+    href: "/rental",
+    label: t("rental"),
+    active: router.pathname.startsWith("/rental"),
     children: [
-      { href: '/rental', label: t('motorbike') },
-      { href: '/rental', label: t('car') },
+      { href: "/rental", label: t("motorbike") },
+      { href: "/rental", label: t("car") },
     ],
   },
-  { href: '/about-us', label: t('aboutUs'), active: router.pathname === '/about-us' },
-  { href: '/contact', label: t('contact'), active: router.pathname === '/contact' },
+  {
+    href: "/about-us",
+    label: t("aboutUs"),
+    active: router.pathname === "/about-us",
+  },
+  {
+    href: "/contact",
+    label: t("contact"),
+    active: router.pathname === "/contact",
+  },
 ];
 ```
 
@@ -516,6 +537,7 @@ git commit -m "feat(i18n): localize Header component and add LanguageSwitcher"
 ### Task 6: Localize Footer component
 
 **Files:**
+
 - Modify: `src/components/footer/index.tsx`
 
 - [ ] **Step 1: Convert Footer from arrow function to regular function and add translations**
@@ -523,12 +545,12 @@ git commit -m "feat(i18n): localize Header component and add LanguageSwitcher"
 The Footer is currently an arrow function component (`export const Footer = () => (`), which makes it hard to add hooks. Convert it and add translations. Replace the entire file with:
 
 ```tsx
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { getUrl, contactInfo } from '@/utils';
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { getUrl, contactInfo } from "@/utils";
 
 export const Footer = () => {
-  const t = useTranslations('footer');
+  const t = useTranslations("footer");
 
   return (
     <footer className="bg-neutral-900 text-neutral-400">
@@ -537,19 +559,31 @@ export const Footer = () => {
           {/* About */}
           <div className="xl:col-span-4">
             <Link href="/" className="inline-block mb-6">
-              <img src={getUrl('assets/images/logo/logo-white.png')} alt="Logo" className="h-11 opacity-90" />
+              <img
+                src={getUrl("assets/images/logo/logo-white.png")}
+                alt="Logo"
+                className="h-11 opacity-90"
+              />
             </Link>
-            <p className="text-sm leading-relaxed mb-6">
-              {t('aboutText')}
-            </p>
+            <p className="text-sm leading-relaxed mb-6">{t("aboutText")}</p>
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-3">
                 <i className="fas fa-phone-square-alt text-primary" />
-                <a href={`tel:${contactInfo.phone}`} className="hover:text-white transition-colors">{contactInfo.phone}</a>
+                <a
+                  href={`tel:${contactInfo.phone}`}
+                  className="hover:text-white transition-colors"
+                >
+                  {contactInfo.phone}
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <i className="fas fa-envelope text-primary" />
-                <a href={`mailto:${contactInfo.email}`} className="hover:text-white transition-colors">{contactInfo.email}</a>
+                <a
+                  href={`mailto:${contactInfo.email}`}
+                  className="hover:text-white transition-colors"
+                >
+                  {contactInfo.email}
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <i className="fas fa-map-marker-alt text-primary" />
@@ -564,45 +598,101 @@ export const Footer = () => {
 
           {/* Company links */}
           <div className="xl:col-span-2">
-            <h3 className="text-white font-bold text-lg mb-6">{t('company')}</h3>
+            <h3 className="text-white font-bold text-lg mb-6">
+              {t("company")}
+            </h3>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/about-us" className="hover:text-white transition-colors">{t('aboutUs')}</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">{t('contactUs')}</Link></li>
-              <li><Link href="/rental" className="hover:text-white transition-colors">{t('rental')}</Link></li>
-              <li><Link href="/tours" className="hover:text-white transition-colors">{t('tours')}</Link></li>
+              <li>
+                <Link
+                  href="/about-us"
+                  className="hover:text-white transition-colors"
+                >
+                  {t("aboutUs")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-white transition-colors"
+                >
+                  {t("contactUs")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/rental"
+                  className="hover:text-white transition-colors"
+                >
+                  {t("rental")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/tours"
+                  className="hover:text-white transition-colors"
+                >
+                  {t("tours")}
+                </Link>
+              </li>
             </ul>
           </div>
 
           {/* Explore links */}
           <div className="xl:col-span-2">
-            <h3 className="text-white font-bold text-lg mb-6">{t('explore')}</h3>
+            <h3 className="text-white font-bold text-lg mb-6">
+              {t("explore")}
+            </h3>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/tours" className="hover:text-white transition-colors">{t('tours')}</Link></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('legal')}</a></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">{t('contact')}</Link></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('privacyPolicy')}</a></li>
+              <li>
+                <Link
+                  href="/tours"
+                  className="hover:text-white transition-colors"
+                >
+                  {t("tours")}
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  {t("legal")}
+                </a>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-white transition-colors"
+                >
+                  {t("contact")}
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  {t("privacyPolicy")}
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Newsletter */}
           <div className="xl:col-span-4">
-            <h3 className="text-white font-bold text-lg mb-6">{t('newsletter')}</h3>
+            <h3 className="text-white font-bold text-lg mb-6">
+              {t("newsletter")}
+            </h3>
             <form className="flex gap-0">
               <input
                 type="email"
-                placeholder={t('emailPlaceholder')}
+                placeholder={t("emailPlaceholder")}
                 className="flex-1 bg-white/10 border border-white/10 rounded-l-lg px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <button
                 type="submit"
                 className="bg-primary hover:bg-primary-light text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-r-lg transition-colors"
               >
-                {t('subscribe')}
+                {t("subscribe")}
               </button>
             </form>
             <label className="flex items-center gap-2 mt-4 text-xs">
               <i className="fa fa-check text-primary" />
-              {t('agreeTerms')}
+              {t("agreeTerms")}
             </label>
           </div>
         </div>
@@ -612,11 +702,28 @@ export const Footer = () => {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <a href={contactInfo.youtubeLink} className="hover:text-white transition-colors"><i className="fab fa-youtube" /></a>
-            <a href={contactInfo.tripadvisorLink} className="hover:text-white transition-colors"><i className="fab fa-tripadvisor" /></a>
-            <a href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`} className="hover:text-white transition-colors"><i className="fab fa-whatsapp" /></a>
+            <a
+              href={contactInfo.youtubeLink}
+              className="hover:text-white transition-colors"
+            >
+              <i className="fab fa-youtube" />
+            </a>
+            <a
+              href={contactInfo.tripadvisorLink}
+              className="hover:text-white transition-colors"
+            >
+              <i className="fab fa-tripadvisor" />
+            </a>
+            <a
+              href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, "")}`}
+              className="hover:text-white transition-colors"
+            >
+              <i className="fab fa-whatsapp" />
+            </a>
           </div>
-          <p className="text-sm">{t('copyright', { year: new Date().getFullYear() })}</p>
+          <p className="text-sm">
+            {t("copyright", { year: new Date().getFullYear() })}
+          </p>
         </div>
       </div>
     </footer>
@@ -644,6 +751,7 @@ git commit -m "feat(i18n): localize Footer component"
 ### Task 7: Localize TourCard and DestinationCard components
 
 **Files:**
+
 - Modify: `src/components/tour-card/index.tsx`
 - Modify: `src/components/destination-card/index.tsx`
 
@@ -652,13 +760,13 @@ git commit -m "feat(i18n): localize Footer component"
 Replace the contents of `src/components/tour-card/index.tsx` with:
 
 ```tsx
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import type { TourCardProps } from '@/types';
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import type { TourCardProps } from "@/types";
 
 export const TourCard = ({ tour }: TourCardProps) => {
   const { title, imageUrl, rating, price, duration, distance, location } = tour;
-  const t = useTranslations('common');
+  const t = useTranslations("common");
 
   return (
     <div className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden h-full flex flex-col">
@@ -675,12 +783,19 @@ export const TourCard = ({ tour }: TourCardProps) => {
           <Link href="/tours">{title}</Link>
         </h3>
         <p className="text-neutral-500 text-sm mb-4">
-          <span className="text-primary font-bold text-lg">${price}</span> {t('perPerson')}
+          <span className="text-primary font-bold text-lg">${price}</span>{" "}
+          {t("perPerson")}
         </p>
         <ul className="flex items-center gap-4 text-xs text-neutral-500 mt-auto pt-4 border-t border-neutral-100">
-          <li className="flex items-center gap-1"><i className="fa fa-clock text-neutral-400" /> {duration}</li>
-          <li className="flex items-center gap-1"><i className="fa fa-road text-neutral-400" /> {distance}</li>
-          <li className="flex items-center gap-1"><i className="fa fa-map-marker-alt text-neutral-400" /> {location}</li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-clock text-neutral-400" /> {duration}
+          </li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-road text-neutral-400" /> {distance}
+          </li>
+          <li className="flex items-center gap-1">
+            <i className="fa fa-map-marker-alt text-neutral-400" /> {location}
+          </li>
         </ul>
       </div>
     </div>
@@ -693,16 +808,21 @@ export const TourCard = ({ tour }: TourCardProps) => {
 Replace the contents of `src/components/destination-card/index.tsx` with:
 
 ```tsx
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import type { DestinationCardProps } from '@/types';
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import type { DestinationCardProps } from "@/types";
 
-export const DestinationCard = ({ destination, className }: DestinationCardProps & { className?: string }) => {
+export const DestinationCard = ({
+  destination,
+  className,
+}: DestinationCardProps & { className?: string }) => {
   const { name, imageUrl, tours } = destination;
-  const t = useTranslations('common');
+  const t = useTranslations("common");
 
   return (
-    <div className={`group relative rounded-lg overflow-hidden ${className ?? 'aspect-[3/2]'}`}>
+    <div
+      className={`group relative rounded-lg overflow-hidden ${className ?? "aspect-[3/2]"}`}
+    >
       <img
         src={imageUrl}
         alt={name}
@@ -711,10 +831,15 @@ export const DestinationCard = ({ destination, className }: DestinationCardProps
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-5">
         <h2 className="text-xl font-bold text-white mb-1">
-          <Link href="/tours" className="hover:text-primary-light transition-colors">{name}</Link>
+          <Link
+            href="/tours"
+            className="hover:text-primary-light transition-colors"
+          >
+            {name}
+          </Link>
         </h2>
         <span className="inline-block bg-primary/90 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full">
-          {tours} {t('tours')}
+          {tours} {t("tours")}
         </span>
       </div>
     </div>
@@ -742,6 +867,7 @@ git commit -m "feat(i18n): localize TourCard and DestinationCard components"
 ### Task 8: Localize Home page (`src/pages/index.tsx`)
 
 **Files:**
+
 - Modify: `src/pages/index.tsx`
 
 - [ ] **Step 1: Add imports and getStaticProps**
@@ -749,9 +875,9 @@ git commit -m "feat(i18n): localize TourCard and DestinationCard components"
 At the top of `src/pages/index.tsx`, add the import:
 
 ```tsx
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
 ```
 
 At the bottom of the file (after the component), add:
@@ -771,8 +897,8 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
 Inside the `Home` function, right after `const [videoModalOpen, setVideoModalOpen] = useState(false);`, add:
 
 ```tsx
-const t = useTranslations('home');
-const tMeta = useTranslations('meta');
+const t = useTranslations("home");
+const tMeta = useTranslations("meta");
 ```
 
 - [ ] **Step 3: Add Head with meta tags**
@@ -781,8 +907,8 @@ Right after the opening `<>` fragment, add:
 
 ```tsx
 <Head>
-  <title>{tMeta('homeTitle')}</title>
-  <meta name="description" content={tMeta('homeDescription')} />
+  <title>{tMeta("homeTitle")}</title>
+  <meta name="description" content={tMeta("homeDescription")} />
 </Head>
 ```
 
@@ -805,6 +931,7 @@ Replace each hardcoded string with its `t()` call:
 - `"Are you ready to travel?"` → `{t('readyToTravel')}`
 - `"We are leading day tour and multi-day tour on organizer in Nha Trang"` → `{t('videoSectionHeading')}`
 - The tour type labels: replace the array with:
+
   ```tsx
   {[
     { icon: 'icon-travel-map', label: t('wildlifeTours') },
@@ -834,6 +961,7 @@ git commit -m "feat(i18n): localize Home page"
 ### Task 9: Localize Tours page
 
 **Files:**
+
 - Modify: `src/pages/tours.tsx`
 
 - [ ] **Step 1: Add imports, translations, and getStaticProps**
@@ -841,13 +969,13 @@ git commit -m "feat(i18n): localize Home page"
 Replace the contents of `src/pages/tours.tsx` with:
 
 ```tsx
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import { PageHeader } from '@/components/page-header';
-import { TourCard } from '@/components/tour-card';
-import { toursData } from '@/data';
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { PageHeader } from "@/components/page-header";
+import { TourCard } from "@/components/tour-card";
+import { toursData } from "@/data";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -855,21 +983,21 @@ const fadeInUp = {
 };
 
 export default function Tours() {
-  const t = useTranslations('tours');
-  const tMeta = useTranslations('meta');
+  const t = useTranslations("tours");
+  const tMeta = useTranslations("meta");
 
   return (
     <>
       <Head>
-        <title>{tMeta('toursTitle')}</title>
-        <meta name="description" content={tMeta('toursDescription')} />
+        <title>{tMeta("toursTitle")}</title>
+        <meta name="description" content={tMeta("toursDescription")} />
       </Head>
 
       <PageHeader
-        title={t('title')}
+        title={t("title")}
         breadcrumbs={[
-          { label: t('breadcrumbHome'), href: '/' },
-          { label: t('breadcrumbTours') },
+          { label: t("breadcrumbHome"), href: "/" },
+          { label: t("breadcrumbTours") },
         ]}
         backgroundImage="https://data.agatetravel.com/images/photogallery/2025/halong-bay-hanoi-vietnam.jpg"
       />
@@ -883,7 +1011,13 @@ export default function Tours() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: { duration: 0.6, delay: i * 0.1 },
+                  },
+                }}
               >
                 <TourCard tour={tour} />
               </motion.div>
@@ -924,6 +1058,7 @@ git commit -m "feat(i18n): localize Tours page"
 ### Task 10: Localize Contact page
 
 **Files:**
+
 - Modify: `src/pages/contact.tsx`
 
 - [ ] **Step 1: Replace contact.tsx with localized version**
@@ -931,28 +1066,28 @@ git commit -m "feat(i18n): localize Tours page"
 Replace the contents of `src/pages/contact.tsx` with:
 
 ```tsx
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import { PageHeader } from '@/components/page-header';
-import { contactInfo } from '@/utils';
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { PageHeader } from "@/components/page-header";
+import { contactInfo } from "@/utils";
 
 export default function Contact() {
-  const t = useTranslations('contact');
-  const tMeta = useTranslations('meta');
+  const t = useTranslations("contact");
+  const tMeta = useTranslations("meta");
 
   return (
     <>
       <Head>
-        <title>{tMeta('contactTitle')}</title>
-        <meta name="description" content={tMeta('contactDescription')} />
+        <title>{tMeta("contactTitle")}</title>
+        <meta name="description" content={tMeta("contactDescription")} />
       </Head>
 
       <PageHeader
-        title={t('title')}
+        title={t("title")}
         breadcrumbs={[
-          { label: t('breadcrumbHome'), href: '/' },
-          { label: t('breadcrumbContact') },
+          { label: t("breadcrumbHome"), href: "/" },
+          { label: t("breadcrumbContact") },
         ]}
         backgroundImage="https://media.gadventures.com/media-server/cache/59/d0/59d0b4d7c98928e2b9bf2e208409d5d6.jpg"
       />
@@ -962,19 +1097,28 @@ export default function Contact() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-4">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                {t('talkWithTeam')}
+                {t("talkWithTeam")}
               </span>
               <h2 className="text-3xl font-bold mt-2 mb-6">
-                {t('anyQuestion')}
+                {t("anyQuestion")}
               </h2>
               <div className="flex gap-3">
-                <a href="#" className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all"
+                >
                   <i className="fab fa-facebook" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all"
+                >
                   <i className="fab fa-twitter" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all"
+                >
                   <i className="fab fa-instagram" />
                 </a>
               </div>
@@ -984,17 +1128,17 @@ export default function Contact() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <input
                     type="text"
-                    placeholder={t('namePlaceholder')}
+                    placeholder={t("namePlaceholder")}
                     className="w-full bg-neutral-100 border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <input
                     type="email"
-                    placeholder={t('emailPlaceholder')}
+                    placeholder={t("emailPlaceholder")}
                     className="w-full bg-neutral-100 border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <textarea
-                  placeholder={t('messagePlaceholder')}
+                  placeholder={t("messagePlaceholder")}
                   rows={6}
                   className="w-full bg-neutral-100 border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                 />
@@ -1002,7 +1146,7 @@ export default function Contact() {
                   type="submit"
                   className="bg-primary hover:bg-primary-light text-white font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors"
                 >
-                  {t('sendMessage')}
+                  {t("sendMessage")}
                 </button>
               </form>
             </div>
@@ -1014,14 +1158,24 @@ export default function Contact() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: 'icon-place', lines: [contactInfo.address, `${contactInfo.city}, Vietnam`] },
-              { icon: 'icon-phone-call', lines: [contactInfo.phone] },
-              { icon: 'icon-at', lines: [contactInfo.email] },
+              {
+                icon: "icon-place",
+                lines: [contactInfo.address, `${contactInfo.city}, Vietnam`],
+              },
+              { icon: "icon-phone-call", lines: [contactInfo.phone] },
+              { icon: "icon-at", lines: [contactInfo.email] },
             ].map((info, i) => (
-              <div key={i} className="bg-white rounded-lg p-8 text-center shadow-sm">
-                <span className={`${info.icon} text-4xl text-primary block mb-4`} />
+              <div
+                key={i}
+                className="bg-white rounded-lg p-8 text-center shadow-sm"
+              >
+                <span
+                  className={`${info.icon} text-4xl text-primary block mb-4`}
+                />
                 {info.lines.map((line, j) => (
-                  <p key={j} className="text-neutral-700 text-sm">{line}</p>
+                  <p key={j} className="text-neutral-700 text-sm">
+                    {line}
+                  </p>
                 ))}
               </div>
             ))}
@@ -1068,6 +1222,7 @@ git commit -m "feat(i18n): localize Contact page"
 ### Task 11: Localize About Us page
 
 **Files:**
+
 - Modify: `src/pages/about-us.tsx`
 
 - [ ] **Step 1: Replace about-us.tsx with localized version**
@@ -1075,14 +1230,14 @@ git commit -m "feat(i18n): localize Contact page"
 Replace the contents of `src/pages/about-us.tsx` with:
 
 ```tsx
-import { useState } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import { PageHeader } from '@/components/page-header';
-import { VideoModal } from '@/components/video-modal';
+import { useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { PageHeader } from "@/components/page-header";
+import { VideoModal } from "@/components/video-modal";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1091,22 +1246,22 @@ const fadeInUp = {
 
 export default function AboutUs() {
   const [videoOpen, setVideoOpen] = useState(false);
-  const t = useTranslations('about');
-  const tMeta = useTranslations('meta');
+  const t = useTranslations("about");
+  const tMeta = useTranslations("meta");
 
   return (
     <>
       <Head>
-        <title>{tMeta('aboutTitle')}</title>
-        <meta name="description" content={tMeta('aboutDescription')} />
+        <title>{tMeta("aboutTitle")}</title>
+        <meta name="description" content={tMeta("aboutDescription")} />
       </Head>
 
       <PageHeader
-        title={t('title')}
+        title={t("title")}
         breadcrumbs={[
-          { label: t('breadcrumbHome'), href: '/' },
-          { label: t('breadcrumbPages') },
-          { label: t('breadcrumbAbout') },
+          { label: t("breadcrumbHome"), href: "/" },
+          { label: t("breadcrumbPages") },
+          { label: t("breadcrumbAbout") },
         ]}
         backgroundImage="https://vietnamamazingtours.com/uploads/Northern-Vietnam-Tours.jpeg"
       />
@@ -1134,29 +1289,43 @@ export default function AboutUs() {
               viewport={{ once: true }}
               variants={fadeInUp}
             >
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">{t('learnAboutUs')}</span>
-              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">{t('dareToExplore')}</h2>
-              <p className="text-primary font-semibold mb-4">{t('perfectPlace')}</p>
-              <p className="text-neutral-500 mb-8">
-                {t('aboutDescription')}
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                {t("learnAboutUs")}
+              </span>
+              <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-4">
+                {t("dareToExplore")}
+              </h2>
+              <p className="text-primary font-semibold mb-4">
+                {t("perfectPlace")}
               </p>
+              <p className="text-neutral-500 mb-8">{t("aboutDescription")}</p>
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-neutral-900">{t('bestServices')}</h4>
+                    <h4 className="text-sm font-bold text-neutral-900">
+                      {t("bestServices")}
+                    </h4>
                     <span className="text-sm font-bold text-primary">77%</span>
                   </div>
                   <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '77%' }} />
+                    <div
+                      className="bg-primary h-2 rounded-full"
+                      style={{ width: "77%" }}
+                    />
                   </div>
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <h4 className="text-sm font-bold text-neutral-900">{t('tourAgents')}</h4>
+                    <h4 className="text-sm font-bold text-neutral-900">
+                      {t("tourAgents")}
+                    </h4>
                     <span className="text-sm font-bold text-primary">38%</span>
                   </div>
                   <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '38%' }} />
+                    <div
+                      className="bg-primary h-2 rounded-full"
+                      style={{ width: "38%" }}
+                    />
                   </div>
                 </div>
               </div>
@@ -1168,14 +1337,18 @@ export default function AboutUs() {
       <section className="bg-primary py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="text-white text-center lg:text-left">
-            <p className="font-display text-sm opacity-80 mb-1">{t('planYourTrip')}</p>
-            <h2 className="text-2xl lg:text-3xl font-bold">{t('readyForTour')}</h2>
+            <p className="font-display text-sm opacity-80 mb-1">
+              {t("planYourTrip")}
+            </p>
+            <h2 className="text-2xl lg:text-3xl font-bold">
+              {t("readyForTour")}
+            </h2>
           </div>
           <Link
             href="/contact"
             className="bg-white text-primary hover:bg-neutral-100 font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors flex-shrink-0"
           >
-            {t('bookTourNow')}
+            {t("bookTourNow")}
           </Link>
         </div>
       </section>
@@ -1183,7 +1356,10 @@ export default function AboutUs() {
       <section className="relative py-24 lg:py-32">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: 'url(assets/images/backgrounds/video-one-two-bg.jpg)' }}
+          style={{
+            backgroundImage:
+              "url(assets/images/backgrounds/video-one-two-bg.jpg)",
+          }}
         />
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 text-center text-white">
@@ -1195,10 +1371,10 @@ export default function AboutUs() {
             <i className="fa fa-play text-xl ml-1" />
           </button>
           <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
-            {t('readyToTravel')}
+            {t("readyToTravel")}
           </p>
           <h2 className="text-3xl lg:text-4xl font-bold max-w-2xl mx-auto leading-tight">
-            {t('platformDescription')}
+            {t("platformDescription")}
           </h2>
         </div>
       </section>
@@ -1212,13 +1388,15 @@ export default function AboutUs() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
             {[
-              { value: '870+', label: t('totalTours') },
-              { value: '480+', label: t('happyRiders') },
-              { value: '930+', label: t('happyPeople') },
-              { value: '15+', label: t('yearsExperience') },
+              { value: "870+", label: t("totalTours") },
+              { value: "480+", label: t("happyRiders") },
+              { value: "930+", label: t("happyPeople") },
+              { value: "15+", label: t("yearsExperience") },
             ].map((stat) => (
               <div key={stat.label}>
-                <h3 className="text-3xl lg:text-4xl font-bold mb-1">{stat.value}</h3>
+                <h3 className="text-3xl lg:text-4xl font-bold mb-1">
+                  {stat.value}
+                </h3>
                 <p className="text-sm text-white/70">{stat.label}</p>
               </div>
             ))}
@@ -1256,6 +1434,7 @@ git commit -m "feat(i18n): localize About Us page"
 ### Task 12: Localize Rental page
 
 **Files:**
+
 - Modify: `src/pages/rental.tsx`
 
 - [ ] **Step 1: Replace rental.tsx with localized version**
@@ -1263,11 +1442,11 @@ git commit -m "feat(i18n): localize About Us page"
 Replace the contents of `src/pages/rental.tsx` with:
 
 ```tsx
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import type { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import { PageHeader } from '@/components/page-header';
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import type { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { PageHeader } from "@/components/page-header";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1275,30 +1454,66 @@ const fadeInUp = {
 };
 
 const rentalItems = [
-  { title: 'Honda Winner X', price: 25, image: 'assets/images/resources/popular-tours-two__img-1.jpg', rating: '8.0 Superb', category: 'Motorbike' },
-  { title: 'Honda XR 150', price: 30, image: 'assets/images/resources/popular-tours-two__img-2.jpg', rating: '8.5 Superb', category: 'Motorbike' },
-  { title: 'Yamaha Exciter', price: 20, image: 'assets/images/resources/popular-tours-two__img-3.jpg', rating: '8.0 Superb', category: 'Motorbike' },
-  { title: 'Honda CB500X', price: 55, image: 'assets/images/resources/popular-tours-two__img-4.jpg', rating: '9.0 Superb', category: 'Motorbike' },
-  { title: 'Toyota Vios', price: 45, image: 'assets/images/resources/popular-tours-two__img-5.jpg', rating: '8.0 Superb', category: 'Car' },
-  { title: 'Ford Ranger', price: 65, image: 'assets/images/resources/popular-tours-two__img-6.jpg', rating: '8.2 Superb', category: 'Car' },
+  {
+    title: "Honda Winner X",
+    price: 25,
+    image: "assets/images/resources/popular-tours-two__img-1.jpg",
+    rating: "8.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Honda XR 150",
+    price: 30,
+    image: "assets/images/resources/popular-tours-two__img-2.jpg",
+    rating: "8.5 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Yamaha Exciter",
+    price: 20,
+    image: "assets/images/resources/popular-tours-two__img-3.jpg",
+    rating: "8.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Honda CB500X",
+    price: 55,
+    image: "assets/images/resources/popular-tours-two__img-4.jpg",
+    rating: "9.0 Superb",
+    category: "Motorbike",
+  },
+  {
+    title: "Toyota Vios",
+    price: 45,
+    image: "assets/images/resources/popular-tours-two__img-5.jpg",
+    rating: "8.0 Superb",
+    category: "Car",
+  },
+  {
+    title: "Ford Ranger",
+    price: 65,
+    image: "assets/images/resources/popular-tours-two__img-6.jpg",
+    rating: "8.2 Superb",
+    category: "Car",
+  },
 ];
 
 export default function Rental() {
-  const t = useTranslations('rental');
-  const tMeta = useTranslations('meta');
+  const t = useTranslations("rental");
+  const tMeta = useTranslations("meta");
 
   return (
     <>
       <Head>
-        <title>{tMeta('rentalTitle')}</title>
-        <meta name="description" content={tMeta('rentalDescription')} />
+        <title>{tMeta("rentalTitle")}</title>
+        <meta name="description" content={tMeta("rentalDescription")} />
       </Head>
 
       <PageHeader
-        title={t('title')}
+        title={t("title")}
         breadcrumbs={[
-          { label: t('breadcrumbHome'), href: '/' },
-          { label: t('breadcrumbRental') },
+          { label: t("breadcrumbHome"), href: "/" },
+          { label: t("breadcrumbRental") },
         ]}
         backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg"
       />
@@ -1313,7 +1528,13 @@ export default function Rental() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={{ ...fadeInUp, visible: { ...fadeInUp.visible, transition: { duration: 0.6, delay: i * 0.1 } } }}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: { duration: 0.6, delay: i * 0.1 },
+                  },
+                }}
               >
                 <div className="relative overflow-hidden aspect-[3/2]">
                   <img
@@ -1340,7 +1561,10 @@ export default function Rental() {
                     {item.title}
                   </h3>
                   <p className="text-neutral-500 text-sm">
-                    <span className="text-primary font-bold text-lg">${item.price}</span> {t('perDay')}
+                    <span className="text-primary font-bold text-lg">
+                      ${item.price}
+                    </span>{" "}
+                    {t("perDay")}
                   </p>
                 </div>
               </motion.div>
@@ -1379,9 +1603,10 @@ git commit -m "feat(i18n): localize Rental page"
 ### Task 13: Add hreflang SEO tags and remove hardcoded lang from `_document.tsx`
 
 **Files:**
+
 - Modify: `src/pages/_document.tsx`
 
-- [ ] **Step 1: Update _document.tsx**
+- [ ] **Step 1: Update \_document.tsx**
 
 Replace the contents of `src/pages/_document.tsx` with:
 
@@ -1394,13 +1619,36 @@ export default function Document() {
     <Html>
       <Head>
         <meta charSet="UTF-8" />
-        <link rel="apple-touch-icon" sizes="180x180" href={getUrl("assets/images/favicons/apple-touch-icon.png")} />
-        <link rel="icon" type="image/png" sizes="32x32" href={getUrl("assets/images/favicons/favicon-32x32.png")} />
-        <link rel="icon" type="image/png" sizes="16x16" href={getUrl("assets/images/favicons/favicon-16x16.png")} />
-        <link rel="manifest" href={getUrl("assets/images/favicons/site.webmanifest")} />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href={getUrl("assets/images/favicons/apple-touch-icon.png")}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href={getUrl("assets/images/favicons/favicon-32x32.png")}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href={getUrl("assets/images/favicons/favicon-16x16.png")}
+        />
+        <link
+          rel="manifest"
+          href={getUrl("assets/images/favicons/site.webmanifest")}
+        />
 
-        <link rel="stylesheet" href={getUrl("assets/vendors/fontawesome/css/all.min.css")} />
-        <link rel="stylesheet" href={getUrl("assets/vendors/tevily-icons/style.css")} />
+        <link
+          rel="stylesheet"
+          href={getUrl("assets/vendors/fontawesome/css/all.min.css")}
+        />
+        <link
+          rel="stylesheet"
+          href={getUrl("assets/vendors/tevily-icons/style.css")}
+        />
       </Head>
       <body>
         <Main />
@@ -1412,6 +1660,7 @@ export default function Document() {
 ```
 
 Key changes:
+
 - Removed `lang="en"` from `<Html>` — Next.js `i18n` config sets this automatically based on the current locale.
 - Removed the hardcoded meta description — each page now provides its own translated meta description via `<Head>`.
 
@@ -1420,17 +1669,17 @@ Key changes:
 Create `src/components/hreflang/index.tsx`:
 
 ```tsx
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import Head from "next/head";
+import { useRouter } from "next/router";
 
-const SITE_URL = 'https://vietnammototour.com';
+const SITE_URL = "https://vietnammototour.com";
 
 export const HrefLang = () => {
   const { asPath } = useRouter();
   const pathWithoutLocale = asPath;
 
   const viUrl = `${SITE_URL}${pathWithoutLocale}`;
-  const enUrl = `${SITE_URL}/en${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`;
+  const enUrl = `${SITE_URL}/en${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
 
   return (
     <Head>
@@ -1447,8 +1696,9 @@ export const HrefLang = () => {
 In `src/components/layout/index.tsx`, add the import and render `<HrefLang />`:
 
 Add at the top:
+
 ```tsx
-import { HrefLang } from '@/components/hreflang';
+import { HrefLang } from "@/components/hreflang";
 ```
 
 Render `<HrefLang />` at the start of the Layout's return JSX (inside the fragment or wrapper, before the Header).

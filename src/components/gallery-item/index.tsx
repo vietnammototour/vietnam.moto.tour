@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import type { GalleryItemProps } from '@/types';
+import { useState } from "react";
+import type { GalleryItemProps } from "@/types";
 
 export const GalleryItem = ({ imageSrc }: GalleryItemProps) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
