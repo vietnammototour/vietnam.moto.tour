@@ -39,3 +39,23 @@
 .carousel :global(.swiper-button-next):hover {
   color: var(--color-on-primary);
 }
+
+.carousel :global(.swiper-pagination) {
+  position: relative;
+  margin-top: 16px;
+}
+
+.carousel :global(.swiper-pagination-bullet) {
+  width: 10px;
+  height: 10px;
+  background: var(--color-on-surface);
+  opacity: 0.25;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
+}
+
+.carousel :global(.swiper-pagination-bullet-active) {
+  opacity: 1;
+  background: var(--color-primary);
+}

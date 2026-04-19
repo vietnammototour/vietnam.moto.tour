@@ -262,16 +262,18 @@ export default function Home() {
                 {t('videoSectionHeading')}
               </h2>
             </div>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
               {[
-                {icon: 'icon-travel-map', label: t('wildlifeTours')},
-                {icon: 'icon-place', label: t('bikeTours')},
-                {icon: 'icon-flag', label: t('adventureTours')},
-                {icon: 'icon-clock', label: t('fullDayTours')},
+                {icon: 'icon-travel-map', label: t('localExperts')},
+                {icon: 'icon-flag', label: t('yearsOnRoad')},
+                {icon: 'icon-place', label: t('hiddenRoutes')},
+                {icon: 'icon-clock', label: t('dayAndMultiDay')},
+                {icon: 'icon-user', label: t('smallGroups')},
+                {icon: 'icon-cashback', label: t('allInclusive')},
               ].map((item) => (
                 <div
                   key={item.icon}
-                  className="bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/10 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
+                  className="bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
                 >
                   <span
                     className={`${item.icon} text-3xl text-primary-light block mb-3`}

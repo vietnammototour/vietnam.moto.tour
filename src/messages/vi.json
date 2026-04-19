@@ -28,10 +28,12 @@
     "mostPopularTours": "Tour Phổ Biến Nhất",
     "readyToTravel": "Bạn đã sẵn sàng du lịch?",
     "videoSectionHeading": "Chúng tôi là đơn vị tổ chức tour trong ngày và nhiều ngày hàng đầu tại Nha Trang",
-    "wildlifeTours": "Tour\nThiên Nhiên",
-    "bikeTours": "Tour\nXe Máy",
-    "adventureTours": "Tour\nPhiêu Lưu",
-    "fullDayTours": "Tour\nCả Ngày"
+    "localExperts": "Hướng Dẫn Viên\nĐịa Phương",
+    "yearsOnRoad": "10+ Năm\nKinh Nghiệm",
+    "hiddenRoutes": "Cung Đường\nBí Ẩn",
+    "dayAndMultiDay": "Tour Ngày\n& Nhiều Ngày",
+    "smallGroups": "Nhóm\nNhỏ",
+    "allInclusive": "Trọn\nGói"
   },
   "tours": {
     "title": "Tour Phổ Biến",
