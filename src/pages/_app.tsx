@@ -1,4 +1,6 @@
 import type { AppProps } from 'next/app';
+import { NextIntlClientProvider } from 'next-intl';
+import { useRouter } from 'next/router';
 import { DM_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Layout } from '../components/layout/index';
@@ -21,11 +23,19 @@ const outBrave = localFont({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   return (
-    <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </div>
+    <NextIntlClientProvider
+      locale={router.locale}
+      messages={pageProps.messages}
+      timeZone="Asia/Ho_Chi_Minh"
+    >
+      <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </div>
+    </NextIntlClientProvider>
   );
 }
