@@ -4,6 +4,7 @@ import {getUrl, contactInfo} from '@/utils';
 
 export const Footer = () => {
   const t = useTranslations('footer');
+  const tNav = useTranslations('header');
 
   return (
     <footer className="bg-surface-inverse text-on-surface-secondary">
@@ -25,25 +26,25 @@ export const Footer = () => {
               href="/about-us"
               className="hover:text-on-surface-inverse transition-colors"
             >
-              {t('aboutUs')}
+              {tNav('aboutUs')}
             </Link>
             <Link
               href="/tours"
               className="hover:text-on-surface-inverse transition-colors"
             >
-              {t('tours')}
+              {tNav('tours')}
             </Link>
             <Link
               href="/rental"
               className="hover:text-on-surface-inverse transition-colors"
             >
-              {t('rental')}
+              {tNav('rental')}
             </Link>
             <Link
               href="/contact"
               className="hover:text-on-surface-inverse transition-colors"
             >
-              {t('contactUs')}
+              {tNav('contact')}
             </Link>
           </nav>
 
