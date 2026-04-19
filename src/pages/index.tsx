@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import type { GetStaticPropsContext } from 'next';
+import Head from 'next/head';
 
 import { DestinationCard } from '@/components/destination-card';
 import { TourCarousel } from '@/components/tour-carousel';
@@ -27,6 +30,8 @@ const fadeInUp = {
 export default function Home() {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const t = useTranslations('home');
+  const tMeta = useTranslations('meta');
 
   useEffect(() => {
     if (bannerVideoRef.current) {
@@ -36,6 +41,11 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>{tMeta('homeTitle')}</title>
+        <meta name="description" content={tMeta('homeDescription')} />
+      </Head>
+
       {/* Hero */}
       <section className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center justify-center overflow-hidden">
         <video
@@ -51,10 +61,10 @@ export default function Home() {
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 text-center text-white px-4 drop-shadow-lg">
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 text-white">
-            Travel & Adventures
+            {t('heroTitle')}
           </h2>
           <p className="text-lg sm:text-xl md:text-2xl font-light text-white">
-            Your Next Adventure Starts Here
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -70,9 +80,9 @@ export default function Home() {
             variants={fadeInUp}
           >
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
-              Destination lists
+              {t('destinationLists')}
             </span>
-            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">Go Exotic Places</h2>
+            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">{t('goExoticPlaces')}</h2>
           </motion.div>
           {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -137,7 +147,7 @@ export default function Home() {
               <div className="absolute bottom-6 left-6 bg-white rounded-lg p-4 shadow-lg flex items-center gap-3">
                 <span className="icon-phone-call text-2xl text-primary" />
                 <div>
-                  <p className="text-xs text-neutral-500">Book Tour Now</p>
+                  <p className="text-xs text-neutral-500">{t('bookTourNow')}</p>
                   <a href="tel:+84-935-797-550" className="font-bold text-neutral-900 hover:text-primary transition-colors">
                     +84 935 797 550
                   </a>
@@ -152,14 +162,14 @@ export default function Home() {
               variants={fadeInUp}
             >
               <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                Get to know us
+                {t('getToKnowUs')}
               </span>
-              <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2 mb-6">Plan Your Trip with Us</h2>
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2 mb-6">{t('planYourTrip')}</h2>
               <p className="font-display text-neutral-500 mb-6">
-                We are leading day tour and multi-day tour on organizer in Nha Trang, Vietnam
+                {t('aboutDescription')}
               </p>
               <ul className="space-y-4 mb-8">
-                {['Motorbike and car tour', 'Friendly team and expert local guide', 'Experience in truly remarkable land'].map((item) => (
+                {[t('bulletMotorbike'), t('bulletFriendly'), t('bulletExperience')].map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
                       <i className="fa fa-check text-primary text-xs" />
@@ -172,7 +182,7 @@ export default function Home() {
                 href="#"
                 className="inline-block bg-primary hover:bg-primary-light text-white font-bold text-xs uppercase tracking-wider px-8 py-3 rounded-lg transition-colors"
               >
-                Book with us now
+                {t('bookWithUsNow')}
               </a>
             </motion.div>
           </div>
@@ -190,9 +200,9 @@ export default function Home() {
             variants={fadeInUp}
           >
             <span className="text-xs font-bold uppercase tracking-widest text-primary">
-              Featured tours
+              {t('featuredTours')}
             </span>
-            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">Most Popular Tours</h2>
+            <h2 className="font-display text-3xl lg:text-4xl font-bold mt-2">{t('mostPopularTours')}</h2>
           </motion.div>
           <TourCarousel tours={toursData} />
         </div>
@@ -216,18 +226,18 @@ export default function Home() {
                 <i className="fa fa-play ml-1" />
               </button>
               <p className="text-sm font-semibold uppercase tracking-widest text-primary-light mb-2">
-                Are you ready to travel?
+                {t('readyToTravel')}
               </p>
               <h2 className="font-display text-3xl lg:text-4xl font-bold leading-tight text-white drop-shadow-lg">
-                We are leading day tour and multi-day tour on organizer in Nha Trang
+                {t('videoSectionHeading')}
               </h2>
             </div>
             <div className="grid grid-cols-2 gap-6">
               {[
-                { icon: 'icon-travel-map', label: 'Wildlife\nTours' },
-                { icon: 'icon-place', label: 'Bike\nTours' },
-                { icon: 'icon-flag', label: 'Adventure\nTours' },
-                { icon: 'icon-clock', label: 'Full day\nTours' },
+                { icon: 'icon-travel-map', label: t('wildlifeTours') },
+                { icon: 'icon-place', label: t('bikeTours') },
+                { icon: 'icon-flag', label: t('adventureTours') },
+                { icon: 'icon-clock', label: t('fullDayTours') },
               ].map((item) => (
                 <div
                   key={item.icon}
@@ -259,4 +269,12 @@ export default function Home() {
       </section>
     </>
   );
+}
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`@/messages/${locale}.json`)).default,
+    },
+  };
 }
