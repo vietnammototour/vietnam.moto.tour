@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import type { GalleryItemProps } from "@/types";
+import {useState} from 'react';
+import type {GalleryItemProps} from '@/types';
 
-export const GalleryItem = ({ imageSrc }: GalleryItemProps) => {
+export const GalleryItem = ({imageSrc}: GalleryItemProps) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   return (
@@ -18,7 +18,7 @@ export const GalleryItem = ({ imageSrc }: GalleryItemProps) => {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <span className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center text-neutral-900">
+          <span className="w-12 h-12 bg-surface-elevated/90 rounded-full flex items-center justify-center text-on-surface">
             <i className="fa fa-expand" />
           </span>
         </div>
@@ -30,7 +30,7 @@ export const GalleryItem = ({ imageSrc }: GalleryItemProps) => {
           onClick={() => setLightboxOpen(false)}
         >
           <button
-            className="absolute top-6 right-6 text-white text-2xl hover:text-neutral-300 transition-colors"
+            className="absolute top-6 right-6 text-white text-2xl hover:text-on-surface-secondary transition-colors"
             onClick={() => setLightboxOpen(false)}
             aria-label="Close lightbox"
           >
