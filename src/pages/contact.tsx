@@ -1,14 +1,25 @@
+import { useTranslations } from 'next-intl';
+import type { GetStaticPropsContext } from 'next';
+import Head from 'next/head';
 import { PageHeader } from '@/components/page-header';
 import { contactInfo } from '@/utils';
 
 export default function Contact() {
+  const t = useTranslations('contact');
+  const tMeta = useTranslations('meta');
+
   return (
     <>
+      <Head>
+        <title>{tMeta('contactTitle')}</title>
+        <meta name="description" content={tMeta('contactDescription')} />
+      </Head>
+
       <PageHeader
-        title="Contact"
+        title={t('title')}
         breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Contact' },
+          { label: t('breadcrumbHome'), href: '/' },
+          { label: t('breadcrumbContact') },
         ]}
         backgroundImage="https://media.gadventures.com/media-server/cache/59/d0/59d0b4d7c98928e2b9bf2e208409d5d6.jpg"
       />
@@ -18,10 +29,10 @@ export default function Contact() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-4">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                Talk with our team
+                {t('talkWithTeam')}
               </span>
               <h2 className="text-3xl font-bold mt-2 mb-6">
-                Any Question? Feel Free to Contact
+                {t('anyQuestion')}
               </h2>
               <div className="flex gap-3">
                 <a href="#" className="w-10 h-10 bg-neutral-100 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-neutral-500 transition-all">
@@ -40,17 +51,17 @@ export default function Contact() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <input
                     type="text"
-                    placeholder="Your name"
+                    placeholder={t('namePlaceholder')}
                     className="w-full bg-neutral-100 border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <input
                     type="email"
-                    placeholder="Email address"
+                    placeholder={t('emailPlaceholder')}
                     className="w-full bg-neutral-100 border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <textarea
-                  placeholder="Write your message"
+                  placeholder={t('messagePlaceholder')}
                   rows={6}
                   className="w-full bg-neutral-100 border-0 rounded-lg px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                 />
@@ -58,7 +69,7 @@ export default function Contact() {
                   type="submit"
                   className="bg-primary hover:bg-primary-light text-white font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors"
                 >
-                  Send a message
+                  {t('sendMessage')}
                 </button>
               </form>
             </div>
@@ -95,4 +106,12 @@ export default function Contact() {
       </section>
     </>
   );
+}
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`@/messages/${locale}.json`)).default,
+    },
+  };
 }
