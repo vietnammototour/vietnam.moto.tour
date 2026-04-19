@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git mv:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf .)",
+      "Bash(git push --force*)",
+      "Bash(git push * --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(git checkout -- .)",
+      "Bash(git clean -f*)",
+      "Bash(git branch -D *)",
+      "Bash(curl * | bash*)",
+      "Bash(curl * | sh*)",
+      "Bash(wget * | bash*)",
+      "Bash(eval *)",
+      "Bash(npm publish*)",
+      "Bash(pnpm publish*)",
+      "Bash(npx *)",
+      "Bash(chmod 777*)",
+      "Bash(chmod -R 777*)",
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(rsync *)",
+      "Bash(pm2 *)",
+      "Bash(*> /dev/null*)",
+      "Bash(cat /etc/passwd*)",
+      "Bash(cat /etc/shadow*)",
+      "Bash(env)",
+      "Bash(printenv)",
+      "Bash(echo $*SECRET*)",
+      "Bash(echo $*KEY*)",
+      "Bash(echo $*TOKEN*)",
+      "Bash(echo $*PASSWORD*)"
+    ]
+  }
+}
