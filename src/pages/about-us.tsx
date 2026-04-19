@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { PageHeader } from '@/components/page-header';
 import { VideoModal } from '@/components/video-modal';
@@ -85,12 +86,12 @@ export default function AboutUs() {
             <p className="text-sm opacity-80 mb-1">Plan your trip with us</p>
             <h2 className="text-2xl lg:text-3xl font-bold">Ready for an unforgettable tour?</h2>
           </div>
-          <a
+          <Link
             href="/contact"
             className="bg-white text-primary hover:bg-neutral-100 font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition-colors flex-shrink-0"
           >
             Book tour now
-          </a>
+          </Link>
         </div>
       </section>
 
