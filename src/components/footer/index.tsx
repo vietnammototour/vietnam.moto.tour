@@ -51,21 +51,30 @@ export const Footer = () => {
           <div className="flex items-center gap-4">
             <a
               href={contactInfo.youtubeLink}
+              aria-label="YouTube"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:text-on-surface-inverse transition-colors"
             >
-              <i className="fab fa-youtube" />
+              <i className="fab fa-youtube" aria-hidden="true" />
             </a>
             <a
               href={contactInfo.tripadvisorLink}
+              aria-label="TripAdvisor"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:text-on-surface-inverse transition-colors"
             >
-              <i className="fab fa-tripadvisor" />
+              <i className="fab fa-tripadvisor" aria-hidden="true" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
+              aria-label="WhatsApp"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:text-on-surface-inverse transition-colors"
             >
-              <i className="fab fa-whatsapp" />
+              <i className="fab fa-whatsapp" aria-hidden="true" />
             </a>
           </div>
         </div>
