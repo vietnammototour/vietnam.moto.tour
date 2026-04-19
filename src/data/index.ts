@@ -1,7 +1,8 @@
-import { getUrl } from "../utils/index";
+import type { Destination, Tour } from '@/types';
+import { getUrl } from '../utils/index';
 
 // Destinations data
-export const destinationsData = [
+export const destinationsData: Destination[] = [
   {
     id: 1,
     name: "Nha Trang",
@@ -50,7 +51,7 @@ export const destinationsData = [
 ];
 
 // Tours data
-export const toursData = [
+export const toursData: Tour[] = [
   {
     id: 1,
     title: "Da Lat Tour",

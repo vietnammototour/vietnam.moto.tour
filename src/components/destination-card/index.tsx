@@ -1,6 +1,6 @@
+import type { DestinationCardProps } from '@/types';
 
-// DestinationCard Component
-export const DestinationCard = ({ destination }) => {
+export const DestinationCard = ({ destination }: DestinationCardProps) => {
   const { name, imageUrl, tours, width, height, colClass } = destination;
 
   return (

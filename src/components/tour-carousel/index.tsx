@@ -13,8 +13,9 @@ import 'swiper/css/pagination';
 import styles from './TourCarousel.module.css';
 
 import { TourCard } from '../tour-card';
+import type { TourCarouselProps } from '@/types';
 
-export const TourCarousel = ({ tours }) => {
+export const TourCarousel = ({ tours }: TourCarouselProps) => {
   return (
     <Swiper
       modules={[Navigation, Pagination, Autoplay]}

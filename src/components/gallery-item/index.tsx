@@ -1,7 +1,8 @@
 import React from 'react';
 import { getUrl } from '../../utils/index';
+import type { GalleryItemProps } from '@/types';
 
-export const GalleryItem = ({ imageSrc, delay }) => {
+export const GalleryItem = ({ imageSrc, delay }: GalleryItemProps) => {
   return (
     <li className="wow fadeInUp" data-wow-delay={`${delay}ms`}>
       <div className="gallery-one__img-box">

@@ -1,6 +1,7 @@
 import React from "react";
+import type { TourCardProps } from '@/types';
 
-export const TourCard = ({ tour }) => {
+export const TourCard = ({ tour }: TourCardProps) => {
   const { title, imageUrl, rating, price, duration, distance, location } = tour;
 
   return (
