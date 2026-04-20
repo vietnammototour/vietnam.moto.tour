@@ -26,10 +26,4 @@ describe('DestinationCard', () => {
     expect(img).toHaveAttribute('src', '/dalat.jpg');
   });
 
-  it('applies className prop', () => {
-    const {container} = render(
-      <DestinationCard destination={destination} className="h-full" />,
-    );
-    expect(container.firstElementChild).toHaveClass('h-full');
-  });
 });

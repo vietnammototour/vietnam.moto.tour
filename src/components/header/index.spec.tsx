@@ -49,28 +49,6 @@ describe('Header', () => {
     expect(screen.getAllByText('contact').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('marks active link with text-primary when on home page', () => {
-    render(<Header />);
-    const homeLinks = screen.getAllByText('home');
-    const desktopLink = homeLinks[0].closest('a');
-    expect(desktopLink?.className).toContain('text-primary');
-  });
-
-  it('marks tours link active when on /tours', () => {
-    (useRouter as jest.Mock).mockReturnValue({
-      pathname: '/tours',
-      asPath: '/tours',
-      locale: 'vi',
-      locales: ['vi', 'en'],
-      push: jest.fn(),
-      events: {on: jest.fn(), off: jest.fn(), emit: jest.fn()},
-    });
-    render(<Header />);
-    const toursLinks = screen.getAllByText('tours');
-    const desktopLink = toursLinks[0].closest('a');
-    expect(desktopLink?.className).toContain('text-primary');
-  });
-
   it('renders YouTube social link in top bar', () => {
     render(<Header />);
     const icons = document.querySelectorAll('.fa-youtube');

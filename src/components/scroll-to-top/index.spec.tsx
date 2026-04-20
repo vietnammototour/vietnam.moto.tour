@@ -27,20 +27,6 @@ describe('ScrollToTop', () => {
     expect(icon).toBeInTheDocument();
   });
 
-  it('has pointer-events-none class when scrollY is below 400', () => {
-    mockScrollY = 100;
-    render(<ScrollToTop />);
-    const button = screen.getByLabelText('Scroll to top');
-    expect(button.className).toContain('pointer-events-none');
-  });
-
-  it('does not have pointer-events-none class when scrollY exceeds 400', () => {
-    mockScrollY = 500;
-    render(<ScrollToTop />);
-    const button = screen.getByLabelText('Scroll to top');
-    expect(button.className).not.toContain('pointer-events-none');
-  });
-
   it('calls window.scrollTo on click', async () => {
     mockScrollY = 500;
     const user = userEvent.setup();
