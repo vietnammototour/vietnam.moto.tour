@@ -74,10 +74,6 @@ export const Footer = () => {
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <p className="text-[0.9rem] leading-none">
-              {t('copyright', {year: new Date().getFullYear()})}
-            </p>
-            <span className="mx-3">·</span>
             {/* Social icons */}
             <div className="flex items-center gap-4 text-base">
               <a
@@ -108,6 +104,10 @@ export const Footer = () => {
                 <i className="fab fa-whatsapp" aria-hidden="true" />
               </a>
             </div>
+            <span className="mx-3">·</span>
+            <p className="text-[0.9rem] leading-none">
+              {t('copyright', {year: new Date().getFullYear()})}
+            </p>
           </div>
         </div>
       </div>

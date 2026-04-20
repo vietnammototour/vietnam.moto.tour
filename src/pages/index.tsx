@@ -160,15 +160,15 @@ export default function Home() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-4 shadow-lg flex items-center gap-6">
-                <span className="icon-phone-call text-sm text-primary" />
+              <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-5 shadow-lg flex items-center gap-4">
+                <span className="icon-phone-call text-2xl text-primary" />
                 <div>
                   <p className="type-label-sm font-normal text-on-surface-secondary">
                     {t('bookTourNow')}
                   </p>
                   <a
                     href={`tel:${contactInfo.phone}`}
-                    className="text-[0.6rem] text-on-surface hover:text-on-surface-accent transition-colors"
+                    className="text-lg font-semibold text-on-surface hover:text-on-surface-accent transition-colors"
                   >
                     {contactInfo.phone}
                   </a>
