@@ -20,7 +20,7 @@ export const TourCarousel = ({tours}: TourCarouselProps) => {
         slidesPerView={1}
         navigation
         autoplay={{
-          delay: 3000,
+          delay: 7500,
           disableOnInteraction: false,
         }}
         loop={false}
