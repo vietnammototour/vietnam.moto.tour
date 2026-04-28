@@ -28,7 +28,11 @@ export function VehiclePricing({
               {group.label[locale]}
             </h4>
           </div>
-          <div className="flex flex-col rounded-lg border border-border-subtle overflow-hidden">
+          <div
+            role="radiogroup"
+            aria-label={group.label[locale]}
+            className="flex flex-col rounded-lg border border-border-subtle overflow-hidden"
+          >
             {group.tiers.map((tier, tIdx) => {
               const isSelected =
                 selectedIndex.groupIdx === gIdx &&
@@ -37,6 +41,8 @@ export function VehiclePricing({
                 <button
                   key={tIdx}
                   type="button"
+                  role="radio"
+                  aria-checked={isSelected}
                   onClick={() => onSelect(gIdx, tIdx)}
                   className={`flex items-start gap-3 p-3 text-left transition-colors border-b border-border-subtle last:border-b-0 ${
                     isSelected

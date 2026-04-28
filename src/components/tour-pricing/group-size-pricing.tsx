@@ -72,9 +72,10 @@ export function GroupSizePricing({
       <div className="flex items-center justify-center gap-6">
         <button
           type="button"
+          aria-label={t('decreasePeople')}
           onClick={() => handleChange(count - 1)}
           disabled={count <= minSize}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"
         >
           -
         </button>
@@ -83,9 +84,10 @@ export function GroupSizePricing({
         </span>
         <button
           type="button"
+          aria-label={t('increasePeople')}
           onClick={() => handleChange(count + 1)}
           disabled={count >= maxSize}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"
         >
           +
         </button>

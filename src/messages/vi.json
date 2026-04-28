@@ -73,7 +73,9 @@
     "howManyPeople": "Bao nhiêu người?",
     "people": "người",
     "largerGroupBetterPrice": "Nhóm lớn hơn = giá tốt hơn!",
-    "pax": "người"
+    "pax": "người",
+    "decreasePeople": "Giảm số người",
+    "increasePeople": "Tăng số người"
   },
   "contact": {
     "title": "Liên Hệ",

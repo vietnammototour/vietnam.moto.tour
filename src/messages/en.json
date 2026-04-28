@@ -73,7 +73,9 @@
     "howManyPeople": "How many people?",
     "people": "people",
     "largerGroupBetterPrice": "Larger group = better price!",
-    "pax": "pax"
+    "pax": "pax",
+    "decreasePeople": "Decrease number of people",
+    "increasePeople": "Increase number of people"
   },
   "contact": {
     "title": "Contact",

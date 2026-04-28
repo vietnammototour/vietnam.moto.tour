@@ -1,4 +1,4 @@
-import {useState, useCallback, useEffect} from 'react';
+import {useState, useCallback, useEffect, useMemo} from 'react';
 import {useTranslations} from 'next-intl';
 import type {PricingGroup} from '@/types';
 import {VehiclePricing} from './vehicle-pricing';
@@ -34,13 +34,26 @@ export function TourPricing({
   const t = useTranslations('tourDetail');
   const localeKey = locale as 'en' | 'vi';
 
-  const hasVehicle = pricingGroups.some((g) => g.type === 'vehicle');
-  const vehicleGroups = pricingGroups.filter((g) => g.type === 'vehicle');
-  const groupSizeGroups = pricingGroups.filter((g) => g.type === 'group-size');
+  const vehicleGroups = useMemo(
+    () => pricingGroups.filter((g) => g.type === 'vehicle'),
+    [pricingGroups],
+  );
+  const hasVehicle = vehicleGroups.length > 0;
+
+  const groupSizeGroups = useMemo(
+    () => pricingGroups.filter((g) => g.type === 'group-size'),
+    [pricingGroups],
+  );
 
   // For group-size: first group with multiple tiers is the main one, single-tier groups are extras (children)
-  const mainGroupSize = groupSizeGroups.find((g) => g.tiers.length > 1);
-  const childrenGroup = groupSizeGroups.find((g) => g.tiers.length === 1);
+  const mainGroupSize = useMemo(
+    () => groupSizeGroups.find((g) => g.tiers.length > 1),
+    [groupSizeGroups],
+  );
+  const childrenGroup = useMemo(
+    () => groupSizeGroups.find((g) => g.tiers.length === 1),
+    [groupSizeGroups],
+  );
 
   // Vehicle selection state
   const cheapest = hasVehicle
