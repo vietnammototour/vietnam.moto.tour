@@ -1,3 +1,4 @@
+import {useState, useCallback} from 'react';
 import {useTranslations} from 'next-intl';
 import type {GetStaticPaths, GetStaticPropsContext} from 'next';
 import Head from 'next/head';
@@ -33,6 +34,15 @@ export default function TourDetail({tour}: TourDetailProps) {
   );
   const whatsappUrl = `https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}?text=${whatsappMessage}`;
 
+  const [selectedPrice, setSelectedPrice] = useState<{
+    price: number;
+    label: string;
+  }>({price: tour.price, label: ''});
+
+  const handlePriceChange = useCallback((price: number, label: string) => {
+    setSelectedPrice({price, label});
+  }, []);
+
   return (
     <>
       <Head>
@@ -55,6 +65,7 @@ export default function TourDetail({tour}: TourDetailProps) {
                 <TourPricing
                   pricingGroups={tour.pricingGroups}
                   locale={locale}
+                  onPriceChange={handlePriceChange}
                 />
                 <TourDetails tour={tour} />
               </div>
@@ -86,6 +97,7 @@ export default function TourDetail({tour}: TourDetailProps) {
                 <TourPricing
                   pricingGroups={tour.pricingGroups}
                   locale={locale}
+                  onPriceChange={handlePriceChange}
                 />
                 <TourCTA tourTitle={tour.title} />
                 <TourDetails tour={tour} />
@@ -109,11 +121,16 @@ export default function TourDetail({tour}: TourDetailProps) {
         <div className="flex items-center justify-between px-4 py-3">
           <div>
             <span className="type-title-sm text-on-surface">
-              {t('from')} ${tour.price}
+              ${selectedPrice.price}
             </span>
             <span className="type-label-sm text-on-surface-secondary ml-1">
-              {t('perPerson')}
+              {t('pricingPerPerson')}
             </span>
+            {selectedPrice.label && (
+              <p className="type-label-sm text-on-surface-secondary">
+                {selectedPrice.label}
+              </p>
+            )}
           </div>
           <div className="flex gap-2">
             <a
