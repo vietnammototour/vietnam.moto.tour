@@ -1,5 +1,25 @@
 import type {ReactNode} from 'react';
 
+export type LocalizedText = {
+  en: string;
+  vi: string;
+};
+
+export interface ItineraryItem {
+  time: string;
+  description: LocalizedText;
+}
+
+export interface ItineraryDay {
+  dayLabel: LocalizedText;
+  items: ItineraryItem[];
+}
+
+export interface PricingTier {
+  label: LocalizedText;
+  price: number;
+}
+
 export interface Tour {
   id: number;
   title: string;
@@ -9,6 +29,22 @@ export interface Tour {
   duration: string;
   distance: string;
   location: string;
+  slug: string;
+  description: LocalizedText;
+  transportation: string;
+  groupSize: string;
+  hotel: string;
+  guided: string;
+  heroImage: string;
+  images: string[];
+  highlights: LocalizedText[];
+  itinerary: ItineraryDay[];
+  pricing: PricingTier[];
+  included: LocalizedText[];
+  excluded: LocalizedText[];
+  paymentDetails: LocalizedText;
+  notes: LocalizedText[];
+  mealsInfo: LocalizedText;
 }
 
 export interface Destination {
