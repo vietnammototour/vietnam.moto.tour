@@ -105,39 +105,48 @@
         ]
       }
     ],
-    "pricing": [
+    "pricingGroups": [
       {
-        "label": {"en": "Per Person (Group of 2)", "vi": "Moi nguoi (Nhom 2)"},
-        "price": 80
+        "type": "group-size",
+        "label": {"en": "Per Person", "vi": "Mỗi Người"},
+        "tiers": [
+          {
+            "label": {"en": "Group of 2", "vi": "Nhóm 2"},
+            "price": 80,
+            "minGroupSize": 2,
+            "maxGroupSize": 2
+          },
+          {
+            "label": {"en": "Group of 3", "vi": "Nhóm 3"},
+            "price": 75,
+            "minGroupSize": 3,
+            "maxGroupSize": 3
+          },
+          {
+            "label": {"en": "Group of 4-5", "vi": "Nhóm 4-5"},
+            "price": 70,
+            "minGroupSize": 4,
+            "maxGroupSize": 5
+          },
+          {
+            "label": {"en": "Group of 6-7", "vi": "Nhóm 6-7"},
+            "price": 65,
+            "minGroupSize": 6,
+            "maxGroupSize": 7
+          },
+          {
+            "label": {"en": "Group of 8+", "vi": "Nhóm 8+"},
+            "price": 60,
+            "minGroupSize": 8
+          }
+        ]
       },
       {
-        "label": {"en": "Per Person (Group of 3)", "vi": "Moi nguoi (Nhom 3)"},
-        "price": 75
-      },
-      {
-        "label": {
-          "en": "Per Person (Group of 4-5)",
-          "vi": "Moi nguoi (Nhom 4-5)"
-        },
-        "price": 70
-      },
-      {
-        "label": {
-          "en": "Per Person (Group of 6-7)",
-          "vi": "Moi nguoi (Nhom 6-7)"
-        },
-        "price": 65
-      },
-      {
-        "label": {
-          "en": "Per Person (Group of 8+)",
-          "vi": "Moi nguoi (Nhom 8+)"
-        },
-        "price": 60
-      },
-      {
-        "label": {"en": "Children (110cm-140cm)", "vi": "Tre em (110cm-140cm)"},
-        "price": 20
+        "type": "group-size",
+        "label": {"en": "Children (110-140cm)", "vi": "Trẻ em (110-140cm)"},
+        "tiers": [
+          {"label": {"en": "Any group size", "vi": "Mọi nhóm"}, "price": 20}
+        ]
       }
     ],
     "included": [
@@ -264,15 +273,37 @@
         ]
       }
     ],
-    "pricing": [
-      {"label": {"en": "1 Pillion", "vi": "1 nguoi ngoi sau"}, "price": 130},
-      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 160},
+    "pricingGroups": [
       {
-        "label": {
-          "en": "1 Rider + 1 Pillion (sharing)",
-          "vi": "1 lai + 1 ngoi sau (chia se)"
-        },
-        "price": 360
+        "type": "vehicle",
+        "label": {"en": "By Motorbike", "vi": "Xe Máy"},
+        "icon": "motorcycle",
+        "tiers": [
+          {
+            "label": {"en": "Ride as passenger", "vi": "Ngồi sau"},
+            "description": {
+              "en": "Sit back and enjoy the ride",
+              "vi": "Ngồi sau và tận hưởng"
+            },
+            "price": 130
+          },
+          {
+            "label": {"en": "Drive yourself", "vi": "Tự lái"},
+            "description": {
+              "en": "You ride your own bike",
+              "vi": "Bạn tự lái xe"
+            },
+            "price": 160
+          },
+          {
+            "label": {"en": "Share a bike", "vi": "Chia sẻ xe"},
+            "description": {
+              "en": "2 people, 1 motorbike",
+              "vi": "2 người, 1 xe"
+            },
+            "price": 180
+          }
+        ]
       }
     ],
     "included": [
@@ -402,28 +433,52 @@
         ]
       }
     ],
-    "pricing": [
+    "pricingGroups": [
       {
-        "label": {
-          "en": "1 Person by Car (Min 2)",
-          "vi": "1 nguoi bang xe hoi (Toi thieu 2)"
-        },
-        "price": 70
+        "type": "vehicle",
+        "label": {"en": "By Motorbike", "vi": "Xe Máy"},
+        "icon": "motorcycle",
+        "tiers": [
+          {
+            "label": {"en": "Ride as passenger", "vi": "Ngồi sau"},
+            "description": {
+              "en": "Sit back and enjoy the ride",
+              "vi": "Ngồi sau và tận hưởng"
+            },
+            "price": 65
+          },
+          {
+            "label": {"en": "Drive yourself", "vi": "Tự lái"},
+            "description": {
+              "en": "You ride your own bike",
+              "vi": "Bạn tự lái xe"
+            },
+            "price": 75
+          },
+          {
+            "label": {"en": "Share a bike", "vi": "Chia sẻ xe"},
+            "description": {
+              "en": "2 people, 1 motorbike",
+              "vi": "2 người, 1 xe"
+            },
+            "price": 55
+          }
+        ]
       },
       {
-        "label": {
-          "en": "1 Pillion by Motorbike",
-          "vi": "1 nguoi ngoi sau xe may"
-        },
-        "price": 65
-      },
-      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 75},
-      {
-        "label": {
-          "en": "1 Rider + 1 Pillion (sharing)",
-          "vi": "1 lai + 1 ngoi sau (chia se)"
-        },
-        "price": 110
+        "type": "vehicle",
+        "label": {"en": "By Car", "vi": "Xe Hơi"},
+        "icon": "car",
+        "tiers": [
+          {
+            "label": {"en": "Private car", "vi": "Xe riêng"},
+            "description": {
+              "en": "Min. 2 passengers",
+              "vi": "Tối thiểu 2 người"
+            },
+            "price": 70
+          }
+        ]
       }
     ],
     "included": [
@@ -524,15 +579,37 @@
         ]
       }
     ],
-    "pricing": [
-      {"label": {"en": "1 Pillion", "vi": "1 nguoi ngoi sau"}, "price": 70},
-      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 90},
+    "pricingGroups": [
       {
-        "label": {
-          "en": "1 Rider + 1 Pillion (sharing)",
-          "vi": "1 lai + 1 ngoi sau (chia se)"
-        },
-        "price": 120
+        "type": "vehicle",
+        "label": {"en": "By Motorbike", "vi": "Xe Máy"},
+        "icon": "motorcycle",
+        "tiers": [
+          {
+            "label": {"en": "Ride as passenger", "vi": "Ngồi sau"},
+            "description": {
+              "en": "Sit back and enjoy the ride",
+              "vi": "Ngồi sau và tận hưởng"
+            },
+            "price": 70
+          },
+          {
+            "label": {"en": "Drive yourself", "vi": "Tự lái"},
+            "description": {
+              "en": "You ride your own bike",
+              "vi": "Bạn tự lái xe"
+            },
+            "price": 90
+          },
+          {
+            "label": {"en": "Share a bike", "vi": "Chia sẻ xe"},
+            "description": {
+              "en": "2 people, 1 motorbike",
+              "vi": "2 người, 1 xe"
+            },
+            "price": 60
+          }
+        ]
       }
     ],
     "included": [
@@ -652,28 +729,52 @@
         ]
       }
     ],
-    "pricing": [
+    "pricingGroups": [
       {
-        "label": {
-          "en": "1 Person by Car (Min 2)",
-          "vi": "1 nguoi bang xe hoi (Toi thieu 2)"
-        },
-        "price": 40
+        "type": "vehicle",
+        "label": {"en": "By Motorbike", "vi": "Xe Máy"},
+        "icon": "motorcycle",
+        "tiers": [
+          {
+            "label": {"en": "Ride as passenger", "vi": "Ngồi sau"},
+            "description": {
+              "en": "Sit back and enjoy the ride",
+              "vi": "Ngồi sau và tận hưởng"
+            },
+            "price": 30
+          },
+          {
+            "label": {"en": "Drive yourself", "vi": "Tự lái"},
+            "description": {
+              "en": "You ride your own bike",
+              "vi": "Bạn tự lái xe"
+            },
+            "price": 40
+          },
+          {
+            "label": {"en": "Share a bike", "vi": "Chia sẻ xe"},
+            "description": {
+              "en": "2 people, 1 motorbike",
+              "vi": "2 người, 1 xe"
+            },
+            "price": 25
+          }
+        ]
       },
       {
-        "label": {
-          "en": "1 Pillion by Motorbike",
-          "vi": "1 nguoi ngoi sau xe may"
-        },
-        "price": 30
-      },
-      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 40},
-      {
-        "label": {
-          "en": "1 Rider + 1 Pillion (sharing)",
-          "vi": "1 lai + 1 ngoi sau (chia se)"
-        },
-        "price": 50
+        "type": "vehicle",
+        "label": {"en": "By Car", "vi": "Xe Hơi"},
+        "icon": "car",
+        "tiers": [
+          {
+            "label": {"en": "Private car", "vi": "Xe riêng"},
+            "description": {
+              "en": "Min. 2 passengers",
+              "vi": "Tối thiểu 2 người"
+            },
+            "price": 40
+          }
+        ]
       }
     ],
     "included": [
@@ -790,28 +891,52 @@
         ]
       }
     ],
-    "pricing": [
+    "pricingGroups": [
       {
-        "label": {
-          "en": "1 Person by Car (Min 2)",
-          "vi": "1 nguoi bang xe hoi (Toi thieu 2)"
-        },
-        "price": 70
+        "type": "vehicle",
+        "label": {"en": "By Motorbike", "vi": "Xe Máy"},
+        "icon": "motorcycle",
+        "tiers": [
+          {
+            "label": {"en": "Ride as passenger", "vi": "Ngồi sau"},
+            "description": {
+              "en": "Sit back and enjoy the ride",
+              "vi": "Ngồi sau và tận hưởng"
+            },
+            "price": 65
+          },
+          {
+            "label": {"en": "Drive yourself", "vi": "Tự lái"},
+            "description": {
+              "en": "You ride your own bike",
+              "vi": "Bạn tự lái xe"
+            },
+            "price": 75
+          },
+          {
+            "label": {"en": "Share a bike", "vi": "Chia sẻ xe"},
+            "description": {
+              "en": "2 people, 1 motorbike",
+              "vi": "2 người, 1 xe"
+            },
+            "price": 55
+          }
+        ]
       },
       {
-        "label": {
-          "en": "1 Pillion by Motorbike",
-          "vi": "1 nguoi ngoi sau xe may"
-        },
-        "price": 65
-      },
-      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 75},
-      {
-        "label": {
-          "en": "1 Rider + 1 Pillion (sharing)",
-          "vi": "1 lai + 1 ngoi sau (chia se)"
-        },
-        "price": 110
+        "type": "vehicle",
+        "label": {"en": "By Car", "vi": "Xe Hơi"},
+        "icon": "car",
+        "tiers": [
+          {
+            "label": {"en": "Private car", "vi": "Xe riêng"},
+            "description": {
+              "en": "Min. 2 passengers",
+              "vi": "Tối thiểu 2 người"
+            },
+            "price": 70
+          }
+        ]
       }
     ],
     "included": [
@@ -965,40 +1090,54 @@
         ]
       }
     ],
-    "pricing": [
+    "pricingGroups": [
       {
-        "label": {"en": "Per Person (Group of 2)", "vi": "Moi nguoi (Nhom 2)"},
-        "price": 85
+        "type": "group-size",
+        "label": {"en": "Per Person", "vi": "Mỗi Người"},
+        "tiers": [
+          {
+            "label": {"en": "Group of 2", "vi": "Nhóm 2"},
+            "price": 85,
+            "minGroupSize": 2,
+            "maxGroupSize": 2
+          },
+          {
+            "label": {"en": "Group of 3", "vi": "Nhóm 3"},
+            "price": 80,
+            "minGroupSize": 3,
+            "maxGroupSize": 3
+          },
+          {
+            "label": {"en": "Group of 4", "vi": "Nhóm 4"},
+            "price": 75,
+            "minGroupSize": 4,
+            "maxGroupSize": 4
+          },
+          {
+            "label": {"en": "Group of 5-6", "vi": "Nhóm 5-6"},
+            "price": 70,
+            "minGroupSize": 5,
+            "maxGroupSize": 6
+          },
+          {
+            "label": {"en": "Group of 7", "vi": "Nhóm 7"},
+            "price": 65,
+            "minGroupSize": 7,
+            "maxGroupSize": 7
+          },
+          {
+            "label": {"en": "Group of 8+", "vi": "Nhóm 8+"},
+            "price": 60,
+            "minGroupSize": 8
+          }
+        ]
       },
       {
-        "label": {"en": "Per Person (Group of 3)", "vi": "Moi nguoi (Nhom 3)"},
-        "price": 80
-      },
-      {
-        "label": {"en": "Per Person (Group of 4)", "vi": "Moi nguoi (Nhom 4)"},
-        "price": 75
-      },
-      {
-        "label": {
-          "en": "Per Person (Group of 5-6)",
-          "vi": "Moi nguoi (Nhom 5-6)"
-        },
-        "price": 70
-      },
-      {
-        "label": {"en": "Per Person (Group of 7)", "vi": "Moi nguoi (Nhom 7)"},
-        "price": 65
-      },
-      {
-        "label": {
-          "en": "Per Person (Group of 8+)",
-          "vi": "Moi nguoi (Nhom 8+)"
-        },
-        "price": 60
-      },
-      {
-        "label": {"en": "Children (110cm-140cm)", "vi": "Tre em (110cm-140cm)"},
-        "price": 20
+        "type": "group-size",
+        "label": {"en": "Children (110-140cm)", "vi": "Trẻ em (110-140cm)"},
+        "tiers": [
+          {"label": {"en": "Any group size", "vi": "Mọi nhóm"}, "price": 20}
+        ]
       }
     ],
     "included": [

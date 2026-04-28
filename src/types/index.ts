@@ -17,7 +17,17 @@ export interface ItineraryDay {
 
 export interface PricingTier {
   label: LocalizedText;
+  description?: LocalizedText;
   price: number;
+  minGroupSize?: number;
+  maxGroupSize?: number;
+}
+
+export interface PricingGroup {
+  type: 'group-size' | 'vehicle';
+  label: LocalizedText;
+  icon?: string;
+  tiers: PricingTier[];
 }
 
 export interface Tour {
@@ -39,7 +49,7 @@ export interface Tour {
   images: string[];
   highlights: LocalizedText[];
   itinerary: ItineraryDay[];
-  pricing: PricingTier[];
+  pricingGroups: PricingGroup[];
   included: LocalizedText[];
   excluded: LocalizedText[];
   paymentDetails: LocalizedText;
