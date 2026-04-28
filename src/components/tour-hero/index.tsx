@@ -12,10 +12,12 @@ export function TourHero({tour}: TourHeroProps) {
   return (
     <section className="relative">
       <div className="relative h-72 md:h-96 overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{backgroundImage: `url(${tour.heroImage})`}}
-        />
+        {tour.heroImage && (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{backgroundImage: `url(${tour.heroImage})`}}
+          />
+        )}
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col justify-end h-full pb-8">
           <h1 className="type-display-sm md:type-display-lg text-on-surface-inverse mb-3">

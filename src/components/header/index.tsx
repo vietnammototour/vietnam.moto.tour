@@ -8,7 +8,6 @@ import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {useTheme} from '@/components/theme-provider';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
-import destinationsData from '@/data/destinations.json';
 import {LanguageSwitcher} from '@/components/language-switcher';
 import ThemeToggle from '@/components/theme-toggle';
 
@@ -33,10 +32,6 @@ export const Header = () => {
       href: '/tours',
       label: t('tours'),
       active: router.pathname.startsWith('/tours'),
-      children: destinationsData.map((d) => ({
-        href: '/tours',
-        label: d.name,
-      })),
     },
     // TODO: unhide when rental page is ready
     // {
