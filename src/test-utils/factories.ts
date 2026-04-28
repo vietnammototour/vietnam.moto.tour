@@ -27,7 +27,23 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
         ],
       },
     ],
-    pricing: [{label: {en: 'Per Person', vi: 'Mỗi người'}, price: 80}],
+    pricingGroups: [
+      {
+        type: 'vehicle' as const,
+        label: {en: 'By Motorbike', vi: 'Xe Máy'},
+        icon: 'motorcycle',
+        tiers: [
+          {
+            label: {en: 'Ride as passenger', vi: 'Ngồi sau'},
+            description: {
+              en: 'Sit back and enjoy the ride',
+              vi: 'Ngồi sau và tận hưởng',
+            },
+            price: 65,
+          },
+        ],
+      },
+    ],
     included: [{en: 'Guide', vi: 'Hướng dẫn viên'}],
     excluded: [{en: 'Flights', vi: 'Vé máy bay'}],
     paymentDetails: {en: '20% deposit required', vi: 'Đặt cọc 20%'},

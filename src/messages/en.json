@@ -68,7 +68,12 @@
     "guided": "Guided",
     "breadcrumbHome": "Home",
     "breadcrumbTours": "Tours",
-    "day": "Day"
+    "day": "Day",
+    "pricingPerPerson": "/ person",
+    "howManyPeople": "How many people?",
+    "people": "people",
+    "largerGroupBetterPrice": "Larger group = better price!",
+    "pax": "pax"
   },
   "contact": {
     "title": "Contact",

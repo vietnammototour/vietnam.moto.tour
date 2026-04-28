@@ -68,7 +68,12 @@
     "guided": "Hướng dẫn",
     "breadcrumbHome": "Trang Chủ",
     "breadcrumbTours": "Tour",
-    "day": "Ngày"
+    "day": "Ngày",
+    "pricingPerPerson": "/ người",
+    "howManyPeople": "Bao nhiêu người?",
+    "people": "người",
+    "largerGroupBetterPrice": "Nhóm lớn hơn = giá tốt hơn!",
+    "pax": "người"
   },
   "contact": {
     "title": "Liên Hệ",

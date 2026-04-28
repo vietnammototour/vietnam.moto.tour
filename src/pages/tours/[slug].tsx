@@ -52,7 +52,10 @@ export default function TourDetail({tour}: TourDetailProps) {
 
               {/* On mobile: pricing + details between highlights and itinerary */}
               <div className="lg:hidden mb-10">
-                <TourPricing pricing={tour.pricing} locale={locale} />
+                <TourPricing
+                  pricingGroups={tour.pricingGroups}
+                  locale={locale}
+                />
                 <TourDetails tour={tour} />
               </div>
 
@@ -80,7 +83,10 @@ export default function TourDetail({tour}: TourDetailProps) {
             {/* Desktop sidebar */}
             <aside className="hidden lg:block lg:w-1/3">
               <div className="sticky top-24">
-                <TourPricing pricing={tour.pricing} locale={locale} />
+                <TourPricing
+                  pricingGroups={tour.pricingGroups}
+                  locale={locale}
+                />
                 <TourCTA tourTitle={tour.title} />
                 <TourDetails tour={tour} />
                 <TourPayment
