@@ -10,6 +10,7 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
     duration: '1 Day',
     distance: '100 Miles',
     location: 'Test City',
+    slug: 'test-tour',
     ...overrides,
   };
 }

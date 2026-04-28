@@ -3,7 +3,7 @@ import {useTranslations} from 'next-intl';
 import type {TourCardProps} from '@/types';
 
 export const TourCard = ({tour}: TourCardProps) => {
-  const {title, imageUrl, rating, price, duration, distance, location} = tour;
+  const {title, imageUrl, rating, price, duration, distance, location, slug} = tour;
   const t = useTranslations('common');
 
   return (
@@ -18,7 +18,7 @@ export const TourCard = ({tour}: TourCardProps) => {
       </div>
       <div className="p-5 flex flex-col flex-1">
         <h3 className="type-title-sm text-on-surface mb-2 group-hover:text-primary transition-colors">
-          <Link href="/tours">{title}</Link>
+          <Link href={`/tours/${slug}`}>{title}</Link>
         </h3>
         <p className="text-on-surface-secondary type-body-sm mb-4">
           <span className="text-on-surface-accent type-title-sm">${price}</span>{' '}
