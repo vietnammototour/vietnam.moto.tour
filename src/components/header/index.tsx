@@ -113,33 +113,17 @@ export const Header = () => {
             </Link>
             <nav className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => (
-                <div key={link.href + link.label} className="relative group">
-                  <Link
-                    href={link.href}
-                    className={`type-label-lg uppercase transition-colors py-6 ${
-                      link.active
-                        ? 'text-primary'
-                        : 'text-on-surface hover:text-primary'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                  {link.children && (
-                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      <div className="bg-surface-elevated rounded-lg shadow-lg py-2 min-w-[180px] border border-border">
-                        {link.children.map((child, i) => (
-                          <Link
-                            key={i}
-                            href={child.href}
-                            className="block px-4 py-2 type-body-sm text-on-surface hover:bg-surface-alt hover:text-primary transition-colors"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <Link
+                  key={link.href + link.label}
+                  href={link.href}
+                  className={`type-label-lg uppercase transition-colors py-6 ${
+                    link.active
+                      ? 'text-primary'
+                      : 'text-on-surface hover:text-primary'
+                  }`}
+                >
+                  {link.label}
+                </Link>
               ))}
             </nav>
             <div className="hidden lg:flex items-center ml-4">
