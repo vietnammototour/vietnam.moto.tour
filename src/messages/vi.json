@@ -45,6 +45,31 @@
     "breadcrumbHome": "Trang Chủ",
     "breadcrumbTours": "Tour"
   },
+  "tourDetail": {
+    "aboutThisTour": "Về Tour Này",
+    "highlights": "Điểm Nổi Bật",
+    "itinerary": "Lịch Trình",
+    "pricing": "Bảng Giá",
+    "whatsIncluded": "Bao Gồm",
+    "whatsNotIncluded": "Không Bao Gồm",
+    "tourDetails": "Chi Tiết Tour",
+    "payment": "Thanh Toán",
+    "importantNotes": "Lưu Ý Quan Trọng",
+    "meals": "Bữa Ăn",
+    "whatsappUs": "Nhắn WhatsApp",
+    "emailInquiry": "Gửi Email",
+    "from": "Từ",
+    "perPerson": "/ mỗi người",
+    "transportation": "Phương tiện",
+    "duration": "Thời gian",
+    "distance": "Khoảng cách",
+    "group": "Nhóm",
+    "hotel": "Khách sạn",
+    "guided": "Hướng dẫn",
+    "breadcrumbHome": "Trang Chủ",
+    "breadcrumbTours": "Tour",
+    "day": "Ngày"
+  },
   "contact": {
     "title": "Liên Hệ",
     "breadcrumbHome": "Trang Chủ",
@@ -102,6 +127,8 @@
     "aboutTitle": "Giới Thiệu — Vietnam Motorcycle Tour",
     "aboutDescription": "Tìm hiểu về Vietnam Motorcycle Tour — hướng dẫn viên giàu kinh nghiệm, hơn 10 năm tour xe máy tại Việt Nam.",
     "rentalTitle": "Cho Thuê Xe Máy & Ô Tô — Vietnam Motorcycle Tour",
-    "rentalDescription": "Cho thuê xe máy và ô tô tại Nha Trang, Việt Nam. Honda, Yamaha, Toyota và nhiều hãng khác."
+    "rentalDescription": "Cho thuê xe máy và ô tô tại Nha Trang, Việt Nam. Honda, Yamaha, Toyota và nhiều hãng khác.",
+    "tourDetailTitle": "{tourTitle} — Vietnam Motorcycle Tour",
+    "tourDetailDescription": "{description}"
   }
 }
