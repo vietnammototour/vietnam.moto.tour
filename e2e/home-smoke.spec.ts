@@ -1,10 +1,6 @@
 import {test, expect} from '@playwright/test';
 
 test.describe('Home page — smoke tests', () => {
-  test.beforeEach(async ({page}) => {
-    await page.goto('/');
-  });
-
   test('page loads with correct title', async ({page}) => {
     const response = await page.goto('/');
     expect(response?.status()).toBe(200);
@@ -12,6 +8,7 @@ test.describe('Home page — smoke tests', () => {
   });
 
   test('hero section is visible with video and heading', async ({page}) => {
+    await page.goto('/');
     const hero = page.locator('section').first();
     await expect(hero).toBeVisible();
 
@@ -23,6 +20,7 @@ test.describe('Home page — smoke tests', () => {
   });
 
   test('destinations section shows heading and 5 cards', async ({page}) => {
+    await page.goto('/');
     const heading = page.getByText('Khám Phá Những Điểm Đến Kỳ Thú');
     await expect(heading).toBeVisible();
 
@@ -31,6 +29,7 @@ test.describe('Home page — smoke tests', () => {
   });
 
   test('about section shows phone number and bullet points', async ({page}) => {
+    await page.goto('/');
     const aboutHeading = page.getByText(
       'Lên Kế Hoạch Chuyến Đi Cùng Chúng Tôi',
     );
@@ -52,6 +51,7 @@ test.describe('Home page — smoke tests', () => {
   });
 
   test('popular tours section shows heading and carousel', async ({page}) => {
+    await page.goto('/');
     const heading = page.getByText('Tour Phổ Biến Nhất');
     await expect(heading).toBeVisible();
 
@@ -62,6 +62,7 @@ test.describe('Home page — smoke tests', () => {
   test('video/CTA section shows play button and 6 feature cards', async ({
     page,
   }) => {
+    await page.goto('/');
     const playButton = page.getByLabel('Play video');
     await expect(playButton).toBeVisible();
 
@@ -70,11 +71,13 @@ test.describe('Home page — smoke tests', () => {
   });
 
   test('gallery section shows 5 images', async ({page}) => {
+    await page.goto('/');
     const galleryItems = page.locator('[data-testid="gallery-item"]');
     await expect(galleryItems).toHaveCount(5);
   });
 
   test('header and footer are present', async ({page}) => {
+    await page.goto('/');
     const header = page.locator('header');
     await expect(header).toBeVisible();
 

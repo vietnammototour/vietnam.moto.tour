@@ -13,27 +13,12 @@ import {contactInfo} from '@/utils';
 import {destinationsData, toursData} from '@/data';
 import {getUrl} from '@/utils';
 
-const galleryImages = [
-  {
-    src: getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
-    alt: 'Vietnam motorcycle tour — scenic road',
-  },
-  {
-    src: getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
-    alt: 'Vietnam motorcycle tour — mountain landscape',
-  },
-  {
-    src: getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
-    alt: 'Vietnam motorcycle tour — coastal road',
-  },
-  {
-    src: getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
-    alt: 'Vietnam motorcycle tour — countryside',
-  },
-  {
-    src: getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
-    alt: 'Vietnam motorcycle tour — adventure',
-  },
+const galleryImageUrls = [
+  getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
+  getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
 ];
 
 const fadeInUp = {
@@ -46,6 +31,18 @@ export default function Home() {
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const t = useTranslations('home');
   const tMeta = useTranslations('meta');
+
+  const galleryAltKeys = [
+    'galleryAlt1',
+    'galleryAlt2',
+    'galleryAlt3',
+    'galleryAlt4',
+    'galleryAlt5',
+  ] as const;
+  const galleryImages = galleryImageUrls.map((src, i) => ({
+    src,
+    alt: t(galleryAltKeys[i]),
+  }));
 
   useEffect(() => {
     if (bannerVideoRef.current) {
