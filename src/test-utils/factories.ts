@@ -10,6 +10,29 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
     duration: '1 Day',
     distance: '100 Miles',
     location: 'Test City',
+    slug: 'test-tour',
+    description: {en: 'Test tour description', vi: 'Test tour description'},
+    transportation: 'Motorbike',
+    groupSize: 'Min 1 Person',
+    hotel: 'Pick up & Drop off',
+    guided: 'Fully Guided Tour',
+    heroImage: '/test-tour.jpg',
+    images: [],
+    highlights: [],
+    itinerary: [
+      {
+        dayLabel: {en: 'Itinerary', vi: 'Lịch trình'},
+        items: [
+          {time: '8:00 AM', description: {en: 'Start tour', vi: 'Start tour'}},
+        ],
+      },
+    ],
+    pricing: [{label: {en: 'Per Person', vi: 'Mỗi người'}, price: 80}],
+    included: [{en: 'Guide', vi: 'Hướng dẫn viên'}],
+    excluded: [{en: 'Flights', vi: 'Vé máy bay'}],
+    paymentDetails: {en: '20% deposit required', vi: 'Đặt cọc 20%'},
+    notes: [{en: 'Check availability', vi: 'Kiểm tra chỗ trống'}],
+    mealsInfo: {en: '1 meal included', vi: '1 meal included'},
     ...overrides,
   };
 }

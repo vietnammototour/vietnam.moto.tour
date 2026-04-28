@@ -10,12 +10,13 @@ describe('TourCard', () => {
     distance: '186 Miles',
     location: 'Da Lat',
     imageUrl: '/dalat.jpg',
+    slug: 'da-lat-tour',
   });
 
-  it('renders the tour title as a link to /tours', () => {
+  it('renders the tour title as a link to /tours/da-lat-tour', () => {
     render(<TourCard tour={tour} />);
     const link = screen.getByText('Da Lat Tour').closest('a');
-    expect(link).toHaveAttribute('href', '/tours');
+    expect(link).toHaveAttribute('href', '/tours/da-lat-tour');
   });
 
   it('renders the price', () => {

@@ -1,0 +1,78 @@
+<h2>Section 3: Component Architecture & Routing</h2>
+<p class="subtitle">How the page is built from components, and how routing + data flow works</p>
+
+<div class="mockup">
+  <div class="mockup-header">Component Tree — src/pages/tours/[slug].tsx</div>
+  <div class="mockup-body">
+<pre style="font-size: 13px; line-height: 1.8; margin: 0; white-space: pre-wrap; font-family: 'SF Mono', Monaco, Consolas, monospace;">
+<span style="color: #7c7c7c;">// Page: src/pages/tours/[slug].tsx</span>
+<span style="color: #c792ea;">Layout</span> <span style="color: #7c7c7c;">(existing — Header, Footer, ScrollToTop)</span>
+└── <span style="color: #ffcb6b;">TourDetailPage</span>
+    ├── <span style="color: #82aaff;">PageHeader</span> <span style="color: #7c7c7c;">(existing — breadcrumb with tour title)</span>
+    ├── <span style="color: #c3e88d;">TourHero</span> <span style="color: #7c7c7c;">(NEW — hero image, title, stats row, price)</span>
+    ├── <span style="color: #7c7c7c;">two-column flex container</span>
+    │   ├── <span style="color: #7c7c7c;">main column</span>
+    │   │   ├── <span style="color: #c3e88d;">TourDescription</span> <span style="color: #7c7c7c;">(NEW — localized description text)</span>
+    │   │   ├── <span style="color: #c3e88d;">TourHighlights</span> <span style="color: #7c7c7c;">(NEW — pill badges, hidden if empty)</span>
+    │   │   ├── <span style="color: #c3e88d;">TourItinerary</span> <span style="color: #7c7c7c;">(NEW — timeline with day groups)</span>
+    │   │   └── <span style="color: #c3e88d;">TourIncluded</span> <span style="color: #7c7c7c;">(NEW — included/excluded two-column)</span>
+    │   └── <span style="color: #7c7c7c;">sidebar (sticky)</span>
+    │       ├── <span style="color: #c3e88d;">TourPricing</span> <span style="color: #7c7c7c;">(NEW — pricing tiers table)</span>
+    │       ├── <span style="color: #c3e88d;">TourCTA</span> <span style="color: #7c7c7c;">(NEW — WhatsApp + Email buttons)</span>
+    │       ├── <span style="color: #c3e88d;">TourDetails</span> <span style="color: #7c7c7c;">(NEW — transport, duration, group, etc.)</span>
+    │       ├── <span style="color: #c3e88d;">TourPayment</span> <span style="color: #7c7c7c;">(NEW — payment terms)</span>
+    │       └── <span style="color: #c3e88d;">TourNotes</span> <span style="color: #7c7c7c;">(NEW — important notes + meals)</span>
+    └── <span style="color: #7c7c7c;">mobile: sticky bottom CTA bar</span>
+</pre>
+  </div>
+</div>
+
+<div class="mockup" style="margin-top: 1.5rem;">
+  <div class="mockup-header">Routing & Data Flow</div>
+  <div class="mockup-body">
+<pre style="font-size: 13px; line-height: 1.8; margin: 0; white-space: pre-wrap; font-family: 'SF Mono', Monaco, Consolas, monospace;">
+<span style="color: #c792ea;">Route:</span>  /tours/ba-ho-waterfall
+<span style="color: #c792ea;">File:</span>   src/pages/tours/[slug].tsx
+
+<span style="color: #ffcb6b;">getStaticPaths()</span>
+  → reads toursData from src/data
+  → returns { params: { slug } } for each tour
+  → generates all 7 pages at build time
+
+<span style="color: #ffcb6b;">getStaticProps({ params, locale })</span>
+  → finds tour by params.slug
+  → loads locale messages for next-intl
+  → returns { props: { tour, messages } }
+  → 404 if slug not found
+
+<span style="color: #ffcb6b;">Component</span>
+  → receives tour as prop
+  → each section component gets its slice of tour data
+  → useTranslations() for UI labels (section headings, button text)
+  → LocalizedText resolved via locale: tour.description[locale]
+</pre>
+  </div>
+</div>
+
+<div class="mockup" style="margin-top: 1.5rem;">
+  <div class="mockup-header">File Changes Summary</div>
+  <div class="mockup-body">
+<pre style="font-size: 13px; line-height: 1.8; margin: 0; white-space: pre-wrap; font-family: 'SF Mono', Monaco, Consolas, monospace;">
+<span style="color: #c3e88d;">MODIFY</span>  src/types/index.ts          <span style="color: #7c7c7c;">— add LocalizedText, ItineraryDay, PricingTier, extend Tour</span>
+<span style="color: #c3e88d;">MODIFY</span>  src/data/tours.json         <span style="color: #7c7c7c;">— enrich all 7 tours with full content</span>
+<span style="color: #c3e88d;">MODIFY</span>  src/components/tour-card     <span style="color: #7c7c7c;">— link to /tours/[slug] instead of /tours</span>
+<span style="color: #c3e88d;">MODIFY</span>  src/messages/en.json        <span style="color: #7c7c7c;">— add tourDetail.* UI label keys</span>
+<span style="color: #c3e88d;">MODIFY</span>  src/messages/vi.json        <span style="color: #7c7c7c;">— add tourDetail.* UI label keys</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/pages/tours/[slug].tsx   <span style="color: #7c7c7c;">— detail page with getStaticPaths/Props</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-hero/    <span style="color: #7c7c7c;">— hero banner component</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-itinerary/  <span style="color: #7c7c7c;">— timeline component</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-pricing/ <span style="color: #7c7c7c;">— pricing table component</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-included/ <span style="color: #7c7c7c;">— included/excluded component</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-highlights/ <span style="color: #7c7c7c;">— highlight pills component</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-cta/     <span style="color: #7c7c7c;">— WhatsApp + Email buttons</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-details/ <span style="color: #7c7c7c;">— sidebar info grid</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-payment/ <span style="color: #7c7c7c;">— payment terms</span>
+<span style="color: #ffcb6b;">CREATE</span>  src/components/tour-notes/   <span style="color: #7c7c7c;">— notes + meals info</span>
+</pre>
+  </div>
+</div>

@@ -45,6 +45,31 @@
     "breadcrumbHome": "Home",
     "breadcrumbTours": "Tours"
   },
+  "tourDetail": {
+    "aboutThisTour": "About This Tour",
+    "highlights": "Highlights",
+    "itinerary": "Itinerary",
+    "pricing": "Pricing",
+    "whatsIncluded": "What's Included",
+    "whatsNotIncluded": "What's Not Included",
+    "tourDetails": "Tour Details",
+    "payment": "Payment",
+    "importantNotes": "Important Notes",
+    "meals": "Meals",
+    "whatsappUs": "WhatsApp Us",
+    "emailInquiry": "Email Inquiry",
+    "from": "From",
+    "perPerson": "/ per person",
+    "transportation": "Transportation",
+    "duration": "Duration",
+    "distance": "Distance",
+    "group": "Group",
+    "hotel": "Hotel",
+    "guided": "Guided",
+    "breadcrumbHome": "Home",
+    "breadcrumbTours": "Tours",
+    "day": "Day"
+  },
   "contact": {
     "title": "Contact",
     "breadcrumbHome": "Home",
@@ -102,6 +127,8 @@
     "aboutTitle": "About Us — Vietnam Motorcycle Tour",
     "aboutDescription": "Learn about Vietnam Motorcycle Tour — experienced guides, over 10 years of motorcycle touring in Vietnam.",
     "rentalTitle": "Motorbike & Car Rental — Vietnam Motorcycle Tour",
-    "rentalDescription": "Rent motorbikes and cars in Nha Trang, Vietnam. Honda, Yamaha, Toyota and more."
+    "rentalDescription": "Rent motorbikes and cars in Nha Trang, Vietnam. Honda, Yamaha, Toyota and more.",
+    "tourDetailTitle": "{tourTitle} — Vietnam Motorcycle Tour",
+    "tourDetailDescription": "{description}"
   }
 }
