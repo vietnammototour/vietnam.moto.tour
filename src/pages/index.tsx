@@ -290,6 +290,7 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.icon}
+                  data-testid="feature-card"
                   className="bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
                 >
                   <span

@@ -11,6 +11,7 @@ export const DestinationCard = ({
 
   return (
     <div
+      data-testid="destination-card"
       className={`group relative rounded-lg overflow-hidden ${className ?? 'aspect-[3/2]'}`}
     >
       <img

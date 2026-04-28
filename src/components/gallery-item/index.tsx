@@ -9,6 +9,7 @@ export const GalleryItem = ({imageSrc}: GalleryItemProps) => {
   return (
     <>
       <button
+        data-testid="gallery-item"
         onClick={() => setLightboxOpen(true)}
         className="group relative block overflow-hidden rounded-lg aspect-square cursor-pointer"
       >
