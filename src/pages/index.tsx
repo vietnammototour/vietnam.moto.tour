@@ -14,11 +14,26 @@ import {destinationsData, toursData} from '@/data';
 import {getUrl} from '@/utils';
 
 const galleryImages = [
-  getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
+  {
+    src: getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
+    alt: 'Vietnam motorcycle tour — scenic road',
+  },
+  {
+    src: getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
+    alt: 'Vietnam motorcycle tour — mountain landscape',
+  },
+  {
+    src: getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
+    alt: 'Vietnam motorcycle tour — coastal road',
+  },
+  {
+    src: getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
+    alt: 'Vietnam motorcycle tour — countryside',
+  },
+  {
+    src: getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
+    alt: 'Vietnam motorcycle tour — adventure',
+  },
 ];
 
 const fadeInUp = {
@@ -315,10 +330,11 @@ export default function Home() {
       <section className="py-16 lg:py-24 bg-surface-alt">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {galleryImages.map((imageSrc, index) => (
+            {galleryImages.map(({src, alt}, index) => (
               <GalleryItem
                 key={index}
-                imageSrc={imageSrc}
+                imageSrc={src}
+                alt={alt}
                 delay={(index + 1) * 100}
               />
             ))}
