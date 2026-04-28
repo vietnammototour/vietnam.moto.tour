@@ -7,7 +7,180 @@
     "price": 80,
     "duration": "1 Day",
     "distance": "186 Miles",
-    "location": "Da Lat"
+    "location": "Da Lat",
+    "slug": "dalat-car-excursion",
+    "description": {
+      "en": "Da Lat is 150 km away from Nha Trang. Dalat is the capital of Lam Dong Province in southern Vietnam's Central Highlands, centered around a lake and golf course, surrounded by hills, pine forests, lakes and waterfalls. Known as the \"City of Eternal Spring\" for its distinctive temperate climate, Da Lat was developed as a resort by the French in the early 1900s, and many reminders of its colonial heritage remain. Dalat holds some very unique European influence architecture and has a cooler climate than the surrounding areas. Dalat today is famed as the city of Love and flowers, and has become a popular holiday retreat for young Vietnamese couples.",
+      "vi": "Da Lat is 150 km away from Nha Trang. Dalat is the capital of Lam Dong Province in southern Vietnam's Central Highlands, centered around a lake and golf course, surrounded by hills, pine forests, lakes and waterfalls. Known as the \"City of Eternal Spring\" for its distinctive temperate climate, Da Lat was developed as a resort by the French in the early 1900s, and many reminders of its colonial heritage remain. Dalat holds some very unique European influence architecture and has a cooler climate than the surrounding areas. Dalat today is famed as the city of Love and flowers, and has become a popular holiday retreat for young Vietnamese couples."
+    },
+    "transportation": "Private Car A/C",
+    "groupSize": "Min 2 Person",
+    "hotel": "Pick up & Drop off",
+    "guided": "Fully Guided Tour",
+    "heroImage": "https://cdnen.thesaigontimes.vn/wp-content/uploads/2024/07/Mot-thoang-Ho-Ba-Be_Thong-Lam.jpg",
+    "images": [],
+    "highlights": [
+      {"en": "Stairway to the Heaven", "vi": "Cau thang len thien duong"},
+      {
+        "en": "Crazy House (Top 10 strangest house in the world)",
+        "vi": "Nha Hang Nga (Top 10 ngoi nha ky la nhat the gioi)"
+      },
+      {"en": "Domain De Marie Church", "vi": "Nha tho Domain De Marie"},
+      {"en": "Dalat Old Railway Station", "vi": "Ga xe lua Da Lat"}
+    ],
+    "itinerary": [
+      {
+        "dayLabel": {"en": "Day 1", "vi": "Ngay 1"},
+        "items": [
+          {
+            "time": "7:00",
+            "description": {
+              "en": "Our guide will pick you up and depart from your Hotel to Dalat (3 hours) to do sightseeing tour. Today we ride into the mountain and the countryside of real Vietnam heading toward the Central Highland. As we make our way up the mountain pass, you can enjoy stunning views along the way on the mountain.",
+              "vi": "Our guide will pick you up and depart from your Hotel to Dalat (3 hours) to do sightseeing tour. Today we ride into the mountain and the countryside of real Vietnam heading toward the Central Highland. As we make our way up the mountain pass, you can enjoy stunning views along the way on the mountain."
+            }
+          },
+          {
+            "time": "10:15",
+            "description": {
+              "en": "Arriving Garden (take photos).",
+              "vi": "Arriving Garden (take photos)."
+            }
+          },
+          {
+            "time": "11:30",
+            "description": {
+              "en": "Visit Crazy House. It is a joyously designed, outrageously artistic private home (top 10 strangest house in the world).",
+              "vi": "Visit Crazy House. It is a joyously designed, outrageously artistic private home (top 10 strangest house in the world)."
+            }
+          },
+          {
+            "time": "12:30",
+            "description": {
+              "en": "Lunch at Ngoc Duy Restaurant.",
+              "vi": "Lunch at Ngoc Duy Restaurant."
+            }
+          },
+          {
+            "time": "13:45",
+            "description": {
+              "en": "Visit old railway station (designed in 1932 by French architects Moncet & Reveron, opened in 1938).",
+              "vi": "Visit old railway station (designed in 1932 by French architects Moncet & Reveron, opened in 1938)."
+            }
+          },
+          {
+            "time": "14:30",
+            "description": {
+              "en": "Visit Domain De Marie Church. The Domaine de Marie is a Catholic convent in Da Lat, Vietnam. The church's history goes back to its initial construction in 1940 and is French and Vietnamese style of architecture.",
+              "vi": "Visit Domain De Marie Church. The Domaine de Marie is a Catholic convent in Da Lat, Vietnam. The church's history goes back to its initial construction in 1940 and is French and Vietnamese style of architecture."
+            }
+          },
+          {
+            "time": "15:00",
+            "description": {
+              "en": "Take photo at Stairway to Heaven & try Vietnamese coffee (no extra pay).",
+              "vi": "Take photo at Stairway to Heaven & try Vietnamese coffee (no extra pay)."
+            }
+          },
+          {
+            "time": "15:45",
+            "description": {
+              "en": "After Dalat sightseeing, our driver will transfer you back to your hotel in Nha Trang (~3 hours).",
+              "vi": "After Dalat sightseeing, our driver will transfer you back to your hotel in Nha Trang (~3 hours)."
+            }
+          },
+          {
+            "time": "19:00",
+            "description": {
+              "en": "Arriving to restaurant for dinner.",
+              "vi": "Arriving to restaurant for dinner."
+            }
+          },
+          {
+            "time": "19:30",
+            "description": {
+              "en": "End of the trip at your Hotel.",
+              "vi": "End of the trip at your Hotel."
+            }
+          }
+        ]
+      }
+    ],
+    "pricing": [
+      {
+        "label": {"en": "Per Person (Group of 2)", "vi": "Moi nguoi (Nhom 2)"},
+        "price": 80
+      },
+      {
+        "label": {"en": "Per Person (Group of 3)", "vi": "Moi nguoi (Nhom 3)"},
+        "price": 75
+      },
+      {
+        "label": {
+          "en": "Per Person (Group of 4-5)",
+          "vi": "Moi nguoi (Nhom 4-5)"
+        },
+        "price": 70
+      },
+      {
+        "label": {
+          "en": "Per Person (Group of 6-7)",
+          "vi": "Moi nguoi (Nhom 6-7)"
+        },
+        "price": 65
+      },
+      {
+        "label": {
+          "en": "Per Person (Group of 8+)",
+          "vi": "Moi nguoi (Nhom 8+)"
+        },
+        "price": 60
+      },
+      {
+        "label": {"en": "Children (110cm-140cm)", "vi": "Tre em (110cm-140cm)"},
+        "price": 20
+      }
+    ],
+    "included": [
+      {"en": "Hotel Pick up & Drop off", "vi": "Don va tra tai khach san"},
+      {
+        "en": "Vehicle A/C, Petrol & Tolls",
+        "vi": "Xe co dieu hoa, xang & phi cau duong"
+      },
+      {"en": "First Aid Kits", "vi": "Bo so cuu"},
+      {"en": "All Entrance Fees", "vi": "Tat ca ve vao cua"},
+      {"en": "Service of local guide", "vi": "Huong dan vien dia phuong"},
+      {"en": "Full mechanical support", "vi": "Ho tro ky thuat day du"},
+      {"en": "Lunch", "vi": "Bua trua"},
+      {"en": "Dinner", "vi": "Bua toi"}
+    ],
+    "excluded": [
+      {"en": "Flights", "vi": "Ve may bay"},
+      {"en": "Travel Insurance", "vi": "Bao hiem du lich"},
+      {"en": "Personal Expenses", "vi": "Chi phi ca nhan"},
+      {"en": "Play ATV-Quad", "vi": "Choi ATV-Quad"}
+    ],
+    "paymentDetails": {
+      "en": "Deposit 20% of the total tour price to secure your booking. Balance is due by cash on departure date. All prices include VAT @ 10%. Exchange rate based on 23,000 VND.",
+      "vi": "Dat coc 20% tong gia tour de giu cho. So du thanh toan bang tien mat vao ngay khoi hanh. Gia da bao gom VAT 10%. Ty gia dua tren 23.000 VND."
+    },
+    "notes": [
+      {
+        "en": "If you decide to make reservation 24 hours before travel date, please inquiry to check availability first.",
+        "vi": "Neu dat truoc 24 gio truoc ngay di, vui long kiem tra cho trong."
+      },
+      {
+        "en": "The itinerary can be changed due to weather, tide levels and operating conditions.",
+        "vi": "Lich trinh co the thay doi do thoi tiet va dieu kien hoat dong."
+      },
+      {
+        "en": "Special request (diet or vegetarian) should be sent before your departure date.",
+        "vi": "Yeu cau dac biet (an kieng, chay) nen gui truoc ngay khoi hanh."
+      }
+    ],
+    "mealsInfo": {
+      "en": "2 Meals are included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch & Dinner are included, and those with particular dietary requirements are easily catered for. Lunches: 1, Dinners: 1.",
+      "vi": "2 Meals are included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch & Dinner are included, and those with particular dietary requirements are easily catered for. Lunches: 1, Dinners: 1."
+    }
   },
   {
     "id": 2,
@@ -17,7 +190,133 @@
     "price": 130,
     "duration": "1 Day",
     "distance": "210 Miles",
-    "location": "Omega Pass"
+    "location": "Omega Pass",
+    "slug": "2d-explore-dalat",
+    "description": {
+      "en": "Da Lat - the City of Eternal Spring is known for its hills, pine forests, lakes, waterfalls and fresh air. The journey there is just as breathtakingly beautiful and full of adventures. Join us on this drive from Nha Trang to Da Lat through the famous Khanh Le Mountain Pass (Omega Pass), which is one of the longest and most spectacular passes in the country. On the way we will make a few stops that ensure you make the most of this day and get to know Vietnam a little bit better. It's a journey for all your senses - from fresh air and beautiful sights to delicious home-made family-style meals, this tour has it all.",
+      "vi": "Da Lat - the City of Eternal Spring is known for its hills, pine forests, lakes, waterfalls and fresh air. The journey there is just as breathtakingly beautiful and full of adventures. Join us on this drive from Nha Trang to Da Lat through the famous Khanh Le Mountain Pass (Omega Pass), which is one of the longest and most spectacular passes in the country. On the way we will make a few stops that ensure you make the most of this day and get to know Vietnam a little bit better. It's a journey for all your senses - from fresh air and beautiful sights to delicious home-made family-style meals, this tour has it all."
+    },
+    "transportation": "Motorbike",
+    "groupSize": "Min 1 Person",
+    "hotel": "Pick up & Drop off",
+    "guided": "Fully Guided Tour",
+    "heroImage": "https://localvietnam.de/wp-content/uploads/2023/09/tuyen-lam-see-1-1024x683.jpg",
+    "images": [],
+    "highlights": [],
+    "itinerary": [
+      {
+        "dayLabel": {"en": "Day 1: Dalat", "vi": "Ngay 1: Da Lat"},
+        "items": [
+          {
+            "time": "8:00",
+            "description": {
+              "en": "Pick up from your hotel. You will travel by the small roads straight to the countryside where you can visit: the rice-papers making village, the yellow-noodles making village, the Giarai ethnic minority village, cross the Cai river by the floating bamboo bridge, the Linh Phuoc temple with the Buddha statue made by a thousand flowers (recognized in the Guinness book). You will travel on the Omega Pass at 1500m height, one of the most beautiful roads in Vietnam. Along this road there are some nice waterfalls and beautiful scenery. Stay overnight at hotel at the center of the city.",
+              "vi": "Pick up from your hotel. You will travel by the small roads straight to the countryside where you can visit: the rice-papers making village, the yellow-noodles making village, the Giarai ethnic minority village, cross the Cai river by the floating bamboo bridge, the Linh Phuoc temple with the Buddha statue made by a thousand flowers (recognized in the Guinness book). You will travel on the Omega Pass at 1500m height, one of the most beautiful roads in Vietnam. Along this road there are some nice waterfalls and beautiful scenery. Stay overnight at hotel at the center of the city."
+            }
+          }
+        ]
+      },
+      {
+        "dayLabel": {"en": "Day 2: Nha Trang", "vi": "Ngay 2: Nha Trang"},
+        "items": [
+          {
+            "time": "8:00",
+            "description": {
+              "en": "Our guide will pick you up at your Hotel, and drive you to breakfast spot so you can start off your day like a local with a cup of coffee.",
+              "vi": "Our guide will pick you up at your Hotel, and drive you to breakfast spot so you can start off your day like a local with a cup of coffee."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Visit Linh Phuoc Pagoda, one of the most unique architectures in Da Lat, with a dragon enclosure made from 12,000 beer bottles. Your guide will share the history as you explore every nook and cranny of the structure.",
+              "vi": "Visit Linh Phuoc Pagoda, one of the most unique architectures in Da Lat, with a dragon enclosure made from 12,000 beer bottles. Your guide will share the history as you explore every nook and cranny of the structure."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Visit a strawberry garden to glimpse the strawberry cultivation and harvesting process. Taste some fresh off the trees. Then enjoy another coffee break - try ca phe sua da (coffee with condensed milk and ice).",
+              "vi": "Visit a strawberry garden to glimpse the strawberry cultivation and harvesting process. Taste some fresh off the trees. Then enjoy another coffee break - try ca phe sua da (coffee with condensed milk and ice)."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Drive through scenic mountain passes with mystical forests, clear lakes, fresh air and blue skies. Stop by Raglai village, home to the Raglai people, one of Khanh Hoa's ethnic minority groups, to meet the tribespeople and learn about their customs.",
+              "vi": "Drive through scenic mountain passes with mystical forests, clear lakes, fresh air and blue skies. Stop by Raglai village, home to the Raglai people, one of Khanh Hoa's ethnic minority groups, to meet the tribespeople and learn about their customs."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Hike to a waterfall and go for a swim! For lunch enjoy delicious local Vietnamese dishes. Continue the journey to Nha Trang city, ending at the doorstep of your Hotel.",
+              "vi": "Hike to a waterfall and go for a swim! For lunch enjoy delicious local Vietnamese dishes. Continue the journey to Nha Trang city, ending at the doorstep of your Hotel."
+            }
+          },
+          {
+            "time": "16:00",
+            "description": {
+              "en": "Arrive at your hotel in Nha Trang. End of the trip.",
+              "vi": "Arrive at your hotel in Nha Trang. End of the trip."
+            }
+          }
+        ]
+      }
+    ],
+    "pricing": [
+      {"label": {"en": "1 Pillion", "vi": "1 nguoi ngoi sau"}, "price": 130},
+      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 160},
+      {
+        "label": {
+          "en": "1 Rider + 1 Pillion (sharing)",
+          "vi": "1 lai + 1 ngoi sau (chia se)"
+        },
+        "price": 360
+      }
+    ],
+    "included": [
+      {"en": "Bike Hire", "vi": "Thue xe"},
+      {"en": "Fuel", "vi": "Xang"},
+      {"en": "Breakfast", "vi": "Bua sang"},
+      {"en": "Accommodation", "vi": "Cho o"},
+      {"en": "English speaking guide", "vi": "Huong dan vien noi tieng Anh"},
+      {"en": "Support vehicle (for 6+ riders)", "vi": "Xe ho tro (nhom 6+)"}
+    ],
+    "excluded": [
+      {"en": "Flights", "vi": "Ve may bay"},
+      {"en": "Lunch, Dinner", "vi": "Bua trua, Bua toi"},
+      {"en": "Evening meals, Alcohol Drinks", "vi": "Bua toi, Do uong co con"},
+      {
+        "en": "Entry fees to attractions",
+        "vi": "Ve vao cua cac diem tham quan"
+      },
+      {"en": "Room Service / mini bar", "vi": "Dich vu phong / mini bar"},
+      {"en": "Tips", "vi": "Tien tip"},
+      {"en": "Repairs / damage", "vi": "Sua chua / hu hong"}
+    ],
+    "paymentDetails": {
+      "en": "Deposit 20% of the total tour price to secure your booking. Balance is due by cash on departure date. All prices include VAT @ 10%. Exchange rate based on 23,000 VND.",
+      "vi": "Dat coc 20% tong gia tour de giu cho. So du thanh toan bang tien mat vao ngay khoi hanh. Gia da bao gom VAT 10%. Ty gia dua tren 23.000 VND."
+    },
+    "notes": [
+      {
+        "en": "If you decide to make reservation 24 hours before travel date, please inquiry to check availability first.",
+        "vi": "Neu dat truoc 24 gio truoc ngay di, vui long kiem tra cho trong."
+      },
+      {
+        "en": "The itinerary can be changed due to weather, tide levels and operating conditions.",
+        "vi": "Lich trinh co the thay doi do thoi tiet va dieu kien hoat dong."
+      },
+      {
+        "en": "Special request (diet or vegetarian) should be sent before your departure date.",
+        "vi": "Yeu cau dac biet (an kieng, chay) nen gui truoc ngay khoi hanh."
+      }
+    ],
+    "mealsInfo": {
+      "en": "1 Meal is included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Breakfast is included, and those with particular dietary requirements are easily catered for. Breakfast: 1.",
+      "vi": "1 Meal is included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Breakfast is included, and those with particular dietary requirements are easily catered for. Breakfast: 1."
+    }
   },
   {
     "id": 3,
@@ -27,7 +326,140 @@
     "price": 70,
     "duration": "1 Day",
     "distance": "50 Miles",
-    "location": "Nha Trang"
+    "location": "Nha Trang",
+    "slug": "ba-ho-waterfall",
+    "description": {
+      "en": "One of Nha Trang's must-visit attractions, comprised of three natural waterfalls that ends with a clear lake surrounded by a dense rainforest. Are you ready for a different kind of adventure? Hop on the back of one of our motorbikes or private car and leave the hustle and bustle of Nha Trang city for the countryside. As we head towards the waterfall, catch a glimpse of the locals going about their daily lives. With a few stops along the way, you'll not only get to see breathtaking natural beauty but also get to learn more about Vietnamese culture, history and architecture. This makes the reward of swimming at the waterfall all the more special.",
+      "vi": "One of Nha Trang's must-visit attractions, comprised of three natural waterfalls that ends with a clear lake surrounded by a dense rainforest. Are you ready for a different kind of adventure? Hop on the back of one of our motorbikes or private car and leave the hustle and bustle of Nha Trang city for the countryside. As we head towards the waterfall, catch a glimpse of the locals going about their daily lives. With a few stops along the way, you'll not only get to see breathtaking natural beauty but also get to learn more about Vietnamese culture, history and architecture. This makes the reward of swimming at the waterfall all the more special."
+    },
+    "transportation": "Motorbike or Private Car A/C",
+    "groupSize": "Min 1 Person",
+    "hotel": "Pick up & Drop off",
+    "guided": "Fully Guided Tour",
+    "heroImage": "https://images.ctfassets.net/wv75stsetqy3/6gzFoj0ORIEj3yIGsB1Q08/5797e277832264a11c9bae10fb2f7772/Retire_in_Mui_Ne.jpg?q=60&fit=fill&fm=webp",
+    "images": [],
+    "highlights": [
+      {"en": "Learn how to make rice paper", "vi": "Hoc cach lam banh trang"},
+      {"en": "Make conical hat by palm leaf", "vi": "Lam non la tu la cot"},
+      {
+        "en": "Visit Ba Ho Waterfall, Swimming & Hiking",
+        "vi": "Tham thac Ba Ho, Boi loi & Di bo"
+      }
+    ],
+    "itinerary": [
+      {
+        "dayLabel": {"en": "Day 1", "vi": "Ngay 1"},
+        "items": [
+          {
+            "time": "8:30",
+            "description": {
+              "en": "Picking you up and depart from your Hotel. Our first stop is to visit traditional Sedge mat weaving. A reed mat used in Vietnamese homes, the Sedge mat weaving is passed through generations from ancestors to youth.",
+              "vi": "Picking you up and depart from your Hotel. Our first stop is to visit traditional Sedge mat weaving. A reed mat used in Vietnamese homes, the Sedge mat weaving is passed through generations from ancestors to youth."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Second stop is La Lo pagoda with a huge Buddha statue (48 meter height). Continue to visit a local family where you will learn how to make conical hats and rice-paper with added ingredients such as sugar and sesame.",
+              "vi": "Second stop is La Lo pagoda with a huge Buddha statue (48 meter height). Continue to visit a local family where you will learn how to make conical hats and rice-paper with added ingredients such as sugar and sesame."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Back on the bikes, head deeper into the countryside with incredible views of rice paddies. Drive through local rural village where you can interact with villagers and see the local way of life.",
+              "vi": "Back on the bikes, head deeper into the countryside with incredible views of rice paddies. Drive through local rural village where you can interact with villagers and see the local way of life."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "See various plantations grown by locals: banana trees, mango trees, coconut trees, dragon fruit trees (depending on season), and rice paddies.",
+              "vi": "See various plantations grown by locals: banana trees, mango trees, coconut trees, dragon fruit trees (depending on season), and rice paddies."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Enjoy lunch at a restaurant, then head to the waterfalls.",
+              "vi": "Enjoy lunch at a restaurant, then head to the waterfalls."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Reach the waterfall and jump into the pool of fresh water. While you relax in the cool waters, our guides will prepare tropical fruits bought fresh from the local market. Remember to bring your camera to capture this epic moment.",
+              "vi": "Reach the waterfall and jump into the pool of fresh water. While you relax in the cool waters, our guides will prepare tropical fruits bought fresh from the local market. Remember to bring your camera to capture this epic moment."
+            }
+          },
+          {
+            "time": "17:00",
+            "description": {
+              "en": "Head back to Nha Trang City. End of the trip.",
+              "vi": "Head back to Nha Trang City. End of the trip."
+            }
+          }
+        ]
+      }
+    ],
+    "pricing": [
+      {
+        "label": {
+          "en": "1 Person by Car (Min 2)",
+          "vi": "1 nguoi bang xe hoi (Toi thieu 2)"
+        },
+        "price": 70
+      },
+      {
+        "label": {
+          "en": "1 Pillion by Motorbike",
+          "vi": "1 nguoi ngoi sau xe may"
+        },
+        "price": 65
+      },
+      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 75},
+      {
+        "label": {
+          "en": "1 Rider + 1 Pillion (sharing)",
+          "vi": "1 lai + 1 ngoi sau (chia se)"
+        },
+        "price": 110
+      }
+    ],
+    "included": [
+      {"en": "Bike Hire", "vi": "Thue xe"},
+      {"en": "Fuel", "vi": "Xang"},
+      {"en": "Lunch", "vi": "Bua trua"},
+      {"en": "English speaking guide", "vi": "Huong dan vien noi tieng Anh"},
+      {"en": "Support vehicle (for 6+ riders)", "vi": "Xe ho tro (nhom 6+)"}
+    ],
+    "excluded": [
+      {"en": "Flights", "vi": "Ve may bay"},
+      {"en": "Tips", "vi": "Tien tip"},
+      {"en": "Repairs / damage", "vi": "Sua chua / hu hong"}
+    ],
+    "paymentDetails": {
+      "en": "Deposit 20% of the total tour price to secure your booking. Balance is due by cash on departure date. All prices include VAT @ 10%. Exchange rate based on 23,000 VND.",
+      "vi": "Dat coc 20% tong gia tour de giu cho. So du thanh toan bang tien mat vao ngay khoi hanh. Gia da bao gom VAT 10%. Ty gia dua tren 23.000 VND."
+    },
+    "notes": [
+      {
+        "en": "If you decide to make reservation 24 hours before travel date, please inquiry to check availability first.",
+        "vi": "Neu dat truoc 24 gio truoc ngay di, vui long kiem tra cho trong."
+      },
+      {
+        "en": "The itinerary can be changed due to weather, tide levels and operating conditions.",
+        "vi": "Lich trinh co the thay doi do thoi tiet va dieu kien hoat dong."
+      },
+      {
+        "en": "Special request (diet or vegetarian) should be sent before your departure date.",
+        "vi": "Yeu cau dac biet (an kieng, chay) nen gui truoc ngay khoi hanh."
+      }
+    ],
+    "mealsInfo": {
+      "en": "1 Meal is included in the price of the tour as well as bottled water and soft drinks. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch is included, and those with particular dietary requirements are easily catered for. Lunch: 1.",
+      "vi": "1 Meal is included in the price of the tour as well as bottled water and soft drinks. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch is included, and those with particular dietary requirements are easily catered for. Lunch: 1."
+    }
   },
   {
     "id": 4,
@@ -37,7 +469,114 @@
     "price": 70,
     "duration": "1 Day",
     "distance": "93 Miles",
-    "location": "Nha Trang"
+    "location": "Nha Trang",
+    "slug": "1d-nha-trang-to-dalat",
+    "description": {
+      "en": "This 1 Day Nha Trang to Da Lat is the best tour to explore the beautiful countryside in Central Highlands and to learn about the old culture and customs of the Ede minority people. Enjoy your real adventure. The journey there is just as breathtakingly beautiful and full of adventures. Join us on this drive from Nha Trang to Da Lat through the famous Khanh Le Mountain Pass (Omega Pass), which is one of the longest and most spectacular passes in the country. On the way we will make a few stops that ensure you make the most of this day and get to know Vietnam a little bit better.",
+      "vi": "This 1 Day Nha Trang to Da Lat is the best tour to explore the beautiful countryside in Central Highlands and to learn about the old culture and customs of the Ede minority people. Enjoy your real adventure. The journey there is just as breathtakingly beautiful and full of adventures. Join us on this drive from Nha Trang to Da Lat through the famous Khanh Le Mountain Pass (Omega Pass), which is one of the longest and most spectacular passes in the country. On the way we will make a few stops that ensure you make the most of this day and get to know Vietnam a little bit better."
+    },
+    "transportation": "Motorbike",
+    "groupSize": "Min 1 Person",
+    "hotel": "Pick up & Drop off",
+    "guided": "Fully Guided Tour",
+    "heroImage": "https://cdnen.thesaigontimes.vn/wp-content/uploads/2024/07/Mot-thoang-Ho-Ba-Be_Thong-Lam.jpg",
+    "images": [],
+    "highlights": [],
+    "itinerary": [
+      {
+        "dayLabel": {"en": "Day 1", "vi": "Ngay 1"},
+        "items": [
+          {
+            "time": "7:00",
+            "description": {
+              "en": "Pick you up from your Hotel and start the trip. You will be welcomed at the homes of a few families, each specializing in a different type of handicraft. You will spend time learning to make sedge mat weaving, rice paper which you can eat after.",
+              "vi": "Pick you up from your Hotel and start the trip. You will be welcomed at the homes of a few families, each specializing in a different type of handicraft. You will spend time learning to make sedge mat weaving, rice paper which you can eat after."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Drive through large sugar-cane fields and rice paddies with many photo-perfect opportunities.",
+              "vi": "Drive through large sugar-cane fields and rice paddies with many photo-perfect opportunities."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Continue to an ethnic village, where you will see close up what life is like for these minorities. Gift the kids some candy for a heartwarming experience.",
+              "vi": "Continue to an ethnic village, where you will see close up what life is like for these minorities. Gift the kids some candy for a heartwarming experience."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Back on the road to Da Lat. The roads are steep and serpentine, passing from one mountain to the other. Cross the Omega Pass, known for its spectacular views and coffee plantations. Stop for lunch along the way.",
+              "vi": "Back on the road to Da Lat. The roads are steep and serpentine, passing from one mountain to the other. Cross the Omega Pass, known for its spectacular views and coffee plantations. Stop for lunch along the way."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "After lunch you can take a nap or break in hammocks. Continue straight to Da Lat City and its fresh air. End of the trip.",
+              "vi": "After lunch you can take a nap or break in hammocks. Continue straight to Da Lat City and its fresh air. End of the trip."
+            }
+          }
+        ]
+      }
+    ],
+    "pricing": [
+      {"label": {"en": "1 Pillion", "vi": "1 nguoi ngoi sau"}, "price": 70},
+      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 90},
+      {
+        "label": {
+          "en": "1 Rider + 1 Pillion (sharing)",
+          "vi": "1 lai + 1 ngoi sau (chia se)"
+        },
+        "price": 120
+      }
+    ],
+    "included": [
+      {"en": "Bike Hire", "vi": "Thue xe"},
+      {"en": "Fuel", "vi": "Xang"},
+      {"en": "Breakfast", "vi": "Bua sang"},
+      {"en": "Accommodation", "vi": "Cho o"},
+      {"en": "English speaking guide", "vi": "Huong dan vien noi tieng Anh"},
+      {"en": "Support vehicle (for 6+ riders)", "vi": "Xe ho tro (nhom 6+)"}
+    ],
+    "excluded": [
+      {"en": "Flights", "vi": "Ve may bay"},
+      {"en": "Lunch, Dinner", "vi": "Bua trua, Bua toi"},
+      {"en": "Evening meals, Alcohol Drinks", "vi": "Bua toi, Do uong co con"},
+      {
+        "en": "Entry fees to attractions",
+        "vi": "Ve vao cua cac diem tham quan"
+      },
+      {"en": "Room Service / mini bar", "vi": "Dich vu phong / mini bar"},
+      {"en": "Tips", "vi": "Tien tip"},
+      {"en": "Repairs / damage", "vi": "Sua chua / hu hong"}
+    ],
+    "paymentDetails": {
+      "en": "Deposit 20% of the total tour price to secure your booking. Balance is due by cash on departure date. All prices include VAT @ 10%. Exchange rate based on 23,000 VND.",
+      "vi": "Dat coc 20% tong gia tour de giu cho. So du thanh toan bang tien mat vao ngay khoi hanh. Gia da bao gom VAT 10%. Ty gia dua tren 23.000 VND."
+    },
+    "notes": [
+      {
+        "en": "If you decide to make reservation 24 hours before travel date, please inquiry to check availability first.",
+        "vi": "Neu dat truoc 24 gio truoc ngay di, vui long kiem tra cho trong."
+      },
+      {
+        "en": "The itinerary can be changed due to weather, tide levels and operating conditions.",
+        "vi": "Lich trinh co the thay doi do thoi tiet va dieu kien hoat dong."
+      },
+      {
+        "en": "Special request (diet or vegetarian) should be sent before your departure date.",
+        "vi": "Yeu cau dac biet (an kieng, chay) nen gui truoc ngay khoi hanh."
+      }
+    ],
+    "mealsInfo": {
+      "en": "1 Meal is included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Breakfast is included, and those with particular dietary requirements are easily catered for. Breakfast: 1.",
+      "vi": "1 Meal is included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Breakfast is included, and those with particular dietary requirements are easily catered for. Breakfast: 1."
+    }
   },
   {
     "id": 5,
@@ -47,7 +586,131 @@
     "price": 40,
     "duration": "1 Day",
     "distance": "25 Miles",
-    "location": "Nha Trang"
+    "location": "Nha Trang",
+    "slug": "nha-trang-half-day",
+    "description": {
+      "en": "Nha Trang is one of the most beautiful bays in the world with sandy coasts and sparkling water, holding the title of being Vietnam's best diving spot. We understand your inkling to get under water, but believe us when we say the city above ground is just as beautiful, with plenty of charming spots to explore. On this city tour, you will get to see Nha Trang from local eyes. So, in addition to all the must-visit sites, you will also get to visit some cool spots that only a local would know.",
+      "vi": "Nha Trang is one of the most beautiful bays in the world with sandy coasts and sparkling water, holding the title of being Vietnam's best diving spot. We understand your inkling to get under water, but believe us when we say the city above ground is just as beautiful, with plenty of charming spots to explore. On this city tour, you will get to see Nha Trang from local eyes. So, in addition to all the must-visit sites, you will also get to visit some cool spots that only a local would know."
+    },
+    "transportation": "Motorbike or Private Car A/C",
+    "groupSize": "Min 1 Person",
+    "hotel": "Pick up & Drop off",
+    "guided": "Fully Guided Tour",
+    "heroImage": "https://localvietnam.de/wp-content/uploads/2023/09/tuyen-lam-see-1-1024x683.jpg",
+    "images": [],
+    "highlights": [
+      {"en": "Learn how to make rice paper", "vi": "Hoc cach lam banh trang"},
+      {"en": "Make conical hat by palm leaf", "vi": "Lam non la tu la cot"},
+      {"en": "Discover Ponagar Cham Tower", "vi": "Kham pha Thap Ba Ponagar"}
+    ],
+    "itinerary": [
+      {
+        "dayLabel": {"en": "Day 1", "vi": "Ngay 1"},
+        "items": [
+          {
+            "time": "8:00",
+            "description": {
+              "en": "Our guides will pick you up and depart from your Hotel and take you to all the must-visit sights in Nha Trang.",
+              "vi": "Our guides will pick you up and depart from your Hotel and take you to all the must-visit sights in Nha Trang."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "First stop is at a local family, where you will learn how to make conical hat, mat weaving, and sweet rice-paper with added ingredients such as sugar, ginger and sesame.",
+              "vi": "First stop is at a local family, where you will learn how to make conical hat, mat weaving, and sweet rice-paper with added ingredients such as sugar, ginger and sesame."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Continue to visit Tong Lam pagoda, still actively used as a place of worship - your opportunity to witness the locals go about their worshipping practices, traditions and customs.",
+              "vi": "Continue to visit Tong Lam pagoda, still actively used as a place of worship - your opportunity to witness the locals go about their worshipping practices, traditions and customs."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Head to the fascinating Po Nagar Towers, ruins left by the Cham people who once reigned over majority of coastal Vietnam from the 8th to the 13th centuries. How these towers were made and are still standing in near-perfect condition is still an archaeological mystery.",
+              "vi": "Head to the fascinating Po Nagar Towers, ruins left by the Cham people who once reigned over majority of coastal Vietnam from the 8th to the 13th centuries. How these towers were made and are still standing in near-perfect condition is still an archaeological mystery."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Free time to explore. You can choose to buy souvenirs at Big C or Lotte Mart Supermarket, or switch over one of the stops on the itinerary to something else.",
+              "vi": "Free time to explore. You can choose to buy souvenirs at Big C or Lotte Mart Supermarket, or switch over one of the stops on the itinerary to something else."
+            }
+          },
+          {
+            "time": "14:00",
+            "description": {
+              "en": "Back to Hotel. End of the trip.",
+              "vi": "Back to Hotel. End of the trip."
+            }
+          }
+        ]
+      }
+    ],
+    "pricing": [
+      {
+        "label": {
+          "en": "1 Person by Car (Min 2)",
+          "vi": "1 nguoi bang xe hoi (Toi thieu 2)"
+        },
+        "price": 40
+      },
+      {
+        "label": {
+          "en": "1 Pillion by Motorbike",
+          "vi": "1 nguoi ngoi sau xe may"
+        },
+        "price": 30
+      },
+      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 40},
+      {
+        "label": {
+          "en": "1 Rider + 1 Pillion (sharing)",
+          "vi": "1 lai + 1 ngoi sau (chia se)"
+        },
+        "price": 50
+      }
+    ],
+    "included": [
+      {"en": "Bike Hire", "vi": "Thue xe"},
+      {"en": "Fuel", "vi": "Xang"},
+      {"en": "Lunch", "vi": "Bua trua"},
+      {"en": "English speaking guide", "vi": "Huong dan vien noi tieng Anh"},
+      {"en": "Support vehicle (for 6+ riders)", "vi": "Xe ho tro (nhom 6+)"}
+    ],
+    "excluded": [
+      {"en": "Flights", "vi": "Ve may bay"},
+      {"en": "Breakfast", "vi": "Bua sang"},
+      {"en": "Tips", "vi": "Tien tip"},
+      {"en": "Repairs / damage", "vi": "Sua chua / hu hong"}
+    ],
+    "paymentDetails": {
+      "en": "Deposit 20% of the total tour price to secure your booking. Balance is due by cash on departure date. All prices include VAT @ 10%. Exchange rate based on 23,000 VND.",
+      "vi": "Dat coc 20% tong gia tour de giu cho. So du thanh toan bang tien mat vao ngay khoi hanh. Gia da bao gom VAT 10%. Ty gia dua tren 23.000 VND."
+    },
+    "notes": [
+      {
+        "en": "If you decide to make reservation 24 hours before travel date, please inquiry to check availability first.",
+        "vi": "Neu dat truoc 24 gio truoc ngay di, vui long kiem tra cho trong."
+      },
+      {
+        "en": "The itinerary can be changed due to weather, tide levels and operating conditions.",
+        "vi": "Lich trinh co the thay doi do thoi tiet va dieu kien hoat dong."
+      },
+      {
+        "en": "Special request (diet or vegetarian) should be sent before your departure date.",
+        "vi": "Yeu cau dac biet (an kieng, chay) nen gui truoc ngay khoi hanh."
+      }
+    ],
+    "mealsInfo": {
+      "en": "1 Meal is included in the price of the tour as well as bottled water and soft drinks. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch is included, and those with particular dietary requirements are easily catered for. Lunch: 1.",
+      "vi": "1 Meal is included in the price of the tour as well as bottled water and soft drinks. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch is included, and those with particular dietary requirements are easily catered for. Lunch: 1."
+    }
   },
   {
     "id": 6,
@@ -57,7 +720,134 @@
     "price": 70,
     "duration": "1 Day",
     "distance": "25 Miles",
-    "location": "La Lo Pagoda"
+    "location": "La Lo Pagoda",
+    "slug": "hon-ba-waterfall",
+    "description": {
+      "en": "Hon Ba Nature Reserve trip is designed for those of you searching for a unique adventure. Travel is by motorcycle or car through the countryside and paddy fields. On your way up the mountain you will pass through minority villages and into the National park. You will explore and experience the natural beauty of this area.",
+      "vi": "Hon Ba Nature Reserve trip is designed for those of you searching for a unique adventure. Travel is by motorcycle or car through the countryside and paddy fields. On your way up the mountain you will pass through minority villages and into the National park. You will explore and experience the natural beauty of this area."
+    },
+    "transportation": "Motorbike or Private Car",
+    "groupSize": "Min 1 Person",
+    "hotel": "Pick up & Drop off",
+    "guided": "Fully Guided Tour",
+    "heroImage": "https://images.ctfassets.net/wv75stsetqy3/6gzFoj0ORIEj3yIGsB1Q08/5797e277832264a11c9bae10fb2f7772/Retire_in_Mui_Ne.jpg?q=60&fit=fill&fm=webp",
+    "images": [],
+    "highlights": [
+      {"en": "Learn how to make rice paper", "vi": "Hoc cach lam banh trang"},
+      {"en": "Make conical hat by palm leaf", "vi": "Lam non la tu la cot"},
+      {
+        "en": "Visit Hon Ba Nature Waterfall & Swimming",
+        "vi": "Tham thac Hon Ba & Boi loi"
+      },
+      {"en": "Enjoy BBQ", "vi": "Thuong thuc BBQ"}
+    ],
+    "itinerary": [
+      {
+        "dayLabel": {"en": "Day 1", "vi": "Ngay 1"},
+        "items": [
+          {
+            "time": "8:30",
+            "description": {
+              "en": "Picking you up and depart from your Hotel. First stop is to visit traditional Sedge mat weaving. A reed mat used in Vietnamese homes, the Sedge mat weaving is passed through generations from ancestors to youth.",
+              "vi": "Picking you up and depart from your Hotel. First stop is to visit traditional Sedge mat weaving. A reed mat used in Vietnamese homes, the Sedge mat weaving is passed through generations from ancestors to youth."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Second stop is La Lo pagoda with a huge Buddha statue (48 meter height). Continue to visit a local family where you will learn how to make conical hats, noodles, and rice-paper with added ingredients such as sugar and sesame.",
+              "vi": "Second stop is La Lo pagoda with a huge Buddha statue (48 meter height). Continue to visit a local family where you will learn how to make conical hats, noodles, and rice-paper with added ingredients such as sugar and sesame."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Back on the bikes, head deeper into the countryside with incredible views of rice paddies. Drive through local rural village where you can interact with villagers and see the local way of life.",
+              "vi": "Back on the bikes, head deeper into the countryside with incredible views of rice paddies. Drive through local rural village where you can interact with villagers and see the local way of life."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "See various plantations grown by locals: banana trees, mango trees, jack fruit trees (depending on season), and rice paddies.",
+              "vi": "See various plantations grown by locals: banana trees, mango trees, jack fruit trees (depending on season), and rice paddies."
+            }
+          },
+          {
+            "time": "",
+            "description": {
+              "en": "Reach the waterfall and jump into the pool of fresh water. Our guides will prepare lunch - enjoy delicious seafood, BBQ and tropical fruits bought fresh from the local market at the waterfall side with splendid views.",
+              "vi": "Reach the waterfall and jump into the pool of fresh water. Our guides will prepare lunch - enjoy delicious seafood, BBQ and tropical fruits bought fresh from the local market at the waterfall side with splendid views."
+            }
+          },
+          {
+            "time": "17:00",
+            "description": {
+              "en": "Head back to Nha Trang City. End of the trip.",
+              "vi": "Head back to Nha Trang City. End of the trip."
+            }
+          }
+        ]
+      }
+    ],
+    "pricing": [
+      {
+        "label": {
+          "en": "1 Person by Car (Min 2)",
+          "vi": "1 nguoi bang xe hoi (Toi thieu 2)"
+        },
+        "price": 70
+      },
+      {
+        "label": {
+          "en": "1 Pillion by Motorbike",
+          "vi": "1 nguoi ngoi sau xe may"
+        },
+        "price": 65
+      },
+      {"label": {"en": "Single Rider", "vi": "Lai xe mot minh"}, "price": 75},
+      {
+        "label": {
+          "en": "1 Rider + 1 Pillion (sharing)",
+          "vi": "1 lai + 1 ngoi sau (chia se)"
+        },
+        "price": 110
+      }
+    ],
+    "included": [
+      {"en": "Bike Hire", "vi": "Thue xe"},
+      {"en": "Fuel", "vi": "Xang"},
+      {"en": "Lunch", "vi": "Bua trua"},
+      {"en": "English speaking guide", "vi": "Huong dan vien noi tieng Anh"},
+      {"en": "Support vehicle (for 6+ riders)", "vi": "Xe ho tro (nhom 6+)"}
+    ],
+    "excluded": [
+      {"en": "Flights", "vi": "Ve may bay"},
+      {"en": "Tips", "vi": "Tien tip"},
+      {"en": "Repairs / damage", "vi": "Sua chua / hu hong"}
+    ],
+    "paymentDetails": {
+      "en": "Deposit 20% of the total tour price to secure your booking. Balance is due by cash on departure date. All prices include VAT @ 10%. Exchange rate based on 23,000 VND.",
+      "vi": "Dat coc 20% tong gia tour de giu cho. So du thanh toan bang tien mat vao ngay khoi hanh. Gia da bao gom VAT 10%. Ty gia dua tren 23.000 VND."
+    },
+    "notes": [
+      {
+        "en": "If you decide to make reservation 24 hours before travel date, please inquiry to check availability first.",
+        "vi": "Neu dat truoc 24 gio truoc ngay di, vui long kiem tra cho trong."
+      },
+      {
+        "en": "The itinerary can be changed due to weather, tide levels and operating conditions.",
+        "vi": "Lich trinh co the thay doi do thoi tiet va dieu kien hoat dong."
+      },
+      {
+        "en": "Special request (diet or vegetarian) should be sent before your departure date.",
+        "vi": "Yeu cau dac biet (an kieng, chay) nen gui truoc ngay khoi hanh."
+      }
+    ],
+    "mealsInfo": {
+      "en": "1 Meal is included in the price of the tour as well as bottled water and soft drinks. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch is included, and those with particular dietary requirements are easily catered for. Lunch: 1.",
+      "vi": "1 Meal is included in the price of the tour as well as bottled water and soft drinks. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch is included, and those with particular dietary requirements are easily catered for. Lunch: 1."
+    }
   },
   {
     "id": 7,
@@ -67,6 +857,190 @@
     "price": 65,
     "duration": "1 Day",
     "distance": "80 Miles",
-    "location": "La Lo pagoda"
+    "location": "La Lo pagoda",
+    "slug": "mui-ne-car-excursion",
+    "description": {
+      "en": "About 250 km South of Nha Trang City are Mui Ne and Phan Thiet. Together, these traditional fishing villages are fast becoming a popular leisure destination. Resort-style developments have been rising along the coastline, though so far the lives of the fishing communities remain unchanged and Mui Ne's long beach is quiet and serene, great for walks, jogging and spectacular sunsets. Phan Thiet is famous for its fish sauce, an ingredient in most Vietnamese dishes. It has a beautiful beach, a wide range of accommodation, and restaurants offer a huge selection of seafood at very affordable prices. There are golf courses, beautiful pagodas, spectacular red and white sand dunes, and a variety of water sports.",
+      "vi": "About 250 km South of Nha Trang City are Mui Ne and Phan Thiet. Together, these traditional fishing villages are fast becoming a popular leisure destination. Resort-style developments have been rising along the coastline, though so far the lives of the fishing communities remain unchanged and Mui Ne's long beach is quiet and serene, great for walks, jogging and spectacular sunsets. Phan Thiet is famous for its fish sauce, an ingredient in most Vietnamese dishes. It has a beautiful beach, a wide range of accommodation, and restaurants offer a huge selection of seafood at very affordable prices. There are golf courses, beautiful pagodas, spectacular red and white sand dunes, and a variety of water sports."
+    },
+    "transportation": "Private Car A/C",
+    "groupSize": "Min 2 Person",
+    "hotel": "Pick up & Drop off",
+    "guided": "Fully Guided Tour",
+    "heroImage": "https://cdnen.thesaigontimes.vn/wp-content/uploads/2024/07/Mot-thoang-Ho-Ba-Be_Thong-Lam.jpg",
+    "images": [],
+    "highlights": [
+      {"en": "Fairy Stream (Suoi Tien)", "vi": "Suoi Tien"},
+      {
+        "en": "Red Sand Dune (Slide down on the sand dunes)",
+        "vi": "Doi cat do (Truot cat)"
+      },
+      {
+        "en": "White Sand Dune (Play ATV-Quad, extra pay)",
+        "vi": "Doi cat trang (Choi ATV-Quad, tra them)"
+      },
+      {"en": "Grape Farm", "vi": "Vuon nho"}
+    ],
+    "itinerary": [
+      {
+        "dayLabel": {"en": "Day 1", "vi": "Ngay 1"},
+        "items": [
+          {
+            "time": "7:00",
+            "description": {
+              "en": "Our guide and driver pick you up and transfer from your hotel to Mui Ne (4 hours / 1 way).",
+              "vi": "Our guide and driver pick you up and transfer from your hotel to Mui Ne (4 hours / 1 way)."
+            }
+          },
+          {
+            "time": "8:15",
+            "description": {
+              "en": "Arriving to rest stop.",
+              "vi": "Arriving to rest stop."
+            }
+          },
+          {
+            "time": "10:45",
+            "description": {
+              "en": "Visit Red Sand Dune - sliding down sand dunes' slopes with surfboards (no extra pay, 30 minutes). Note: Don't put belongings in your pockets, hand bags over to the guide.",
+              "vi": "Visit Red Sand Dune - sliding down sand dunes' slopes with surfboards (no extra pay, 30 minutes). Note: Don't put belongings in your pockets, hand bags over to the guide."
+            }
+          },
+          {
+            "time": "11:30",
+            "description": {
+              "en": "Visit Fairy Stream (Suoi Tien) where a small stream runs through the middle of the red sand dunes, like a mini version of the Red Canyon.",
+              "vi": "Visit Fairy Stream (Suoi Tien) where a small stream runs through the middle of the red sand dunes, like a mini version of the Red Canyon."
+            }
+          },
+          {
+            "time": "12:30",
+            "description": {
+              "en": "Lunch at Thao Nhu Restaurant (set menu included).",
+              "vi": "Lunch at Thao Nhu Restaurant (set menu included)."
+            }
+          },
+          {
+            "time": "13:30",
+            "description": {
+              "en": "Visit fishing village, observing the daily lives of fishermen, with fishing boats lining up and waiting to depart.",
+              "vi": "Visit fishing village, observing the daily lives of fishermen, with fishing boats lining up and waiting to depart."
+            }
+          },
+          {
+            "time": "14:15",
+            "description": {
+              "en": "Visit White Sand Dune where you can play ATV-Quad (500,000 VND / 1 car / 2 people / 20 minutes, extra pay). Very exciting!",
+              "vi": "Visit White Sand Dune where you can play ATV-Quad (500,000 VND / 1 car / 2 people / 20 minutes, extra pay). Very exciting!"
+            }
+          },
+          {
+            "time": "16:15",
+            "description": {
+              "en": "Visit grape farm (take photos & try grape juice, no extra pay).",
+              "vi": "Visit grape farm (take photos & try grape juice, no extra pay)."
+            }
+          },
+          {
+            "time": "16:45",
+            "description": {
+              "en": "After sightseeing, transfer back to Nha Trang.",
+              "vi": "After sightseeing, transfer back to Nha Trang."
+            }
+          },
+          {
+            "time": "18:30",
+            "description": {
+              "en": "Dinner in Nha Trang (try Vietnamese noodle soup, rice chicken, pork chop rice).",
+              "vi": "Dinner in Nha Trang (try Vietnamese noodle soup, rice chicken, pork chop rice)."
+            }
+          },
+          {
+            "time": "19:15",
+            "description": {
+              "en": "End of the trip at your Hotel.",
+              "vi": "End of the trip at your Hotel."
+            }
+          }
+        ]
+      }
+    ],
+    "pricing": [
+      {
+        "label": {"en": "Per Person (Group of 2)", "vi": "Moi nguoi (Nhom 2)"},
+        "price": 85
+      },
+      {
+        "label": {"en": "Per Person (Group of 3)", "vi": "Moi nguoi (Nhom 3)"},
+        "price": 80
+      },
+      {
+        "label": {"en": "Per Person (Group of 4)", "vi": "Moi nguoi (Nhom 4)"},
+        "price": 75
+      },
+      {
+        "label": {
+          "en": "Per Person (Group of 5-6)",
+          "vi": "Moi nguoi (Nhom 5-6)"
+        },
+        "price": 70
+      },
+      {
+        "label": {"en": "Per Person (Group of 7)", "vi": "Moi nguoi (Nhom 7)"},
+        "price": 65
+      },
+      {
+        "label": {
+          "en": "Per Person (Group of 8+)",
+          "vi": "Moi nguoi (Nhom 8+)"
+        },
+        "price": 60
+      },
+      {
+        "label": {"en": "Children (110cm-140cm)", "vi": "Tre em (110cm-140cm)"},
+        "price": 20
+      }
+    ],
+    "included": [
+      {"en": "Hotel Pick up & Drop off", "vi": "Don va tra tai khach san"},
+      {
+        "en": "Vehicle A/C, Petrol & Tolls",
+        "vi": "Xe co dieu hoa, xang & phi cau duong"
+      },
+      {"en": "First Aid Kits", "vi": "Bo so cuu"},
+      {"en": "All Entrance Fees", "vi": "Tat ca ve vao cua"},
+      {"en": "Service of local guide", "vi": "Huong dan vien dia phuong"},
+      {"en": "Full mechanical support", "vi": "Ho tro ky thuat day du"},
+      {"en": "Lunch", "vi": "Bua trua"},
+      {"en": "Dinner", "vi": "Bua toi"}
+    ],
+    "excluded": [
+      {"en": "Flights", "vi": "Ve may bay"},
+      {"en": "Travel Insurance", "vi": "Bao hiem du lich"},
+      {"en": "Personal Expenses", "vi": "Chi phi ca nhan"},
+      {"en": "Play ATV-Quad", "vi": "Choi ATV-Quad"}
+    ],
+    "paymentDetails": {
+      "en": "Deposit 20% of the total tour price to secure your booking. Balance is due by cash on departure date. All prices include VAT @ 10%. Exchange rate based on 23,000 VND.",
+      "vi": "Dat coc 20% tong gia tour de giu cho. So du thanh toan bang tien mat vao ngay khoi hanh. Gia da bao gom VAT 10%. Ty gia dua tren 23.000 VND."
+    },
+    "notes": [
+      {
+        "en": "If you decide to make reservation 24 hours before travel date, please inquiry to check availability first.",
+        "vi": "Neu dat truoc 24 gio truoc ngay di, vui long kiem tra cho trong."
+      },
+      {
+        "en": "The itinerary can be changed due to weather, tide levels and operating conditions.",
+        "vi": "Lich trinh co the thay doi do thoi tiet va dieu kien hoat dong."
+      },
+      {
+        "en": "Special request (diet or vegetarian) should be sent before your departure date.",
+        "vi": "Yeu cau dac biet (an kieng, chay) nen gui truoc ngay khoi hanh."
+      }
+    ],
+    "mealsInfo": {
+      "en": "2 Meals are included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch & Dinner are included, and those with particular dietary requirements are easily catered for. Lunches: 1, Dinners: 1.",
+      "vi": "2 Meals are included in the price of the tour as well as bottled water and soft drinks each day. The food options on this tour are extremely varied. Vietnamese cuisine is also available. Lunch & Dinner are included, and those with particular dietary requirements are easily catered for. Lunches: 1, Dinners: 1."
+    }
   }
 ]
