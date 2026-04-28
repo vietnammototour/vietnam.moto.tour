@@ -3,18 +3,20 @@
 import {useState} from 'react';
 import type {GalleryItemProps} from '@/types';
 
-export const GalleryItem = ({imageSrc}: GalleryItemProps) => {
+export const GalleryItem = ({imageSrc, alt}: GalleryItemProps) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   return (
     <>
       <button
+        data-testid="gallery-item"
         onClick={() => setLightboxOpen(true)}
+        aria-label={alt}
         className="group relative block overflow-hidden rounded-lg aspect-square cursor-pointer"
       >
         <img
           src={imageSrc}
-          alt=""
+          alt={alt}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -38,7 +40,7 @@ export const GalleryItem = ({imageSrc}: GalleryItemProps) => {
           </button>
           <img
             src={imageSrc}
-            alt=""
+            alt={alt}
             className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
             onClick={(e) => e.stopPropagation()}
           />

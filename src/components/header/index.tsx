@@ -68,27 +68,30 @@ export const Header = () => {
           <div className="flex items-center gap-4">
             <a
               href={contactInfo.youtubeLink}
+              aria-label="YouTube"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-primary-light transition-colors"
             >
-              <i className="fab fa-youtube" />
+              <i className="fab fa-youtube" aria-hidden="true" />
             </a>
             <a
               href={contactInfo.tripadvisorLink}
+              aria-label="TripAdvisor"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-primary-light transition-colors"
             >
-              <i className="fab fa-tripadvisor" />
+              <i className="fab fa-tripadvisor" aria-hidden="true" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
+              aria-label="WhatsApp"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-primary-light transition-colors"
             >
-              <i className="fab fa-whatsapp" />
+              <i className="fab fa-whatsapp" aria-hidden="true" />
             </a>
             <span className="mx-2 text-on-surface-inverse/30">|</span>
             <ThemeToggle />
@@ -208,27 +211,30 @@ export const Header = () => {
           <div className="flex gap-4">
             <a
               href={contactInfo.youtubeLink}
+              aria-label="YouTube"
               target="_blank"
               rel="noopener noreferrer"
               className="text-on-surface-secondary hover:text-on-surface-inverse"
             >
-              <i className="fab fa-youtube" />
+              <i className="fab fa-youtube" aria-hidden="true" />
             </a>
             <a
               href={contactInfo.tripadvisorLink}
+              aria-label="TripAdvisor"
               target="_blank"
               rel="noopener noreferrer"
               className="text-on-surface-secondary hover:text-on-surface-inverse"
             >
-              <i className="fab fa-tripadvisor" />
+              <i className="fab fa-tripadvisor" aria-hidden="true" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
+              aria-label="WhatsApp"
               target="_blank"
               rel="noopener noreferrer"
               className="text-on-surface-secondary hover:text-on-surface-inverse"
             >
-              <i className="fab fa-whatsapp" />
+              <i className="fab fa-whatsapp" aria-hidden="true" />
             </a>
           </div>
           <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">

@@ -33,7 +33,12 @@
     "hiddenRoutes": "Hidden\nRoutes",
     "dayAndMultiDay": "Day &\nMulti-Day",
     "smallGroups": "Small\nGroups",
-    "allInclusive": "All\nInclusive"
+    "allInclusive": "All\nInclusive",
+    "galleryAlt1": "Vietnam motorcycle tour — scenic road",
+    "galleryAlt2": "Vietnam motorcycle tour — mountain landscape",
+    "galleryAlt3": "Vietnam motorcycle tour — coastal road",
+    "galleryAlt4": "Vietnam motorcycle tour — countryside",
+    "galleryAlt5": "Vietnam motorcycle tour — adventure"
   },
   "tours": {
     "title": "Popular Tours",
