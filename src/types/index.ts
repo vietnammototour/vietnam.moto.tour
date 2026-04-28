@@ -47,6 +47,7 @@ export interface DestinationCardProps {
 
 export interface GalleryItemProps {
   imageSrc: string;
+  alt: string;
   delay: number;
 }
 

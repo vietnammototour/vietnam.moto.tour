@@ -13,7 +13,7 @@ import {contactInfo} from '@/utils';
 import {destinationsData, toursData} from '@/data';
 import {getUrl} from '@/utils';
 
-const galleryImages = [
+const galleryImageUrls = [
   getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
   getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
   getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
@@ -31,6 +31,18 @@ export default function Home() {
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const t = useTranslations('home');
   const tMeta = useTranslations('meta');
+
+  const galleryAltKeys = [
+    'galleryAlt1',
+    'galleryAlt2',
+    'galleryAlt3',
+    'galleryAlt4',
+    'galleryAlt5',
+  ] as const;
+  const galleryImages = galleryImageUrls.map((src, i) => ({
+    src,
+    alt: t(galleryAltKeys[i]),
+  }));
 
   useEffect(() => {
     if (bannerVideoRef.current) {
@@ -290,6 +302,7 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.icon}
+                  data-testid="feature-card"
                   className="bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
                 >
                   <span
@@ -314,10 +327,11 @@ export default function Home() {
       <section className="py-16 lg:py-24 bg-surface-alt">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {galleryImages.map((imageSrc, index) => (
+            {galleryImages.map(({src, alt}, index) => (
               <GalleryItem
                 key={index}
-                imageSrc={imageSrc}
+                imageSrc={src}
+                alt={alt}
                 delay={(index + 1) * 100}
               />
             ))}
