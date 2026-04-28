@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {useTranslations} from 'next-intl';
 import type {Tour} from '@/types';
 
@@ -38,17 +39,28 @@ export function TourHero({tour}: TourHeroProps) {
             </span>
           </div>
           <div className="mt-4 text-on-surface-inverse">
-            <span className="type-headline-lg">{t('from')} ${tour.price}</span>
-            <span className="type-body-sm ml-1 opacity-80">{t('perPerson')}</span>
+            <span className="type-headline-lg">
+              {t('from')} ${tour.price}
+            </span>
+            <span className="type-body-sm ml-1 opacity-80">
+              {t('perPerson')}
+            </span>
           </div>
         </div>
       </div>
       <div className="bg-surface-alt py-3">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 type-body-sm text-on-surface-secondary">
-            <a href="/" className="hover:text-primary transition-colors">{t('breadcrumbHome')}</a>
+            <Link href="/" className="hover:text-primary transition-colors">
+              {t('breadcrumbHome')}
+            </Link>
             <span>/</span>
-            <a href="/tours" className="hover:text-primary transition-colors">{t('breadcrumbTours')}</a>
+            <Link
+              href="/tours"
+              className="hover:text-primary transition-colors"
+            >
+              {t('breadcrumbTours')}
+            </Link>
             <span>/</span>
             <span className="text-on-surface type-label-lg">{tour.title}</span>
           </nav>
