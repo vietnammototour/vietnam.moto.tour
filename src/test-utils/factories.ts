@@ -9,7 +9,7 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
     price: 80,
     duration: '1 Day',
     distance: '100 Miles',
-    location: 'Test City',
+    destinationId: 1,
     slug: 'test-tour',
     description: {en: 'Test tour description', vi: 'Test tour description'},
     transportation: 'Motorbike',
@@ -60,7 +60,6 @@ export function buildDestination(
     id: 1,
     name: 'Test Destination',
     imageUrl: '/test-destination.jpg',
-    tours: 3,
     size: 'small',
     ...overrides,
   };
