@@ -10,9 +10,10 @@ export const DestinationCard = ({
   const t = useTranslations('common');
 
   return (
-    <div
+    <Link
+      href={`/tours?destination=${id}`}
       data-testid="destination-card"
-      className={`group relative rounded-lg overflow-hidden ${className ?? 'aspect-[3/2]'}`}
+      className={`group relative rounded-lg overflow-hidden block cursor-pointer ${className ?? 'aspect-[3/2]'}`}
     >
       <img
         src={imageUrl}
@@ -21,13 +22,8 @@ export const DestinationCard = ({
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-5">
-        <h2 className="type-title-lg text-white mb-1">
-          <Link
-            href={`/tours?destination=${id}`}
-            className="hover:text-primary-light transition-colors"
-          >
-            {name}
-          </Link>
+        <h2 className="type-title-lg text-white mb-1 group-hover:text-primary-light transition-colors">
+          {name}
         </h2>
         <div className="flex items-center gap-2">
           <span className="inline-block bg-primary/90 text-white type-label-sm uppercase px-3 py-1 rounded-full">
@@ -53,6 +49,6 @@ export const DestinationCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
