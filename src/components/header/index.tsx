@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import {useScrollDirection} from '@/hooks/useScrollDirection';
-import {useTheme} from '@/components/theme-provider';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from '@/components/language-switcher';
@@ -14,14 +13,8 @@ import ThemeToggle from '@/components/theme-toggle';
 export const Header = () => {
   const router = useRouter();
   const {scrollDirection, scrollY} = useScrollDirection();
-  const {theme} = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const t = useTranslations('header');
-
-  const headerLogo =
-    theme === 'dark'
-      ? getUrl('assets/images/logo/logo-white.png')
-      : getUrl('assets/images/logo/logo-amber-dark.png');
 
   const isSticky = scrollY > 100;
   const isHidden = scrollDirection === 'down' && scrollY > 200;
@@ -106,9 +99,14 @@ export const Header = () => {
           <div className="flex items-center justify-between h-16 lg:h-20">
             <Link href="/" className="flex-shrink-0">
               <img
-                src={headerLogo}
+                src={getUrl('assets/images/logo/logo-amber-dark.png')}
                 alt="Vietnam Motorcycle Tour"
-                className="h-11 lg:h-14"
+                className="h-11 lg:h-14 block dark:hidden"
+              />
+              <img
+                src={getUrl('assets/images/logo/logo-white.png')}
+                alt="Vietnam Motorcycle Tour"
+                className="h-11 lg:h-14 hidden dark:block"
               />
             </Link>
             <nav className="hidden lg:flex items-center gap-8">
