@@ -89,7 +89,7 @@ export function TranslationEditor({
         <select
           value={namespaceFilter}
           onChange={(e) => setNamespaceFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+          className="px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
         >
           <option value="">All namespaces</option>
           {namespaces.map((ns) => (
@@ -102,7 +102,7 @@ export function TranslationEditor({
           <button
             onClick={handleSave}
             disabled={saving}
-            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 ml-auto"
+            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 ml-auto cursor-pointer"
           >
             {saving ? 'Saving...' : `Save ${modified.size} changes`}
           </button>

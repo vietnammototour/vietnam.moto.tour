@@ -65,7 +65,7 @@ export default function AdminUsers({users: initial}: Props) {
         <h1 className="type-headline-sm">Users</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors"
+          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
         >
           {showForm ? 'Cancel' : '+ New User'}
         </button>
@@ -128,7 +128,7 @@ export default function AdminUsers({users: initial}: Props) {
             <button
               type="submit"
               disabled={saving}
-              className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50"
+              className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
             >
               {saving ? 'Creating...' : 'Create User'}
             </button>
@@ -173,7 +173,7 @@ export default function AdminUsers({users: initial}: Props) {
                   {session?.user.id !== user.id && (
                     <button
                       onClick={() => handleDelete(user.id)}
-                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors"
+                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                     >
                       Delete
                     </button>

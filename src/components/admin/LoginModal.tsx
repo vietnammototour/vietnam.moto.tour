@@ -84,7 +84,7 @@ function LoginForm({onClose}: {onClose: () => void}) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase py-3 rounded-lg transition-colors disabled:opacity-50"
+        className="w-full bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase py-3 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
       >
         {loading ? '...' : t('loginButton')}
       </button>
@@ -130,7 +130,7 @@ export function LoginModal({isOpen, onClose}: LoginModalProps) {
             <h2 className="type-title-lg text-on-surface">{t('loginTitle')}</h2>
             <button
               onClick={onClose}
-              className="text-on-surface-secondary hover:text-on-surface transition-colors"
+              className="text-on-surface-secondary hover:text-on-surface transition-colors cursor-pointer"
               aria-label="Close"
             >
               <i className="fa fa-times text-xl" />

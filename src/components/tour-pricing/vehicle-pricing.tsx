@@ -44,7 +44,7 @@ export function VehiclePricing({
                   role="radio"
                   aria-checked={isSelected}
                   onClick={() => onSelect(gIdx, tIdx)}
-                  className={`flex items-start gap-3 p-3 text-left transition-colors border-b border-border-subtle last:border-b-0 ${
+                  className={`flex items-start gap-3 p-3 text-left transition-colors border-b border-border-subtle last:border-b-0 cursor-pointer ${
                     isSelected
                       ? 'bg-primary/10 border-l-2 border-l-primary'
                       : 'hover:bg-surface-elevated'

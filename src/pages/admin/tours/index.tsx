@@ -52,7 +52,7 @@ export default function AdminToursList({tours: initialTours}: Props) {
         <h1 className="type-headline-sm">Tours</h1>
         <Link
           href="/admin/tours/new"
-          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors"
+          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
         >
           + New Tour
         </Link>
@@ -97,7 +97,7 @@ export default function AdminToursList({tours: initialTours}: Props) {
                 <td className="px-4 py-3">
                   <button
                     onClick={() => handleToggleActive(tour.id, tour.isActive)}
-                    className={`type-label-sm px-2 py-0.5 rounded ${
+                    className={`type-label-sm px-2 py-0.5 rounded cursor-pointer ${
                       tour.isActive
                         ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                         : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
@@ -110,13 +110,13 @@ export default function AdminToursList({tours: initialTours}: Props) {
                   <div className="flex items-center justify-end gap-2">
                     <Link
                       href={`/admin/tours/${tour.id}/edit`}
-                      className="type-label-sm text-primary hover:text-primary-light transition-colors"
+                      className="type-label-sm text-primary hover:text-primary-light transition-colors cursor-pointer"
                     >
                       Edit
                     </Link>
                     <button
                       onClick={() => handleDelete(tour.id)}
-                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors"
+                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                     >
                       Delete
                     </button>

@@ -37,7 +37,7 @@ export default function AdminDestinationsList({destinations: initial}: Props) {
         <h1 className="type-headline-sm">Destinations</h1>
         <Link
           href="/admin/destinations/new"
-          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors"
+          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
         >
           + New Destination
         </Link>
@@ -88,13 +88,13 @@ export default function AdminDestinationsList({destinations: initial}: Props) {
                   <div className="flex items-center justify-end gap-2">
                     <Link
                       href={`/admin/destinations/${dest.id}/edit`}
-                      className="type-label-sm text-primary hover:text-primary-light transition-colors"
+                      className="type-label-sm text-primary hover:text-primary-light transition-colors cursor-pointer"
                     >
                       Edit
                     </Link>
                     <button
                       onClick={() => handleDelete(dest.id)}
-                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors"
+                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                     >
                       Delete
                     </button>

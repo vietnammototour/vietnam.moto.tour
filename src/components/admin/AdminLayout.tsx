@@ -36,7 +36,7 @@ export function AdminLayout({children}: AdminLayoutProps) {
       {/* Sidebar */}
       <aside className="w-64 bg-surface-elevated border-r border-border flex flex-col">
         <div className="p-4 border-b border-border">
-          <Link href="/" className="type-title-sm text-primary">
+          <Link href="/" className="type-title-sm text-primary cursor-pointer">
             VMT Admin
           </Link>
         </div>
@@ -51,7 +51,7 @@ export function AdminLayout({children}: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg type-label-sm transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg type-label-sm transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-primary/10 text-primary'
                     : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'
@@ -69,7 +69,7 @@ export function AdminLayout({children}: AdminLayoutProps) {
           </p>
           <button
             onClick={() => signOut({callbackUrl: '/'})}
-            className="type-label-sm text-on-surface-secondary hover:text-primary transition-colors mt-1"
+            className="type-label-sm text-on-surface-secondary hover:text-primary transition-colors mt-1 cursor-pointer"
           >
             {t('logout')}
           </button>

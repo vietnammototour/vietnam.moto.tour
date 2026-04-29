@@ -103,7 +103,7 @@ export default function Rental() {
                     {item.category}
                   </span>
                   <button
-                    className="absolute top-3 right-3 w-9 h-9 bg-surface-elevated/90 rounded-full flex items-center justify-center text-on-surface-secondary hover:text-primary hover:bg-surface-elevated transition-all"
+                    className="absolute top-3 right-3 w-9 h-9 bg-surface-elevated/90 rounded-full flex items-center justify-center text-on-surface-secondary hover:text-primary hover:bg-surface-elevated transition-all cursor-pointer"
                     aria-label="Add to favorites"
                   >
                     <i className="fa fa-heart text-sm" />

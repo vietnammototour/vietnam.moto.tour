@@ -194,7 +194,7 @@ export function DestinationForm({
         <button
           type="submit"
           disabled={saving}
-          className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50"
+          className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
         >
           {saving
             ? 'Saving...'
@@ -205,7 +205,7 @@ export function DestinationForm({
         <button
           type="button"
           onClick={() => router.push('/admin/destinations')}
-          className="px-6 py-2.5 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors"
+          className="px-6 py-2.5 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
         >
           Cancel
         </button>

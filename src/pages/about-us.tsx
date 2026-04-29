@@ -118,7 +118,7 @@ export default function AboutUs() {
           </div>
           <Link
             href="/contact"
-            className="bg-surface-elevated text-on-surface-accent hover:bg-surface-alt type-label-sm uppercase px-8 py-4 rounded-lg transition-colors flex-shrink-0"
+            className="bg-surface-elevated text-on-surface-accent hover:bg-surface-alt type-label-sm uppercase px-8 py-4 rounded-lg transition-colors flex-shrink-0 cursor-pointer"
           >
             {t('bookTourNow')}
           </Link>
@@ -137,7 +137,7 @@ export default function AboutUs() {
         <div className="relative z-10 text-center text-white">
           <button
             onClick={() => setVideoOpen(true)}
-            className="mx-auto mb-6 w-20 h-20 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse"
+            className="mx-auto mb-6 w-20 h-20 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse cursor-pointer"
             aria-label="Play video"
           >
             <i className="fa fa-play text-xl ml-1" />
@@ -186,5 +186,6 @@ export async function getStaticProps({locale}: GetStaticPropsContext) {
     props: {
       messages: (await import(`@/messages/${locale}.json`)).default,
     },
+    revalidate: 60,
   };
 }

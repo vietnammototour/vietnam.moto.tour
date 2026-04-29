@@ -55,13 +55,13 @@ export function TourHero({tour}: TourHeroProps) {
       <div className="bg-surface-alt py-3">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 type-body-sm text-on-surface-secondary">
-            <Link href="/" className="hover:text-primary transition-colors">
+            <Link href="/" className="hover:text-primary transition-colors cursor-pointer">
               {t('breadcrumbHome')}
             </Link>
             <span>/</span>
             <Link
               href="/tours"
-              className="hover:text-primary transition-colors"
+              className="hover:text-primary transition-colors cursor-pointer"
             >
               {t('breadcrumbTours')}
             </Link>

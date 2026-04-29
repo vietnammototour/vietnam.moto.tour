@@ -19,7 +19,7 @@ export const TourCard = ({tour}: TourCardProps) => {
   return (
     <Link
       href={`/tours/${slug}`}
-      className="group bg-surface-elevated rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden h-full flex flex-col"
+      className="group bg-surface-elevated rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden h-full flex flex-col cursor-pointer"
     >
       <div className="relative overflow-hidden aspect-[3/2] bg-secondary/10">
         {imageUrl ? (
