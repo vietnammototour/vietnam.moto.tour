@@ -93,25 +93,32 @@ Unique constraint on `(namespace, key)`.
 
 ### Login Flow
 
-1. Admin navigates to `/admin/login`
-2. Submits email + password
-3. NextAuth credentials provider verifies against Users table
-4. Success: JWT cookie set, redirect to `/admin`
-5. Failure: error message displayed
+1. Admin clicks "Login" button in the site header (top right corner)
+2. A modal window opens with email + password form
+3. Submits credentials via NextAuth
+4. Success: JWT cookie set, modal closes, header switches to show logout button
+5. Failure: error message displayed inside the modal
+
+### Header Integration
+
+- **Logged out:** A "Login" button appears in the top right of the existing site Header
+- **Logged in:** The "Login" button is replaced with admin name + "Logout" button
+- The login modal is a shared component rendered in the Layout, controlled by state
+- Clicking outside the modal or pressing Escape closes it
 
 ### Route Protection
 
-- `middleware.ts` intercepts all `/admin/*` requests except `/admin/login`
+- `middleware.ts` intercepts all `/admin/*` requests
 - Also excludes `/api/auth/*` (NextAuth endpoints must be public)
 - Checks for valid JWT in cookie via NextAuth's `getToken()`
-- No valid token: redirect to `/admin/login`
+- No valid token: redirect to `/` (home page)
 - Valid token: request proceeds
 
 ### Account Management
 
 - First admin: created via `pnpm db:seed-admin` CLI script
 - Additional admins: created by existing admins through `/admin/users` (email, name, temporary password)
-- Logout: clears JWT cookie, redirects to `/admin/login`
+- Logout: clears JWT cookie via NextAuth signOut, header reverts to "Login" button
 
 ## Admin Panel
 
@@ -123,7 +130,6 @@ Separate layout from public site — sidebar navigation + content area. No publi
 
 | Route                           | Purpose                                          |
 | ------------------------------- | ------------------------------------------------ |
-| `/admin/login`                  | Login form (no sidebar)                          |
 | `/admin`                        | Dashboard — overview stats (tour count, etc.)    |
 | `/admin/tours`                  | Tours list with edit/delete/activate controls    |
 | `/admin/tours/new`              | Create new tour form                             |
@@ -231,7 +237,6 @@ src/
           index.ts           # GET, POST
           [id].ts            # DELETE
     admin/
-      login.tsx
       index.tsx              # Dashboard
       tours/
         index.tsx            # Tour list
@@ -248,6 +253,7 @@ src/
   components/
     admin/
       AdminLayout.tsx        # Sidebar + content layout
+      LoginModal.tsx         # Login form modal (rendered in Layout)
       TourForm.tsx           # Shared create/edit tour form
       DestinationForm.tsx    # Shared create/edit destination form
       TranslationEditor.tsx  # Inline translation table
