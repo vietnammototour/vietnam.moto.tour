@@ -14,7 +14,7 @@ describe('toursData', () => {
       expect(tour.price).toEqual(expect.any(Number));
       expect(tour.duration).toEqual(expect.any(String));
       expect(tour.distance).toEqual(expect.any(String));
-      expect(tour.location).toEqual(expect.any(String));
+      expect(tour.destinationId).toEqual(expect.any(Number));
     }
   });
 
@@ -34,7 +34,6 @@ describe('destinationsData', () => {
       expect(dest.id).toEqual(expect.any(Number));
       expect(dest.name).toEqual(expect.any(String));
       expect(dest.imageUrl).toEqual(expect.any(String));
-      expect(dest.tours).toEqual(expect.any(Number));
       expect(['small', 'large']).toContain(dest.size);
     }
   });
