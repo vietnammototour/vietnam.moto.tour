@@ -133,6 +133,18 @@
     "light": "Light",
     "dark": "Dark"
   },
+  "admin": {
+    "dashboard": "Dashboard",
+    "tours": "Tours",
+    "destinations": "Destinations",
+    "translations": "Translations",
+    "users": "Users",
+    "totalTours": "Total Tours",
+    "totalDestinations": "Total Destinations",
+    "totalUsers": "Total Users",
+    "welcome": "Welcome, {name}",
+    "logout": "Logout"
+  },
   "meta": {
     "homeTitle": "Vietnam Motorcycle Tour — Adventure Tours in Nha Trang",
     "homeDescription": "Vietnam Motorcycle Tour — Adventure tours in Nha Trang and beyond. Day tours, multi-day tours, motorbike and car rental.",

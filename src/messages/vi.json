@@ -133,6 +133,18 @@
     "light": "Sang",
     "dark": "Toi"
   },
+  "admin": {
+    "dashboard": "Bảng điều khiển",
+    "tours": "Tour",
+    "destinations": "Điểm đến",
+    "translations": "Bản dịch",
+    "users": "Người dùng",
+    "totalTours": "Tổng số tour",
+    "totalDestinations": "Tổng số điểm đến",
+    "totalUsers": "Tổng số người dùng",
+    "welcome": "Chào mừng, {name}",
+    "logout": "Đăng xuất"
+  },
   "meta": {
     "homeTitle": "Vietnam Motorcycle Tour — Tour Phiêu Lưu Tại Nha Trang",
     "homeDescription": "Vietnam Motorcycle Tour — Tour phiêu lưu tại Nha Trang và các vùng lân cận. Tour trong ngày, tour nhiều ngày, cho thuê xe máy và ô tô.",

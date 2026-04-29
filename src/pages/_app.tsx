@@ -6,6 +6,7 @@ import {DM_Sans} from 'next/font/google';
 import localFont from 'next/font/local';
 import {ThemeProvider} from '@/components/theme-provider';
 import {Layout} from '../components/layout/index';
+import {AdminLayout} from '@/components/admin/AdminLayout';
 import '@/styles/globals.css';
 import viMessages from '@/messages/vi.json';
 import enMessages from '@/messages/en.json';
@@ -56,9 +57,15 @@ export default function App({
           timeZone="Asia/Ho_Chi_Minh"
         >
           <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            {router.pathname.startsWith('/admin') ? (
+              <AdminLayout>
+                <Component {...pageProps} />
+              </AdminLayout>
+            ) : (
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            )}
           </div>
         </NextIntlClientProvider>
       </ThemeProvider>
