@@ -10,7 +10,7 @@ import {GalleryItem} from '@/components/gallery-item';
 import {VideoModal} from '@/components/video-modal';
 import {contactInfo} from '@/utils';
 
-import {destinationsData, toursData} from '@/data';
+import {getActiveDestinations, toursData} from '@/data';
 import {getUrl} from '@/utils';
 
 const galleryImageUrls = [
@@ -49,6 +49,8 @@ export default function Home() {
       bannerVideoRef.current.playbackRate = 0.8;
     }
   }, []);
+
+  const destinations = getActiveDestinations();
 
   return (
     <>
@@ -107,11 +109,11 @@ export default function Home() {
               variants={fadeInUp}
             >
               <DestinationCard
-                destination={destinationsData[0]}
+                destination={destinations[0]}
                 className="h-full"
               />
             </motion.div>
-            {destinationsData.slice(1, 5).map((destination, i) => (
+            {destinations.slice(1, 5).map((destination, i) => (
               <motion.div
                 key={destination.id}
                 initial="hidden"
@@ -130,9 +132,9 @@ export default function Home() {
             ))}
           </div>
           {/* Bottom row: additional destinations aligned under the hero */}
-          {destinationsData.length > 5 && (
+          {destinations.length > 5 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-              {destinationsData.slice(5).map((destination, i) => (
+              {destinations.slice(5).map((destination, i) => (
                 <motion.div
                   key={destination.id}
                   initial="hidden"
