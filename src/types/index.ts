@@ -87,7 +87,11 @@ export interface TourCarouselProps {
 }
 
 export interface DestinationCardProps {
-  destination: Destination & {tourCount: number};
+  destination: Destination & {
+    tourCount: number;
+    hasCar: boolean;
+    hasBike: boolean;
+  };
 }
 
 export interface GalleryItemProps {

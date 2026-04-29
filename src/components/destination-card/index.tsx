@@ -6,7 +6,7 @@ export const DestinationCard = ({
   destination,
   className,
 }: DestinationCardProps & {className?: string}) => {
-  const {name, imageUrl, tourCount, id} = destination;
+  const {name, imageUrl, tourCount, id, hasCar, hasBike} = destination;
   const t = useTranslations('common');
 
   return (
@@ -29,9 +29,29 @@ export const DestinationCard = ({
             {name}
           </Link>
         </h2>
-        <span className="inline-block bg-primary/90 text-white type-label-sm uppercase px-3 py-1 rounded-full">
-          {tourCount} {t('tours', {count: tourCount})}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="inline-block bg-primary/90 text-white type-label-sm uppercase px-3 py-1 rounded-full">
+            {tourCount} {t('tours', {count: tourCount})}
+          </span>
+          <div className="flex items-center gap-1.5">
+            {hasBike && (
+              <span
+                className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm text-white"
+                title={t('motorbike')}
+              >
+                <i className="fa fa-motorcycle text-xs" />
+              </span>
+            )}
+            {hasCar && (
+              <span
+                className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm text-white"
+                title={t('car')}
+              >
+                <i className="fa fa-car text-xs" />
+              </span>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

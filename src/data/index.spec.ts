@@ -120,4 +120,17 @@ describe('getActiveDestinations', () => {
       .map((d) => d.id);
     expect(activeIds).toEqual(originalOrder);
   });
+
+  it('computes correct transport type flags', () => {
+    const active = getActiveDestinations();
+    for (const dest of active) {
+      const tours = toursData.filter((t) => t.destinationId === dest.id);
+      const expectedCar = tours.some((t) => /car/i.test(t.transportation));
+      const expectedBike = tours.some((t) =>
+        /motorbike/i.test(t.transportation),
+      );
+      expect(dest.hasCar).toBe(expectedCar);
+      expect(dest.hasBike).toBe(expectedBike);
+    }
+  });
 });

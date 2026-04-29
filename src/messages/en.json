@@ -117,7 +117,9 @@
   },
   "common": {
     "perPerson": "/ Per Person",
-    "tours": "{count, plural, one {tour} other {tours}}"
+    "tours": "{count, plural, one {tour} other {tours}}",
+    "motorbike": "Motorbike tours available",
+    "car": "Car tours available"
   },
   "ThemeToggle": {
     "label": "Theme",

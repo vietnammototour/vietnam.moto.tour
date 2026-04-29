@@ -30,20 +30,32 @@ export function getToursByDestination(destinationId: number): Tour[] {
   return toursData.filter((t) => t.destinationId === destinationId);
 }
 
-/** Only destinations that have >= 1 tour, with computed tour count.
+/** Only destinations that have >= 1 tour, with computed tour count
+ *  and aggregated transport types.
  *  Preserves the original order from destinations.json. */
 export function getActiveDestinations(): (Destination & {
   tourCount: number;
+  hasCar: boolean;
+  hasBike: boolean;
 })[] {
   const countMap = new Map<number, number>();
+  const carSet = new Set<number>();
+  const bikeSet = new Set<number>();
   for (const tour of toursData) {
     countMap.set(
       tour.destinationId,
       (countMap.get(tour.destinationId) ?? 0) + 1,
     );
+    if (/car/i.test(tour.transportation)) carSet.add(tour.destinationId);
+    if (/motorbike/i.test(tour.transportation)) bikeSet.add(tour.destinationId);
   }
 
   return destinationsData
     .filter((d) => countMap.has(d.id))
-    .map((d) => ({...d, tourCount: countMap.get(d.id)!}));
+    .map((d) => ({
+      ...d,
+      tourCount: countMap.get(d.id)!,
+      hasCar: carSet.has(d.id),
+      hasBike: bikeSet.has(d.id),
+    }));
 }

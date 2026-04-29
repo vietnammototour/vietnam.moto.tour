@@ -10,6 +10,8 @@ describe('DestinationCard', () => {
       id: 1,
     }),
     tourCount: 5,
+    hasCar: true,
+    hasBike: true,
   };
 
   it('renders the destination name as a link to /tours with destination query param', () => {
