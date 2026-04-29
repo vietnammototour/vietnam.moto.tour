@@ -3,16 +3,20 @@ import {DestinationCard} from './index';
 import {buildDestination} from '@/test-utils/factories';
 
 describe('DestinationCard', () => {
-  const destination = buildDestination({
-    name: 'Dalat',
-    imageUrl: '/dalat.jpg',
-    tours: 5,
-  });
+  const destination = {
+    ...buildDestination({
+      name: 'Dalat',
+      imageUrl: '/dalat.jpg',
+      tours: 5,
+      id: 1,
+    }),
+    tourCount: 5,
+  };
 
-  it('renders the destination name as a link to /tours', () => {
+  it('renders the destination name as a link to /tours with destination query param', () => {
     render(<DestinationCard destination={destination} />);
     const link = screen.getByText('Dalat').closest('a');
-    expect(link).toHaveAttribute('href', '/tours');
+    expect(link).toHaveAttribute('href', '/tours?destination=1');
   });
 
   it('renders the tour count with tours translation key', () => {
@@ -25,5 +29,4 @@ describe('DestinationCard', () => {
     const img = screen.getByAltText('Dalat');
     expect(img).toHaveAttribute('src', '/dalat.jpg');
   });
-
 });
