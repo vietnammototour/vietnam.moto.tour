@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
+import {getDestinationName} from '@/data';
 import type {Tour} from '@/types';
 
 interface TourHeroProps {
@@ -25,7 +26,8 @@ export function TourHero({tour}: TourHeroProps) {
           </h1>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface-inverse/80 type-body-sm">
             <span className="flex items-center gap-1.5">
-              <i className="fa fa-map-marker-alt" /> {tour.location}
+              <i className="fa fa-map-marker-alt" />{' '}
+              {getDestinationName(tour.destinationId)}
             </span>
             <span className="flex items-center gap-1.5">
               <i className="fa fa-clock" /> {tour.duration}

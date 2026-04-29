@@ -7,7 +7,7 @@
     "price": 80,
     "duration": "1 Day",
     "distance": "186 Miles",
-    "location": "Da Lat",
+    "destinationId": 1,
     "slug": "dalat-car-excursion",
     "description": {
       "en": "Da Lat is 150 km away from Nha Trang. Dalat is the capital of Lam Dong Province in southern Vietnam's Central Highlands, centered around a lake and golf course, surrounded by hills, pine forests, lakes and waterfalls. Known as the \"City of Eternal Spring\" for its distinctive temperate climate, Da Lat was developed as a resort by the French in the early 1900s, and many reminders of its colonial heritage remain. Dalat holds some very unique European influence architecture and has a cooler climate than the surrounding areas. Dalat today is famed as the city of Love and flowers, and has become a popular holiday retreat for young Vietnamese couples.",
@@ -199,7 +199,7 @@
     "price": 130,
     "duration": "1 Day",
     "distance": "210 Miles",
-    "location": "Omega Pass",
+    "destinationId": 1,
     "slug": "2d-explore-dalat",
     "description": {
       "en": "Da Lat - the City of Eternal Spring is known for its hills, pine forests, lakes, waterfalls and fresh air. The journey there is just as breathtakingly beautiful and full of adventures. Join us on this drive from Nha Trang to Da Lat through the famous Khanh Le Mountain Pass (Omega Pass), which is one of the longest and most spectacular passes in the country. On the way we will make a few stops that ensure you make the most of this day and get to know Vietnam a little bit better. It's a journey for all your senses - from fresh air and beautiful sights to delicious home-made family-style meals, this tour has it all.",
@@ -357,7 +357,7 @@
     "price": 70,
     "duration": "1 Day",
     "distance": "50 Miles",
-    "location": "Nha Trang",
+    "destinationId": 2,
     "slug": "ba-ho-waterfall",
     "description": {
       "en": "One of Nha Trang's must-visit attractions, comprised of three natural waterfalls that ends with a clear lake surrounded by a dense rainforest. Are you ready for a different kind of adventure? Hop on the back of one of our motorbikes or private car and leave the hustle and bustle of Nha Trang city for the countryside. As we head towards the waterfall, catch a glimpse of the locals going about their daily lives. With a few stops along the way, you'll not only get to see breathtaking natural beauty but also get to learn more about Vietnamese culture, history and architecture. This makes the reward of swimming at the waterfall all the more special.",
@@ -524,7 +524,7 @@
     "price": 70,
     "duration": "1 Day",
     "distance": "93 Miles",
-    "location": "Nha Trang",
+    "destinationId": 2,
     "slug": "1d-nha-trang-to-dalat",
     "description": {
       "en": "This 1 Day Nha Trang to Da Lat is the best tour to explore the beautiful countryside in Central Highlands and to learn about the old culture and customs of the Ede minority people. Enjoy your real adventure. The journey there is just as breathtakingly beautiful and full of adventures. Join us on this drive from Nha Trang to Da Lat through the famous Khanh Le Mountain Pass (Omega Pass), which is one of the longest and most spectacular passes in the country. On the way we will make a few stops that ensure you make the most of this day and get to know Vietnam a little bit better.",
@@ -663,7 +663,7 @@
     "price": 40,
     "duration": "1 Day",
     "distance": "25 Miles",
-    "location": "Nha Trang",
+    "destinationId": 2,
     "slug": "nha-trang-half-day",
     "description": {
       "en": "Nha Trang is one of the most beautiful bays in the world with sandy coasts and sparkling water, holding the title of being Vietnam's best diving spot. We understand your inkling to get under water, but believe us when we say the city above ground is just as beautiful, with plenty of charming spots to explore. On this city tour, you will get to see Nha Trang from local eyes. So, in addition to all the must-visit sites, you will also get to visit some cool spots that only a local would know.",
@@ -821,7 +821,7 @@
     "price": 70,
     "duration": "1 Day",
     "distance": "25 Miles",
-    "location": "La Lo Pagoda",
+    "destinationId": 2,
     "slug": "hon-ba-waterfall",
     "description": {
       "en": "Hon Ba Nature Reserve trip is designed for those of you searching for a unique adventure. Travel is by motorcycle or car through the countryside and paddy fields. On your way up the mountain you will pass through minority villages and into the National park. You will explore and experience the natural beauty of this area.",
@@ -982,7 +982,7 @@
     "price": 65,
     "duration": "1 Day",
     "distance": "80 Miles",
-    "location": "La Lo pagoda",
+    "destinationId": 3,
     "slug": "mui-ne-car-excursion",
     "description": {
       "en": "About 250 km South of Nha Trang City are Mui Ne and Phan Thiet. Together, these traditional fishing villages are fast becoming a popular leisure destination. Resort-style developments have been rising along the coastline, though so far the lives of the fishing communities remain unchanged and Mui Ne's long beach is quiet and serene, great for walks, jogging and spectacular sunsets. Phan Thiet is famous for its fish sauce, an ingredient in most Vietnamese dishes. It has a beautiful beach, a wide range of accommodation, and restaurants offer a huge selection of seafood at very affordable prices. There are golf courses, beautiful pagodas, spectacular red and white sand dunes, and a variety of water sports.",

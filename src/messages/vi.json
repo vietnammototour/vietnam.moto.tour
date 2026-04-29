@@ -117,7 +117,9 @@
   },
   "common": {
     "perPerson": "/ Mỗi Người",
-    "tours": "tour"
+    "tours": "{count, plural, one {tour} other {tour}}",
+    "motorbike": "Có tour xe máy",
+    "car": "Có tour xe hơi"
   },
   "ThemeToggle": {
     "label": "Giao dien",

@@ -3,21 +3,26 @@ import {DestinationCard} from './index';
 import {buildDestination} from '@/test-utils/factories';
 
 describe('DestinationCard', () => {
-  const destination = buildDestination({
-    name: 'Dalat',
-    imageUrl: '/dalat.jpg',
-    tours: 5,
-  });
+  const destination = {
+    ...buildDestination({
+      name: 'Dalat',
+      imageUrl: '/dalat.jpg',
+      id: 1,
+    }),
+    tourCount: 5,
+    hasCar: true,
+    hasBike: true,
+  };
 
-  it('renders the destination name as a link to /tours', () => {
+  it('renders the destination name as a link to /tours with destination query param', () => {
     render(<DestinationCard destination={destination} />);
     const link = screen.getByText('Dalat').closest('a');
-    expect(link).toHaveAttribute('href', '/tours');
+    expect(link).toHaveAttribute('href', '/tours?destination=1');
   });
 
   it('renders the tour count with tours translation key', () => {
     render(<DestinationCard destination={destination} />);
-    expect(screen.getByText('5 tours')).toBeInTheDocument();
+    expect(screen.getByText('5 tours:{"count":5}')).toBeInTheDocument();
   });
 
   it('renders the image with correct src and alt', () => {
@@ -25,5 +30,4 @@ describe('DestinationCard', () => {
     const img = screen.getByAltText('Dalat');
     expect(img).toHaveAttribute('src', '/dalat.jpg');
   });
-
 });

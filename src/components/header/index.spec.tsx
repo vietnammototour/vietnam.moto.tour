@@ -25,8 +25,8 @@ describe('Header', () => {
 
   it('renders the logo', () => {
     render(<Header />);
-    const logo = screen.getByAltText('Vietnam Motorcycle Tour');
-    expect(logo).toBeInTheDocument();
+    const logos = screen.getAllByAltText('Vietnam Motorcycle Tour');
+    expect(logos.length).toBe(2);
   });
 
   it('renders Home nav link', () => {

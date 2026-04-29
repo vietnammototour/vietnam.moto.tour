@@ -23,9 +23,8 @@ describe('Layout', () => {
         <div>Page Content</div>
       </Layout>,
     );
-    expect(
-      screen.getByAltText('Vietnam Motorcycle Tour'),
-    ).toBeInTheDocument();
+    const logos = screen.getAllByAltText('Vietnam Motorcycle Tour');
+    expect(logos.length).toBe(2);
   });
 
   it('renders Footer (logo present)', () => {
