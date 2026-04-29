@@ -8,7 +8,7 @@ describe('TourCard', () => {
     price: 80,
     duration: '1 Day',
     distance: '186 Miles',
-    location: 'Da Lat',
+    destinationId: 1,
     imageUrl: '/dalat.jpg',
     slug: 'da-lat-tour',
   });
@@ -41,7 +41,7 @@ describe('TourCard', () => {
 
   it('renders the location', () => {
     render(<TourCard tour={tour} />);
-    expect(screen.getByText('Da Lat')).toBeInTheDocument();
+    expect(screen.getByText('Dalat')).toBeInTheDocument();
   });
 
   it('renders the tour image with correct src and alt', () => {
