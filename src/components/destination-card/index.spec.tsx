@@ -7,7 +7,6 @@ describe('DestinationCard', () => {
     ...buildDestination({
       name: 'Dalat',
       imageUrl: '/dalat.jpg',
-      tours: 5,
       id: 1,
     }),
     tourCount: 5,
