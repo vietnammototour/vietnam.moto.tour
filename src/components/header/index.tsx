@@ -50,6 +50,15 @@ export const Header = () => {
       label: t('contact'),
       active: router.pathname === '/contact',
     },
+    ...(session
+      ? [
+          {
+            href: '/admin',
+            label: t('admin'),
+            active: router.pathname.startsWith('/admin'),
+          },
+        ]
+      : []),
   ];
 
   return (
