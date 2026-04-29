@@ -38,7 +38,7 @@ export interface Tour {
   price: number;
   duration: string;
   distance: string;
-  location: string;
+  destinationId: number;
   slug: string;
   description: LocalizedText;
   transportation: string;
@@ -61,7 +61,6 @@ export interface Destination {
   id: number;
   name: string;
   imageUrl: string;
-  tours: number;
   size: 'small' | 'large';
 }
 
@@ -88,7 +87,7 @@ export interface TourCarouselProps {
 }
 
 export interface DestinationCardProps {
-  destination: Destination;
+  destination: Destination & {tourCount: number};
 }
 
 export interface GalleryItemProps {
