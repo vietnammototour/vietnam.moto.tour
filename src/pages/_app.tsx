@@ -1,4 +1,5 @@
 import type {AppProps} from 'next/app';
+import {SessionProvider} from 'next-auth/react';
 import {NextIntlClientProvider} from 'next-intl';
 import {useRouter} from 'next/router';
 import {DM_Sans} from 'next/font/google';
@@ -38,24 +39,29 @@ const allMessages: Record<string, typeof viMessages> = {
   en: enMessages,
 };
 
-export default function App({Component, pageProps}: AppProps) {
+export default function App({
+  Component,
+  pageProps: {session, ...pageProps},
+}: AppProps) {
   const router = useRouter();
   const locale = router.locale ?? 'vi';
   const messages = pageProps.messages ?? allMessages[locale];
 
   return (
-    <ThemeProvider>
-      <NextIntlClientProvider
-        locale={locale}
-        messages={messages}
-        timeZone="Asia/Ho_Chi_Minh"
-      >
-        <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </div>
-      </NextIntlClientProvider>
-    </ThemeProvider>
+    <SessionProvider session={session}>
+      <ThemeProvider>
+        <NextIntlClientProvider
+          locale={locale}
+          messages={messages}
+          timeZone="Asia/Ho_Chi_Minh"
+        >
+          <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </div>
+        </NextIntlClientProvider>
+      </ThemeProvider>
+    </SessionProvider>
   );
 }
