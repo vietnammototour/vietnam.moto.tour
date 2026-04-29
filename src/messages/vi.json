@@ -117,7 +117,7 @@
   },
   "common": {
     "perPerson": "/ Mỗi Người",
-    "tours": "tour"
+    "tours": "{count, plural, one {tour} other {tour}}"
   },
   "ThemeToggle": {
     "label": "Giao dien",

@@ -20,7 +20,7 @@ describe('DestinationCard', () => {
 
   it('renders the tour count with tours translation key', () => {
     render(<DestinationCard destination={destination} />);
-    expect(screen.getByText('5 tours')).toBeInTheDocument();
+    expect(screen.getByText('5 tours:{"count":5}')).toBeInTheDocument();
   });
 
   it('renders the image with correct src and alt', () => {

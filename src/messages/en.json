@@ -117,7 +117,7 @@
   },
   "common": {
     "perPerson": "/ Per Person",
-    "tours": "tours"
+    "tours": "{count, plural, one {tour} other {tours}}"
   },
   "ThemeToggle": {
     "label": "Theme",

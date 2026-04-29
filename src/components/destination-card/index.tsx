@@ -30,7 +30,7 @@ export const DestinationCard = ({
           </Link>
         </h2>
         <span className="inline-block bg-primary/90 text-white type-label-sm uppercase px-3 py-1 rounded-full">
-          {tourCount} {t('tours')}
+          {tourCount} {t('tours', {count: tourCount})}
         </span>
       </div>
     </div>
