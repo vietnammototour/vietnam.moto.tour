@@ -1,9 +1,14 @@
 import {render, type RenderOptions} from '@testing-library/react';
 import type {ReactElement, ReactNode} from 'react';
+import {SessionProvider} from 'next-auth/react';
 import {ThemeProvider} from '@/components/theme-provider';
 
 function AllProviders({children}: {children: ReactNode}) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <SessionProvider session={null}>
+      <ThemeProvider>{children}</ThemeProvider>
+    </SessionProvider>
+  );
 }
 
 function customRender(

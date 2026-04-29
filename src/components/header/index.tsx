@@ -4,16 +4,20 @@ import {useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
+import {useSession, signOut} from 'next-auth/react';
 import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from '@/components/language-switcher';
 import ThemeToggle from '@/components/theme-toggle';
+import {LoginModal} from '@/components/admin/LoginModal';
 
 export const Header = () => {
   const router = useRouter();
   const {scrollDirection, scrollY} = useScrollDirection();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const {data: session} = useSession();
+  const [loginOpen, setLoginOpen] = useState(false);
   const t = useTranslations('header');
 
   const isSticky = scrollY > 100;
@@ -124,8 +128,28 @@ export const Header = () => {
                 </Link>
               ))}
             </nav>
-            <div className="hidden lg:flex items-center ml-4">
+            <div className="hidden lg:flex items-center gap-4 ml-4">
               <LanguageSwitcher />
+              {session ? (
+                <div className="flex items-center gap-3">
+                  <span className="type-label-sm text-on-surface-secondary">
+                    {session.user.name}
+                  </span>
+                  <button
+                    onClick={() => signOut({redirect: false})}
+                    className="type-label-sm text-on-surface-secondary hover:text-primary transition-colors"
+                  >
+                    {t('logout')}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setLoginOpen(true)}
+                  className="type-label-sm uppercase text-on-surface hover:text-primary transition-colors"
+                >
+                  {t('login')}
+                </button>
+              )}
             </div>
             <button
               className="lg:hidden flex flex-col gap-1.5 p-2"
@@ -220,8 +244,38 @@ export const Header = () => {
           <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">
             <ThemeToggle />
           </div>
+          <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">
+            {session ? (
+              <div className="space-y-2">
+                <p className="type-label-sm text-on-surface-inverse/70">
+                  {session.user.name}
+                </p>
+                <button
+                  onClick={() => {
+                    signOut({redirect: false});
+                    setMobileOpen(false);
+                  }}
+                  className="type-label-sm text-on-surface-inverse hover:text-primary-light transition-colors"
+                >
+                  {t('logout')}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setLoginOpen(true);
+                  setMobileOpen(false);
+                }}
+                className="type-label-sm text-on-surface-inverse hover:text-primary-light transition-colors"
+              >
+                {t('login')}
+              </button>
+            )}
+          </div>
         </div>
       </div>
+
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </>
   );
 };

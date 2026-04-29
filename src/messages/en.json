@@ -6,7 +6,14 @@
     "aboutUs": "About us",
     "contact": "Contact",
     "motorbike": "Motorbike",
-    "car": "Car"
+    "car": "Car",
+    "login": "Login",
+    "logout": "Logout",
+    "loginTitle": "Admin Login",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "loginButton": "Sign In",
+    "loginError": "Invalid email or password"
   },
   "footer": {
     "copyright": "© {year} Vietnam Moto Tours"

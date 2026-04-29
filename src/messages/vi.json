@@ -6,7 +6,14 @@
     "aboutUs": "Về Chúng Tôi",
     "contact": "Liên Hệ",
     "motorbike": "Xe Máy",
-    "car": "Ô Tô"
+    "car": "Ô Tô",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "loginTitle": "Đăng nhập quản trị",
+    "emailLabel": "Email",
+    "passwordLabel": "Mật khẩu",
+    "loginButton": "Đăng nhập",
+    "loginError": "Email hoặc mật khẩu không đúng"
   },
   "footer": {
     "copyright": "© {year} Vietnam Moto Tours"
