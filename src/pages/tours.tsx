@@ -6,14 +6,18 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {PageHeader} from '@/components/page-header';
 import {TourCard} from '@/components/tour-card';
-import {toursData, getToursByDestination} from '@/data';
+import type {Tour} from '@/types';
 
 const fadeInUp = {
   hidden: {opacity: 0, y: 30},
   visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
 };
 
-export default function Tours() {
+interface ToursPageProps {
+  allTours: Tour[];
+}
+
+export default function Tours({allTours}: ToursPageProps) {
   const t = useTranslations('tours');
   const tMeta = useTranslations('meta');
   const router = useRouter();
@@ -23,14 +27,16 @@ export default function Tours() {
     if (typeof destinationParam === 'string') {
       const destinationId = Number(destinationParam);
       if (!Number.isNaN(destinationId)) {
-        const filtered = getToursByDestination(destinationId);
+        const filtered = allTours.filter(
+          (t) => t.destinationId === destinationId,
+        );
         if (filtered.length > 0) {
           return filtered;
         }
       }
     }
-    return toursData;
-  }, [router.query.destination]);
+    return allTours;
+  }, [router.query.destination, allTours]);
 
   return (
     <>
@@ -76,9 +82,14 @@ export default function Tours() {
 }
 
 export async function getStaticProps({locale}: GetStaticPropsContext) {
+  const {getAllTours} = await import('@/data/queries');
+  const allTours = await getAllTours();
+
   return {
     props: {
+      allTours,
       messages: (await import(`@/messages/${locale}.json`)).default,
     },
+    revalidate: 60,
   };
 }

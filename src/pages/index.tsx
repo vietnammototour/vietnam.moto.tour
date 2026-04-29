@@ -10,7 +10,6 @@ import {GalleryItem} from '@/components/gallery-item';
 import {VideoModal} from '@/components/video-modal';
 import {contactInfo} from '@/utils';
 
-import {getAllTours, getActiveDestinationsFromDb} from '@/data/queries';
 import type {Destination, Tour} from '@/types';
 import {getUrl} from '@/utils';
 
@@ -353,6 +352,8 @@ export default function Home({tours, destinations}: HomeProps) {
 }
 
 export async function getStaticProps({locale}: GetStaticPropsContext) {
+  const {getAllTours, getActiveDestinationsFromDb} =
+    await import('@/data/queries');
   const [tours, destinations] = await Promise.all([
     getAllTours(),
     getActiveDestinationsFromDb(),

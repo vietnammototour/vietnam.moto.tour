@@ -2,13 +2,18 @@ import type {Destination, Tour} from '@/types';
 import destinationsJson from './destinations.json';
 import toursJson from './tours.json';
 
-// Raw data
+// ---------------------------------------------------------------------------
+// JSON fallback data (kept for sync helpers used by client components & tests)
+// ---------------------------------------------------------------------------
+
 export const destinationsData: Destination[] =
   destinationsJson as Destination[];
 
 export const toursData: Tour[] = toursJson as Tour[];
 
-// Helpers
+// ---------------------------------------------------------------------------
+// Sync helpers (used by client-side components like TourCard, TourHero)
+// ---------------------------------------------------------------------------
 
 /** Destination lookup by ID */
 export function getDestinationById(id: number): Destination | undefined {
@@ -25,7 +30,7 @@ export function getDestinationName(destinationId: number): string {
   return destination.name;
 }
 
-/** All tours for a given destination */
+/** All tours for a given destination (sync, from JSON) */
 export function getToursByDestination(destinationId: number): Tour[] {
   return toursData.filter((t) => t.destinationId === destinationId);
 }
