@@ -1,10 +1,19 @@
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
+import {getDestinationName} from '@/data';
 import type {TourCardProps} from '@/types';
 
 export const TourCard = ({tour}: TourCardProps) => {
-  const {title, imageUrl, rating, price, duration, distance, location, slug} =
-    tour;
+  const {
+    title,
+    imageUrl,
+    rating,
+    price,
+    duration,
+    distance,
+    destinationId,
+    slug,
+  } = tour;
   const t = useTranslations('common');
 
   return (
@@ -45,7 +54,7 @@ export const TourCard = ({tour}: TourCardProps) => {
           </li>
           <li className="flex items-center gap-1">
             <i className="fa fa-map-marker-alt text-on-surface-secondary" />{' '}
-            {location}
+            {getDestinationName(destinationId)}
           </li>
         </ul>
       </div>
