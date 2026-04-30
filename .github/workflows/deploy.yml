@@ -20,9 +20,11 @@ jobs:
             set -e
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export PATH="$NVM_DIR/versions/node/$(node -v)/bin:$PATH"
             cd /var/www/vietnam-moto-tours
             git checkout -- .
             git pull origin main
+            set -a && source .env && set +a
             pnpm install --frozen-lockfile
             npx prisma generate
             npx prisma migrate deploy
