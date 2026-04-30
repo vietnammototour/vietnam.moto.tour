@@ -63,7 +63,9 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@parcel/watcher",
       "@prisma/engines",
+      "@swc/core",
       "bcrypt",
       "prisma"
     ]
