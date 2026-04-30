@@ -54,3 +54,6 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Uploaded images (symlink to /var/www/uploads on VPS)
+public/uploads
