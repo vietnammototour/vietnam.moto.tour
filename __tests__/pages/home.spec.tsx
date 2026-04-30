@@ -4,6 +4,7 @@ import Home, {getStaticProps} from '@/pages/index';
 jest.mock('@/data/queries', () => ({
   getAllTours: jest.fn().mockResolvedValue([]),
   getActiveDestinationsFromDb: jest.fn().mockResolvedValue([]),
+  getMessagesFromDb: jest.fn().mockResolvedValue(null),
 }));
 
 const mockDestinations = [

@@ -352,18 +352,20 @@ export default function Home({tours, destinations}: HomeProps) {
 }
 
 export async function getStaticProps({locale}: GetStaticPropsContext) {
-  const {getAllTours, getActiveDestinationsFromDb} =
+  const {getAllTours, getActiveDestinationsFromDb, getMessagesFromDb} =
     await import('@/data/queries');
-  const [tours, destinations] = await Promise.all([
+  const [tours, destinations, dbMessages] = await Promise.all([
     getAllTours(),
     getActiveDestinationsFromDb(),
+    getMessagesFromDb(locale ?? 'vi'),
   ]);
 
   return {
     props: {
       tours,
       destinations,
-      messages: (await import(`@/messages/${locale}.json`)).default,
+      messages:
+        dbMessages ?? (await import(`@/messages/${locale}.json`)).default,
     },
     revalidate: 60,
   };

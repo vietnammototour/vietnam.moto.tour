@@ -1,6 +1,10 @@
 import {render, screen} from '@/test-utils/render';
 import AboutUs, {getStaticProps} from '@/pages/about-us';
 
+jest.mock('@/data/queries', () => ({
+  getMessagesFromDb: jest.fn().mockResolvedValue(null),
+}));
+
 describe('AboutUs page', () => {
   it('renders meta title translation key', () => {
     render(<AboutUs />);

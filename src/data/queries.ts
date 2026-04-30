@@ -119,7 +119,7 @@ export async function getAllTours(): Promise<Tour[]> {
 
     return rows.map((row) => {
       const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
-      tour.destinationHeroImage = row.destination.heroImage;
+      tour.destinationHeroImage = row.destination.heroImage ?? '';
       return tour;
     });
   } catch (error) {
@@ -137,7 +137,7 @@ export async function getTourBySlug(slug: string): Promise<Tour | undefined> {
     });
     if (!row) return undefined;
     const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
-    tour.destinationHeroImage = row.destination.heroImage;
+    tour.destinationHeroImage = row.destination.heroImage ?? '';
     return tour;
   } catch (error) {
     console.error('getTourBySlug: DB query failed, using JSON fallback', error);
@@ -193,5 +193,42 @@ export async function getActiveDestinationsFromDb(): Promise<
       error,
     );
     return getActiveDestinations();
+  }
+}
+
+/** Load translations from DB, reconstructing the nested structure next-intl expects */
+export async function getMessagesFromDb(
+  locale: string,
+): Promise<Record<string, unknown> | null> {
+  try {
+    const rows = await prisma.translation.findMany();
+    if (rows.length === 0) return null;
+
+    const valueKey = locale === 'en' ? 'valueEn' : 'valueVi';
+    const messages: Record<string, unknown> = {};
+
+    for (const row of rows) {
+      if (!messages[row.namespace]) {
+        messages[row.namespace] = {};
+      }
+
+      const parts = row.key.split('.');
+      let current = messages[row.namespace] as Record<string, unknown>;
+
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]] || typeof current[parts[i]] !== 'object') {
+          current[parts[i]] = {};
+        }
+        current = current[parts[i]] as Record<string, unknown>;
+      }
+
+      current[parts[parts.length - 1]] =
+        (row as Record<string, unknown>)[valueKey] ?? '';
+    }
+
+    return messages;
+  } catch (error) {
+    console.error('getMessagesFromDb: DB query failed', error);
+    return null;
   }
 }

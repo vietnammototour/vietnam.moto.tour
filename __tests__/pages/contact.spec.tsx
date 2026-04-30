@@ -2,6 +2,10 @@ import {render, screen} from '@/test-utils/render';
 import Contact, {getStaticProps} from '@/pages/contact';
 import {contactInfo} from '@/utils';
 
+jest.mock('@/data/queries', () => ({
+  getMessagesFromDb: jest.fn().mockResolvedValue(null),
+}));
+
 describe('Contact page', () => {
   it('renders meta title translation key', () => {
     render(<Contact />);
@@ -21,12 +25,8 @@ describe('Contact page', () => {
 
   it('renders contact form fields', () => {
     render(<Contact />);
-    expect(
-      screen.getByPlaceholderText('namePlaceholder'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText('emailPlaceholder'),
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('namePlaceholder')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('emailPlaceholder')).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText('messagePlaceholder'),
     ).toBeInTheDocument();

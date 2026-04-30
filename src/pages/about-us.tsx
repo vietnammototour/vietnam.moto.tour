@@ -182,9 +182,13 @@ export default function AboutUs() {
 }
 
 export async function getStaticProps({locale}: GetStaticPropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const dbMessages = await getMessagesFromDb(locale ?? 'vi');
+
   return {
     props: {
-      messages: (await import(`@/messages/${locale}.json`)).default,
+      messages:
+        dbMessages ?? (await import(`@/messages/${locale}.json`)).default,
     },
     revalidate: 60,
   };

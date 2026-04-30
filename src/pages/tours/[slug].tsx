@@ -170,9 +170,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export async function getStaticProps({params, locale}: GetStaticPropsContext) {
-  const {getTourBySlug} = await import('@/data/queries');
+  const {getTourBySlug, getMessagesFromDb} = await import('@/data/queries');
   const slug = params?.slug as string;
-  const tour = await getTourBySlug(slug);
+  const [tour, dbMessages] = await Promise.all([
+    getTourBySlug(slug),
+    getMessagesFromDb(locale ?? 'vi'),
+  ]);
 
   if (!tour) {
     return {notFound: true};
@@ -181,7 +184,8 @@ export async function getStaticProps({params, locale}: GetStaticPropsContext) {
   return {
     props: {
       tour,
-      messages: (await import(`@/messages/${locale}.json`)).default,
+      messages:
+        dbMessages ?? (await import(`@/messages/${locale}.json`)).default,
     },
     revalidate: 60,
   };
