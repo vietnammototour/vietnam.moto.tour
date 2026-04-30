@@ -45,7 +45,7 @@ export interface Tour {
   groupSize: string;
   hotel: string;
   guided: string;
-  heroImage: string;
+  destinationHeroImage: string;
   images: string[];
   highlights: LocalizedText[];
   itinerary: ItineraryDay[];
@@ -61,6 +61,7 @@ export interface Destination {
   id: number;
   name: string;
   imageUrl: string;
+  heroImage: string;
   size: 'small' | 'large';
 }
 

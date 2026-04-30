@@ -17,7 +17,7 @@
     "groupSize": "Min 2 Person",
     "hotel": "Pick up & Drop off",
     "guided": "Fully Guided Tour",
-    "heroImage": "",
+    "destinationHeroImage": "",
     "images": [],
     "highlights": [
       {"en": "Stairway to the Heaven", "vi": "Cau thang len thien duong"},
@@ -209,7 +209,7 @@
     "groupSize": "Min 1 Person",
     "hotel": "Pick up & Drop off",
     "guided": "Fully Guided Tour",
-    "heroImage": "",
+    "destinationHeroImage": "",
     "images": [],
     "highlights": [],
     "itinerary": [
@@ -367,7 +367,7 @@
     "groupSize": "Min 1 Person",
     "hotel": "Pick up & Drop off",
     "guided": "Fully Guided Tour",
-    "heroImage": "",
+    "destinationHeroImage": "",
     "images": [],
     "highlights": [
       {"en": "Learn how to make rice paper", "vi": "Hoc cach lam banh trang"},
@@ -534,7 +534,7 @@
     "groupSize": "Min 1 Person",
     "hotel": "Pick up & Drop off",
     "guided": "Fully Guided Tour",
-    "heroImage": "",
+    "destinationHeroImage": "",
     "images": [],
     "highlights": [],
     "itinerary": [
@@ -673,7 +673,7 @@
     "groupSize": "Min 1 Person",
     "hotel": "Pick up & Drop off",
     "guided": "Fully Guided Tour",
-    "heroImage": "",
+    "destinationHeroImage": "",
     "images": [],
     "highlights": [
       {"en": "Learn how to make rice paper", "vi": "Hoc cach lam banh trang"},
@@ -831,7 +831,7 @@
     "groupSize": "Min 1 Person",
     "hotel": "Pick up & Drop off",
     "guided": "Fully Guided Tour",
-    "heroImage": "",
+    "destinationHeroImage": "",
     "images": [],
     "highlights": [
       {"en": "Learn how to make rice paper", "vi": "Hoc cach lam banh trang"},
@@ -992,7 +992,7 @@
     "groupSize": "Min 2 Person",
     "hotel": "Pick up & Drop off",
     "guided": "Fully Guided Tour",
-    "heroImage": "",
+    "destinationHeroImage": "",
     "images": [],
     "highlights": [
       {"en": "Fairy Stream (Suoi Tien)", "vi": "Suoi Tien"},
