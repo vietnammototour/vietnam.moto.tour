@@ -29,7 +29,6 @@ interface DbTour {
   groupSize: string;
   hotel: string;
   guided: string;
-  heroImage: string;
   images: unknown;
   highlights: unknown;
   itinerary: unknown;
@@ -46,6 +45,7 @@ interface DbDestination {
   slug: string;
   name: string;
   imageUrl: string;
+  heroImage: string;
   size: string;
 }
 
@@ -82,7 +82,7 @@ function dbTourToTour(row: DbTour, destinationName?: string): Tour {
     groupSize: row.groupSize,
     hotel: row.hotel,
     guided: row.guided,
-    heroImage: row.heroImage,
+    destinationHeroImage: '',
     images: row.images as string[],
     highlights: row.highlights as Tour['highlights'],
     itinerary: row.itinerary as Tour['itinerary'],
@@ -100,6 +100,7 @@ function dbDestToDestination(row: DbDestination): Destination {
     id: destNameToJsonId.get(row.name) ?? 0,
     name: row.name,
     imageUrl: row.imageUrl,
+    heroImage: row.heroImage ?? '',
     size: row.size as 'small' | 'large',
   };
 }
@@ -113,15 +114,18 @@ export async function getAllTours(): Promise<Tour[]> {
   try {
     const rows = await prisma.tour.findMany({
       where: {isActive: true},
-      include: {destination: true},
+      include: {destination: {select: {heroImage: true, name: true}}},
     });
 
-    return rows.map((row) =>
-      dbTourToTour(row as unknown as DbTour, row.destination.name),
-    );
+    return rows.map((row) => {
+      const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
+      tour.destinationHeroImage =
+        (row.destination as unknown as {heroImage: string}).heroImage ?? '';
+      return tour;
+    });
   } catch (error) {
     console.error('getAllTours: DB query failed, using JSON fallback', error);
-    return toursData;
+    return toursData.map((t) => ({...t, destinationHeroImage: ''}));
   }
 }
 
@@ -130,12 +134,17 @@ export async function getTourBySlug(slug: string): Promise<Tour | undefined> {
   try {
     const row = await prisma.tour.findUnique({
       where: {slug, isActive: true},
+      include: {destination: {select: {heroImage: true, name: true}}},
     });
     if (!row) return undefined;
-    return dbTourToTour(row as unknown as DbTour);
+    const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
+    tour.destinationHeroImage = row.destination.heroImage ?? '';
+    return tour;
   } catch (error) {
     console.error('getTourBySlug: DB query failed, using JSON fallback', error);
-    return toursData.find((t) => t.slug === slug);
+    const fallback = toursData.find((t) => t.slug === slug);
+    if (fallback) return {...fallback, destinationHeroImage: ''};
+    return undefined;
   }
 }
 

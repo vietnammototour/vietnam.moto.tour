@@ -38,7 +38,6 @@ export default async function handler(
         groupSize: data.groupSize,
         hotel: data.hotel,
         guided: data.guided,
-        heroImage: data.heroImage,
         images: data.images,
         highlights: data.highlights,
         itinerary: data.itinerary,

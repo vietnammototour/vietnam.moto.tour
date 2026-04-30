@@ -13,10 +13,10 @@ export function TourHero({tour}: TourHeroProps) {
   return (
     <section className="relative">
       <div className="relative h-72 md:h-96 overflow-hidden">
-        {tour.heroImage && (
+        {tour.destinationHeroImage && (
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{backgroundImage: `url(${tour.heroImage})`}}
+            style={{backgroundImage: `url(${tour.destinationHeroImage})`}}
           />
         )}
         <div className="absolute inset-0 bg-overlay" />
@@ -55,7 +55,10 @@ export function TourHero({tour}: TourHeroProps) {
       <div className="bg-surface-alt py-3">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 type-body-sm text-on-surface-secondary">
-            <Link href="/" className="hover:text-primary transition-colors cursor-pointer">
+            <Link
+              href="/"
+              className="hover:text-primary transition-colors cursor-pointer"
+            >
               {t('breadcrumbHome')}
             </Link>
             <span>/</span>

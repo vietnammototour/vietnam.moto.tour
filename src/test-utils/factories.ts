@@ -16,7 +16,7 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
     groupSize: 'Min 1 Person',
     hotel: 'Pick up & Drop off',
     guided: 'Fully Guided Tour',
-    heroImage: '/test-tour.jpg',
+    destinationHeroImage: '',
     images: [],
     highlights: [],
     itinerary: [
@@ -60,6 +60,7 @@ export function buildDestination(
     id: 1,
     name: 'Test Destination',
     imageUrl: '/test-destination.jpg',
+    heroImage: '',
     size: 'small',
     ...overrides,
   };

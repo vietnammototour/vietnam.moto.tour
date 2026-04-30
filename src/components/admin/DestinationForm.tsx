@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import {useRouter} from 'next/router';
+import {ImageUploadField} from './ImageUploadField';
 
 interface DestinationFormData {
   slug: string;
@@ -9,6 +10,7 @@ interface DestinationFormData {
   nameVi: string;
   nameEn: string;
   imageUrl: string;
+  heroImage: string;
   descriptionVi: string;
   descriptionEn: string;
   size: string;
@@ -26,6 +28,7 @@ const emptyForm: DestinationFormData = {
   nameVi: '',
   nameEn: '',
   imageUrl: '',
+  heroImage: '',
   descriptionVi: '',
   descriptionEn: '',
   size: 'small',
@@ -165,14 +168,13 @@ export function DestinationForm({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block type-label-sm text-on-surface-secondary mb-1">
-            Image URL
-          </label>
-          <input
-            type="text"
-            value={form.imageUrl}
-            onChange={(e) => updateField('imageUrl', e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+          <ImageUploadField
+            entityType="destination"
+            entityId={destinationId ?? null}
+            imageType="card"
+            currentUrl={form.imageUrl}
+            onUploadComplete={(url) => updateField('imageUrl', url)}
+            label="Card Image"
           />
         </div>
         <div>
@@ -189,6 +191,15 @@ export function DestinationForm({
           </select>
         </div>
       </div>
+
+      <ImageUploadField
+        entityType="destination"
+        entityId={destinationId ?? null}
+        imageType="hero"
+        currentUrl={form.heroImage}
+        onUploadComplete={(url) => updateField('heroImage', url)}
+        label="Hero Image"
+      />
 
       <div className="flex gap-4 pt-4">
         <button

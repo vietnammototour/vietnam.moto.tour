@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import {useRouter} from 'next/router';
+import {ImageUploadField} from './ImageUploadField';
 
 interface TourFormData {
   slug: string;
@@ -20,7 +21,6 @@ interface TourFormData {
   groupSize: string;
   hotel: string;
   guided: string;
-  heroImage: string;
   images: string[];
   highlights: Array<{en: string; vi: string}>;
   itinerary: Array<{
@@ -68,7 +68,6 @@ const emptyForm: TourFormData = {
   groupSize: '',
   hotel: '',
   guided: '',
-  heroImage: '',
   images: [],
   highlights: [],
   itinerary: [],
@@ -300,29 +299,15 @@ export function TourForm({
         </div>
       </div>
 
-      {/* Image URLs */}
-      <div>
-        <label className="block type-label-sm text-on-surface-secondary mb-1">
-          Hero Image URL
-        </label>
-        <input
-          type="text"
-          value={form.heroImage}
-          onChange={(e) => updateField('heroImage', e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
-      <div>
-        <label className="block type-label-sm text-on-surface-secondary mb-1">
-          Main Image URL
-        </label>
-        <input
-          type="text"
-          value={form.imageUrl}
-          onChange={(e) => updateField('imageUrl', e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
+      {/* Image */}
+      <ImageUploadField
+        entityType="tour"
+        entityId={tourId ?? null}
+        imageType="card"
+        currentUrl={form.imageUrl}
+        onUploadComplete={(url) => updateField('imageUrl', url)}
+        label="Card Image"
+      />
 
       {/* Submit */}
       <div className="flex gap-4 pt-4">

@@ -43,6 +43,7 @@ export default function EditDestination() {
     nameVi: (destination.nameVi as string) ?? '',
     nameEn: (destination.nameEn as string) ?? '',
     imageUrl: (destination.imageUrl as string) ?? '',
+    heroImage: (destination.heroImage as string) ?? '',
     descriptionVi: (destination.descriptionVi as string) ?? '',
     descriptionEn: (destination.descriptionEn as string) ?? '',
     size: (destination.size as string) ?? 'small',
