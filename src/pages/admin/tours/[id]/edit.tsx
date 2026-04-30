@@ -1,15 +1,51 @@
-import type {GetServerSidePropsContext} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from '@/lib/auth';
-import {prisma} from '@/lib/prisma';
+import {useEffect} from 'react';
+import {useRouter} from 'next/router';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourForm} from '@/components/admin/TourForm';
 
-interface Props {
-  tour: Record<string, unknown>;
-  destinations: Array<{id: string; name: string}>;
+interface Destination {
+  id: string;
+  name: string;
 }
 
-export default function EditTour({tour, destinations}: Props) {
+export default function EditTour() {
+  const router = useRouter();
+  const id = typeof router.query.id === 'string' ? router.query.id : null;
+
+  const {
+    data: tour,
+    loading: tourLoading,
+    error: tourError,
+  } = useAdminFetch<Record<string, unknown>>(
+    id ? `/api/admin/tours/${id}` : null,
+  );
+  const {data: destinations, loading: destLoading} = useAdminFetch<
+    Destination[]
+  >('/api/admin/destinations');
+  const {setLoading} = useAdminLoading();
+
+  const loading = tourLoading || destLoading;
+
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
+
+  if (tourError) {
+    return (
+      <div>
+        <h1 className="type-headline-sm mb-6">Tour Not Found</h1>
+        <p className="text-on-surface-secondary">
+          The tour you are looking for does not exist or could not be loaded.
+        </p>
+      </div>
+    );
+  }
+
+  if (!tour || !destinations) {
+    return null;
+  }
+
   const initialData = {
     slug: tour.slug as string,
     destinationId: tour.destinationId as string,
@@ -53,27 +89,4 @@ export default function EditTour({tour, destinations}: Props) {
       />
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) return {redirect: {destination: '/', permanent: false}};
-
-  const id = context.params?.id as string;
-  const tour = await prisma.tour.findUnique({where: {id}});
-  if (!tour) return {notFound: true};
-
-  const destinations = await prisma.destination.findMany({
-    where: {isActive: true},
-    select: {id: true, name: true},
-    orderBy: {name: 'asc'},
-  });
-
-  return {
-    props: {
-      tour: JSON.parse(JSON.stringify(tour)),
-      destinations: JSON.parse(JSON.stringify(destinations)),
-      messages: (await import(`@/messages/${context.locale}.json`)).default,
-    },
-  };
 }

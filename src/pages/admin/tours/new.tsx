@@ -1,36 +1,29 @@
-import type {GetServerSidePropsContext} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from '@/lib/auth';
-import {prisma} from '@/lib/prisma';
+import {useEffect} from 'react';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourForm} from '@/components/admin/TourForm';
 
-interface Props {
-  destinations: Array<{id: string; name: string}>;
+interface Destination {
+  id: string;
+  name: string;
 }
 
-export default function NewTour({destinations}: Props) {
+export default function NewTour() {
+  const {data: destinations, loading} = useAdminFetch<Destination[]>(
+    '/api/admin/destinations',
+  );
+  const {setLoading} = useAdminLoading();
+
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
+
   return (
     <div>
       <h1 className="type-headline-sm mb-6">Create New Tour</h1>
-      <TourForm destinations={destinations} mode="create" />
+      {!loading && destinations && (
+        <TourForm destinations={destinations} mode="create" />
+      )}
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) return {redirect: {destination: '/', permanent: false}};
-
-  const destinations = await prisma.destination.findMany({
-    where: {isActive: true},
-    select: {id: true, name: true},
-    orderBy: {name: 'asc'},
-  });
-
-  return {
-    props: {
-      destinations: JSON.parse(JSON.stringify(destinations)),
-      messages: (await import(`@/messages/${context.locale}.json`)).default,
-    },
-  };
 }

@@ -4,35 +4,37 @@ import {type ReactNode} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useSession, signOut} from 'next-auth/react';
-import {useTranslations} from 'next-intl';
+import {ProgressBar} from './ProgressBar';
+import {
+  AdminLoadingProvider,
+  useAdminLoading,
+} from '@/contexts/AdminLoadingContext';
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
-export function AdminLayout({children}: AdminLayoutProps) {
+function AdminLayoutInner({children}: AdminLayoutProps) {
   const router = useRouter();
   const {data: session} = useSession();
-  const t = useTranslations('admin');
+  const {loading} = useAdminLoading();
 
   const navItems = [
-    {href: '/admin', label: t('dashboard'), icon: 'fa-tachometer-alt'},
-    {href: '/admin/tours', label: t('tours'), icon: 'fa-route'},
+    {href: '/admin', label: 'Dashboard', icon: 'fa-tachometer-alt'},
+    {href: '/admin/tours', label: 'Tours', icon: 'fa-route'},
     {
       href: '/admin/destinations',
-      label: t('destinations'),
+      label: 'Destinations',
       icon: 'fa-map-marker-alt',
     },
-    {
-      href: '/admin/translations',
-      label: t('translations'),
-      icon: 'fa-language',
-    },
-    {href: '/admin/users', label: t('users'), icon: 'fa-users'},
+    {href: '/admin/translations', label: 'Translations', icon: 'fa-language'},
+    {href: '/admin/users', label: 'Users', icon: 'fa-users'},
   ];
 
   return (
     <div className="flex min-h-screen bg-surface">
+      <ProgressBar loading={loading} />
+
       {/* Sidebar */}
       <aside className="w-64 bg-surface-elevated border-r border-border flex flex-col">
         <div className="p-4 border-b border-border">
@@ -71,7 +73,7 @@ export function AdminLayout({children}: AdminLayoutProps) {
             onClick={() => signOut({callbackUrl: '/'})}
             className="type-label-sm text-on-surface-secondary hover:text-primary transition-colors mt-1 cursor-pointer"
           >
-            {t('logout')}
+            Logout
           </button>
         </div>
       </aside>
@@ -79,5 +81,13 @@ export function AdminLayout({children}: AdminLayoutProps) {
       {/* Main content */}
       <main className="flex-1 p-8">{children}</main>
     </div>
+  );
+}
+
+export function AdminLayout({children}: AdminLayoutProps) {
+  return (
+    <AdminLoadingProvider>
+      <AdminLayoutInner>{children}</AdminLayoutInner>
+    </AdminLoadingProvider>
   );
 }

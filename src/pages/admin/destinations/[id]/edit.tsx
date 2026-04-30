@@ -1,14 +1,42 @@
-import type {GetServerSidePropsContext} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from '@/lib/auth';
-import {prisma} from '@/lib/prisma';
+import {useEffect} from 'react';
+import {useRouter} from 'next/router';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {DestinationForm} from '@/components/admin/DestinationForm';
 
-interface Props {
-  destination: Record<string, unknown>;
-}
+export default function EditDestination() {
+  const router = useRouter();
+  const id = typeof router.query.id === 'string' ? router.query.id : null;
 
-export default function EditDestination({destination}: Props) {
+  const {
+    data: destination,
+    loading,
+    error,
+  } = useAdminFetch<Record<string, unknown>>(
+    id ? `/api/admin/destinations/${id}` : null,
+  );
+  const {setLoading} = useAdminLoading();
+
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
+
+  if (error) {
+    return (
+      <div>
+        <h1 className="type-headline-sm mb-6">Destination Not Found</h1>
+        <p className="text-on-surface-secondary">
+          The destination you are looking for does not exist or could not be
+          loaded.
+        </p>
+      </div>
+    );
+  }
+
+  if (!destination) {
+    return null;
+  }
+
   const initialData = {
     slug: destination.slug as string,
     name: destination.name as string,
@@ -30,20 +58,4 @@ export default function EditDestination({destination}: Props) {
       />
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) return {redirect: {destination: '/', permanent: false}};
-
-  const id = context.params?.id as string;
-  const destination = await prisma.destination.findUnique({where: {id}});
-  if (!destination) return {notFound: true};
-
-  return {
-    props: {
-      destination: JSON.parse(JSON.stringify(destination)),
-      messages: (await import(`@/messages/${context.locale}.json`)).default,
-    },
-  };
 }

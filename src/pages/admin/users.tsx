@@ -1,9 +1,7 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useSession} from 'next-auth/react';
-import type {GetServerSidePropsContext} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from '@/lib/auth';
-import {prisma} from '@/lib/prisma';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 
 interface AdminUser {
   id: string;
@@ -13,17 +11,21 @@ interface AdminUser {
   createdAt: string;
 }
 
-interface Props {
-  users: AdminUser[];
-}
-
-export default function AdminUsers({users: initial}: Props) {
+export default function AdminUsers() {
   const {data: session} = useSession();
-  const [users, setUsers] = useState(initial);
+  const {data, loading, refetch} =
+    useAdminFetch<AdminUser[]>('/api/admin/users');
+  const {setLoading} = useAdminLoading();
+  const users = data ?? [];
+
   const [showForm, setShowForm] = useState(false);
   const [newUser, setNewUser] = useState({email: '', name: '', password: ''});
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -44,10 +46,9 @@ export default function AdminUsers({users: initial}: Props) {
       return;
     }
 
-    const created = await res.json();
-    setUsers((prev) => [created, ...prev]);
     setNewUser({email: '', name: '', password: ''});
     setShowForm(false);
+    refetch();
   }
 
   async function handleDelete(id: string) {
@@ -55,7 +56,7 @@ export default function AdminUsers({users: initial}: Props) {
 
     const res = await fetch(`/api/admin/users/${id}`, {method: 'DELETE'});
     if (res.ok) {
-      setUsers((prev) => prev.filter((u) => u.id !== id));
+      refetch();
     }
   }
 
@@ -186,21 +187,4 @@ export default function AdminUsers({users: initial}: Props) {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) return {redirect: {destination: '/', permanent: false}};
-
-  const users = await prisma.user.findMany({
-    select: {id: true, email: true, name: true, role: true, createdAt: true},
-    orderBy: {createdAt: 'desc'},
-  });
-
-  return {
-    props: {
-      users: JSON.parse(JSON.stringify(users)),
-      messages: (await import(`@/messages/${context.locale}.json`)).default,
-    },
-  };
 }

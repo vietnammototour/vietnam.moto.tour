@@ -45,29 +45,38 @@ export default function App({
   pageProps: {session, ...pageProps},
 }: AppProps) {
   const router = useRouter();
+  const isAdmin = router.pathname.startsWith('/admin');
   const locale = router.locale ?? 'vi';
   const messages = pageProps.messages ?? allMessages[locale];
+
+  const content = (
+    <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
+      {isAdmin ? (
+        <AdminLayout>
+          <Component {...pageProps} />
+        </AdminLayout>
+      ) : (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )}
+    </div>
+  );
 
   return (
     <SessionProvider session={session}>
       <ThemeProvider>
-        <NextIntlClientProvider
-          locale={locale}
-          messages={messages}
-          timeZone="Asia/Ho_Chi_Minh"
-        >
-          <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
-            {router.pathname.startsWith('/admin') ? (
-              <AdminLayout>
-                <Component {...pageProps} />
-              </AdminLayout>
-            ) : (
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            )}
-          </div>
-        </NextIntlClientProvider>
+        {isAdmin ? (
+          content
+        ) : (
+          <NextIntlClientProvider
+            locale={locale}
+            messages={messages}
+            timeZone="Asia/Ho_Chi_Minh"
+          >
+            {content}
+          </NextIntlClientProvider>
+        )}
       </ThemeProvider>
     </SessionProvider>
   );

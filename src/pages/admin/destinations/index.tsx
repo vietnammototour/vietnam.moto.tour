@@ -1,9 +1,7 @@
-import {useState} from 'react';
+import {useEffect} from 'react';
 import Link from 'next/link';
-import type {GetServerSidePropsContext} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from '@/lib/auth';
-import {prisma} from '@/lib/prisma';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 
 interface AdminDestination {
   id: string;
@@ -13,12 +11,17 @@ interface AdminDestination {
   _count: {tours: number};
 }
 
-interface Props {
-  destinations: AdminDestination[];
-}
+export default function AdminDestinationsList() {
+  const {
+    data: destinations,
+    loading,
+    refetch,
+  } = useAdminFetch<AdminDestination[]>('/api/admin/destinations');
+  const {setLoading} = useAdminLoading();
 
-export default function AdminDestinationsList({destinations: initial}: Props) {
-  const [destinations, setDestinations] = useState(initial);
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
 
   async function handleDelete(id: string) {
     if (!confirm('Deactivate this destination?')) return;
@@ -27,9 +30,11 @@ export default function AdminDestinationsList({destinations: initial}: Props) {
       method: 'DELETE',
     });
     if (res.ok) {
-      setDestinations((prev) => prev.filter((d) => d.id !== id));
+      refetch();
     }
   }
+
+  const destList = destinations ?? [];
 
   return (
     <div>
@@ -62,7 +67,7 @@ export default function AdminDestinationsList({destinations: initial}: Props) {
             </tr>
           </thead>
           <tbody>
-            {destinations.map((dest) => (
+            {destList.map((dest) => (
               <tr
                 key={dest.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
@@ -107,27 +112,4 @@ export default function AdminDestinationsList({destinations: initial}: Props) {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) return {redirect: {destination: '/', permanent: false}};
-
-  const destinations = await prisma.destination.findMany({
-    orderBy: {createdAt: 'desc'},
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      isActive: true,
-      _count: {select: {tours: true}},
-    },
-  });
-
-  return {
-    props: {
-      destinations: JSON.parse(JSON.stringify(destinations)),
-      messages: (await import(`@/messages/${context.locale}.json`)).default,
-    },
-  };
 }
