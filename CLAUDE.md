@@ -67,7 +67,7 @@ No test framework is configured.
 
 Next.js 16 app using the **Pages Router** (`src/pages/`), TypeScript strict mode, React 19.
 
-**Data flow:** All tour/destination data is hardcoded in JSON files (`src/data/tours.json`, `src/data/destinations.json`) re-exported via `src/data/index.ts` — no API calls, no CMS, no database. Components receive data as props from page files.
+**Data flow:** Tour/destination data lives in PostgreSQL via Prisma ORM (`src/data/queries.ts`), with JSON file fallback (`src/data/tours.json`, `src/data/destinations.json`). Admin panel provides CRUD via API routes (`src/pages/api/admin/`). Auth uses NextAuth v4 with JWT sessions.
 
 **Shared types** live in `src/types/index.ts`: `Tour`, `Destination`, `ContactInfo`, and component prop interfaces.
 
@@ -85,4 +85,6 @@ Next.js 16 app using the **Pages Router** (`src/pages/`), TypeScript strict mode
 
 ## Deployment
 
-Pushes to `main` trigger SSH deployment to production (`/var/www/vietnam-moto-tours`) via `.github/workflows/deploy.yml`. The server runs the app with pm2.
+Pushes to `main` trigger SSH deployment to production (`/var/www/vietnam-moto-tours`) via `.github/workflows/deploy.yml`. The workflow calls an external deploy script at `/home/ci-cd/deploy.sh` on the VPS via SSH (user: `ci-cd`). The server runs the app with pm2.
+
+**Full VPS documentation:** See [VPS.md](./VPS.md) for server setup, PostgreSQL, CI/CD gotchas, auth, and useful commands.
