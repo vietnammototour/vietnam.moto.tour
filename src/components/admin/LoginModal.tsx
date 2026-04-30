@@ -48,12 +48,12 @@ function LoginForm({onClose}: {onClose: () => void}) {
         </label>
         <input
           id="login-email"
-          type="email"
+          type="text"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-          autoComplete="email"
+          autoComplete="username"
         />
       </div>
 
