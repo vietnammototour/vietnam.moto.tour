@@ -82,13 +82,17 @@ export default function Tours({allTours}: ToursPageProps) {
 }
 
 export async function getStaticProps({locale}: GetStaticPropsContext) {
-  const {getAllTours} = await import('@/data/queries');
-  const allTours = await getAllTours();
+  const {getAllTours, getMessagesFromDb} = await import('@/data/queries');
+  const [allTours, dbMessages] = await Promise.all([
+    getAllTours(),
+    getMessagesFromDb(locale ?? 'vi'),
+  ]);
 
   return {
     props: {
       allTours,
-      messages: (await import(`@/messages/${locale}.json`)).default,
+      messages:
+        dbMessages ?? (await import(`@/messages/${locale}.json`)).default,
     },
     revalidate: 60,
   };
