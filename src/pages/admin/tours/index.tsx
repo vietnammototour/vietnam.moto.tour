@@ -85,13 +85,13 @@ export default function AdminToursList({tours: initialTours}: Props) {
                 key={tour.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
-                <td className="px-4 py-3 type-body-sm text-on-surface">
+                <td className="px-4 py-3 type-body-lg text-on-surface">
                   {tour.title}
                 </td>
-                <td className="px-4 py-3 type-body-sm text-on-surface-secondary">
+                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {tour.destination.name}
                 </td>
-                <td className="px-4 py-3 type-body-sm text-on-surface">
+                <td className="px-4 py-3 type-body-lg text-on-surface">
                   ${tour.price}
                 </td>
                 <td className="px-4 py-3">
@@ -107,7 +107,7 @@ export default function AdminToursList({tours: initialTours}: Props) {
                   </button>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center justify-end gap-4">
                     <Link
                       href={`/admin/tours/${tour.id}/edit`}
                       className="type-label-sm text-primary hover:text-primary-light transition-colors cursor-pointer"

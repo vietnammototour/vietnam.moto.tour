@@ -77,7 +77,7 @@ export default function AdminUsers({users: initial}: Props) {
           className="bg-surface-elevated rounded-xl border border-border p-6 mb-6 max-w-lg"
         >
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-sm mb-4">
+            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-lg mb-4">
               {error}
             </div>
           )}
@@ -160,10 +160,10 @@ export default function AdminUsers({users: initial}: Props) {
                 key={user.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
-                <td className="px-4 py-3 type-body-sm text-on-surface">
+                <td className="px-4 py-3 type-body-lg text-on-surface">
                   {user.name}
                 </td>
-                <td className="px-4 py-3 type-body-sm text-on-surface-secondary">
+                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {user.email}
                 </td>
                 <td className="px-4 py-3 type-label-sm text-on-surface-secondary">
