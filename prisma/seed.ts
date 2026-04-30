@@ -43,6 +43,7 @@ interface RawDestination {
   id: number;
   name: string;
   imageUrl: string;
+  heroImage: string;
   size: string;
 }
 
@@ -61,7 +62,6 @@ interface RawTour {
   groupSize: string;
   hotel: string;
   guided: string;
-  heroImage: string;
   images: string[];
   highlights: Array<{en: string; vi: string}>;
   itinerary: unknown[];
@@ -157,13 +157,23 @@ async function main(): Promise<void> {
   // --- Seed Destinations ---
   const destinationIdMap = new Map<number, string>(); // old numeric ID -> new UUID
 
+  // Build heroImage map: destinationId -> heroImage from first matching tour
+  const destHeroImageMap = new Map<number, string>();
+  for (const tour of tours) {
+    if (!destHeroImageMap.has(tour.destinationId)) {
+      destHeroImageMap.set(tour.destinationId, '');
+    }
+  }
+
   for (const dest of destinations) {
     const slug = slugify(dest.name);
+    const heroImage = dest.heroImage || destHeroImageMap.get(dest.id) || '';
     const created = await prisma.destination.upsert({
       where: {slug},
       update: {
         name: dest.name,
         imageUrl: dest.imageUrl,
+        heroImage,
         size: dest.size,
       },
       create: {
@@ -172,6 +182,7 @@ async function main(): Promise<void> {
         nameVi: dest.name,
         nameEn: dest.name,
         imageUrl: dest.imageUrl,
+        heroImage,
         size: dest.size,
       },
     });
@@ -207,7 +218,6 @@ async function main(): Promise<void> {
         groupSize: tour.groupSize,
         hotel: tour.hotel,
         guided: tour.guided,
-        heroImage: tour.heroImage,
         images: tour.images,
         highlights: tour.highlights,
         itinerary: tour.itinerary,
@@ -235,7 +245,6 @@ async function main(): Promise<void> {
         groupSize: tour.groupSize,
         hotel: tour.hotel,
         guided: tour.guided,
-        heroImage: tour.heroImage,
         images: tour.images,
         highlights: tour.highlights,
         itinerary: tour.itinerary,
