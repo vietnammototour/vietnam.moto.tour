@@ -114,13 +114,12 @@ export async function getAllTours(): Promise<Tour[]> {
   try {
     const rows = await prisma.tour.findMany({
       where: {isActive: true},
-      include: {destination: {select: {heroImage: true, name: true}}},
+      include: {destination: true},
     });
 
     return rows.map((row) => {
       const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
-      tour.destinationHeroImage =
-        (row.destination as unknown as {heroImage: string}).heroImage ?? '';
+      tour.destinationHeroImage = row.destination.heroImage;
       return tour;
     });
   } catch (error) {
@@ -134,11 +133,11 @@ export async function getTourBySlug(slug: string): Promise<Tour | undefined> {
   try {
     const row = await prisma.tour.findUnique({
       where: {slug, isActive: true},
-      include: {destination: {select: {heroImage: true, name: true}}},
+      include: {destination: true},
     });
     if (!row) return undefined;
     const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
-    tour.destinationHeroImage = row.destination.heroImage ?? '';
+    tour.destinationHeroImage = row.destination.heroImage;
     return tour;
   } catch (error) {
     console.error('getTourBySlug: DB query failed, using JSON fallback', error);
