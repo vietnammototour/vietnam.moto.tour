@@ -70,6 +70,7 @@ rm -rf node_modules
 pnpm install --frozen-lockfile
 npx prisma generate
 npx prisma migrate deploy
+rm -rf .next
 pnpm build
 pm2 restart vietnam-moto-tours
 ```
@@ -100,6 +101,21 @@ The deploy process runs `git checkout -- .` which reverts all local changes, the
 - **Migrations:** `npx prisma migrate deploy`
 - **Seed data:** `npx tsx prisma/seed.ts` (tours, destinations from JSON)
 - **Seed admin:** Create users via psql or `prisma/seed-admin.ts`
+
+## Image Uploads
+
+Uploaded images are stored in `/var/www/uploads/` and symlinked into the project:
+
+```bash
+# Create persistent uploads directory (one-time)
+mkdir -p /var/www/uploads/destinations /var/www/uploads/tours
+chown -R ci-cd:ci-cd /var/www/uploads
+
+# Add to deploy script after build step:
+ln -sfn /var/www/uploads /var/www/vietnam-moto-tours/public/uploads
+```
+
+The `UPLOAD_DIR` environment variable can override the default path (defaults to `{project}/public/uploads` for local dev).
 
 ## Auth
 
