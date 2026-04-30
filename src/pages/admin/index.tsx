@@ -1,36 +1,38 @@
-import {useTranslations} from 'next-intl';
 import {useSession} from 'next-auth/react';
-import type {GetServerSidePropsContext} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from '@/lib/auth';
-import {prisma} from '@/lib/prisma';
+import {useEffect} from 'react';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 
-interface DashboardProps {
-  stats: {
-    tourCount: number;
-    destinationCount: number;
-    userCount: number;
-  };
+interface DashboardStats {
+  tourCount: number;
+  destinationCount: number;
+  userCount: number;
 }
 
-export default function AdminDashboard({stats}: DashboardProps) {
-  const t = useTranslations('admin');
+export default function AdminDashboard() {
   const {data: session} = useSession();
+  const {data: stats, loading} =
+    useAdminFetch<DashboardStats>('/api/admin/stats');
+  const {setLoading} = useAdminLoading();
+
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
 
   const statCards = [
-    {label: t('totalTours'), value: stats.tourCount, icon: 'fa-route'},
+    {label: 'Total Tours', value: stats?.tourCount ?? 0, icon: 'fa-route'},
     {
-      label: t('totalDestinations'),
-      value: stats.destinationCount,
+      label: 'Total Destinations',
+      value: stats?.destinationCount ?? 0,
       icon: 'fa-map-marker-alt',
     },
-    {label: t('totalUsers'), value: stats.userCount, icon: 'fa-users'},
+    {label: 'Total Users', value: stats?.userCount ?? 0, icon: 'fa-users'},
   ];
 
   return (
     <div>
       <h1 className="type-headline-sm mb-8">
-        {t('welcome', {name: session?.user.name ?? ''})}
+        Welcome back, {session?.user.name ?? ''}
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -55,25 +57,4 @@ export default function AdminDashboard({stats}: DashboardProps) {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (!session) {
-    return {redirect: {destination: '/', permanent: false}};
-  }
-
-  const [tourCount, destinationCount, userCount] = await Promise.all([
-    prisma.tour.count({where: {isActive: true}}),
-    prisma.destination.count({where: {isActive: true}}),
-    prisma.user.count(),
-  ]);
-
-  return {
-    props: {
-      stats: {tourCount, destinationCount, userCount},
-      messages: (await import(`@/messages/${context.locale}.json`)).default,
-    },
-  };
 }

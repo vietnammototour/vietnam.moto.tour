@@ -1,10 +1,7 @@
-import {useState} from 'react';
+import {useEffect} from 'react';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
-import type {GetServerSidePropsContext} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from '@/lib/auth';
-import {prisma} from '@/lib/prisma';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 
 interface AdminTour {
   id: string;
@@ -16,20 +13,24 @@ interface AdminTour {
   duration: string;
 }
 
-interface Props {
-  tours: AdminTour[];
-}
+export default function AdminToursList() {
+  const {
+    data: tours,
+    loading,
+    refetch,
+  } = useAdminFetch<AdminTour[]>('/api/admin/tours');
+  const {setLoading} = useAdminLoading();
 
-export default function AdminToursList({tours: initialTours}: Props) {
-  const [tours, setTours] = useState(initialTours);
-  const router = useRouter();
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
 
   async function handleDelete(id: string) {
     if (!confirm('Deactivate this tour?')) return;
 
     const res = await fetch(`/api/admin/tours/${id}`, {method: 'DELETE'});
     if (res.ok) {
-      setTours((prev) => prev.filter((t) => t.id !== id));
+      refetch();
     }
   }
 
@@ -40,11 +41,11 @@ export default function AdminToursList({tours: initialTours}: Props) {
       body: JSON.stringify({isActive: !isActive}),
     });
     if (res.ok) {
-      setTours((prev) =>
-        prev.map((t) => (t.id === id ? {...t, isActive: !isActive} : t)),
-      );
+      refetch();
     }
   }
+
+  const tourList = tours ?? [];
 
   return (
     <div>
@@ -80,7 +81,7 @@ export default function AdminToursList({tours: initialTours}: Props) {
             </tr>
           </thead>
           <tbody>
-            {tours.map((tour) => (
+            {tourList.map((tour) => (
               <tr
                 key={tour.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
@@ -129,29 +130,4 @@ export default function AdminToursList({tours: initialTours}: Props) {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) return {redirect: {destination: '/', permanent: false}};
-
-  const tours = await prisma.tour.findMany({
-    orderBy: {createdAt: 'desc'},
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      isActive: true,
-      price: true,
-      duration: true,
-      destination: {select: {name: true}},
-    },
-  });
-
-  return {
-    props: {
-      tours: JSON.parse(JSON.stringify(tours)),
-      messages: (await import(`@/messages/${context.locale}.json`)).default,
-    },
-  };
 }
