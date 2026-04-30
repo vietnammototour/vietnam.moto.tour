@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  NODE_BIN: /root/.nvm/versions/node/v24.14.0/bin
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,18 +19,16 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: NODE_BIN
           script: |
             set -e
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use default
-            export PATH="/root/.nvm/versions/node/v24.14.0/bin:$PATH"
+            export PATH="$NODE_BIN:$PATH"
             cd /var/www/vietnam-moto-tours
             git checkout -- .
             git pull origin main
             set -a && source .env && set +a
-            pnpm install --frozen-lockfile
-            npx prisma generate
-            npx prisma migrate deploy
-            pnpm build
-            pm2 restart vietnam-moto-tours
+            $NODE_BIN/pnpm install --frozen-lockfile
+            $NODE_BIN/npx prisma generate
+            $NODE_BIN/npx prisma migrate deploy
+            $NODE_BIN/pnpm build
+            $NODE_BIN/pm2 restart vietnam-moto-tours
