@@ -28,6 +28,7 @@ export default async function handler(
         nameVi: data.nameVi,
         nameEn: data.nameEn,
         imageUrl: data.imageUrl,
+        heroImage: data.heroImage,
         descriptionVi: data.descriptionVi,
         descriptionEn: data.descriptionEn,
         size: data.size,
