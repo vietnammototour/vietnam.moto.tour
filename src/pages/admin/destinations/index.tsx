@@ -67,10 +67,10 @@ export default function AdminDestinationsList({destinations: initial}: Props) {
                 key={dest.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
-                <td className="px-4 py-3 type-body-sm text-on-surface">
+                <td className="px-4 py-3 type-body-lg text-on-surface">
                   {dest.name}
                 </td>
-                <td className="px-4 py-3 type-body-sm text-on-surface-secondary">
+                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {dest._count.tours}
                 </td>
                 <td className="px-4 py-3">
@@ -85,7 +85,7 @@ export default function AdminDestinationsList({destinations: initial}: Props) {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center justify-end gap-4">
                     <Link
                       href={`/admin/destinations/${dest.id}/edit`}
                       className="type-label-sm text-primary hover:text-primary-light transition-colors cursor-pointer"
