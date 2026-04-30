@@ -2,7 +2,6 @@
 
 import {useState, useEffect, useCallback} from 'react';
 import {signIn} from 'next-auth/react';
-import {useTranslations} from 'next-intl';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -14,8 +13,6 @@ function LoginForm({onClose}: {onClose: () => void}) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const t = useTranslations('header');
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
@@ -30,7 +27,7 @@ function LoginForm({onClose}: {onClose: () => void}) {
     setLoading(false);
 
     if (result?.error) {
-      setError(t('loginError'));
+      setError('Invalid email or password');
       return;
     }
 
@@ -44,7 +41,7 @@ function LoginForm({onClose}: {onClose: () => void}) {
           htmlFor="login-email"
           className="block type-label-sm text-on-surface-secondary mb-1"
         >
-          {t('emailLabel')}
+          Email
         </label>
         <input
           id="login-email"
@@ -62,7 +59,7 @@ function LoginForm({onClose}: {onClose: () => void}) {
           htmlFor="login-password"
           className="block type-label-sm text-on-surface-secondary mb-1"
         >
-          {t('passwordLabel')}
+          Password
         </label>
         <input
           id="login-password"
@@ -86,15 +83,13 @@ function LoginForm({onClose}: {onClose: () => void}) {
         disabled={loading}
         className="w-full bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase py-3 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
       >
-        {loading ? '...' : t('loginButton')}
+        {loading ? '...' : 'Sign In'}
       </button>
     </form>
   );
 }
 
 export function LoginModal({isOpen, onClose}: LoginModalProps) {
-  const t = useTranslations('header');
-
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -127,7 +122,7 @@ export function LoginModal({isOpen, onClose}: LoginModalProps) {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="type-title-lg text-on-surface">{t('loginTitle')}</h2>
+            <h2 className="type-title-lg text-on-surface">Admin Login</h2>
             <button
               onClick={onClose}
               className="text-on-surface-secondary hover:text-on-surface transition-colors cursor-pointer"
