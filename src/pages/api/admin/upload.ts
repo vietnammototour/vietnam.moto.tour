@@ -131,20 +131,26 @@ export default async function handler(
     }
 
     // Convert to webp and write
-    const destDir = getDestDir(entityType, entityId);
-    await fs.mkdir(destDir, {recursive: true});
+    try {
+      const destDir = getDestDir(entityType, entityId);
+      await fs.mkdir(destDir, {recursive: true});
 
-    const outputPath = path.join(destDir, `${imageType}.webp`);
-    await sharp(file.filepath).webp({quality: 80}).toFile(outputPath);
+      const outputPath = path.join(destDir, `${imageType}.webp`);
+      await sharp(file.filepath).webp({quality: 80}).toFile(outputPath);
 
-    // Update DB
-    const publicUrl = getPublicUrl(entityType, entityId, imageType);
-    await updateDbField(entityType, entityId, imageType, publicUrl);
+      // Update DB
+      const publicUrl = getPublicUrl(entityType, entityId, imageType);
+      await updateDbField(entityType, entityId, imageType, publicUrl);
 
-    // Clean up temp file
-    await fs.unlink(file.filepath).catch(() => {});
+      // Clean up temp file
+      await fs.unlink(file.filepath).catch(() => {});
 
-    return res.json({success: true, url: publicUrl});
+      return res.json({success: true, url: publicUrl});
+    } catch {
+      // Clean up temp file on failure
+      await fs.unlink(file.filepath).catch(() => {});
+      return res.status(500).json({error: 'Image processing failed'});
+    }
   }
 
   if (req.method === 'DELETE') {
@@ -156,6 +162,7 @@ export default async function handler(
     };
 
     if (
+      !entityId ||
       !VALID_ENTITY_TYPES.includes(entityType) ||
       !VALID_IMAGE_TYPES.includes(imageType)
     ) {
