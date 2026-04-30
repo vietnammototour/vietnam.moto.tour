@@ -2,32 +2,36 @@ import {render, screen} from '@/test-utils/render';
 import Tours, {getStaticProps} from '@/pages/tours';
 import {toursData} from '@/data';
 
+jest.mock('@/data/queries', () => ({
+  getAllTours: jest.fn().mockResolvedValue([]),
+}));
+
 describe('Tours page', () => {
   it('renders meta title translation key', () => {
-    render(<Tours />);
+    render(<Tours allTours={[]} />);
     expect(document.title).toBe('toursTitle');
   });
 
   it('renders page header with title translation key', () => {
-    render(<Tours />);
+    render(<Tours allTours={[]} />);
     expect(screen.getByText('title')).toBeInTheDocument();
   });
 
   it('renders breadcrumbs', () => {
-    render(<Tours />);
+    render(<Tours allTours={[]} />);
     expect(screen.getByText('breadcrumbHome')).toBeInTheDocument();
     expect(screen.getByText('breadcrumbTours')).toBeInTheDocument();
   });
 
   it('renders a TourCard for each tour in data', () => {
-    render(<Tours />);
+    render(<Tours allTours={toursData} />);
     for (const tour of toursData) {
       expect(screen.getByText(tour.title)).toBeInTheDocument();
     }
   });
 
   it('renders correct number of tour cards', () => {
-    render(<Tours />);
+    render(<Tours allTours={toursData} />);
     const prices = screen.getAllByText('perPerson');
     expect(prices).toHaveLength(toursData.length);
   });

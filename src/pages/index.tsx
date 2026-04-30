@@ -10,7 +10,7 @@ import {GalleryItem} from '@/components/gallery-item';
 import {VideoModal} from '@/components/video-modal';
 import {contactInfo} from '@/utils';
 
-import {getActiveDestinations, toursData} from '@/data';
+import type {Destination, Tour} from '@/types';
 import {getUrl} from '@/utils';
 
 const galleryImageUrls = [
@@ -26,7 +26,16 @@ const fadeInUp = {
   visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
 };
 
-export default function Home() {
+interface HomeProps {
+  tours: Tour[];
+  destinations: (Destination & {
+    tourCount: number;
+    hasCar: boolean;
+    hasBike: boolean;
+  })[];
+}
+
+export default function Home({tours, destinations}: HomeProps) {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const t = useTranslations('home');
@@ -49,8 +58,6 @@ export default function Home() {
       bannerVideoRef.current.playbackRate = 0.8;
     }
   }, []);
-
-  const destinations = getActiveDestinations();
 
   return (
     <>
@@ -247,7 +254,7 @@ export default function Home() {
               {t('mostPopularTours')}
             </h2>
           </motion.div>
-          <TourCarousel tours={toursData} />
+          <TourCarousel tours={tours} />
         </div>
       </section>
 
@@ -265,7 +272,7 @@ export default function Home() {
             <div className="text-white">
               <button
                 onClick={() => setVideoModalOpen(true)}
-                className="mb-6 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse"
+                className="mb-6 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse cursor-pointer"
                 aria-label="Play video"
               >
                 <i className="fa fa-play ml-1" />
@@ -345,9 +352,19 @@ export default function Home() {
 }
 
 export async function getStaticProps({locale}: GetStaticPropsContext) {
+  const {getAllTours, getActiveDestinationsFromDb} =
+    await import('@/data/queries');
+  const [tours, destinations] = await Promise.all([
+    getAllTours(),
+    getActiveDestinationsFromDb(),
+  ]);
+
   return {
     props: {
+      tours,
+      destinations,
       messages: (await import(`@/messages/${locale}.json`)).default,
     },
+    revalidate: 60,
   };
 }

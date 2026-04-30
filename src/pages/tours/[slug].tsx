@@ -3,7 +3,6 @@ import {useTranslations} from 'next-intl';
 import type {GetStaticPaths, GetStaticPropsContext} from 'next';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {toursData} from '@/data';
 import type {Tour} from '@/types';
 import {contactInfo} from '@/utils';
 import {TourHero} from '@/components/tour-hero';
@@ -155,21 +154,25 @@ export default function TourDetail({tour}: TourDetailProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = toursData.flatMap((tour) =>
+  const {getAllTourSlugs} = await import('@/data/queries');
+  const slugs = await getAllTourSlugs();
+  const paths = slugs.flatMap((slug) =>
     ['vi', 'en'].map((locale) => ({
-      params: {slug: tour.slug},
+      params: {slug},
       locale,
     })),
   );
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
 export async function getStaticProps({params, locale}: GetStaticPropsContext) {
-  const tour = toursData.find((t) => t.slug === params?.slug);
+  const {getTourBySlug} = await import('@/data/queries');
+  const slug = params?.slug as string;
+  const tour = await getTourBySlug(slug);
 
   if (!tour) {
     return {notFound: true};
@@ -180,5 +183,6 @@ export async function getStaticProps({params, locale}: GetStaticPropsContext) {
       tour,
       messages: (await import(`@/messages/${locale}.json`)).default,
     },
+    revalidate: 60,
   };
 }

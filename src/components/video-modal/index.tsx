@@ -31,7 +31,7 @@ export function VideoModal({videoUrl, isOpen, onClose}: VideoModalProps) {
       >
         <button
           onClick={onClose}
-          className="absolute -top-10 right-0 text-white text-2xl hover:text-on-surface-secondary transition-colors"
+          className="absolute -top-10 right-0 text-white text-2xl hover:text-on-surface-secondary transition-colors cursor-pointer"
           aria-label="Close video"
         >
           <i className="fa fa-times" />

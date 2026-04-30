@@ -74,7 +74,7 @@ export default function Contact() {
                 />
                 <button
                   type="submit"
-                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 rounded-lg transition-colors"
+                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 rounded-lg transition-colors cursor-pointer"
                 >
                   {t('sendMessage')}
                 </button>
@@ -130,5 +130,6 @@ export async function getStaticProps({locale}: GetStaticPropsContext) {
     props: {
       messages: (await import(`@/messages/${locale}.json`)).default,
     },
+    revalidate: 60,
   };
 }

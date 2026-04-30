@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Tour {
+  id             String      @id @default(uuid())
+  slug           String      @unique
+  destinationId  String
+  destination    Destination @relation(fields: [destinationId], references: [id])
+  title          String
+  titleVi        String      @default("")
+  titleEn        String      @default("")
+  imageUrl       String      @default("")
+  rating         String      @default("")
+  price          Float       @default(0)
+  duration       String      @default("")
+  distance       String      @default("")
+  descriptionVi  String      @default("")
+  descriptionEn  String      @default("")
+  transportation String      @default("")
+  groupSize      String      @default("")
+  hotel          String      @default("")
+  guided         String      @default("")
+  heroImage      String      @default("")
+  images         Json        @default("[]")
+  highlights     Json        @default("[]")
+  itinerary      Json        @default("[]")
+  pricingGroups  Json        @default("[]")
+  included       Json        @default("[]")
+  excluded       Json        @default("[]")
+  paymentDetails Json        @default("{}")
+  notes          Json        @default("[]")
+  mealsInfo      Json        @default("{}")
+  isActive       Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Destination {
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  name          String
+  nameVi        String   @default("")
+  nameEn        String   @default("")
+  imageUrl      String   @default("")
+  descriptionVi String   @default("")
+  descriptionEn String   @default("")
+  size          String   @default("small")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  tours         Tour[]
+}
+
+model Translation {
+  id        String   @id @default(uuid())
+  namespace String
+  key       String
+  valueVi   String   @default("")
+  valueEn   String   @default("")
+  updatedAt DateTime @updatedAt
+
+  @@unique([namespace, key])
+}

@@ -32,7 +32,7 @@ export const GalleryItem = ({imageSrc, alt}: GalleryItemProps) => {
           onClick={() => setLightboxOpen(false)}
         >
           <button
-            className="absolute top-6 right-6 text-white text-2xl hover:text-on-surface-secondary transition-colors"
+            className="absolute top-6 right-6 text-white text-2xl hover:text-on-surface-secondary transition-colors cursor-pointer"
             onClick={() => setLightboxOpen(false)}
             aria-label="Close lightbox"
           >

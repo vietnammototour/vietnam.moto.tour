@@ -5,8 +5,16 @@
     "rental": "Rental",
     "aboutUs": "About us",
     "contact": "Contact",
+    "admin": "Admin",
     "motorbike": "Motorbike",
-    "car": "Car"
+    "car": "Car",
+    "login": "Login",
+    "logout": "Logout",
+    "loginTitle": "Admin Login",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "loginButton": "Sign In",
+    "loginError": "Invalid email or password"
   },
   "footer": {
     "copyright": "© {year} Vietnam Moto Tours"
@@ -125,6 +133,18 @@
     "label": "Theme",
     "light": "Light",
     "dark": "Dark"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "tours": "Tours",
+    "destinations": "Destinations",
+    "translations": "Translations",
+    "users": "Users",
+    "totalTours": "Total Tours",
+    "totalDestinations": "Total Destinations",
+    "totalUsers": "Total Users",
+    "welcome": "Welcome, {name}",
+    "logout": "Logout"
   },
   "meta": {
     "homeTitle": "Vietnam Motorcycle Tour — Adventure Tours in Nha Trang",

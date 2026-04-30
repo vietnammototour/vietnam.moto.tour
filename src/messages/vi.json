@@ -5,8 +5,16 @@
     "rental": "Cho Thuê",
     "aboutUs": "Về Chúng Tôi",
     "contact": "Liên Hệ",
+    "admin": "Quản Trị",
     "motorbike": "Xe Máy",
-    "car": "Ô Tô"
+    "car": "Ô Tô",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "loginTitle": "Đăng nhập quản trị",
+    "emailLabel": "Email",
+    "passwordLabel": "Mật khẩu",
+    "loginButton": "Đăng nhập",
+    "loginError": "Email hoặc mật khẩu không đúng"
   },
   "footer": {
     "copyright": "© {year} Vietnam Moto Tours"
@@ -125,6 +133,18 @@
     "label": "Giao dien",
     "light": "Sang",
     "dark": "Toi"
+  },
+  "admin": {
+    "dashboard": "Bảng điều khiển",
+    "tours": "Tour",
+    "destinations": "Điểm đến",
+    "translations": "Bản dịch",
+    "users": "Người dùng",
+    "totalTours": "Tổng số tour",
+    "totalDestinations": "Tổng số điểm đến",
+    "totalUsers": "Tổng số người dùng",
+    "welcome": "Chào mừng, {name}",
+    "logout": "Đăng xuất"
   },
   "meta": {
     "homeTitle": "Vietnam Motorcycle Tour — Tour Phiêu Lưu Tại Nha Trang",
