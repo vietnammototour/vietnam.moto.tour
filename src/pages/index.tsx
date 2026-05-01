@@ -106,20 +106,37 @@ export default function Home({tours, destinations}: HomeProps) {
               {t('goExoticPlaces')}
             </h2>
           </motion.div>
-          {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
+          {/* Magazine grid: hero left spanning 2 rows, up to 4 small cards right */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <motion.div
-              className="sm:col-span-2 sm:row-span-2"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{once: true}}
-              variants={fadeInUp}
-            >
-              <DestinationCard
-                destination={destinations[0]}
-                className="h-full"
-              />
-            </motion.div>
+            {destinations.length > 0 ? (
+              <motion.div
+                className="sm:col-span-2 sm:row-span-2"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{once: true}}
+                variants={fadeInUp}
+              >
+                <DestinationCard
+                  destination={destinations[0]}
+                  className="h-full"
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                className="sm:col-span-2 sm:row-span-2"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{once: true}}
+                variants={fadeInUp}
+              >
+                <div className="relative rounded-lg overflow-hidden bg-surface-alt aspect-[3/2] h-full flex flex-col items-center justify-center text-on-surface-muted">
+                  <i className="fa fa-motorcycle text-6xl opacity-20 mb-3" />
+                  <span className="type-label-sm uppercase opacity-40">
+                    {t('comingSoon')}
+                  </span>
+                </div>
+              </motion.div>
+            )}
             {destinations.slice(1, 5).map((destination, i) => (
               <motion.div
                 key={destination.id}
@@ -135,6 +152,33 @@ export default function Home({tours, destinations}: HomeProps) {
                 }}
               >
                 <DestinationCard destination={destination} />
+              </motion.div>
+            ))}
+            {Array.from({
+              length: Math.max(0, 4 - Math.max(0, destinations.length - 1)),
+            }).map((_, i) => (
+              <motion.div
+                key={`placeholder-${i}`}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{once: true}}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: {
+                      duration: 0.6,
+                      delay: (destinations.length + i) * 0.1,
+                    },
+                  },
+                }}
+              >
+                <div className="relative rounded-lg overflow-hidden bg-surface-alt aspect-[3/2] flex flex-col items-center justify-center text-on-surface-muted">
+                  <i className="fa fa-motorcycle text-3xl opacity-20 mb-2" />
+                  <span className="type-label-sm uppercase opacity-40">
+                    {t('comingSoon')}
+                  </span>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -364,8 +408,7 @@ export async function getStaticProps({locale}: GetStaticPropsContext) {
     props: {
       tours,
       destinations,
-      messages:
-        dbMessages ?? (await import(`@/messages/${locale}.json`)).default,
+      messages: dbMessages,
     },
     revalidate: 60,
   };
