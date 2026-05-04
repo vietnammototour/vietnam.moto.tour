@@ -15,6 +15,7 @@ const config: Config = {
     '\\.css$': '<rootDir>/src/__mocks__/styleMock.ts',
     '^swiper/css$': '<rootDir>/src/__mocks__/styleMock.ts',
     '^swiper/css/(.*)$': '<rootDir>/src/__mocks__/styleMock.ts',
+    '^framer-motion$': '<rootDir>/src/__mocks__/framer-motion.tsx',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testMatch: [
