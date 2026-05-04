@@ -93,22 +93,26 @@ export default function TourDetail({tour}: TourDetailProps) {
             {/* Desktop sidebar */}
             <aside className="hidden lg:block lg:w-1/3">
               <div className="sticky top-24">
-                <TourPricing
-                  pricingGroups={tour.pricingGroups}
-                  locale={locale}
-                  onPriceChange={handlePriceChange}
-                />
-                <TourCTA tourTitle={tour.title} />
-                <TourDetails tour={tour} />
-                <TourPayment
-                  paymentDetails={tour.paymentDetails}
-                  locale={locale}
-                />
-                <TourNotes
-                  notes={tour.notes}
-                  mealsInfo={tour.mealsInfo}
-                  locale={locale}
-                />
+                <div className="rounded-xl elevation-3 p-6 texture-grain-warm">
+                  <div className="relative z-10">
+                    <TourPricing
+                      pricingGroups={tour.pricingGroups}
+                      locale={locale}
+                      onPriceChange={handlePriceChange}
+                    />
+                    <TourCTA tourTitle={tour.title} />
+                    <TourDetails tour={tour} />
+                    <TourPayment
+                      paymentDetails={tour.paymentDetails}
+                      locale={locale}
+                    />
+                    <TourNotes
+                      notes={tour.notes}
+                      mealsInfo={tour.mealsInfo}
+                      locale={locale}
+                    />
+                  </div>
+                </div>
               </div>
             </aside>
           </div>
@@ -116,7 +120,7 @@ export default function TourDetail({tour}: TourDetailProps) {
       </article>
 
       {/* Mobile sticky bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-surface-elevated border-t border-border shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-surface-elevated border-t border-border elevation-3">
         <div className="flex items-center justify-between px-4 py-3">
           <div>
             <span className="type-title-sm text-on-surface">
