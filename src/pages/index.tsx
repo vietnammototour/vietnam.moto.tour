@@ -3,8 +3,10 @@ import {motion, useMotionTemplate} from 'framer-motion';
 import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
 import {
   clipReveal,
+  fadeInUp,
   riseWithOvershoot,
   slideFromLeft,
+  waveStagger,
 } from '@/utils/motion-variants';
 import {useTranslations} from 'next-intl';
 import type {GetStaticPropsContext} from 'next';
@@ -27,11 +29,6 @@ const galleryImageUrls = [
   getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
   getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
 ];
-
-const fadeInUp = {
-  hidden: {opacity: 0, y: 30},
-  visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
-};
 
 interface HomeProps {
   tours: Tour[];
@@ -137,30 +134,37 @@ export default function Home({tours, destinations}: HomeProps) {
       </section>
 
       {/* Destinations */}
-      <section className="py-16 lg:py-24">
+      <section className="relative py-16 lg:py-24 texture-grain-warm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-12"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{once: true}}
-            variants={fadeInUp}
-          >
-            <span className="type-label-sm uppercase text-on-surface-accent">
+          <div className="text-center mb-12">
+            <motion.span
+              className="type-label-sm uppercase text-on-surface-accent block"
+              variants={slideFromLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{once: true}}
+            >
               {t('destinationLists')}
-            </span>
-            <h2 className="type-headline-sm lg:type-headline-lg mt-2">
+            </motion.span>
+            <motion.h2
+              className="type-headline-sm lg:type-headline-lg mt-2"
+              variants={clipReveal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{once: true}}
+            >
               {t('goExoticPlaces')}
-            </h2>
-          </motion.div>
+            </motion.h2>
+          </div>
           {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <motion.div
               className="sm:col-span-2 sm:row-span-2"
+              custom={0}
+              variants={waveStagger(0.08)}
               initial="hidden"
               whileInView="visible"
               viewport={{once: true}}
-              variants={fadeInUp}
             >
               <DestinationCard
                 destination={destinations[0]}
@@ -170,16 +174,11 @@ export default function Home({tours, destinations}: HomeProps) {
             {destinations.slice(1, 5).map((destination, i) => (
               <motion.div
                 key={destination.id}
+                custom={i + 1}
+                variants={waveStagger(0.08)}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{once: true}}
-                variants={{
-                  ...fadeInUp,
-                  visible: {
-                    ...fadeInUp.visible,
-                    transition: {duration: 0.6, delay: (i + 1) * 0.1},
-                  },
-                }}
               >
                 <DestinationCard destination={destination} />
               </motion.div>
@@ -191,16 +190,11 @@ export default function Home({tours, destinations}: HomeProps) {
               {destinations.slice(5).map((destination, i) => (
                 <motion.div
                   key={destination.id}
+                  custom={i + 5}
+                  variants={waveStagger(0.08)}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{once: true}}
-                  variants={{
-                    ...fadeInUp,
-                    visible: {
-                      ...fadeInUp.visible,
-                      transition: {duration: 0.6, delay: (i + 5) * 0.1},
-                    },
-                  }}
                 >
                   <DestinationCard destination={destination} />
                 </motion.div>
@@ -208,11 +202,12 @@ export default function Home({tours, destinations}: HomeProps) {
             </div>
           )}
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-5 bg-[url('/textures/border-pattern.svg')] bg-repeat-x bg-[length:auto_100%] opacity-60" />
       </section>
 
       {/* About */}
-      <section className="py-16 lg:py-24 bg-surface-alt">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-16 lg:py-24 texture-grain-cool bg-surface-alt">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
             <motion.div
               className="relative"
@@ -236,7 +231,7 @@ export default function Home({tours, destinations}: HomeProps) {
                   </p>
                   <a
                     href={`tel:${contactInfo.phone}`}
-                    className="text-lg font-semibold text-on-surface hover:text-on-surface-accent transition-colors"
+                    className="text-lg font-semibold text-on-surface hover:text-on-surface-accent transition-colors cursor-pointer"
                   >
                     {contactInfo.phone}
                   </a>
@@ -275,7 +270,7 @@ export default function Home({tours, destinations}: HomeProps) {
               </ul>
               <a
                 href="#"
-                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg transition-colors"
+                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg transition-colors cursor-pointer"
               >
                 {t('bookWithUsNow')}
               </a>
@@ -315,60 +310,77 @@ export default function Home({tours, destinations}: HomeProps) {
         />
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
-              <button
-                onClick={() => setVideoModalOpen(true)}
-                className="mb-6 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse cursor-pointer"
-                aria-label="Play video"
-              >
-                <i className="fa fa-play ml-1" />
-              </button>
-              <p className="type-label-lg uppercase text-primary-light mb-2">
-                {t('readyToTravel')}
-              </p>
-              <h2 className="type-headline-sm lg:type-headline-lg text-white drop-shadow-lg">
-                {t('videoSectionHeading')}
-              </h2>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-              {[
-                {
-                  icon: 'icon-travel-map',
-                  label: t('localExperts'),
-                  accent: 'primary',
-                },
-                {
-                  icon: 'icon-place',
-                  label: t('hiddenRoutes'),
-                  accent: 'secondary',
-                },
-                {icon: 'icon-flag', label: t('yearsOnRoad'), accent: 'primary'},
-                {
-                  icon: 'icon-clock',
-                  label: t('dayAndMultiDay'),
-                  accent: 'secondary',
-                },
-                {icon: 'icon-user', label: t('smallGroups'), accent: 'primary'},
-                {
-                  icon: 'icon-cashback',
-                  label: t('allInclusive'),
-                  accent: 'secondary',
-                },
-              ].map((item) => (
-                <div
-                  key={item.icon}
-                  data-testid="feature-card"
-                  className="bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
+          <div className="lg:flex lg:gap-12 lg:items-center">
+            <div className="lg:w-3/5 mb-8 lg:mb-0">
+              <div className="text-white">
+                <button
+                  onClick={() => setVideoModalOpen(true)}
+                  className="mb-6 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse cursor-pointer"
+                  aria-label="Play video"
                 >
-                  <span
-                    className={`${item.icon} text-4xl block mb-3 ${item.accent === 'primary' ? 'text-primary-light' : 'text-secondary-light'}`}
-                  />
-                  <h4 className="type-label-lg whitespace-pre-line text-white drop-shadow-md">
-                    {item.label}
-                  </h4>
-                </div>
-              ))}
+                  <i className="fa fa-play ml-1" />
+                </button>
+                <p className="type-label-lg uppercase text-primary-light mb-2">
+                  {t('readyToTravel')}
+                </p>
+                <h2 className="type-headline-sm lg:type-headline-lg text-white drop-shadow-lg">
+                  {t('videoSectionHeading')}
+                </h2>
+              </div>
+            </div>
+            <div className="lg:w-2/5">
+              <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
+                {[
+                  {
+                    icon: 'icon-travel-map',
+                    label: t('localExperts'),
+                    accent: 'primary',
+                  },
+                  {
+                    icon: 'icon-place',
+                    label: t('hiddenRoutes'),
+                    accent: 'secondary',
+                  },
+                  {
+                    icon: 'icon-flag',
+                    label: t('yearsOnRoad'),
+                    accent: 'primary',
+                  },
+                  {
+                    icon: 'icon-clock',
+                    label: t('dayAndMultiDay'),
+                    accent: 'secondary',
+                  },
+                  {
+                    icon: 'icon-user',
+                    label: t('smallGroups'),
+                    accent: 'primary',
+                  },
+                  {
+                    icon: 'icon-cashback',
+                    label: t('allInclusive'),
+                    accent: 'secondary',
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={item.icon}
+                    custom={index}
+                    variants={waveStagger(0.1)}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{once: true}}
+                    data-testid="feature-card"
+                    className="elevation-1 bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
+                  >
+                    <span
+                      className={`${item.icon} text-4xl block mb-3 ${item.accent === 'primary' ? 'text-primary-light' : 'text-secondary-light'}`}
+                    />
+                    <h4 className="type-label-lg whitespace-pre-line text-white drop-shadow-md">
+                      {item.label}
+                    </h4>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
