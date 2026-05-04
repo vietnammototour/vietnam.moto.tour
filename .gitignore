@@ -57,3 +57,6 @@ next-env.d.ts
 
 # Uploaded images (symlink to /var/www/uploads on VPS)
 public/uploads
+
+# Superpowers cache
+.superpowers/
