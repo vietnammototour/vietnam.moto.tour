@@ -117,7 +117,7 @@ export async function getAllTours(): Promise<Tour[]> {
       include: {destination: true},
     });
 
-    return rows.map((row) => {
+    return rows.map((row: any) => {
       const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
       tour.destinationHeroImage = row.destination.heroImage ?? '';
       return tour;
@@ -154,7 +154,7 @@ export async function getAllTourSlugs(): Promise<string[]> {
       where: {isActive: true},
       select: {slug: true},
     });
-    return rows.map((r) => r.slug);
+    return rows.map((r: any) => r.slug);
   } catch (error) {
     console.error(
       'getAllTourSlugs: DB query failed, using JSON fallback',
@@ -180,12 +180,12 @@ export async function getActiveDestinationsFromDb(): Promise<
     });
 
     return destinations
-      .filter((d) => d.tours.length > 0)
-      .map((d) => ({
+      .filter((d: any) => d.tours.length > 0)
+      .map((d: any) => ({
         ...dbDestToDestination(d as unknown as DbDestination),
         tourCount: d.tours.length,
-        hasCar: d.tours.some((t) => /car/i.test(t.transportation)),
-        hasBike: d.tours.some((t) => /motorbike/i.test(t.transportation)),
+        hasCar: d.tours.some((t: any) => /car/i.test(t.transportation)),
+        hasBike: d.tours.some((t: any) => /motorbike/i.test(t.transportation)),
       }));
   } catch (error) {
     console.error(
