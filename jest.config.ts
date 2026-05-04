@@ -22,6 +22,7 @@ const config: Config = {
     '<rootDir>/src/**/*.spec.{ts,tsx}',
     '<rootDir>/__tests__/**/*.spec.{ts,tsx}',
   ],
+  modulePathIgnorePatterns: ['<rootDir>/.worktrees/'],
 };
 
 export default config;

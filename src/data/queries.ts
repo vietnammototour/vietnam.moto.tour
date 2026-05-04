@@ -202,7 +202,10 @@ export async function getMessagesFromDb(
 ): Promise<Record<string, unknown> | null> {
   try {
     const rows = await prisma.translation.findMany();
-    if (rows.length === 0) return null;
+    if (rows.length === 0) {
+      console.warn('getMessagesFromDb: Translation table is empty');
+      return {};
+    }
 
     const valueKey = locale === 'en' ? 'valueEn' : 'valueVi';
     const messages: Record<string, unknown> = {};
@@ -229,6 +232,6 @@ export async function getMessagesFromDb(
     return messages;
   } catch (error) {
     console.error('getMessagesFromDb: DB query failed', error);
-    return null;
+    return {};
   }
 }

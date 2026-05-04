@@ -31,18 +31,23 @@
 ## Application
 
 - **Path:** `/var/www/vietnam-moto-tours`
-- **Process manager:** pm2
+- **Process manager:** pm2 (runs under `ci-cd` user, NOT root)
 - **pm2 name:** `vietnam-moto-tours`
+- **pm2 binary:** `/home/ci-cd/.nvm/versions/node/v24.14.0/lib/node_modules/pm2/bin/pm2`
 - **Ownership:** `ci-cd:ci-cd` (required for CI/CD deploys)
 - **Environment:** `.env` at project root (DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL)
 
 ### pm2 Commands
 
+**IMPORTANT:** Always use ci-cd's pm2, never root's. Running `pm2` as root creates a second daemon that fights for port 3000.
+
+Set up alias (one-time): `echo 'alias pm2ci="sudo -u ci-cd /home/ci-cd/.nvm/versions/node/v24.14.0/lib/node_modules/pm2/bin/pm2"' >> /root/.bashrc`
+
 ```bash
-pm2 status                           # Check app status
-pm2 logs vietnam-moto-tours          # View logs
-pm2 restart vietnam-moto-tours       # Restart app
-pm2 save                             # Save process list for reboot
+pm2ci status                           # Check app status
+pm2ci logs vietnam-moto-tours          # View logs
+pm2ci restart vietnam-moto-tours       # Restart app
+pm2ci save                             # Save process list for reboot
 ```
 
 ## CI/CD Deployment

@@ -183,6 +183,33 @@ export default function Home({tours, destinations}: HomeProps) {
                 <DestinationCard destination={destination} />
               </motion.div>
             ))}
+            {Array.from({
+              length: Math.max(0, 4 - Math.max(0, destinations.length - 1)),
+            }).map((_, i) => (
+              <motion.div
+                key={`placeholder-${i}`}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{once: true}}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: {
+                      duration: 0.6,
+                      delay: (destinations.length + i) * 0.1,
+                    },
+                  },
+                }}
+              >
+                <div className="relative rounded-lg overflow-hidden bg-surface-alt aspect-[3/2] flex flex-col items-center justify-center text-on-surface-muted">
+                  <i className="fa fa-motorcycle text-3xl opacity-20 mb-2" />
+                  <span className="type-label-sm uppercase opacity-40">
+                    {t('comingSoon')}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
           </div>
           {/* Bottom row: additional destinations aligned under the hero */}
           {destinations.length > 5 && (
@@ -423,8 +450,7 @@ export async function getStaticProps({locale}: GetStaticPropsContext) {
     props: {
       tours,
       destinations,
-      messages:
-        dbMessages ?? (await import(`@/messages/${locale}.json`)).default,
+      messages: dbMessages,
     },
     revalidate: 60,
   };

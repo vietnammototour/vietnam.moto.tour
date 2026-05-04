@@ -188,8 +188,7 @@ export async function getStaticProps({params, locale}: GetStaticPropsContext) {
   return {
     props: {
       tour,
-      messages:
-        dbMessages ?? (await import(`@/messages/${locale}.json`)).default,
+      messages: dbMessages,
     },
     revalidate: 60,
   };
