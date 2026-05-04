@@ -36,6 +36,17 @@
 
   --color-on-surface-tertiary: #a8a29e;
   --color-on-surface-accent: #b45309;
+
+  --shadow-elevation-1:
+    0 2px 8px -2px rgba(180, 83, 9, 0.08), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-2:
+    0 8px 24px -4px rgba(180, 83, 9, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.08);
+  --shadow-elevation-3:
+    0 16px 48px -8px rgba(180, 83, 9, 0.16), 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+
+  --ease-lantern-sway: cubic-bezier(0.45, 0.05, 0.35, 0.95);
+  --ease-motorbike-sweep: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-water-flow: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Dark mode overrides */
@@ -138,6 +149,70 @@
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: 0.02em;
+}
+
+@utility elevation-1 {
+  box-shadow: var(--shadow-elevation-1);
+  transition: box-shadow 200ms ease;
+}
+
+@utility elevation-2 {
+  box-shadow: var(--shadow-elevation-2);
+  transition: box-shadow 200ms ease;
+}
+
+@utility elevation-3 {
+  box-shadow: var(--shadow-elevation-3);
+  transition: box-shadow 200ms ease;
+}
+
+@utility texture-grain-warm {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+  }
+}
+
+@utility texture-grain-cool {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+}
+
+@utility texture-paper {
+  background-color: #faf8f5;
+}
+
+@keyframes lantern-sway {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(0.5deg);
+  }
+  75% {
+    transform: translateY(2px) rotate(-0.5deg);
+  }
+}
+
+@utility animate-lantern-sway {
+  animation: lantern-sway 4s var(--ease-lantern-sway) infinite;
 }
 
 @layer base {
