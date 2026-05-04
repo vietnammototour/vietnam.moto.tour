@@ -1,8 +1,15 @@
 import {useEffect, useRef, useState} from 'react';
-import {motion} from 'framer-motion';
+import {motion, useMotionTemplate} from 'framer-motion';
+import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
+import {
+  clipReveal,
+  riseWithOvershoot,
+  slideFromLeft,
+} from '@/utils/motion-variants';
 import {useTranslations} from 'next-intl';
 import type {GetStaticPropsContext} from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import {DestinationCard} from '@/components/destination-card';
 import {TourCarousel} from '@/components/tour-carousel';
@@ -41,6 +48,9 @@ export default function Home({tours, destinations}: HomeProps) {
   const t = useTranslations('home');
   const tMeta = useTranslations('meta');
 
+  const spotlight = useCursorSpotlight(200, 0.15);
+  const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.15), transparent)`;
+
   const galleryAltKeys = [
     'galleryAlt1',
     'galleryAlt2',
@@ -67,7 +77,12 @@ export default function Home({tours, destinations}: HomeProps) {
       </Head>
 
       {/* Hero */}
-      <section className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section
+        ref={spotlight.ref as React.RefObject<HTMLElement>}
+        onMouseMove={spotlight.onMouseMove}
+        onMouseLeave={spotlight.onMouseLeave}
+        className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center overflow-hidden texture-grain-warm"
+      >
         <video
           autoPlay
           muted
@@ -78,14 +93,46 @@ export default function Home({tours, destinations}: HomeProps) {
         >
           <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-overlay" />
-        <div className="relative z-10 text-center text-white px-4 drop-shadow-lg">
-          <h2 className="type-display-sm md:type-display-lg mb-4 text-white">
-            {t('heroTitle')}
-          </h2>
-          <p className="type-body-lg md:type-headline-sm text-primary">
-            {t('heroSubtitle')}
-          </p>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+
+        {/* Cursor spotlight overlay */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{background: spotlightBg}}
+        />
+
+        {/* Asymmetric content — left-aligned */}
+        <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-2xl">
+            <motion.p
+              variants={slideFromLeft}
+              initial="hidden"
+              animate="visible"
+              className="type-label-sm uppercase tracking-wider text-primary-light mb-4"
+            >
+              {t('heroSubtitle')}
+            </motion.p>
+            <motion.h1
+              variants={clipReveal}
+              initial="hidden"
+              animate="visible"
+              className="type-display-sm md:type-display-lg text-white mb-6"
+            >
+              {t('heroTitle')}
+            </motion.h1>
+            <motion.div
+              variants={riseWithOvershoot}
+              initial="hidden"
+              animate="visible"
+            >
+              <Link
+                href="/tours"
+                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg cursor-pointer transition-colors elevation-2 hover:elevation-3"
+              >
+                {t('bookWithUsNow')}
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </section>
 

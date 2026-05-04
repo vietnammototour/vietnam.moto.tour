@@ -67,3 +67,19 @@ export type MotionValue<T = number> = {
   get: () => T;
   set: (v: T) => void;
 };
+
+export function useMotionTemplate(
+  strings: TemplateStringsArray,
+  ...values: unknown[]
+) {
+  const result = strings.reduce(
+    (acc, str, i) => acc + str + (values[i] ?? ''),
+    '',
+  );
+  return {
+    get: () => result,
+    set: () => {},
+    onChange: () => () => {},
+    on: () => () => {},
+  };
+}
