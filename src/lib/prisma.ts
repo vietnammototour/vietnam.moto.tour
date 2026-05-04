@@ -1,7 +1,7 @@
-import {PrismaClient} from '@prisma/client';
+const {PrismaClient} = require('@prisma/client') as {PrismaClient: any};
 import {PrismaPg} from '@prisma/adapter-pg';
 
-const globalForPrisma = globalThis as unknown as {prisma: PrismaClient};
+const globalForPrisma = globalThis as unknown as {prisma: any};
 
 // Strip Prisma-specific query params (like ?schema=public) that pg doesn't understand
 const dbUrl = (process.env.DATABASE_URL as string).split('?')[0];

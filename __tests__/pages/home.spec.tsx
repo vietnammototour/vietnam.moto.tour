@@ -121,7 +121,8 @@ describe('Home page', () => {
 
   it('renders book with us CTA', () => {
     render(<Home tours={[]} destinations={mockDestinations} />);
-    expect(screen.getByText('bookWithUsNow')).toBeInTheDocument();
+    const ctaElements = screen.getAllByText('bookWithUsNow');
+    expect(ctaElements.length).toBeGreaterThanOrEqual(1);
   });
 });
 

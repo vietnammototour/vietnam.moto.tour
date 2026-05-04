@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.03">
+  <path d="M100 20c0 0-30 40-30 80s30 80 30 80c0 0 30-40 30-80s-30-80-30-80z"/>
+  <path d="M100 20c0 0-60 30-60 90s60 70 60 70c0 0 60-10 60-70s-60-90-60-90z"/>
+  <path d="M100 20c0 0-80 50-70 100c10 50 70 60 70 60c0 0 60-10 70-60c10-50-70-100-70-100z"/>
+  <ellipse cx="100" cy="170" rx="40" ry="10"/>
+</svg>

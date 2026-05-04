@@ -15,12 +15,14 @@ const config: Config = {
     '\\.css$': '<rootDir>/src/__mocks__/styleMock.ts',
     '^swiper/css$': '<rootDir>/src/__mocks__/styleMock.ts',
     '^swiper/css/(.*)$': '<rootDir>/src/__mocks__/styleMock.ts',
+    '^framer-motion$': '<rootDir>/src/__mocks__/framer-motion.tsx',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testMatch: [
     '<rootDir>/src/**/*.spec.{ts,tsx}',
     '<rootDir>/__tests__/**/*.spec.{ts,tsx}',
   ],
+  modulePathIgnorePatterns: ['<rootDir>/.worktrees/'],
 };
 
 export default config;
