@@ -43,6 +43,7 @@ export function DestinationEditTabs({
   const [destinationId, setDestinationId] = useState<string | null>(initialId);
   const [locale, setLocale] = useState<Locale>('en');
   const [form, setForm] = useState<DestinationFormData>(initialData);
+  const [imgVersion, setImgVersion] = useState(0);
 
   const handleSaved = useCallback(
     (id: string) => {
@@ -135,7 +136,11 @@ export function DestinationEditTabs({
               locale={locale}
               mode={mode}
               destinationId={destinationId}
-              onFieldChange={updateForm}
+              imgVersion={imgVersion}
+              onFieldChange={(key, value) => {
+                updateForm(key, value);
+                if (key === 'heroImage') setImgVersion((v) => v + 1);
+              }}
               onSaved={handleSaved}
             />
           </div>
@@ -145,10 +150,13 @@ export function DestinationEditTabs({
           <div className="p-5">
             <CardImagePreview
               destinationId={destinationId}
-              imageUrl={form.imageUrl}
+              imageUrl={form.imageUrl ? `${form.imageUrl}?v=${imgVersion}` : ''}
               destinationName={currentName}
               size={form.size as 'small' | 'large'}
-              onImageChange={(url) => updateForm('imageUrl', url)}
+              onImageChange={(url) => {
+                updateForm('imageUrl', url);
+                setImgVersion((v) => v + 1);
+              }}
               onSizeChange={(size) => updateForm('size', size)}
             />
           </div>

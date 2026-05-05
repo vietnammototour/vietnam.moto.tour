@@ -11,6 +11,7 @@ interface DestinationGeneralFormProps {
   locale: Locale;
   mode: 'create' | 'edit';
   destinationId: string | null;
+  imgVersion: number;
   onFieldChange: <K extends keyof DestinationFormData>(
     key: K,
     value: DestinationFormData[K],
@@ -23,6 +24,7 @@ export function DestinationGeneralForm({
   locale,
   mode,
   destinationId,
+  imgVersion,
   onFieldChange,
   onSaved,
 }: DestinationGeneralFormProps) {
@@ -146,7 +148,7 @@ export function DestinationGeneralForm({
       {/* Hero Image Preview */}
       <HeroImagePreview
         destinationId={destinationId}
-        heroImage={form.heroImage}
+        heroImage={form.heroImage ? `${form.heroImage}?v=${imgVersion}` : ''}
         destinationName={currentName || form.name}
         onImageChange={(url) => onFieldChange('heroImage', url)}
       />
