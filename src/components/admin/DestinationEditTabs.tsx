@@ -1,0 +1,115 @@
+'use client';
+
+import {useState, useCallback} from 'react';
+import {useRouter} from 'next/router';
+import {DestinationForm} from './DestinationForm';
+import {DestinationHighlights} from './DestinationHighlights';
+
+type TabId = 'general' | 'highlights';
+
+interface DestinationFormData {
+  slug: string;
+  name: string;
+  nameVi: string;
+  nameEn: string;
+  imageUrl: string;
+  heroImage: string;
+  descriptionVi: string;
+  descriptionEn: string;
+  size: string;
+}
+
+interface DestinationEditTabsProps {
+  mode: 'create' | 'edit';
+  destinationId: string | null;
+  initialData: DestinationFormData;
+}
+
+const tabs: {id: TabId; label: string}[] = [
+  {id: 'general', label: 'General'},
+  {id: 'highlights', label: 'Highlights'},
+];
+
+export function DestinationEditTabs({
+  mode,
+  destinationId: initialId,
+  initialData,
+}: DestinationEditTabsProps) {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<TabId>('general');
+  const [destinationId, setDestinationId] = useState<string | null>(initialId);
+
+  const handleSaved = useCallback(
+    (id: string) => {
+      if (!destinationId) {
+        setDestinationId(id);
+        window.history.replaceState(null, '', `/admin/destinations/${id}/edit`);
+      }
+    },
+    [destinationId],
+  );
+
+  const isTabDisabled = (tabId: TabId) =>
+    tabId !== 'general' && mode === 'create' && !destinationId;
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="type-headline-sm">
+          {mode === 'create' ? 'Create New Destination' : 'Edit Destination'}
+        </h1>
+        <button
+          type="button"
+          onClick={() => router.push('/admin/destinations')}
+          className="px-4 py-2 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
+        >
+          Back to Destinations
+        </button>
+      </div>
+
+      {/* Tab bar */}
+      <div className="flex border-b-2 border-border mb-0">
+        {tabs.map((tab) => {
+          const disabled = isTabDisabled(tab.id);
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              disabled={disabled}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-6 py-3 type-label-sm transition-colors cursor-pointer ${
+                activeTab === tab.id
+                  ? 'text-primary border-b-2 border-primary -mb-[2px] font-semibold'
+                  : disabled
+                    ? 'text-on-surface-secondary/40 cursor-not-allowed'
+                    : 'text-on-surface-secondary hover:text-on-surface'
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Tab content */}
+      <div className="border border-border border-t-0 rounded-b-lg overflow-hidden">
+        {activeTab === 'general' && (
+          <div className="p-5">
+            <DestinationForm
+              initialData={initialData}
+              mode={mode}
+              destinationId={destinationId ?? undefined}
+              onSaved={handleSaved}
+            />
+          </div>
+        )}
+
+        {activeTab === 'highlights' && destinationId && (
+          <div className="p-5">
+            <DestinationHighlights destinationId={destinationId} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

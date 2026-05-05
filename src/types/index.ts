@@ -30,27 +30,34 @@ export interface PricingGroup {
   tiers: PricingTier[];
 }
 
+export interface Highlight {
+  id: string;
+  destinationId: string;
+  textEn: string;
+  textVi: string;
+  imageUrl: string | null;
+}
+
 export type TourStatus = 'DRAFT' | 'PUBLISHED' | 'FEATURED' | 'ARCHIVED';
 
 export interface Tour {
   id: number;
   title: string;
   imageUrl: string;
-  rating: string;
   price: number;
-  duration: string;
-  distance: string;
+  duration: number;
+  distance: number;
   destinationId: number;
   slug: string;
   status: TourStatus;
   description: LocalizedText;
   transportation: string;
-  groupSize: string;
+  groupSize: number;
   hotel: string;
   guided: string;
   destinationHeroImage: string;
   images: string[];
-  highlights: LocalizedText[];
+  highlights: Highlight[];
   itinerary: ItineraryDay[];
   pricingGroups: PricingGroup[];
   included: LocalizedText[];

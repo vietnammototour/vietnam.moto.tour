@@ -55,16 +55,13 @@ export function TourHero({tour}: TourHeroProps) {
               {getDestinationName(tour.destinationId)}
             </span>
             <span className="flex items-center gap-1.5">
-              <i className="fa fa-clock" /> {tour.duration}
+              <i className="fa fa-clock" /> {tour.duration} {t('days')}
             </span>
             <span className="flex items-center gap-1.5">
-              <i className="fa fa-road" /> {tour.distance}
+              <i className="fa fa-road" /> {tour.distance} km
             </span>
             <span className="flex items-center gap-1.5">
               <i className="fa fa-motorcycle" /> {tour.transportation}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <i className="fa fa-star" /> {tour.rating}
             </span>
           </motion.div>
           <motion.div

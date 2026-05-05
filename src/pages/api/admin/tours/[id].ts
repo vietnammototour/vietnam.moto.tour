@@ -12,7 +12,10 @@ export default async function handler(
   const id = req.query.id as string;
 
   if (req.method === 'GET') {
-    const tour = await prisma.tour.findUnique({where: {id}});
+    const tour = await prisma.tour.findUnique({
+      where: {id},
+      include: {highlights: true},
+    });
     if (!tour) return res.status(404).json({error: 'Tour not found'});
     return res.json(tour);
   }
@@ -27,7 +30,6 @@ export default async function handler(
       'titleVi',
       'titleEn',
       'imageUrl',
-      'rating',
       'price',
       'duration',
       'distance',
@@ -38,7 +40,6 @@ export default async function handler(
       'hotel',
       'guided',
       'images',
-      'highlights',
       'itinerary',
       'pricingGroups',
       'included',
@@ -53,11 +54,28 @@ export default async function handler(
         updateData[field] = data[field];
       }
     }
-    const tour = await prisma.tour.update({
+    // Handle highlights relation separately — only allow highlights from the tour's destination
+    if (data.highlightIds !== undefined) {
+      const tour = await prisma.tour.findUnique({
+        where: {id},
+        select: {destinationId: true},
+      });
+      if (!tour) return res.status(404).json({error: 'Tour not found'});
+
+      const destId = (updateData.destinationId as string) ?? tour.destinationId;
+      const validHighlights = await prisma.highlight.findMany({
+        where: {id: {in: data.highlightIds}, destinationId: destId},
+        select: {id: true},
+      });
+      updateData.highlights = {
+        set: validHighlights.map((h: {id: string}) => ({id: h.id})),
+      };
+    }
+    const updatedTour = await prisma.tour.update({
       where: {id},
       data: updateData,
     });
-    return res.json(tour);
+    return res.json(updatedTour);
   }
 
   if (req.method === 'DELETE') {

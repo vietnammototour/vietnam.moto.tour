@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import {TourForm} from '@/components/admin/TourForm';
+import {TourEditTabs} from '@/components/admin/TourEditTabs';
 import type {TourStatus} from '@/types';
 
 interface Destination {
@@ -47,28 +47,25 @@ export default function EditTour() {
     return null;
   }
 
-  const initialData = {
+  const highlights = (tour.highlights as Array<{id: string}>) ?? [];
+
+  const initialGeneral = {
     slug: tour.slug as string,
     destinationId: tour.destinationId as string,
     title: tour.title as string,
     titleVi: (tour.titleVi as string) ?? '',
     titleEn: (tour.titleEn as string) ?? '',
     imageUrl: (tour.imageUrl as string) ?? '',
-    rating: (tour.rating as string) ?? '',
     price: (tour.price as number) ?? 0,
-    duration: (tour.duration as string) ?? '',
-    distance: (tour.distance as string) ?? '',
+    duration: (tour.duration as number) ?? 1,
+    distance: (tour.distance as number) ?? 0,
     descriptionVi: (tour.descriptionVi as string) ?? '',
     descriptionEn: (tour.descriptionEn as string) ?? '',
     transportation: (tour.transportation as string) ?? '',
-    groupSize: (tour.groupSize as string) ?? '',
+    groupSize: (tour.groupSize as number) ?? 2,
     hotel: (tour.hotel as string) ?? '',
     guided: (tour.guided as string) ?? '',
-    heroImage: (tour.heroImage as string) ?? '',
     images: (tour.images as string[]) ?? [],
-    highlights: (tour.highlights as Array<{en: string; vi: string}>) ?? [],
-    itinerary: tour.itinerary as unknown[] as never,
-    pricingGroups: tour.pricingGroups as unknown[] as never,
     included: (tour.included as Array<{en: string; vi: string}>) ?? [],
     excluded: (tour.excluded as Array<{en: string; vi: string}>) ?? [],
     paymentDetails: (tour.paymentDetails as {en: string; vi: string}) ?? {
@@ -81,13 +78,14 @@ export default function EditTour() {
   };
 
   return (
-    <div>
-      <TourForm
-        initialData={initialData}
-        destinations={destinations}
-        mode="edit"
-        tourId={tour.id as string}
-      />
-    </div>
+    <TourEditTabs
+      mode="edit"
+      tourId={tour.id as string}
+      destinations={destinations}
+      initialGeneral={initialGeneral}
+      initialItinerary={(tour.itinerary as never) ?? []}
+      initialPricingGroups={(tour.pricingGroups as never) ?? []}
+      initialHighlightIds={highlights.map((h) => h.id)}
+    />
   );
 }

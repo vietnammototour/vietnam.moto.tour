@@ -12,7 +12,10 @@ export default async function handler(
   if (req.method === 'GET') {
     const tours = await prisma.tour.findMany({
       orderBy: {createdAt: 'desc'},
-      include: {destination: {select: {name: true}}},
+      include: {
+        destination: {select: {name: true}},
+        highlights: true,
+      },
     });
     return res.json(tours);
   }
@@ -27,18 +30,16 @@ export default async function handler(
         titleVi: data.titleVi ?? '',
         titleEn: data.titleEn ?? '',
         imageUrl: data.imageUrl ?? '',
-        rating: data.rating ?? '',
         price: data.price ?? 0,
-        duration: data.duration ?? '',
-        distance: data.distance ?? '',
+        duration: data.duration ?? 1,
+        distance: data.distance ?? 0,
         descriptionVi: data.descriptionVi ?? '',
         descriptionEn: data.descriptionEn ?? '',
         transportation: data.transportation ?? '',
-        groupSize: data.groupSize ?? '',
+        groupSize: data.groupSize ?? 2,
         hotel: data.hotel ?? '',
         guided: data.guided ?? '',
         images: data.images ?? [],
-        highlights: data.highlights ?? [],
         itinerary: data.itinerary ?? [],
         pricingGroups: data.pricingGroups ?? [],
         included: data.included ?? [],
@@ -47,7 +48,11 @@ export default async function handler(
         notes: data.notes ?? [],
         mealsInfo: data.mealsInfo ?? {},
         status: data.status ?? 'DRAFT',
+        highlights: data.highlightIds?.length
+          ? {connect: data.highlightIds.map((id: string) => ({id}))}
+          : undefined,
       },
+      include: {highlights: true},
     });
     return res.status(201).json(tour);
   }

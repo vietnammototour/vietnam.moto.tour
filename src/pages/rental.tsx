@@ -14,42 +14,36 @@ const rentalItems = [
     title: 'Honda Winner X',
     price: 25,
     image: 'assets/images/resources/popular-tours-two__img-1.jpg',
-    rating: '8.0 Superb',
     category: 'Motorbike',
   },
   {
     title: 'Honda XR 150',
     price: 30,
     image: 'assets/images/resources/popular-tours-two__img-2.jpg',
-    rating: '8.5 Superb',
     category: 'Motorbike',
   },
   {
     title: 'Yamaha Exciter',
     price: 20,
     image: 'assets/images/resources/popular-tours-two__img-3.jpg',
-    rating: '8.0 Superb',
     category: 'Motorbike',
   },
   {
     title: 'Honda CB500X',
     price: 55,
     image: 'assets/images/resources/popular-tours-two__img-4.jpg',
-    rating: '9.0 Superb',
     category: 'Motorbike',
   },
   {
     title: 'Toyota Vios',
     price: 45,
     image: 'assets/images/resources/popular-tours-two__img-5.jpg',
-    rating: '8.0 Superb',
     category: 'Car',
   },
   {
     title: 'Ford Ranger',
     price: 65,
     image: 'assets/images/resources/popular-tours-two__img-6.jpg',
-    rating: '8.2 Superb',
     category: 'Car',
   },
 ];
@@ -110,9 +104,6 @@ export default function Rental() {
                   </button>
                 </div>
                 <div className="p-5">
-                  <div className="flex items-center gap-1 type-label-lg text-on-surface-accent mb-2">
-                    <i className="fa fa-star text-xs" /> {item.rating}
-                  </div>
                   <h3 className="type-title-sm text-on-surface mb-2 group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>

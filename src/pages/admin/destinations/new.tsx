@@ -1,10 +1,23 @@
-import {DestinationForm} from '@/components/admin/DestinationForm';
+import {DestinationEditTabs} from '@/components/admin/DestinationEditTabs';
+
+const emptyData = {
+  slug: '',
+  name: '',
+  nameVi: '',
+  nameEn: '',
+  imageUrl: '',
+  heroImage: '',
+  descriptionVi: '',
+  descriptionEn: '',
+  size: 'small',
+};
 
 export default function NewDestination() {
   return (
-    <div>
-      <h1 className="type-headline-sm mb-6">Create New Destination</h1>
-      <DestinationForm mode="create" />
-    </div>
+    <DestinationEditTabs
+      mode="create"
+      destinationId={null}
+      initialData={emptyData}
+    />
   );
 }

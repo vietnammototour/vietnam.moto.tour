@@ -17,10 +17,9 @@ describe('toursData', () => {
       expect(tour.id).toEqual(expect.any(Number));
       expect(tour.title).toEqual(expect.any(String));
       expect(tour.imageUrl).toEqual(expect.any(String));
-      expect(tour.rating).toEqual(expect.any(String));
       expect(tour.price).toEqual(expect.any(Number));
-      expect(tour.duration).toEqual(expect.any(String));
-      expect(tour.distance).toEqual(expect.any(String));
+      expect(tour.duration).toEqual(expect.any(Number));
+      expect(tour.distance).toEqual(expect.any(Number));
       expect(tour.destinationId).toEqual(expect.any(Number));
     }
   });

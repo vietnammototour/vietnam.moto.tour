@@ -1,6 +1,7 @@
 import {useState, useCallback, useEffect, useMemo} from 'react';
 import {useTranslations} from 'next-intl';
 import type {PricingGroup} from '@/types';
+import {useEditable} from '@/components/admin/EditableContext';
 import {VehiclePricing} from './vehicle-pricing';
 import {GroupSizePricing} from './group-size-pricing';
 
@@ -33,6 +34,8 @@ export function TourPricing({
 }: TourPricingProps) {
   const t = useTranslations('tourDetail');
   const localeKey = locale as 'en' | 'vi';
+  const ctx = useEditable();
+  const activeLocale = ctx?.locale ?? localeKey;
 
   const vehicleGroups = useMemo(
     () => pricingGroups.filter((g) => g.type === 'vehicle'),
@@ -65,9 +68,9 @@ export function TourPricing({
     (groupIdx: number, tierIdx: number) => {
       setSelectedVehicle({groupIdx, tierIdx, price: 0});
       const tier = vehicleGroups[groupIdx].tiers[tierIdx];
-      onPriceChange?.(tier.price, tier.label[localeKey]);
+      onPriceChange?.(tier.price, tier.label[activeLocale]);
     },
-    [vehicleGroups, localeKey, onPriceChange],
+    [vehicleGroups, activeLocale, onPriceChange],
   );
 
   const handleGroupSizePriceChange = useCallback(
@@ -81,7 +84,7 @@ export function TourPricing({
   useEffect(() => {
     if (hasVehicle && vehicleGroups.length > 0) {
       const tier = vehicleGroups[cheapest.groupIdx].tiers[cheapest.tierIdx];
-      onPriceChange?.(tier.price, tier.label[localeKey]);
+      onPriceChange?.(tier.price, tier.label[activeLocale]);
     } else if (mainGroupSize) {
       const firstTier = mainGroupSize.tiers[0];
       onPriceChange?.(

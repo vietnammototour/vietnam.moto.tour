@@ -20,6 +20,7 @@ interface DestinationFormProps {
   initialData?: DestinationFormData;
   mode: 'create' | 'edit';
   destinationId?: string;
+  onSaved?: (id: string) => void;
 }
 
 const emptyForm: DestinationFormData = {
@@ -38,6 +39,7 @@ export function DestinationForm({
   initialData,
   mode,
   destinationId,
+  onSaved,
 }: DestinationFormProps) {
   const router = useRouter();
   const [form, setForm] = useState<DestinationFormData>(
@@ -78,7 +80,12 @@ export function DestinationForm({
       return;
     }
 
-    router.push('/admin/destinations');
+    if (onSaved) {
+      const data = await res.json();
+      onSaved(data.id ?? destinationId);
+    } else {
+      router.push('/admin/destinations');
+    }
   }
 
   return (
@@ -213,13 +220,15 @@ export function DestinationForm({
               ? 'Create Destination'
               : 'Save Changes'}
         </button>
-        <button
-          type="button"
-          onClick={() => router.push('/admin/destinations')}
-          className="px-6 py-2.5 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
-        >
-          Cancel
-        </button>
+        {!onSaved && (
+          <button
+            type="button"
+            onClick={() => router.push('/admin/destinations')}
+            className="px-6 py-2.5 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </form>
   );
