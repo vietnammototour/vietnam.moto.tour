@@ -1,9 +1,7 @@
 'use client';
 
 import {useState} from 'react';
-import {useRouter} from 'next/router';
 import {routes, api, useNavigate} from '@/routes';
-import {HeroImagePreview} from './HeroImagePreview';
 import type {DestinationFormData} from './DestinationEditTabs';
 import type {Locale} from './LocalePicker';
 
@@ -12,7 +10,6 @@ type DestinationGeneralFormProps = {
   locale: Locale;
   mode: 'create' | 'edit';
   destinationId: string | null;
-  imgVersion: number;
   onFieldChange: <K extends keyof DestinationFormData>(
     key: K,
     value: DestinationFormData[K],
@@ -25,18 +22,15 @@ export function DestinationGeneralForm({
   locale,
   mode,
   destinationId,
-  imgVersion,
   onFieldChange,
   onSaved,
 }: DestinationGeneralFormProps) {
-  const router = useRouter();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   const nameField = locale === 'en' ? 'nameEn' : 'nameVi';
   const descField = locale === 'en' ? 'descriptionEn' : 'descriptionVi';
-  const currentName = form[nameField];
   const currentDesc = form[descField];
 
   async function handleSubmit(e: React.FormEvent) {
@@ -92,28 +86,16 @@ export function DestinationGeneralForm({
           </div>
           <div>
             <label className="block type-label-sm text-on-surface-secondary mb-1">
-              Name
+              Name ({locale.toUpperCase()})
             </label>
             <input
               type="text"
               required
-              value={form.name}
-              onChange={(e) => onFieldChange('name', e.target.value)}
+              value={form[nameField]}
+              onChange={(e) => onFieldChange(nameField, e.target.value)}
               className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
-        </div>
-
-        <div>
-          <label className="block type-label-sm text-on-surface-secondary mb-1">
-            Name ({locale.toUpperCase()})
-          </label>
-          <input
-            type="text"
-            value={currentName}
-            onChange={(e) => onFieldChange(nameField, e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-          />
         </div>
 
         <div>
@@ -142,14 +124,6 @@ export function DestinationGeneralForm({
           </button>
         </div>
       </div>
-
-      {/* Hero Image Preview */}
-      <HeroImagePreview
-        destinationId={destinationId}
-        heroImage={form.heroImage ? `${form.heroImage}?v=${imgVersion}` : ''}
-        destinationName={currentName || form.name}
-        onImageChange={(url) => onFieldChange('heroImage', url)}
-      />
     </form>
   );
 }

@@ -4,11 +4,12 @@ import {useState, useCallback, useEffect, useRef} from 'react';
 import {useRouter} from 'next/router';
 import {routes, api, useNavigate} from '@/routes';
 import {DestinationGeneralForm} from './DestinationGeneralForm';
+import {HeroImagePreview} from './HeroImagePreview';
 import {CardImagePreview} from './CardImagePreview';
 import {DestinationHighlights} from './DestinationHighlights';
 import {LocalePicker, type Locale} from './LocalePicker';
 
-type TabId = 'general' | 'cardImage' | 'highlights';
+type TabId = 'general' | 'heroImage' | 'cardImage' | 'highlights';
 
 export type DestinationFormData = {
   slug: string;
@@ -30,6 +31,7 @@ type DestinationEditTabsProps = {
 
 const tabs: {id: TabId; label: string}[] = [
   {id: 'general', label: 'General'},
+  {id: 'heroImage', label: 'Hero Image'},
   {id: 'cardImage', label: 'Card Image'},
   {id: 'highlights', label: 'Highlights'},
 ];
@@ -134,12 +136,24 @@ export function DestinationEditTabs({
               locale={locale}
               mode={mode}
               destinationId={destinationId}
-              imgVersion={imgVersion}
-              onFieldChange={(key, value) => {
-                updateForm(key, value);
-                if (key === 'heroImage') setImgVersion((v) => v + 1);
-              }}
+              onFieldChange={updateForm}
               onSaved={handleSaved}
+            />
+          </div>
+        )}
+
+        {activeTab === 'heroImage' && (
+          <div className="p-5">
+            <HeroImagePreview
+              destinationId={destinationId}
+              heroImage={
+                form.heroImage ? `${form.heroImage}?v=${imgVersion}` : ''
+              }
+              destinationName={currentName || form.name}
+              onImageChange={(url) => {
+                updateForm('heroImage', url);
+                setImgVersion((v) => v + 1);
+              }}
             />
           </div>
         )}
