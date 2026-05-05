@@ -2,8 +2,7 @@ import {useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import {DestinationForm} from '@/components/admin/DestinationForm';
-import {DestinationHighlights} from '@/components/admin/DestinationHighlights';
+import {DestinationEditTabs} from '@/components/admin/DestinationEditTabs';
 
 export default function EditDestination() {
   const router = useRouter();
@@ -51,19 +50,10 @@ export default function EditDestination() {
   };
 
   return (
-    <div>
-      <h1 className="type-headline-sm mb-6">Edit Destination</h1>
-      <DestinationForm
-        initialData={initialData}
-        mode="edit"
-        destinationId={destination.id as string}
-      />
-
-      {id && (
-        <div className="mt-10 pt-10 border-t border-border">
-          <DestinationHighlights destinationId={id} />
-        </div>
-      )}
-    </div>
+    <DestinationEditTabs
+      mode="edit"
+      destinationId={destination.id as string}
+      initialData={initialData}
+    />
   );
 }

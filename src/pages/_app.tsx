@@ -59,17 +59,13 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <ThemeProvider>
-        {isAdmin ? (
-          content
-        ) : (
-          <NextIntlClientProvider
-            locale={locale}
-            messages={messages}
-            timeZone="Asia/Ho_Chi_Minh"
-          >
-            {content}
-          </NextIntlClientProvider>
-        )}
+        <NextIntlClientProvider
+          locale={locale}
+          messages={messages}
+          timeZone="Asia/Ho_Chi_Minh"
+        >
+          {content}
+        </NextIntlClientProvider>
       </ThemeProvider>
     </SessionProvider>
   );
