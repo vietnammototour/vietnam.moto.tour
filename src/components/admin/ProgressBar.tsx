@@ -1,6 +1,6 @@
-interface ProgressBarProps {
+type ProgressBarProps = {
   loading: boolean;
-}
+};
 
 export function ProgressBar({loading}: ProgressBarProps) {
   if (!loading) return null;

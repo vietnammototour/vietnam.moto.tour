@@ -4,10 +4,10 @@ import {useState, useMemo} from 'react';
 import {api} from '@/routes';
 import type {TranslationRow} from '@/types';
 
-interface TranslationEditorProps {
+type TranslationEditorProps = {
   translations: TranslationRow[];
   namespaces: string[];
-}
+};
 
 export function TranslationEditor({
   translations: initial,

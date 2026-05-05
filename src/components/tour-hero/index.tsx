@@ -7,13 +7,13 @@ import {routes} from '@/routes';
 import {getDestinationName} from '@/data';
 import type {Tour} from '@/types';
 
-interface TourHeroProps {
+type TourHeroProps = {
   tour?: Tour;
   preview?: {
     heroImage: string;
     destinationName: string;
   };
-}
+};
 
 export function TourHero({tour, preview}: TourHeroProps) {
   const t = useTranslations('tourDetail');

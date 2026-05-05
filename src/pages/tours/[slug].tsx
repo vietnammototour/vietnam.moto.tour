@@ -19,10 +19,10 @@ import {TourDetails} from '@/components/tour-details';
 import {TourPayment} from '@/components/tour-payment';
 import {TourNotes} from '@/components/tour-notes';
 
-interface TourDetailProps {
+type TourDetailProps = {
   tour: Tour;
   isAdmin: boolean;
-}
+};
 
 export default function TourDetail({tour, isAdmin}: TourDetailProps) {
   const router = useRouter();

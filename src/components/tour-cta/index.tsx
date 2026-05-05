@@ -3,9 +3,9 @@ import {motion} from 'framer-motion';
 import {contactInfo} from '@/utils';
 import {useMagnetic} from '@/hooks/use-magnetic';
 
-interface TourCTAProps {
+type TourCTAProps = {
   tourTitle: string;
-}
+};
 
 export function TourCTA({tourTitle}: TourCTAProps) {
   const t = useTranslations('tourDetail');

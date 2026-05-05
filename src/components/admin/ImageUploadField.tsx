@@ -3,7 +3,7 @@
 import {useState, useRef} from 'react';
 import {api} from '@/routes';
 
-interface ImageUploadFieldProps {
+type ImageUploadFieldProps = {
   entityType: 'tour' | 'destination';
   entityId: string | null;
   imageType: 'card' | 'hero';
@@ -11,7 +11,7 @@ interface ImageUploadFieldProps {
   onUploadComplete: (url: string) => void;
   label: string;
   compact?: boolean;
-}
+};
 
 export function ImageUploadField({
   entityType,

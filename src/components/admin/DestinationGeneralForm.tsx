@@ -7,7 +7,7 @@ import {HeroImagePreview} from './HeroImagePreview';
 import type {DestinationFormData} from './DestinationEditTabs';
 import type {Locale} from './LocalePicker';
 
-interface DestinationGeneralFormProps {
+type DestinationGeneralFormProps = {
   form: DestinationFormData;
   locale: Locale;
   mode: 'create' | 'edit';
@@ -18,7 +18,7 @@ interface DestinationGeneralFormProps {
     value: DestinationFormData[K],
   ) => void;
   onSaved?: (id: string) => void;
-}
+};
 
 export function DestinationGeneralForm({
   form,

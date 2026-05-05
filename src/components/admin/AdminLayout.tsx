@@ -11,9 +11,9 @@ import {
   useAdminLoading,
 } from '@/contexts/AdminLoadingContext';
 
-interface AdminLayoutProps {
+type AdminLayoutProps = {
   children: ReactNode;
-}
+};
 
 function AdminLayoutInner({children}: AdminLayoutProps) {
   const router = useRouter();

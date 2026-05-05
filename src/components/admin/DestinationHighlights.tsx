@@ -5,17 +5,17 @@ import Image from 'next/image';
 import {ImageUploadField} from './ImageUploadField';
 import {api} from '@/routes';
 
-interface Highlight {
+type Highlight = {
   id: string;
   textEn: string;
   textVi: string;
   imageUrl: string | null;
-}
+};
 
-interface DestinationHighlightsProps {
+type DestinationHighlightsProps = {
   destinationId: string;
   locale: 'en' | 'vi';
-}
+};
 
 export function DestinationHighlights({
   destinationId,

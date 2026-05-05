@@ -5,13 +5,13 @@ import Image from 'next/image';
 import type {Highlight} from '@/types';
 import {api} from '@/routes';
 
-interface HighlightsTabProps {
+type HighlightsTabProps = {
   tourId: string | null;
   destinationId: string;
   initialSelectedIds: string[];
   destinations: Array<{id: string; name: string}>;
   onSave: (highlightIds: string[]) => Promise<void>;
-}
+};
 
 export function HighlightsTab({
   tourId,

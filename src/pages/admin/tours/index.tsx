@@ -6,7 +6,7 @@ import {StatusPicker} from '@/components/admin/StatusPicker';
 import {routes, api} from '@/routes';
 import type {TourStatus} from '@/types';
 
-interface AdminTour {
+type AdminTour = {
   id: string;
   title: string;
   slug: string;
@@ -15,7 +15,7 @@ interface AdminTour {
   price: number;
   duration: string;
   imageUrl: string | null;
-}
+};
 
 export default function AdminToursList() {
   const {

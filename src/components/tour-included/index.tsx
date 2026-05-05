@@ -3,11 +3,11 @@ import {useTranslations} from 'next-intl';
 import type {LocalizedText} from '@/types';
 import {waveStagger} from '@/utils/motion-variants';
 
-interface TourIncludedProps {
+type TourIncludedProps = {
   included: LocalizedText[];
   excluded: LocalizedText[];
   locale: string;
-}
+};
 
 export function TourIncluded({included, excluded, locale}: TourIncludedProps) {
   const t = useTranslations('tourDetail');

@@ -2,10 +2,10 @@ import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
 import type {LocalizedText} from '@/types';
 
-interface TourDescriptionProps {
+type TourDescriptionProps = {
   description: LocalizedText;
   locale: string;
-}
+};
 
 export function TourDescription({description, locale}: TourDescriptionProps) {
   const t = useTranslations('tourDetail');
@@ -19,7 +19,9 @@ export function TourDescription({description, locale}: TourDescriptionProps) {
       transition={{duration: 0.5}}
       className="mb-10"
     >
-      <h2 className="type-headline-sm text-on-surface mb-4">{t('aboutThisTour')}</h2>
+      <h2 className="type-headline-sm text-on-surface mb-4">
+        {t('aboutThisTour')}
+      </h2>
       <p className="type-body-sm text-on-surface-secondary leading-relaxed">
         {description[localeKey]}
       </p>

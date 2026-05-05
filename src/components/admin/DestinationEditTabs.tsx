@@ -10,7 +10,7 @@ import {LocalePicker, type Locale} from './LocalePicker';
 
 type TabId = 'general' | 'cardImage' | 'highlights';
 
-export interface DestinationFormData {
+export type DestinationFormData = {
   slug: string;
   name: string;
   nameVi: string;
@@ -20,13 +20,13 @@ export interface DestinationFormData {
   descriptionVi: string;
   descriptionEn: string;
   size: string;
-}
+};
 
-interface DestinationEditTabsProps {
+type DestinationEditTabsProps = {
   mode: 'create' | 'edit';
   destinationId: string | null;
   initialData: DestinationFormData;
-}
+};
 
 const tabs: {id: TabId; label: string}[] = [
   {id: 'general', label: 'General'},

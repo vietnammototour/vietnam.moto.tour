@@ -5,7 +5,7 @@ import {ImageUploadField} from '@/components/admin/ImageUploadField';
 import {StatusPicker} from '@/components/admin/StatusPicker';
 import type {TourStatus, LocalizedText} from '@/types';
 
-export interface GeneralTabData {
+export type GeneralTabData = {
   slug: string;
   destinationId: string;
   title: string;
@@ -28,15 +28,15 @@ export interface GeneralTabData {
   notes: LocalizedText[];
   mealsInfo: LocalizedText;
   status: TourStatus;
-}
+};
 
-interface GeneralTabProps {
+type GeneralTabProps = {
   initialData: GeneralTabData;
   destinations: Array<{id: string; name: string}>;
   tourId: string | null;
   onDestinationChange?: (destinationId: string) => void;
   onSave: (data: GeneralTabData) => Promise<void>;
-}
+};
 
 export function GeneralTab({
   initialData,

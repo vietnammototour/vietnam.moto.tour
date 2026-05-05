@@ -2,13 +2,13 @@ import {useTranslations} from 'next-intl';
 import type {PricingGroup} from '@/types';
 import {useEditable} from '@/components/admin/EditableContext';
 
-interface VehiclePricingProps {
+type VehiclePricingProps = {
   groups: PricingGroup[];
   locale: 'en' | 'vi';
   selectedIndex: {groupIdx: number; tierIdx: number};
   onSelect: (groupIdx: number, tierIdx: number) => void;
   pathPrefix?: string;
-}
+};
 
 function EditableInline({
   value,

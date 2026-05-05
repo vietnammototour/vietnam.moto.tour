@@ -7,10 +7,10 @@ import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourItinerary} from '@/components/tour-itinerary';
 
-interface ItineraryTabProps {
+type ItineraryTabProps = {
   initialData: ItineraryDay[];
   onSave: (itinerary: ItineraryDay[]) => Promise<void>;
-}
+};
 
 function setNestedValue(
   obj: ItineraryDay[],

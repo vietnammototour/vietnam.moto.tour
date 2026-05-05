@@ -12,7 +12,7 @@ import {HighlightsTab} from './tabs/HighlightsTab';
 
 type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights';
 
-interface TourEditTabsProps {
+type TourEditTabsProps = {
   mode: 'create' | 'edit';
   tourId: string | null;
   destinations: Array<{id: string; name: string}>;
@@ -20,7 +20,7 @@ interface TourEditTabsProps {
   initialItinerary: ItineraryDay[];
   initialPricingGroups: PricingGroup[];
   initialHighlightIds: string[];
-}
+};
 
 const tabs: {id: TabId; label: string}[] = [
   {id: 'general', label: 'General'},

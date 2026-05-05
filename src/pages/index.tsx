@@ -33,7 +33,7 @@ const galleryImageUrls = [
   getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
 ];
 
-interface HomeProps {
+type HomeProps = {
   tours: Tour[];
   destinations: (Destination & {
     tourCount: number;
@@ -41,7 +41,7 @@ interface HomeProps {
     hasBike: boolean;
   })[];
   isAdmin: boolean;
-}
+};
 
 export default function Home({tours, destinations, isAdmin}: HomeProps) {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);

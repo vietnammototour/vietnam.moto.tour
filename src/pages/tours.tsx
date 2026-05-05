@@ -15,10 +15,10 @@ const fadeInUp = {
   visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
 };
 
-interface ToursPageProps {
+type ToursPageProps = {
   allTours: Tour[];
   isAdmin: boolean;
-}
+};
 
 export default function Tours({allTours, isAdmin}: ToursPageProps) {
   const t = useTranslations('tours');

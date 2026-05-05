@@ -4,14 +4,14 @@ import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {routes, api} from '@/routes';
 
-interface AdminDestination {
+type AdminDestination = {
   id: string;
   name: string;
   slug: string;
   isActive: boolean;
   imageUrl: string | null;
   _count: {tours: number};
-}
+};
 
 export default function AdminDestinationsList() {
   const {

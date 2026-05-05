@@ -13,7 +13,7 @@ import {toursData, destinationsData} from '@/data';
 // DB row -> frontend type converters
 // ---------------------------------------------------------------------------
 
-interface DbTour {
+type DbTour = {
   id: string;
   slug: string;
   status: string;
@@ -37,16 +37,16 @@ interface DbTour {
   paymentDetails: unknown;
   notes: unknown;
   mealsInfo: unknown;
-}
+};
 
-interface DbDestination {
+type DbDestination = {
   id: string;
   slug: string;
   name: string;
   imageUrl: string;
   heroImage: string;
   size: string;
-}
+};
 
 // Build lookup maps from JSON data for mapping DB UUIDs back to JSON numeric IDs.
 // This ensures components using sync helpers (getDestinationName, etc.) keep working.
