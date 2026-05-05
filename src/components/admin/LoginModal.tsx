@@ -1,7 +1,15 @@
 'use client';
 
 import {useState, useEffect, useCallback} from 'react';
-import {signIn} from 'next-auth/react';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {
+  loginSchema,
+  loginDefaults,
+  submitLogin,
+  type LoginFormData,
+} from './LoginModal.form-utils';
+import {FormFieldError} from './FormFieldError';
 
 type LoginModalProps = {
   isOpen: boolean;
@@ -9,33 +17,30 @@ type LoginModalProps = {
 };
 
 function LoginForm({onClose}: {onClose: () => void}) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  const [submitError, setSubmitError] = useState('');
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: {errors, isSubmitting},
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(loginSchema),
+    defaultValues: loginDefaults,
+    shouldFocusError: true,
+  });
 
-    setLoading(false);
-
-    if (result?.error) {
-      setError('Invalid email or password');
+  async function onSubmit(data: LoginFormData) {
+    setSubmitError('');
+    const {error} = await submitLogin(data);
+    if (error) {
+      setSubmitError(error);
       return;
     }
-
     onClose();
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label
           htmlFor="login-email"
@@ -46,12 +51,11 @@ function LoginForm({onClose}: {onClose: () => void}) {
         <input
           id="login-email"
           type="text"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          {...register('email')}
           className="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
           autoComplete="username"
         />
+        <FormFieldError message={errors.email?.message} />
       </div>
 
       <div>
@@ -64,26 +68,25 @@ function LoginForm({onClose}: {onClose: () => void}) {
         <input
           id="login-password"
           type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          {...register('password')}
           className="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
           autoComplete="current-password"
         />
+        <FormFieldError message={errors.password?.message} />
       </div>
 
-      {error && (
+      {submitError && (
         <p className="type-body-sm text-red-500" role="alert">
-          {error}
+          {submitError}
         </p>
       )}
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={isSubmitting}
         className="w-full bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase py-3 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
       >
-        {loading ? '...' : 'Sign In'}
+        {isSubmitting ? '...' : 'Sign In'}
       </button>
     </form>
   );
