@@ -31,7 +31,7 @@ export const TourCarousel = ({tours}: TourCarouselProps) => {
         }}
       >
         {tours.map((tour) => (
-          <SwiperSlide key={tour.id} className="h-auto pb-2">
+          <SwiperSlide key={tour.id} className="h-auto py-2">
             <TourCard tour={tour} />
           </SwiperSlide>
         ))}

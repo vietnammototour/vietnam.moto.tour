@@ -1,3 +1,13 @@
+.carousel {
+  overflow: hidden;
+  margin: -8px;
+  padding: 8px;
+}
+
+.carousel :global(.swiper) {
+  overflow: visible;
+}
+
 .carousel :global(.swiper-pagination) {
   position: relative;
   margin-top: 16px;
