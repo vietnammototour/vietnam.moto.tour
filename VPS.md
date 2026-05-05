@@ -91,6 +91,8 @@ The deploy process runs `git checkout -- .` which reverts all local changes, the
 - **`rm -rf node_modules`** before install avoids EACCES permission errors when pnpm tries to recreate modules.
 - **`set -a && source .env && set +a`** exports all .env vars so Prisma `env()` helper can read DATABASE_URL.
 - **Swap is essential** — Next.js build uses 1-2GB RAM, VPS only has 961MB. Without swap, build crashes the server.
+- **No symlinks in `public/`** — Turbopack rejects symlinks pointing outside the project root. Use `cp -r` instead (see Image Uploads section).
+- **Never run project commands as root** — creates files owned by root in `.next/`, `node_modules/`, etc. that ci-cd can't delete on next deploy. Always use `su - ci-cd` for manual operations. If this happens, fix with `chown -R ci-cd:ci-cd /var/www/vietnam-moto-tours`.
 
 ## Swap
 
@@ -140,10 +142,8 @@ pm2 logs vietnam-moto-tours --lines 50
 sudo -u postgres psql -d vietnam_moto_tours
 sudo -u postgres psql -d vietnam_moto_tours -c 'SELECT email, name, role FROM "User";'
 
-# Manual deploy
-bash /home/ci-cd/deploy.sh    # as root
-# or
-bash ~/deploy.sh              # as ci-cd user
+# Manual deploy — ALWAYS as ci-cd, never as root
+su - ci-cd -c "cd /var/www/vietnam-moto-tours && bash ~/deploy.sh"
 
 # Generate bcrypt hash
 node -e "const bcrypt = require('bcrypt'); bcrypt.hash('PASSWORD', 10).then(h => console.log(h));"
