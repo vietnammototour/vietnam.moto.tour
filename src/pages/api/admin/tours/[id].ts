@@ -47,14 +47,14 @@ export default async function handler(
         paymentDetails: data.paymentDetails,
         notes: data.notes,
         mealsInfo: data.mealsInfo,
-        isActive: data.isActive,
+        status: data.status,
       },
     });
     return res.json(tour);
   }
 
   if (req.method === 'DELETE') {
-    await prisma.tour.update({where: {id}, data: {isActive: false}});
+    await prisma.tour.update({where: {id}, data: {status: 'ARCHIVED'}});
     return res.status(204).end();
   }
 

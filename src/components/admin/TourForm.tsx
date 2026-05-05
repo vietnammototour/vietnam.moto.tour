@@ -3,6 +3,8 @@
 import {useState} from 'react';
 import {useRouter} from 'next/router';
 import {ImageUploadField} from './ImageUploadField';
+import {StatusPicker} from './StatusPicker';
+import type {TourStatus} from '@/types';
 
 interface TourFormData {
   slug: string;
@@ -42,6 +44,7 @@ interface TourFormData {
   paymentDetails: {en: string; vi: string};
   notes: Array<{en: string; vi: string}>;
   mealsInfo: {en: string; vi: string};
+  status: TourStatus;
 }
 
 interface TourFormProps {
@@ -77,6 +80,7 @@ const emptyForm: TourFormData = {
   paymentDetails: {en: '', vi: ''},
   notes: [],
   mealsInfo: {en: '', vi: ''},
+  status: 'DRAFT' as TourStatus,
 };
 
 export function TourForm({
@@ -308,6 +312,17 @@ export function TourForm({
         onUploadComplete={(url) => updateField('imageUrl', url)}
         label="Card Image"
       />
+
+      {/* Status */}
+      <div>
+        <label className="block type-label-sm text-on-surface-secondary mb-2">
+          Status
+        </label>
+        <StatusPicker
+          value={form.status}
+          onChange={(status) => updateField('status', status)}
+        />
+      </div>
 
       {/* Submit */}
       <div className="flex gap-4 pt-4">
