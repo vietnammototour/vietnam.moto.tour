@@ -92,7 +92,7 @@ export default function AdminToursList() {
                 <td className="px-4 py-3">
                   <Link
                     href={`/admin/tours/${tour.id}/edit`}
-                    className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                    className="group/link flex items-center gap-3 cursor-pointer"
                   >
                     {tour.imageUrl ? (
                       <img
@@ -112,7 +112,7 @@ export default function AdminToursList() {
                     >
                       <i className="fa fa-image text-on-surface-tertiary" />
                     </div>
-                    <span className="type-body-lg text-on-surface">
+                    <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
                       {tour.title}
                     </span>
                   </Link>
