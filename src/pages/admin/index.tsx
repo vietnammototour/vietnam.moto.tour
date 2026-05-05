@@ -2,17 +2,11 @@ import {useSession} from 'next-auth/react';
 import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-
-interface DashboardStats {
-  tourCount: number;
-  destinationCount: number;
-  userCount: number;
-}
+import type {AdminStats} from '@/types';
 
 export default function AdminDashboard() {
   const {data: session} = useSession();
-  const {data: stats, loading} =
-    useAdminFetch<DashboardStats>('/api/admin/stats');
+  const {data: stats, loading} = useAdminFetch<AdminStats>('/api/admin/stats');
   const {setLoading} = useAdminLoading();
 
   useEffect(() => {

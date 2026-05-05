@@ -2,10 +2,10 @@
 
 type Locale = 'en' | 'vi';
 
-interface LocalePickerProps {
+type LocalePickerProps = {
   value: Locale;
   onChange: (locale: Locale) => void;
-}
+};
 
 export function LocalePicker({value, onChange}: LocalePickerProps) {
   return (

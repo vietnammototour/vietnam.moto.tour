@@ -6,6 +6,7 @@ import type {GetStaticPropsContext} from 'next';
 import Head from 'next/head';
 import {PageHeader} from '@/components/page-header';
 import {VideoModal} from '@/components/video-modal';
+import {routes} from '@/routes';
 
 const fadeInUp = {
   hidden: {opacity: 0, y: 30},
@@ -117,7 +118,7 @@ export default function AboutUs() {
             </h2>
           </div>
           <Link
-            href="/contact"
+            href={routes.contact.path()}
             className="bg-surface-elevated text-on-surface-accent hover:bg-surface-alt type-label-sm uppercase px-8 py-4 rounded-lg transition-colors flex-shrink-0 cursor-pointer"
           >
             {t('bookTourNow')}

@@ -3,9 +3,10 @@ import Link from 'next/link';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/admin/StatusPicker';
+import {routes, api} from '@/routes';
 import type {TourStatus} from '@/types';
 
-interface AdminTour {
+type AdminTour = {
   id: string;
   title: string;
   slug: string;
@@ -14,7 +15,7 @@ interface AdminTour {
   price: number;
   duration: string;
   imageUrl: string | null;
-}
+};
 
 export default function AdminToursList() {
   const {
@@ -31,19 +32,15 @@ export default function AdminToursList() {
   async function handleDelete(id: string) {
     if (!confirm('Archive this tour?')) return;
 
-    const res = await fetch(`/api/admin/tours/${id}`, {method: 'DELETE'});
-    if (res.ok) {
+    const {error} = await api.admin.tours.delete(id);
+    if (!error) {
       refetch();
     }
   }
 
   async function handleStatusChange(id: string, status: TourStatus) {
-    const res = await fetch(`/api/admin/tours/${id}`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({status}),
-    });
-    if (res.ok) {
+    const {error} = await api.admin.tours.update(id, {status});
+    if (!error) {
       refetch();
     }
   }
@@ -55,7 +52,7 @@ export default function AdminToursList() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="type-headline-sm">Tours</h1>
         <Link
-          href="/admin/tours/new"
+          href={routes.admin.tours.new.path()}
           className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
         >
           + New Tour
@@ -91,7 +88,7 @@ export default function AdminToursList() {
               >
                 <td className="px-4 py-3">
                   <Link
-                    href={`/admin/tours/${tour.id}/edit`}
+                    href={routes.admin.tours.edit.path({id: tour.id})}
                     className="group/link flex items-center gap-3 cursor-pointer"
                   >
                     {tour.imageUrl ? (

@@ -3,6 +3,7 @@
 import {useState, useCallback} from 'react';
 import {useRouter} from 'next/router';
 import type {ItineraryDay, PricingGroup} from '@/types';
+import {routes, api, useNavigate} from '@/routes';
 import {GeneralTab} from './tabs/GeneralTab';
 import type {GeneralTabData} from './tabs/GeneralTab';
 import {ItineraryTab} from './tabs/ItineraryTab';
@@ -11,7 +12,7 @@ import {HighlightsTab} from './tabs/HighlightsTab';
 
 type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights';
 
-interface TourEditTabsProps {
+type TourEditTabsProps = {
   mode: 'create' | 'edit';
   tourId: string | null;
   destinations: Array<{id: string; name: string}>;
@@ -19,7 +20,7 @@ interface TourEditTabsProps {
   initialItinerary: ItineraryDay[];
   initialPricingGroups: PricingGroup[];
   initialHighlightIds: string[];
-}
+};
 
 const tabs: {id: TabId; label: string}[] = [
   {id: 'general', label: 'General'},
@@ -38,6 +39,7 @@ export function TourEditTabs({
   initialHighlightIds,
 }: TourEditTabsProps) {
   const router = useRouter();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('general');
   const [tourId, setTourId] = useState<string | null>(initialTourId);
   const [destinationId, setDestinationId] = useState(
@@ -46,45 +48,32 @@ export function TourEditTabs({
 
   const handleGeneralSave = useCallback(
     async (data: GeneralTabData) => {
-      const url =
-        mode === 'create' && !tourId
-          ? '/api/admin/tours'
-          : `/api/admin/tours/${tourId}`;
-      const method = mode === 'create' && !tourId ? 'POST' : 'PUT';
+      const isNew = mode === 'create' && !tourId;
+      const result = isNew
+        ? await api.admin.tours.create(
+            data as unknown as Record<string, unknown>,
+          )
+        : await api.admin.tours.update(
+            tourId!,
+            data as unknown as Record<string, unknown>,
+          );
 
-      const res = await fetch(url, {
-        method,
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data),
-      });
+      if (result.error) throw new Error(result.error);
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? 'Failed to save');
-      }
-
-      const saved = await res.json();
-      if (mode === 'create' && !tourId) {
-        setTourId(saved.id);
-        // Update URL without full reload
-        window.history.replaceState(null, '', `/admin/tours/${saved.id}/edit`);
+      if (isNew && result.data) {
+        const saved = result.data;
+        setTourId(String(saved.id));
+        navigate.replaceUrl(routes.admin.tours.edit, {id: String(saved.id)});
       }
     },
-    [mode, tourId],
+    [mode, tourId, navigate],
   );
 
   const handleItinerarySave = useCallback(
     async (itinerary: ItineraryDay[]) => {
       if (!tourId) throw new Error('Save General tab first');
-      const res = await fetch(`/api/admin/tours/${tourId}`, {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({itinerary}),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? 'Failed to save');
-      }
+      const {error} = await api.admin.tours.update(tourId, {itinerary});
+      if (error) throw new Error(error);
     },
     [tourId],
   );
@@ -92,15 +81,8 @@ export function TourEditTabs({
   const handlePricingSave = useCallback(
     async (pricingGroups: PricingGroup[]) => {
       if (!tourId) throw new Error('Save General tab first');
-      const res = await fetch(`/api/admin/tours/${tourId}`, {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({pricingGroups}),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? 'Failed to save');
-      }
+      const {error} = await api.admin.tours.update(tourId, {pricingGroups});
+      if (error) throw new Error(error);
     },
     [tourId],
   );
@@ -108,15 +90,8 @@ export function TourEditTabs({
   const handleHighlightsSave = useCallback(
     async (highlightIds: string[]) => {
       if (!tourId) throw new Error('Save General tab first');
-      const res = await fetch(`/api/admin/tours/${tourId}`, {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({highlightIds}),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? 'Failed to save');
-      }
+      const {error} = await api.admin.tours.update(tourId, {highlightIds});
+      if (error) throw new Error(error);
     },
     [tourId],
   );
@@ -132,7 +107,7 @@ export function TourEditTabs({
         </h1>
         <button
           type="button"
-          onClick={() => router.push('/admin/tours')}
+          onClick={() => navigate.to(routes.admin.tours.list)}
           className="px-4 py-2 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
         >
           Back to Tours

@@ -1,13 +1,13 @@
 import {useMotionValue, useSpring, MotionValue} from 'framer-motion';
 import {useCallback, useRef, RefObject} from 'react';
 
-interface MagneticEffect {
+type MagneticEffect = {
   ref: RefObject<HTMLElement | null>;
   x: MotionValue<number>;
   y: MotionValue<number>;
   onMouseMove: (e: React.MouseEvent) => void;
   onMouseLeave: () => void;
-}
+};
 
 export function useMagnetic(strength = 0.3, threshold = 80): MagneticEffect {
   const ref = useRef<HTMLElement | null>(null);

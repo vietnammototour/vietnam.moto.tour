@@ -6,7 +6,7 @@ import {
 } from 'framer-motion';
 import {useCallback, useRef, RefObject} from 'react';
 
-interface CardTilt {
+type CardTilt = {
   ref: RefObject<HTMLElement | null>;
   rotateX: MotionValue<number>;
   rotateY: MotionValue<number>;
@@ -14,7 +14,7 @@ interface CardTilt {
   onMouseMove: (e: React.MouseEvent) => void;
   onMouseLeave: () => void;
   onMouseEnter: () => void;
-}
+};
 
 export function useCardTilt(maxDeg = 4): CardTilt {
   const ref = useRef<HTMLElement | null>(null);

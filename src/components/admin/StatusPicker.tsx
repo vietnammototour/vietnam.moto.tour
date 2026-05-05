@@ -23,11 +23,11 @@ const statuses: {value: TourStatus; label: string; activeClasses: string}[] = [
   },
 ];
 
-interface StatusPickerProps {
+type StatusPickerProps = {
   value: TourStatus;
   onChange: (status: TourStatus) => void;
   disabled?: boolean;
-}
+};
 
 export function StatusPicker({
   value,

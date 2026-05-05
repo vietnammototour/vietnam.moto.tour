@@ -11,10 +11,10 @@ import {
 
 type Theme = 'light' | 'dark';
 
-interface ThemeContextValue {
+type ThemeContextValue = {
   theme: Theme;
   toggleTheme: () => void;
-}
+};
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 

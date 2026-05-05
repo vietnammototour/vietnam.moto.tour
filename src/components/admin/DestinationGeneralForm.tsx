@@ -2,11 +2,12 @@
 
 import {useState} from 'react';
 import {useRouter} from 'next/router';
+import {routes, api, useNavigate} from '@/routes';
 import {HeroImagePreview} from './HeroImagePreview';
 import type {DestinationFormData} from './DestinationEditTabs';
 import type {Locale} from './LocalePicker';
 
-interface DestinationGeneralFormProps {
+type DestinationGeneralFormProps = {
   form: DestinationFormData;
   locale: Locale;
   mode: 'create' | 'edit';
@@ -17,7 +18,7 @@ interface DestinationGeneralFormProps {
     value: DestinationFormData[K],
   ) => void;
   onSaved?: (id: string) => void;
-}
+};
 
 export function DestinationGeneralForm({
   form,
@@ -29,6 +30,7 @@ export function DestinationGeneralForm({
   onSaved,
 }: DestinationGeneralFormProps) {
   const router = useRouter();
+  const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -42,31 +44,27 @@ export function DestinationGeneralForm({
     setSaving(true);
     setError('');
 
-    const url =
+    const result =
       mode === 'create'
-        ? '/api/admin/destinations'
-        : `/api/admin/destinations/${destinationId}`;
-    const method = mode === 'create' ? 'POST' : 'PUT';
-
-    const res = await fetch(url, {
-      method,
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(form),
-    });
+        ? await api.admin.destinations.create(
+            form as unknown as Record<string, unknown>,
+          )
+        : await api.admin.destinations.update(
+            destinationId!,
+            form as unknown as Record<string, unknown>,
+          );
 
     setSaving(false);
 
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? 'Failed to save');
+    if (result.error) {
+      setError(result.error);
       return;
     }
 
     if (onSaved) {
-      const data = await res.json();
-      onSaved(data.id ?? destinationId);
+      onSaved(String(result.data?.id ?? destinationId));
     } else {
-      router.push('/admin/destinations');
+      navigate.to(routes.admin.destinations.list);
     }
   }
 

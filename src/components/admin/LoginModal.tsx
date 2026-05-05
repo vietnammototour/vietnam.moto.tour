@@ -3,10 +3,10 @@
 import {useState, useEffect, useCallback} from 'react';
 import {signIn} from 'next-auth/react';
 
-interface LoginModalProps {
+type LoginModalProps = {
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 function LoginForm({onClose}: {onClose: () => void}) {
   const [email, setEmail] = useState('');

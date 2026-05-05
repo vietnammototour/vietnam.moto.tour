@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
+import {routes} from '@/routes';
 import {getUrl, contactInfo} from '@/utils';
 
 export const Footer = () => {
@@ -12,7 +13,7 @@ export const Footer = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <Link href="/" className="shrink-0 cursor-pointer">
+          <Link href={routes.home.path()} className="shrink-0 cursor-pointer">
             <img
               src={getUrl('assets/images/logo/logo-white.png')}
               alt="Logo"
@@ -23,7 +24,7 @@ export const Footer = () => {
           {/* Nav links */}
           <nav className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-2 type-body-sm">
             <Link
-              href="/tours"
+              href={routes.tours.list.path()}
               className="hover:text-on-surface-inverse transition-colors cursor-pointer"
             >
               {tNav('tours')}
@@ -37,13 +38,13 @@ export const Footer = () => {
             </Link>
             */}
             <Link
-              href="/about-us"
+              href={routes.aboutUs.path()}
               className="hover:text-on-surface-inverse transition-colors cursor-pointer"
             >
               {tNav('aboutUs')}
             </Link>
             <Link
-              href="/contact"
+              href={routes.contact.path()}
               className="hover:text-on-surface-inverse transition-colors cursor-pointer"
             >
               {tNav('contact')}

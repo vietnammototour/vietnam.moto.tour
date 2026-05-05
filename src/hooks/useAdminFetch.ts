@@ -1,11 +1,11 @@
 import {useState, useEffect, useCallback, useReducer} from 'react';
 
-interface UseAdminFetchResult<T> {
+type UseAdminFetchResult<T> = {
   data: T | null;
   loading: boolean;
   error: string | null;
   refetch: () => void;
-}
+};
 
 type State<T> = {
   data: T | null;

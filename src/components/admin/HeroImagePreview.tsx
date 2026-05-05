@@ -3,12 +3,12 @@
 import {TourHero} from '@/components/tour-hero';
 import {ImageUploadField} from './ImageUploadField';
 
-interface HeroImagePreviewProps {
+type HeroImagePreviewProps = {
   destinationId: string | null;
   heroImage: string;
   destinationName: string;
   onImageChange: (url: string) => void;
-}
+};
 
 export function HeroImagePreview({
   destinationId,

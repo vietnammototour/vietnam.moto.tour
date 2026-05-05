@@ -5,42 +5,42 @@ export type LocalizedText = {
   vi: string;
 };
 
-export interface ItineraryItem {
+export type ItineraryItem = {
   time: string;
   description: LocalizedText;
-}
+};
 
-export interface ItineraryDay {
+export type ItineraryDay = {
   dayLabel: LocalizedText;
   items: ItineraryItem[];
-}
+};
 
-export interface PricingTier {
+export type PricingTier = {
   label: LocalizedText;
   description?: LocalizedText;
   price: number;
   minGroupSize?: number;
   maxGroupSize?: number;
-}
+};
 
-export interface PricingGroup {
+export type PricingGroup = {
   type: 'group-size' | 'vehicle';
   label: LocalizedText;
   icon?: string;
   tiers: PricingTier[];
-}
+};
 
-export interface Highlight {
+export type Highlight = {
   id: string;
   destinationId: string;
   textEn: string;
   textVi: string;
   imageUrl: string | null;
-}
+};
 
 export type TourStatus = 'DRAFT' | 'PUBLISHED' | 'FEATURED' | 'ARCHIVED';
 
-export interface Tour {
+export type Tour = {
   id: number;
   title: string;
   imageUrl: string;
@@ -65,17 +65,17 @@ export interface Tour {
   paymentDetails: LocalizedText;
   notes: LocalizedText[];
   mealsInfo: LocalizedText;
-}
+};
 
-export interface Destination {
+export type Destination = {
   id: number;
   name: string;
   imageUrl: string;
   heroImage: string;
   size: 'small' | 'large';
-}
+};
 
-export interface ContactInfo {
+export type ContactInfo = {
   phone: string;
   email: string;
   youtubeLink: string;
@@ -83,42 +83,64 @@ export interface ContactInfo {
   whatsApp: string;
   address: string;
   city: string;
-}
+};
 
-export interface LayoutProps {
+export type LayoutProps = {
   children: ReactNode;
-}
+};
 
-export interface TourCardProps {
+export type TourCardProps = {
   tour: Tour;
-}
+};
 
-export interface TourCarouselProps {
+export type TourCarouselProps = {
   tours: Tour[];
-}
+};
 
-export interface DestinationCardProps {
+export type DestinationCardProps = {
   destination: Destination & {
     tourCount: number;
     hasCar: boolean;
     hasBike: boolean;
   };
-}
+};
 
-export interface GalleryItemProps {
+export type GalleryItemProps = {
   imageSrc: string;
   alt: string;
   delay: number;
-}
+};
 
-export interface PageHeaderProps {
+export type PageHeaderProps = {
   title: string;
   breadcrumbs: {label: string; href?: string}[];
   backgroundImage: string;
-}
+};
 
-export interface VideoModalProps {
+export type VideoModalProps = {
   videoUrl: string;
   isOpen: boolean;
   onClose: () => void;
-}
+};
+
+export type AdminUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  createdAt: string;
+};
+
+export type TranslationRow = {
+  id: string;
+  namespace: string;
+  key: string;
+  valueVi: string;
+  valueEn: string;
+};
+
+export type AdminStats = {
+  tourCount: number;
+  destinationCount: number;
+  userCount: number;
+};

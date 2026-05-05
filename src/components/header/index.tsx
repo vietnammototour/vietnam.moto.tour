@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import {useSession, signOut} from 'next-auth/react';
+import {routes} from '@/routes';
 import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
@@ -24,9 +25,13 @@ export const Header = () => {
   const isHidden = scrollDirection === 'down' && scrollY > 200;
 
   const navLinks = [
-    {href: '/', label: t('home'), active: router.pathname === '/'},
     {
-      href: '/tours',
+      href: routes.home.path(),
+      label: t('home'),
+      active: router.pathname === routes.home.path(),
+    },
+    {
+      href: routes.tours.list.path(),
       label: t('tours'),
       active: router.pathname.startsWith('/tours'),
     },
@@ -41,21 +46,21 @@ export const Header = () => {
     //   ],
     // },
     {
-      href: '/about-us',
+      href: routes.aboutUs.path(),
       label: t('aboutUs'),
-      active: router.pathname === '/about-us',
+      active: router.pathname === routes.aboutUs.path(),
     },
     {
-      href: '/contact',
+      href: routes.contact.path(),
       label: t('contact'),
-      active: router.pathname === '/contact',
+      active: router.pathname === routes.contact.path(),
     },
     ...(session
       ? [
           {
-            href: '/admin',
+            href: routes.admin.dashboard.path(),
             label: t('admin'),
-            active: router.pathname.startsWith('/admin'),
+            active: routes.isAdmin(router.pathname),
           },
         ]
       : []),
@@ -110,7 +115,10 @@ export const Header = () => {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            <Link href="/" className="flex-shrink-0 cursor-pointer">
+            <Link
+              href={routes.home.path()}
+              className="flex-shrink-0 cursor-pointer"
+            >
               <img
                 src={getUrl('assets/images/logo/logo-amber-dark.png')}
                 alt="Vietnam Motorcycle Tour"
