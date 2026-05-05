@@ -3,6 +3,7 @@ import {useTranslations} from 'next-intl';
 import {motion, useMotionTemplate} from 'framer-motion';
 import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
 import {clipReveal, slideFromLeft} from '@/utils/motion-variants';
+import {routes} from '@/routes';
 import {getDestinationName} from '@/data';
 import type {Tour} from '@/types';
 
@@ -97,14 +98,14 @@ export function TourHero({tour, preview}: TourHeroProps) {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <nav className="flex items-center gap-2 type-body-sm text-on-surface-secondary">
               <Link
-                href="/"
+                href={routes.home.path()}
                 className="hover:text-primary transition-colors cursor-pointer"
               >
                 {t('breadcrumbHome')}
               </Link>
               <span>/</span>
               <Link
-                href="/tours"
+                href={routes.tours.list.path()}
                 className="hover:text-primary transition-colors cursor-pointer"
               >
                 {t('breadcrumbTours')}
