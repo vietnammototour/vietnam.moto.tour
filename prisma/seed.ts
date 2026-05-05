@@ -265,6 +265,25 @@ async function main(): Promise<void> {
       valueEn: 'Light',
       valueVi: 'Sáng',
     },
+    // notFound
+    {
+      namespace: 'notFound',
+      key: 'title',
+      valueEn: 'Page Not Found',
+      valueVi: 'Không tìm thấy trang',
+    },
+    {
+      namespace: 'notFound',
+      key: 'message',
+      valueEn: 'The page you are looking for does not exist.',
+      valueVi: 'Trang bạn đang tìm kiếm không tồn tại.',
+    },
+    {
+      namespace: 'notFound',
+      key: 'backHome',
+      valueEn: 'Back to Home',
+      valueVi: 'Về trang chủ',
+    },
     // meta
     {
       namespace: 'meta',
