@@ -1,146 +1,99 @@
 'use client';
 
 import {useState, useCallback} from 'react';
+import {useForm, useFieldArray, useWatch} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 import type {PricingGroup} from '@/types';
 import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourPricing} from '@/components/tour-pricing';
+import {pricingSchema, type PricingFormData} from './PricingTab.form-utils';
 
 type PricingTabProps = {
   initialData: PricingGroup[];
   onSave: (pricingGroups: PricingGroup[]) => Promise<void>;
 };
 
-function setNestedValue(
-  obj: PricingGroup[],
-  path: string,
-  value: string | number,
-): PricingGroup[] {
-  const clone = JSON.parse(JSON.stringify(obj)) as PricingGroup[];
-  const parts = path.split('.');
-  let current: unknown = clone;
-  for (let i = 0; i < parts.length - 1; i++) {
-    const key = /^\d+$/.test(parts[i]) ? Number(parts[i]) : parts[i];
-    current = (current as Record<string, unknown>)[key as string];
-  }
-  const lastKey = parts[parts.length - 1];
-  (current as Record<string, unknown>)[lastKey] = value;
-  return clone;
-}
-
 export function PricingTab({initialData, onSave}: PricingTabProps) {
-  const [pricingGroups, setPricingGroups] =
-    useState<PricingGroup[]>(initialData);
   const [locale, setLocale] = useState<'en' | 'vi'>('en');
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [savedData, setSavedData] = useState<PricingGroup[]>(initialData);
+  const [submitError, setSubmitError] = useState('');
 
-  const isDirty = JSON.stringify(pricingGroups) !== JSON.stringify(savedData);
+  const {
+    control,
+    setValue,
+    getValues,
+    formState: {isDirty},
+    reset,
+    register,
+  } = useForm<PricingFormData>({
+    resolver: yupResolver(pricingSchema),
+    defaultValues: {groups: initialData},
+  });
+
+  const {
+    fields: groupFields,
+    append: appendGroup,
+    remove: removeGroup,
+  } = useFieldArray({control, name: 'groups'});
+
+  const watchedGroups = useWatch({control, name: 'groups'}) as PricingGroup[];
+
+  function handleAddGroup() {
+    appendGroup({
+      type: 'vehicle' as const,
+      label: {en: 'New Group', vi: 'Nhóm mới'},
+      tiers: [],
+    });
+  }
+
+  function handleAddTier(groupIndex: number) {
+    const group = getValues(`groups.${groupIndex}`);
+    const currentTiers = group.tiers;
+    setValue(
+      `groups.${groupIndex}.tiers` as any,
+      [
+        ...currentTiers,
+        {
+          label: {en: 'New Tier', vi: 'Mức mới'},
+          price: 0,
+          minGroupSize: group.type === 'group-size' ? 2 : undefined,
+          maxGroupSize: group.type === 'group-size' ? 4 : undefined,
+        },
+      ],
+      {shouldDirty: true},
+    );
+  }
+
+  function handleRemoveTier(groupIndex: number, tierIndex: number) {
+    const currentTiers = getValues(`groups.${groupIndex}.tiers`);
+    setValue(
+      `groups.${groupIndex}.tiers` as any,
+      currentTiers.filter((_: unknown, i: number) => i !== tierIndex),
+      {shouldDirty: true},
+    );
+  }
 
   const handleFieldChange = useCallback(
     (path: string, value: string | number) => {
-      setPricingGroups((prev) => setNestedValue(prev, path, value));
+      // EditableProvider paths use raw array indices
+      // e.g., "0.tiers.1.price" -> "groups.0.tiers.1.price"
+      const rhfPath = `groups.${path}`;
+      setValue(rhfPath as any, value as any, {shouldDirty: true});
     },
-    [],
+    [setValue],
   );
-
-  function addGroup() {
-    setPricingGroups((prev) => [
-      ...prev,
-      {
-        type: 'vehicle' as const,
-        label: {en: 'New Group', vi: 'Nhóm mới'},
-        tiers: [],
-      },
-    ]);
-  }
-
-  function removeGroup(index: number) {
-    setPricingGroups((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function updateGroupType(index: number, type: 'vehicle' | 'group-size') {
-    setPricingGroups((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
-      clone[index].type = type;
-      return clone;
-    });
-  }
-
-  function updateGroupIcon(index: number, icon: string) {
-    setPricingGroups((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
-      clone[index].icon = icon;
-      return clone;
-    });
-  }
-
-  function updateGroupLabel(index: number, value: string) {
-    setPricingGroups((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
-      clone[index].label[locale] = value;
-      return clone;
-    });
-  }
-
-  function addTier(groupIndex: number) {
-    setPricingGroups((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
-      clone[groupIndex].tiers.push({
-        label: {en: 'New Tier', vi: 'Mức mới'},
-        price: 0,
-        minGroupSize: clone[groupIndex].type === 'group-size' ? 2 : undefined,
-        maxGroupSize: clone[groupIndex].type === 'group-size' ? 4 : undefined,
-      });
-      return clone;
-    });
-  }
-
-  function removeTier(groupIndex: number, tierIndex: number) {
-    setPricingGroups((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
-      clone[groupIndex].tiers.splice(tierIndex, 1);
-      return clone;
-    });
-  }
-
-  function updateTierField(
-    groupIndex: number,
-    tierIndex: number,
-    field: string,
-    value: string | number,
-  ) {
-    setPricingGroups((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
-      (
-        clone[groupIndex].tiers[tierIndex] as unknown as Record<string, unknown>
-      )[field] = value;
-      return clone;
-    });
-  }
-
-  function updateTierLabel(
-    groupIndex: number,
-    tierIndex: number,
-    value: string,
-  ) {
-    setPricingGroups((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
-      clone[groupIndex].tiers[tierIndex].label[locale] = value;
-      return clone;
-    });
-  }
 
   async function handleSave() {
     setSaving(true);
-    setError('');
+    setSubmitError('');
     try {
-      await onSave(pricingGroups);
-      setSavedData(pricingGroups);
+      const data = getValues();
+      await onSave(data.groups as PricingGroup[]);
+      reset(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to save');
+      setSubmitError(err instanceof Error ? err.message : 'Failed to save');
     } finally {
       setSaving(false);
     }
@@ -156,7 +109,7 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
           </span>
           <button
             type="button"
-            onClick={addGroup}
+            onClick={handleAddGroup}
             className="type-label-sm text-primary hover:text-primary-light px-3 py-1.5 border border-dashed border-primary/40 rounded-lg cursor-pointer"
           >
             + Add Group
@@ -164,7 +117,9 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
         </div>
         <div className="flex items-center gap-3">
           <LocalePicker value={locale} onChange={setLocale} />
-          {error && <span className="type-label-sm text-red-400">{error}</span>}
+          {submitError && (
+            <span className="type-label-sm text-red-400">{submitError}</span>
+          )}
           {isDirty && (
             <span className="type-label-sm text-amber-500">Unsaved</span>
           )}
@@ -183,169 +138,181 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px]">
         {/* Editor */}
         <div className="p-5 overflow-y-auto space-y-4 border-r border-border">
-          {pricingGroups.length === 0 && (
+          {groupFields.length === 0 && (
             <p className="type-body-sm text-on-surface-secondary">
               No pricing groups yet. Click &quot;+ Add Group&quot; to start.
             </p>
           )}
 
-          {pricingGroups.map((group, gIdx) => (
-            <div
-              key={gIdx}
-              className="rounded-lg border border-border overflow-hidden"
-            >
-              {/* Group header */}
-              <div className="bg-surface-elevated px-4 py-3 flex items-center gap-3">
-                <select
-                  value={group.type}
-                  onChange={(e) =>
-                    updateGroupType(
-                      gIdx,
-                      e.target.value as 'vehicle' | 'group-size',
-                    )
-                  }
-                  className="px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
-                >
-                  <option value="vehicle">Vehicle</option>
-                  <option value="group-size">Group Size</option>
-                </select>
-                <input
-                  type="text"
-                  placeholder="Icon (e.g. fa-motorcycle)"
-                  value={group.icon ?? ''}
-                  onChange={(e) => updateGroupIcon(gIdx, e.target.value)}
-                  className="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeGroup(gIdx)}
-                  className="type-label-sm text-red-400 hover:text-red-300 cursor-pointer shrink-0"
-                >
-                  Delete
-                </button>
-              </div>
+          {groupFields.map((field, gIdx) => {
+            const group = watchedGroups?.[gIdx];
+            if (!group) return null;
 
-              {/* Group label */}
-              <div className="px-4 py-2 border-b border-border">
-                <label className="type-label-sm text-on-surface-secondary">
-                  Group Label ({locale.toUpperCase()})
-                </label>
-                <input
-                  type="text"
-                  value={group.label[locale]}
-                  onChange={(e) => updateGroupLabel(gIdx, e.target.value)}
-                  className="w-full mt-1 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                />
-              </div>
+            return (
+              <div
+                key={field.id}
+                className="rounded-lg border border-border overflow-hidden"
+              >
+                {/* Group header */}
+                <div className="bg-surface-elevated px-4 py-3 flex items-center gap-3">
+                  <select
+                    value={group.type}
+                    onChange={(e) =>
+                      setValue(
+                        `groups.${gIdx}.type` as any,
+                        e.target.value as 'vehicle' | 'group-size',
+                        {shouldDirty: true},
+                      )
+                    }
+                    className="px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
+                  >
+                    <option value="vehicle">Vehicle</option>
+                    <option value="group-size">Group Size</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Icon (e.g. fa-motorcycle)"
+                    {...register(`groups.${gIdx}.icon`)}
+                    className="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeGroup(gIdx)}
+                    className="type-label-sm text-red-400 hover:text-red-300 cursor-pointer shrink-0"
+                  >
+                    Delete
+                  </button>
+                </div>
 
-              {/* Tiers table */}
-              <div className="px-4 py-3">
-                {group.tiers.length > 0 && (
-                  <div className="space-y-2">
-                    {/* Column headers */}
-                    <div
-                      className={`grid gap-2 type-label-sm text-on-surface-secondary ${
-                        group.type === 'group-size'
-                          ? 'grid-cols-[1fr_80px_60px_60px_28px]'
-                          : 'grid-cols-[1fr_80px_28px]'
-                      }`}
-                    >
-                      <span>Label ({locale.toUpperCase()})</span>
-                      <span>Price ($)</span>
-                      {group.type === 'group-size' && (
-                        <>
-                          <span>Min</span>
-                          <span>Max</span>
-                        </>
-                      )}
-                      <span />
-                    </div>
+                {/* Group label */}
+                <div className="px-4 py-2 border-b border-border">
+                  <label className="type-label-sm text-on-surface-secondary">
+                    Group Label ({locale.toUpperCase()})
+                  </label>
+                  <input
+                    type="text"
+                    value={group.label[locale]}
+                    onChange={(e) =>
+                      setValue(
+                        `groups.${gIdx}.label.${locale}` as any,
+                        e.target.value,
+                        {shouldDirty: true},
+                      )
+                    }
+                    className="w-full mt-1 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                  />
+                </div>
 
-                    {/* Tier rows */}
-                    {group.tiers.map((tier, tIdx) => (
+                {/* Tiers table */}
+                <div className="px-4 py-3">
+                  {group.tiers.length > 0 && (
+                    <div className="space-y-2">
+                      {/* Column headers */}
                       <div
-                        key={tIdx}
-                        className={`grid gap-2 items-center ${
+                        className={`grid gap-2 type-label-sm text-on-surface-secondary ${
                           group.type === 'group-size'
                             ? 'grid-cols-[1fr_80px_60px_60px_28px]'
                             : 'grid-cols-[1fr_80px_28px]'
                         }`}
                       >
-                        <input
-                          type="text"
-                          value={tier.label[locale]}
-                          onChange={(e) =>
-                            updateTierLabel(gIdx, tIdx, e.target.value)
-                          }
-                          className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                        />
-                        <input
-                          type="number"
-                          value={tier.price}
-                          onChange={(e) =>
-                            updateTierField(
-                              gIdx,
-                              tIdx,
-                              'price',
-                              Number(e.target.value),
-                            )
-                          }
-                          className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                        />
+                        <span>Label ({locale.toUpperCase()})</span>
+                        <span>Price ($)</span>
                         {group.type === 'group-size' && (
                           <>
-                            <input
-                              type="number"
-                              placeholder="min"
-                              value={tier.minGroupSize ?? ''}
-                              onChange={(e) =>
-                                updateTierField(
-                                  gIdx,
-                                  tIdx,
-                                  'minGroupSize',
-                                  Number(e.target.value),
-                                )
-                              }
-                              className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                            />
-                            <input
-                              type="number"
-                              placeholder="max"
-                              value={tier.maxGroupSize ?? ''}
-                              onChange={(e) =>
-                                updateTierField(
-                                  gIdx,
-                                  tIdx,
-                                  'maxGroupSize',
-                                  Number(e.target.value),
-                                )
-                              }
-                              className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                            />
+                            <span>Min</span>
+                            <span>Max</span>
                           </>
                         )}
-                        <button
-                          type="button"
-                          onClick={() => removeTier(gIdx, tIdx)}
-                          className="w-7 h-7 flex items-center justify-center rounded-full text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-colors cursor-pointer type-label-sm"
-                        >
-                          ×
-                        </button>
+                        <span />
                       </div>
-                    ))}
-                  </div>
-                )}
 
-                <button
-                  type="button"
-                  onClick={() => addTier(gIdx)}
-                  className="type-label-sm text-primary hover:text-primary-light mt-2 cursor-pointer"
-                >
-                  + Add Tier
-                </button>
+                      {/* Tier rows */}
+                      {group.tiers.map((tier, tIdx) => (
+                        <div
+                          key={tIdx}
+                          className={`grid gap-2 items-center ${
+                            group.type === 'group-size'
+                              ? 'grid-cols-[1fr_80px_60px_60px_28px]'
+                              : 'grid-cols-[1fr_80px_28px]'
+                          }`}
+                        >
+                          <input
+                            type="text"
+                            value={tier.label[locale]}
+                            onChange={(e) =>
+                              setValue(
+                                `groups.${gIdx}.tiers.${tIdx}.label.${locale}` as any,
+                                e.target.value,
+                                {shouldDirty: true},
+                              )
+                            }
+                            className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                          />
+                          <input
+                            type="number"
+                            value={tier.price}
+                            onChange={(e) =>
+                              setValue(
+                                `groups.${gIdx}.tiers.${tIdx}.price` as any,
+                                Number(e.target.value),
+                                {shouldDirty: true},
+                              )
+                            }
+                            className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                          />
+                          {group.type === 'group-size' && (
+                            <>
+                              <input
+                                type="number"
+                                placeholder="min"
+                                value={tier.minGroupSize ?? ''}
+                                onChange={(e) =>
+                                  setValue(
+                                    `groups.${gIdx}.tiers.${tIdx}.minGroupSize` as any,
+                                    Number(e.target.value),
+                                    {shouldDirty: true},
+                                  )
+                                }
+                                className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                              />
+                              <input
+                                type="number"
+                                placeholder="max"
+                                value={tier.maxGroupSize ?? ''}
+                                onChange={(e) =>
+                                  setValue(
+                                    `groups.${gIdx}.tiers.${tIdx}.maxGroupSize` as any,
+                                    Number(e.target.value),
+                                    {shouldDirty: true},
+                                  )
+                                }
+                                className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                              />
+                            </>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveTier(gIdx, tIdx)}
+                            className="w-7 h-7 flex items-center justify-center rounded-full text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-colors cursor-pointer type-label-sm"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => handleAddTier(gIdx)}
+                    className="type-label-sm text-primary hover:text-primary-light mt-2 cursor-pointer"
+                  >
+                    + Add Tier
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Live preview */}
@@ -355,7 +322,10 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
           </p>
           <AdminIntlProvider>
             <EditableProvider locale={locale} onFieldChange={handleFieldChange}>
-              <TourPricing pricingGroups={pricingGroups} locale={locale} />
+              <TourPricing
+                pricingGroups={(watchedGroups ?? []) as PricingGroup[]}
+                locale={locale}
+              />
             </EditableProvider>
           </AdminIntlProvider>
         </div>
