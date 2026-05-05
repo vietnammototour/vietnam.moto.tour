@@ -122,3 +122,25 @@ export interface VideoModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  createdAt: string;
+}
+
+export interface TranslationRow {
+  id: string;
+  namespace: string;
+  key: string;
+  valueVi: string;
+  valueEn: string;
+}
+
+export interface AdminStats {
+  tourCount: number;
+  destinationCount: number;
+  userCount: number;
+}
