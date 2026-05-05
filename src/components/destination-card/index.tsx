@@ -11,15 +11,15 @@ export const DestinationCard = ({
   const t = useTranslations('common');
 
   return (
-    <Link
-      href={`/tours?destination=${id}`}
-      data-testid="destination-card"
-      className={`group relative rounded-lg overflow-hidden block cursor-pointer elevation-1 hover:elevation-2 transition-all duration-300 ${className ?? 'aspect-[3/2]'}`}
+    <motion.div
+      whileHover={{y: -4}}
+      transition={{duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94]}}
+      className={className ?? 'aspect-[3/2]'}
     >
-      <motion.div
-        className="w-full h-full"
-        whileHover={{y: -4}}
-        transition={{duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94]}}
+      <Link
+        href={`/tours?destination=${id}`}
+        data-testid="destination-card"
+        className="group relative rounded-lg overflow-hidden block cursor-pointer elevation-1 hover:elevation-2 transition-all duration-300 w-full h-full"
       >
         <img
           src={imageUrl}
@@ -55,7 +55,7 @@ export const DestinationCard = ({
             </div>
           </div>
         </div>
-      </motion.div>
-    </Link>
+      </Link>
+    </motion.div>
   );
 };
