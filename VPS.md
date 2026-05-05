@@ -75,8 +75,14 @@ rm -rf node_modules
 pnpm install --frozen-lockfile
 npx prisma generate
 npx prisma migrate deploy
+# Copy uploads for build (Turbopack rejects symlinks outside project root)
+rm -rf public/uploads
+cp -r /var/www/uploads public/uploads
 rm -rf .next
 pnpm build
+# Replace copy with symlink for runtime serving (new uploads go to /var/www/uploads)
+rm -rf public/uploads
+ln -sfn /var/www/uploads public/uploads
 pm2 restart vietnam-moto-tours
 ```
 
@@ -91,6 +97,8 @@ The deploy process runs `git checkout -- .` which reverts all local changes, the
 - **`rm -rf node_modules`** before install avoids EACCES permission errors when pnpm tries to recreate modules.
 - **`set -a && source .env && set +a`** exports all .env vars so Prisma `env()` helper can read DATABASE_URL.
 - **Swap is essential** — Next.js build uses 1-2GB RAM, VPS only has 961MB. Without swap, build crashes the server.
+- **No symlinks in `public/`** — Turbopack rejects symlinks pointing outside the project root. Use `cp -r` instead (see Image Uploads section).
+- **Never run project commands as root** — creates files owned by root in `.next/`, `node_modules/`, etc. that ci-cd can't delete on next deploy. Always use `su - ci-cd` for manual operations. If this happens, fix with `chown -R ci-cd:ci-cd /var/www/vietnam-moto-tours`.
 
 ## Swap
 
@@ -109,18 +117,22 @@ The deploy process runs `git checkout -- .` which reverts all local changes, the
 
 ## Image Uploads
 
-Uploaded images are stored in `/var/www/uploads/` and symlinked into the project:
+Uploaded images are stored persistently in `/var/www/uploads/` (outside the repo, survives deploys).
+
+**Important:** Turbopack rejects symlinks outside the project root during `pnpm build`, but Next.js serves them fine at runtime. The deploy script handles this with a two-step approach:
+
+1. **Before build:** `cp -r /var/www/uploads public/uploads` (real copy for Turbopack)
+2. **After build:** `rm -rf public/uploads && ln -sfn /var/www/uploads public/uploads` (symlink for runtime — new uploads go to persistent storage and are served immediately)
 
 ```bash
 # Create persistent uploads directory (one-time)
 mkdir -p /var/www/uploads/destinations /var/www/uploads/tours
 chown -R ci-cd:ci-cd /var/www/uploads
-
-# Add to deploy script after build step:
-ln -sfn /var/www/uploads /var/www/vietnam-moto-tours/public/uploads
 ```
 
-The `UPLOAD_DIR` environment variable can override the default path (defaults to `{project}/public/uploads` for local dev).
+**Production `.env` must include:** `UPLOAD_DIR=/var/www/uploads` so the upload API writes to persistent storage, not the project copy.
+
+For local dev, `UPLOAD_DIR` defaults to `{project}/public/uploads`.
 
 ## Auth
 
@@ -140,10 +152,8 @@ pm2 logs vietnam-moto-tours --lines 50
 sudo -u postgres psql -d vietnam_moto_tours
 sudo -u postgres psql -d vietnam_moto_tours -c 'SELECT email, name, role FROM "User";'
 
-# Manual deploy
-bash /home/ci-cd/deploy.sh    # as root
-# or
-bash ~/deploy.sh              # as ci-cd user
+# Manual deploy — ALWAYS as ci-cd, never as root
+su - ci-cd -c "cd /var/www/vietnam-moto-tours && bash ~/deploy.sh"
 
 # Generate bcrypt hash
 node -e "const bcrypt = require('bcrypt'); bcrypt.hash('PASSWORD', 10).then(h => console.log(h));"

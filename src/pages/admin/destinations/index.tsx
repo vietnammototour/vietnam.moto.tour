@@ -8,6 +8,7 @@ interface AdminDestination {
   name: string;
   slug: string;
   isActive: boolean;
+  imageUrl: string | null;
   _count: {tours: number};
 }
 
@@ -72,8 +73,33 @@ export default function AdminDestinationsList() {
                 key={dest.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
-                <td className="px-4 py-3 type-body-lg text-on-surface">
-                  {dest.name}
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/admin/destinations/${dest.id}/edit`}
+                    className="group/link flex items-center gap-3 cursor-pointer"
+                  >
+                    {dest.imageUrl ? (
+                      <img
+                        src={dest.imageUrl}
+                        alt=""
+                        className="h-[50px] w-auto rounded object-contain shrink-0"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling?.classList.remove(
+                            'hidden',
+                          );
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className={`h-[50px] w-[50px] rounded bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
+                    >
+                      <i className="fa fa-image text-on-surface-tertiary" />
+                    </div>
+                    <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
+                      {dest.name}
+                    </span>
+                  </Link>
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {dest._count.tours}
@@ -90,20 +116,13 @@ export default function AdminDestinationsList() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-4">
-                    <Link
-                      href={`/admin/destinations/${dest.id}/edit`}
-                      className="type-label-sm text-primary hover:text-primary-light transition-colors cursor-pointer"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(dest.id)}
-                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleDelete(dest.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors cursor-pointer"
+                  >
+                    <i className="fa fa-trash text-xs" />
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
