@@ -14,10 +14,10 @@ export const DestinationCard = ({
     <Link
       href={`/tours?destination=${id}`}
       data-testid="destination-card"
-      className={`group relative rounded-lg overflow-hidden block cursor-pointer elevation-1 hover:elevation-2 transition-all duration-300 ${className ?? 'aspect-[3/2]'}`}
+      className={`group relative block cursor-pointer transition-all duration-300 ${className ?? 'aspect-[3/2]'}`}
     >
       <motion.div
-        className="w-full h-full"
+        className="w-full h-full rounded-lg overflow-hidden elevation-1 group-hover:elevation-2"
         whileHover={{y: -4}}
         transition={{duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94]}}
       >
