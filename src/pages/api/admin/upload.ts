@@ -160,13 +160,11 @@ export default async function handler(
     // Body parser is disabled for multipart, so parse JSON manually
     let body: {entityType: EntityType; entityId: string; imageType: ImageType};
     try {
-      const raw = await new Promise<string>((resolve, reject) => {
-        let data = '';
-        req.on('data', (chunk: Buffer) => (data += chunk));
-        req.on('end', () => resolve(data));
-        req.on('error', reject);
-      });
-      body = JSON.parse(raw);
+      const chunks: Buffer[] = [];
+      for await (const chunk of req) {
+        chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+      }
+      body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
     } catch {
       return res.status(400).json({error: 'Invalid JSON body'});
     }
@@ -181,15 +179,23 @@ export default async function handler(
       return res.status(400).json({error: 'Invalid parameters'});
     }
 
-    const filePath = path.join(
-      getDestDir(entityType, entityId),
-      `${imageType}.webp`,
-    );
-    await fs.unlink(filePath).catch(() => {});
+    try {
+      const filePath = path.join(
+        getDestDir(entityType, entityId),
+        `${imageType}.webp`,
+      );
+      await fs.unlink(filePath).catch(() => {});
 
-    await updateDbField(entityType, entityId, imageType, '');
+      await updateDbField(entityType, entityId, imageType, '');
 
-    return res.json({success: true});
+      return res.json({success: true});
+    } catch (err) {
+      console.error('Image delete failed:', err);
+      return res.status(500).json({
+        error: 'Delete failed',
+        details: err instanceof Error ? err.message : String(err),
+      });
+    }
   }
 
   res.setHeader('Allow', 'POST, DELETE');
