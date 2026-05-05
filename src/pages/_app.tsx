@@ -1,3 +1,4 @@
+import {useEffect, useState} from 'react';
 import type {AppProps} from 'next/app';
 import {SessionProvider} from 'next-auth/react';
 import {NextIntlClientProvider, type IntlError} from 'next-intl';
@@ -42,6 +43,22 @@ export default function App({
   const isAdmin = routes.isAdmin(router.pathname);
   const locale = router.locale ?? 'vi';
   const messages = pageProps.messages ?? {};
+  const [routeLoading, setRouteLoading] = useState(false);
+
+  useEffect(() => {
+    const handleStart = () => setRouteLoading(true);
+    const handleDone = () => setRouteLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleDone);
+    router.events.on('routeChangeError', handleDone);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleDone);
+      router.events.off('routeChangeError', handleDone);
+    };
+  }, [router]);
 
   function handleIntlError(error: IntlError) {
     if (error.code === 'MISSING_MESSAGE') return;
@@ -50,6 +67,11 @@ export default function App({
 
   const content = (
     <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
+      {routeLoading && !isAdmin && (
+        <div className="fixed top-0 left-0 right-0 h-1 z-[9999] overflow-hidden bg-primary/20">
+          <div className="h-full bg-primary animate-progress-bar" />
+        </div>
+      )}
       {isAdmin ? (
         <AdminLayout>
           <Component {...pageProps} />
