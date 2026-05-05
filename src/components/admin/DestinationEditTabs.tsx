@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useCallback} from 'react';
+import {useState, useCallback, useEffect, useRef} from 'react';
 import {useRouter} from 'next/router';
 import {DestinationGeneralForm} from './DestinationGeneralForm';
 import {CardImagePreview} from './CardImagePreview';
@@ -66,6 +66,19 @@ export function DestinationEditTabs({
 
   const isTabDisabled = (tabId: TabId) =>
     tabId !== 'general' && mode === 'create' && !destinationId;
+
+  const prevSizeRef = useRef(initialData.size);
+
+  useEffect(() => {
+    if (!destinationId || form.size === prevSizeRef.current) return;
+    prevSizeRef.current = form.size;
+
+    fetch(`/api/admin/destinations/${destinationId}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({...form, size: form.size}),
+    });
+  }, [form.size, destinationId, form]);
 
   const currentName = locale === 'en' ? form.nameEn : form.nameVi;
 
