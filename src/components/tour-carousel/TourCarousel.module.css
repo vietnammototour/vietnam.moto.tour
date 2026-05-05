@@ -1,9 +1,19 @@
 .carousel :global(.swiper-button-prev),
 .carousel :global(.swiper-button-next) {
   --swiper-navigation-size: 24px;
-  --swiper-navigation-sides-offset: 20px;
   color: var(--color-on-surface);
   transition: color 0.2s;
+  top: -36px;
+  bottom: auto;
+}
+
+.carousel :global(.swiper-button-prev) {
+  left: auto;
+  right: 60px;
+}
+
+.carousel :global(.swiper-button-next) {
+  right: 0;
 }
 
 @media (max-width: 1023px) {
