@@ -2,6 +2,7 @@
 
 import {useState, useCallback, useEffect, useRef} from 'react';
 import {useRouter} from 'next/router';
+import {routes, api, useNavigate} from '@/routes';
 import {DestinationGeneralForm} from './DestinationGeneralForm';
 import {CardImagePreview} from './CardImagePreview';
 import {DestinationHighlights} from './DestinationHighlights';
@@ -39,6 +40,7 @@ export function DestinationEditTabs({
   initialData,
 }: DestinationEditTabsProps) {
   const router = useRouter();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('general');
   const [destinationId, setDestinationId] = useState<string | null>(initialId);
   const [locale, setLocale] = useState<Locale>('en');
@@ -49,10 +51,10 @@ export function DestinationEditTabs({
     (id: string) => {
       if (!destinationId) {
         setDestinationId(id);
-        window.history.replaceState(null, '', `/admin/destinations/${id}/edit`);
+        navigate.replaceUrl(routes.admin.destinations.edit, {id});
       }
     },
-    [destinationId],
+    [destinationId, navigate],
   );
 
   const updateForm = useCallback(
@@ -74,11 +76,7 @@ export function DestinationEditTabs({
     if (!destinationId || form.size === prevSizeRef.current) return;
     prevSizeRef.current = form.size;
 
-    fetch(`/api/admin/destinations/${destinationId}`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({...form, size: form.size}),
-    });
+    api.admin.destinations.update(destinationId, {...form, size: form.size});
   }, [form.size, destinationId, form]);
 
   const currentName = locale === 'en' ? form.nameEn : form.nameVi;
@@ -91,7 +89,7 @@ export function DestinationEditTabs({
         </h1>
         <button
           type="button"
-          onClick={() => router.push('/admin/destinations')}
+          onClick={() => navigate.to(routes.admin.destinations.list)}
           className="px-4 py-2 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
         >
           Back to Destinations
