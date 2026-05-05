@@ -9,6 +9,7 @@ interface ImageUploadFieldProps {
   currentUrl?: string;
   onUploadComplete: (url: string) => void;
   label: string;
+  compact?: boolean;
 }
 
 export function ImageUploadField({
@@ -18,6 +19,7 @@ export function ImageUploadField({
   currentUrl,
   onUploadComplete,
   label,
+  compact,
 }: ImageUploadFieldProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -122,6 +124,45 @@ export function ImageUploadField({
     } catch {
       setError('Delete failed');
     }
+  }
+
+  if (compact) {
+    return (
+      <div>
+        {!entityId ? (
+          <span className="type-body-sm text-on-surface-secondary">
+            Save first to upload
+          </span>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm transition-colors cursor-pointer disabled:opacity-50"
+            >
+              {uploading
+                ? 'Uploading...'
+                : hasImage
+                  ? 'Change Image'
+                  : 'Upload Image'}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+          </>
+        )}
+        {error && (
+          <p className="mt-1 type-body-sm text-red-600 dark:text-red-400">
+            {error}
+          </p>
+        )}
+      </div>
+    );
   }
 
   return (
