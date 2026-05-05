@@ -83,6 +83,13 @@ Next.js 16 app using the **Pages Router** (`src/pages/`), TypeScript strict mode
 
 **Path alias:** `@/*` maps to `./src/*`.
 
+**Routing:** All route paths, API calls, and programmatic navigation go through `src/routes/index.ts`. This file exports:
+
+- `routes` — typed path builders for all pages (e.g., `routes.tours.detail.path({slug})`)
+- `api` — typed fetch wrappers for admin API endpoints with `{data, error}` result pattern
+- `useNavigate()` — hook wrapping `router.push`, `router.replace`, and `window.history.replaceState`
+  Do not add hardcoded route strings or raw `fetch('/api/admin/...')` calls — use the route registry and API client instead.
+
 ## Deployment
 
 Pushes to `main` trigger SSH deployment to production (`/var/www/vietnam-moto-tours`) via `.github/workflows/deploy.yml`. The workflow calls an external deploy script at `/home/ci-cd/deploy.sh` on the VPS via SSH (user: `ci-cd`). The server runs the app with pm2.
