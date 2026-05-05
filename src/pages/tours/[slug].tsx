@@ -7,6 +7,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import type {Tour} from '@/types';
 import {contactInfo} from '@/utils';
+import {AdminStatusBadge} from '@/components/admin-status-badge';
 import {TourHero} from '@/components/tour-hero';
 import {TourDescription} from '@/components/tour-description';
 import {TourHighlights} from '@/components/tour-highlights';
@@ -47,6 +48,9 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
 
   return (
     <>
+      {isAdmin && tour.status && tour.status !== 'PUBLISHED' && (
+        <AdminStatusBadge status={tour.status} />
+      )}
       <Head>
         <title>{tMeta('tourDetailTitle', {tourTitle: tour.title})}</title>
         <meta name="description" content={metaDescription} />
