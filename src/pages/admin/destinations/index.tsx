@@ -53,7 +53,6 @@ export default function AdminDestinationsList() {
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-surface-alt">
-              <th className="px-4 py-3"></th>
               <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
                 Name
               </th>
@@ -75,27 +74,29 @@ export default function AdminDestinationsList() {
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
                 <td className="px-4 py-3">
-                  {dest.imageUrl ? (
-                    <img
-                      src={dest.imageUrl}
-                      alt=""
-                      className="h-[75px] w-auto rounded object-contain"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling?.classList.remove(
-                          'hidden',
-                        );
-                      }}
-                    />
-                  ) : null}
-                  <div
-                    className={`h-[75px] w-[75px] rounded bg-surface-alt flex items-center justify-center ${dest.imageUrl ? 'hidden' : ''}`}
-                  >
-                    <i className="fa fa-image text-on-surface-tertiary text-lg" />
+                  <div className="flex items-center gap-3">
+                    {dest.imageUrl ? (
+                      <img
+                        src={dest.imageUrl}
+                        alt=""
+                        className="h-[50px] w-auto rounded object-contain shrink-0"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling?.classList.remove(
+                            'hidden',
+                          );
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className={`h-[50px] w-[50px] rounded bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
+                    >
+                      <i className="fa fa-image text-on-surface-tertiary" />
+                    </div>
+                    <span className="type-body-lg text-on-surface">
+                      {dest.name}
+                    </span>
                   </div>
-                </td>
-                <td className="px-4 py-3 type-body-lg text-on-surface">
-                  {dest.name}
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {dest._count.tours}
