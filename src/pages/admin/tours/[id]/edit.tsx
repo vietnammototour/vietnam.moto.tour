@@ -82,7 +82,6 @@ export default function EditTour() {
 
   return (
     <div>
-      <h1 className="type-headline-sm mb-6">Edit Tour</h1>
       <TourForm
         initialData={initialData}
         destinations={destinations}

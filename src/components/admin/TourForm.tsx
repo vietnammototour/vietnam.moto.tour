@@ -129,6 +129,16 @@ export function TourForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+      <div className="flex items-center justify-between">
+        <h1 className="type-headline-sm">
+          {mode === 'create' ? 'Create New Tour' : 'Edit Tour'}
+        </h1>
+        <StatusPicker
+          value={form.status}
+          onChange={(status) => updateField('status', status)}
+        />
+      </div>
+
       {error && (
         <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-sm">
           {error}
@@ -312,17 +322,6 @@ export function TourForm({
         onUploadComplete={(url) => updateField('imageUrl', url)}
         label="Card Image"
       />
-
-      {/* Status */}
-      <div>
-        <label className="block type-label-sm text-on-surface-secondary mb-2">
-          Status
-        </label>
-        <StatusPicker
-          value={form.status}
-          onChange={(status) => updateField('status', status)}
-        />
-      </div>
 
       {/* Submit */}
       <div className="flex gap-4 pt-4">
