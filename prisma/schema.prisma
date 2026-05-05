@@ -47,7 +47,7 @@ model Tour {
   hotel          String      @default("")
   guided         String      @default("")
   images         Json        @default("[]")
-  highlights     Json        @default("[]")
+  highlights     Highlight[]
   itinerary      Json        @default("[]")
   pricingGroups  Json        @default("[]")
   included       Json        @default("[]")
@@ -74,6 +74,18 @@ model Destination {
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  tours         Tour[]
+  highlights    Highlight[]
+}
+
+model Highlight {
+  id            String      @id @default(cuid())
+  destinationId String
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  textEn        String
+  textVi        String
+  imageUrl      String?
+  createdAt     DateTime    @default(now())
   tours         Tour[]
 }
 
