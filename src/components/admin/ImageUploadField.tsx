@@ -27,6 +27,37 @@ export function ImageUploadField({
   const hasImage = !!previewUrl;
   const isHero = imageType === 'hero';
 
+  async function compressToWebP(file: File): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        // Resize: max 1920px wide, preserve aspect ratio
+        const maxWidth = 1920;
+        let {width, height} = img;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject(new Error('Canvas not supported'));
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('WebP conversion failed'));
+          },
+          'image/webp',
+          0.8,
+        );
+      };
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
   async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !entityId) return;
@@ -34,8 +65,17 @@ export function ImageUploadField({
     setUploading(true);
     setError('');
 
+    let uploadBlob: Blob;
+    try {
+      uploadBlob = await compressToWebP(file);
+    } catch {
+      setError('Image compression failed');
+      setUploading(false);
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', uploadBlob, 'image.webp');
     formData.append('entityType', entityType);
     formData.append('entityId', entityId);
     formData.append('imageType', imageType);

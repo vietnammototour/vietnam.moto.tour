@@ -1,7 +1,6 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {requireAdmin} from '@/lib/admin-auth';
 import {prisma} from '@/lib/prisma';
-import sharp from 'sharp';
 import {promises as fs} from 'fs';
 import path from 'path';
 import {IncomingForm, type File} from 'formidable';
@@ -130,13 +129,13 @@ export default async function handler(
       return res.status(404).json({error: 'Entity not found'});
     }
 
-    // Convert to webp and write
+    // Save the uploaded file (already WebP from client-side processing)
     try {
       const destDir = getDestDir(entityType, entityId);
       await fs.mkdir(destDir, {recursive: true});
 
       const outputPath = path.join(destDir, `${imageType}.webp`);
-      await sharp(file.filepath).webp({quality: 80}).toFile(outputPath);
+      await fs.copyFile(file.filepath, outputPath);
 
       // Update DB
       const publicUrl = getPublicUrl(entityType, entityId, imageType);
@@ -146,10 +145,16 @@ export default async function handler(
       await fs.unlink(file.filepath).catch(() => {});
 
       return res.json({success: true, url: publicUrl});
-    } catch {
+    } catch (err) {
       // Clean up temp file on failure
       await fs.unlink(file.filepath).catch(() => {});
-      return res.status(500).json({error: 'Image processing failed'});
+      console.error('File save failed:', err);
+      return res
+        .status(500)
+        .json({
+          error: 'File save failed',
+          details: err instanceof Error ? err.message : String(err),
+        });
     }
   }
 
