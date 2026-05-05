@@ -19,36 +19,43 @@ export default async function handler(
 
   if (req.method === 'PUT') {
     const data = req.body;
+    const updateData: Record<string, unknown> = {};
+    const fields = [
+      'slug',
+      'destinationId',
+      'title',
+      'titleVi',
+      'titleEn',
+      'imageUrl',
+      'rating',
+      'price',
+      'duration',
+      'distance',
+      'descriptionVi',
+      'descriptionEn',
+      'transportation',
+      'groupSize',
+      'hotel',
+      'guided',
+      'images',
+      'highlights',
+      'itinerary',
+      'pricingGroups',
+      'included',
+      'excluded',
+      'paymentDetails',
+      'notes',
+      'mealsInfo',
+      'status',
+    ];
+    for (const field of fields) {
+      if (data[field] !== undefined) {
+        updateData[field] = data[field];
+      }
+    }
     const tour = await prisma.tour.update({
       where: {id},
-      data: {
-        slug: data.slug,
-        destinationId: data.destinationId,
-        title: data.title,
-        titleVi: data.titleVi,
-        titleEn: data.titleEn,
-        imageUrl: data.imageUrl,
-        rating: data.rating,
-        price: data.price,
-        duration: data.duration,
-        distance: data.distance,
-        descriptionVi: data.descriptionVi,
-        descriptionEn: data.descriptionEn,
-        transportation: data.transportation,
-        groupSize: data.groupSize,
-        hotel: data.hotel,
-        guided: data.guided,
-        images: data.images,
-        highlights: data.highlights,
-        itinerary: data.itinerary,
-        pricingGroups: data.pricingGroups,
-        included: data.included,
-        excluded: data.excluded,
-        paymentDetails: data.paymentDetails,
-        notes: data.notes,
-        mealsInfo: data.mealsInfo,
-        status: data.status,
-      },
+      data: updateData,
     });
     return res.json(tour);
   }
