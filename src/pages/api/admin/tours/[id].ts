@@ -12,7 +12,10 @@ export default async function handler(
   const id = req.query.id as string;
 
   if (req.method === 'GET') {
-    const tour = await prisma.tour.findUnique({where: {id}});
+    const tour = await prisma.tour.findUnique({
+      where: {id},
+      include: {highlights: true},
+    });
     if (!tour) return res.status(404).json({error: 'Tour not found'});
     return res.json(tour);
   }
@@ -38,7 +41,6 @@ export default async function handler(
       'hotel',
       'guided',
       'images',
-      'highlights',
       'itinerary',
       'pricingGroups',
       'included',
@@ -52,6 +54,12 @@ export default async function handler(
       if (data[field] !== undefined) {
         updateData[field] = data[field];
       }
+    }
+    // Handle highlights relation separately
+    if (data.highlightIds !== undefined) {
+      updateData.highlights = {
+        set: data.highlightIds.map((hId: string) => ({id: hId})),
+      };
     }
     const tour = await prisma.tour.update({
       where: {id},
