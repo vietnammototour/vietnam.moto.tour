@@ -12,14 +12,13 @@ export interface GeneralTabData {
   titleVi: string;
   titleEn: string;
   imageUrl: string;
-  rating: string;
   price: number;
-  duration: string;
-  distance: string;
+  duration: number;
+  distance: number;
   descriptionVi: string;
   descriptionEn: string;
   transportation: string;
-  groupSize: string;
+  groupSize: number;
   hotel: string;
   guided: string;
   images: string[];
@@ -169,28 +168,24 @@ export function GeneralTab({
         </div>
       </div>
 
-      {/* Numeric / short fields */}
+      {/* Numeric fields */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          {key: 'price' as const, label: 'Price ($)', type: 'number'},
-          {key: 'duration' as const, label: 'Duration', type: 'text'},
-          {key: 'distance' as const, label: 'Distance', type: 'text'},
-          {key: 'rating' as const, label: 'Rating', type: 'text'},
-        ].map(({key, label, type}) => (
+          {key: 'price' as const, label: 'Price ($)'},
+          {key: 'duration' as const, label: 'Duration (days)'},
+          {key: 'distance' as const, label: 'Distance (km)'},
+          {key: 'groupSize' as const, label: 'Group Size'},
+        ].map(({key, label}) => (
           <div key={key}>
             <label className="block type-label-sm text-on-surface-secondary mb-1">
               {label}
             </label>
             <input
-              type={type}
+              type="number"
+              min={0}
               value={form[key]}
               onChange={(e) =>
-                updateField(
-                  key,
-                  type === 'number'
-                    ? (Number(e.target.value) as never)
-                    : (e.target.value as never),
-                )
+                updateField(key, Number(e.target.value) as never)
               }
               className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             />
@@ -198,10 +193,9 @@ export function GeneralTab({
         ))}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {[
           {key: 'transportation' as const, label: 'Transportation'},
-          {key: 'groupSize' as const, label: 'Group Size'},
           {key: 'hotel' as const, label: 'Hotel'},
           {key: 'guided' as const, label: 'Guided'},
         ].map(({key, label}) => (

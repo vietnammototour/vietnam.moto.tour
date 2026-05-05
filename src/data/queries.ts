@@ -19,15 +19,14 @@ interface DbTour {
   status: string;
   title: string;
   imageUrl: string;
-  rating: string;
   price: number;
-  duration: string;
-  distance: string;
+  duration: number;
+  distance: number;
   destinationId: string;
   descriptionVi: string;
   descriptionEn: string;
   transportation: string;
-  groupSize: string;
+  groupSize: number;
   hotel: string;
   guided: string;
   images: unknown;
@@ -82,7 +81,6 @@ function dbTourToTour(
     id: tourSlugToJsonId.get(row.slug) ?? 0,
     title: row.title,
     imageUrl: row.imageUrl,
-    rating: row.rating,
     price: row.price,
     duration: row.duration,
     distance: row.distance,

@@ -30,7 +30,6 @@ export default async function handler(
       'titleVi',
       'titleEn',
       'imageUrl',
-      'rating',
       'price',
       'duration',
       'distance',
