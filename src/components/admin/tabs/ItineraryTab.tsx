@@ -1,101 +1,106 @@
 'use client';
 
 import {useState, useCallback} from 'react';
+import {useForm, useFieldArray, useWatch} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 import type {ItineraryDay} from '@/types';
 import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourItinerary} from '@/components/tour-itinerary';
+import {
+  itinerarySchema,
+  type ItineraryFormData,
+} from './ItineraryTab.form-utils';
 
 type ItineraryTabProps = {
   initialData: ItineraryDay[];
   onSave: (itinerary: ItineraryDay[]) => Promise<void>;
 };
 
-function setNestedValue(
-  obj: ItineraryDay[],
-  path: string,
-  value: string | number,
-): ItineraryDay[] {
-  const clone = JSON.parse(JSON.stringify(obj)) as ItineraryDay[];
-  const parts = path.split('.');
-  // path: itinerary.0.items.1.description.en
-  // skip first part ("itinerary")
-  let current: unknown = clone;
-  for (let i = 1; i < parts.length - 1; i++) {
-    const key = /^\d+$/.test(parts[i]) ? Number(parts[i]) : parts[i];
-    current = (current as Record<string, unknown>)[key as string];
-  }
-  const lastKey = parts[parts.length - 1];
-  (current as Record<string, unknown>)[lastKey] = value;
-  return clone;
-}
-
 export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
-  const [itinerary, setItinerary] = useState<ItineraryDay[]>(initialData);
   const [locale, setLocale] = useState<'en' | 'vi'>('en');
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [savedData, setSavedData] = useState<ItineraryDay[]>(initialData);
+  const [submitError, setSubmitError] = useState('');
 
-  const isDirty = JSON.stringify(itinerary) !== JSON.stringify(savedData);
+  const {
+    control,
+    setValue,
+    formState: {isDirty},
+    reset,
+    getValues,
+  } = useForm<ItineraryFormData>({
+    resolver: yupResolver(itinerarySchema),
+    defaultValues: {days: initialData},
+  });
+
+  const {
+    fields: dayFields,
+    append: appendDay,
+    remove: removeDay,
+  } = useFieldArray({control, name: 'days'});
+
+  const watchedDays = useWatch({control, name: 'days'}) as ItineraryDay[];
+
+  function handleAddDay() {
+    appendDay({
+      dayLabel: {
+        en: `Day ${dayFields.length + 1}`,
+        vi: `Ngày ${dayFields.length + 1}`,
+      },
+      items: [],
+    });
+  }
+
+  function handleAddItem(dayIndex: number) {
+    const currentItems = getValues(`days.${dayIndex}.items`);
+    setValue(
+      `days.${dayIndex}.items` as any,
+      [
+        ...currentItems,
+        {time: '00:00', description: {en: 'New activity', vi: 'Hoạt động mới'}},
+      ],
+      {shouldDirty: true},
+    );
+  }
+
+  function handleRemoveItem(dayIndex: number, itemIndex: number) {
+    const currentItems = getValues(`days.${dayIndex}.items`);
+    setValue(
+      `days.${dayIndex}.items` as any,
+      currentItems.filter((_: unknown, i: number) => i !== itemIndex),
+      {shouldDirty: true},
+    );
+  }
 
   const handleFieldChange = useCallback(
     (path: string, value: string | number) => {
-      setItinerary((prev) => setNestedValue(prev, path, value));
+      // path from EditableProvider: "itinerary.0.items.1.description.en"
+      // Convert to RHF path: "days.0.items.1.description.en"
+      const rhfPath = path.replace(/^itinerary\./, 'days.');
+
+      setValue(rhfPath as any, value as any, {shouldDirty: true});
     },
-    [],
+    [setValue],
   );
 
-  function addDay() {
-    setItinerary((prev) => [
-      ...prev,
-      {
-        dayLabel: {en: `Day ${prev.length + 1}`, vi: `Ngày ${prev.length + 1}`},
-        items: [],
-      },
-    ]);
-  }
-
-  function removeDay(index: number) {
-    setItinerary((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function addItem(dayIndex: number) {
-    setItinerary((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as ItineraryDay[];
-      clone[dayIndex].items.push({
-        time: '00:00',
-        description: {en: 'New activity', vi: 'Hoạt động mới'},
-      });
-      return clone;
-    });
-  }
-
-  function removeItem(dayIndex: number, itemIndex: number) {
-    setItinerary((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev)) as ItineraryDay[];
-      clone[dayIndex].items.splice(itemIndex, 1);
-      return clone;
-    });
-  }
-
-  const handleRemoveItem = useCallback((path: string) => {
+  const handleRemoveItemFromPreview = useCallback((path: string) => {
     // path: "itinerary.0.items.1"
     const parts = path.split('.');
     const dayIndex = Number(parts[1]);
     const itemIndex = Number(parts[3]);
-    removeItem(dayIndex, itemIndex);
+    handleRemoveItem(dayIndex, itemIndex);
   }, []);
 
   async function handleSave() {
     setSaving(true);
-    setError('');
+    setSubmitError('');
     try {
-      await onSave(itinerary);
-      setSavedData(itinerary);
+      const data = getValues();
+      await onSave(data.days as ItineraryDay[]);
+      reset(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to save');
+      setSubmitError(err instanceof Error ? err.message : 'Failed to save');
     } finally {
       setSaving(false);
     }
@@ -107,20 +112,21 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
       <div className="border-b border-border p-4 flex flex-wrap items-center gap-3">
         {/* Day chips */}
         <div className="flex flex-wrap items-center gap-2 flex-1">
-          {itinerary.map((day, dayIndex) => (
+          {dayFields.map((field, dayIndex) => (
             <div
-              key={dayIndex}
+              key={field.id}
               className="inline-flex items-center gap-2 bg-surface-elevated rounded-lg px-3 py-1.5 border border-border type-label-sm"
             >
               <span className="text-on-surface font-medium">
-                {day.dayLabel[locale] || `Day ${dayIndex + 1}`}
+                {watchedDays?.[dayIndex]?.dayLabel[locale] ||
+                  `Day ${dayIndex + 1}`}
               </span>
               <span className="text-on-surface-secondary">
-                ({day.items.length})
+                ({watchedDays?.[dayIndex]?.items.length ?? 0})
               </span>
               <button
                 type="button"
-                onClick={() => addItem(dayIndex)}
+                onClick={() => handleAddItem(dayIndex)}
                 className="text-primary hover:text-primary-light cursor-pointer"
                 title="Add item"
               >
@@ -138,7 +144,7 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
           ))}
           <button
             type="button"
-            onClick={addDay}
+            onClick={handleAddDay}
             className="type-label-sm text-primary hover:text-primary-light px-3 py-1.5 border border-dashed border-primary/40 rounded-lg cursor-pointer"
           >
             + Add Day
@@ -148,7 +154,9 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
         {/* Right side: locale, status, save */}
         <div className="flex items-center gap-3">
           <LocalePicker value={locale} onChange={setLocale} />
-          {error && <span className="type-label-sm text-red-400">{error}</span>}
+          {submitError && (
+            <span className="type-label-sm text-red-400">{submitError}</span>
+          )}
           {isDirty && (
             <span className="type-label-sm text-amber-500">Unsaved</span>
           )}
@@ -172,9 +180,9 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
           <EditableProvider
             locale={locale}
             onFieldChange={handleFieldChange}
-            onRemoveItem={handleRemoveItem}
+            onRemoveItem={handleRemoveItemFromPreview}
           >
-            <TourItinerary itinerary={itinerary} locale={locale} />
+            <TourItinerary itinerary={watchedDays ?? []} locale={locale} />
           </EditableProvider>
         </AdminIntlProvider>
       </div>
