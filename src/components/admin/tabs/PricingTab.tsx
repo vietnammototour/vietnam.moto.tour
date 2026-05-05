@@ -4,6 +4,7 @@ import {useState, useCallback} from 'react';
 import type {PricingGroup} from '@/types';
 import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
+import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourPricing} from '@/components/tour-pricing';
 
 interface PricingTabProps {
@@ -76,6 +77,14 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
     });
   }
 
+  function updateGroupLabel(index: number, value: string) {
+    setPricingGroups((prev) => {
+      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
+      clone[index].label[locale] = value;
+      return clone;
+    });
+  }
+
   function addTier(groupIndex: number) {
     setPricingGroups((prev) => {
       const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
@@ -112,6 +121,18 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
     });
   }
 
+  function updateTierLabel(
+    groupIndex: number,
+    tierIndex: number,
+    value: string,
+  ) {
+    setPricingGroups((prev) => {
+      const clone = JSON.parse(JSON.stringify(prev)) as PricingGroup[];
+      clone[groupIndex].tiers[tierIndex].label[locale] = value;
+      return clone;
+    });
+  }
+
   async function handleSave() {
     setSaving(true);
     setError('');
@@ -126,29 +147,55 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
   }
 
   return (
-    <div className="flex gap-0 min-h-[600px]">
-      {/* Left panel */}
-      <div className="w-80 shrink-0 border-r border-border p-5 flex flex-col">
-        <div className="flex items-center justify-between mb-4">
+    <div className="flex flex-col">
+      {/* Top toolbar */}
+      <div className="border-b border-border p-4 flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2 flex-1">
           <span className="type-title-sm text-on-surface font-semibold">
             Pricing Groups
           </span>
           <button
             type="button"
             onClick={addGroup}
-            className="type-label-sm text-primary hover:text-primary-light cursor-pointer"
+            className="type-label-sm text-primary hover:text-primary-light px-3 py-1.5 border border-dashed border-primary/40 rounded-lg cursor-pointer"
           >
             + Add Group
           </button>
         </div>
+        <div className="flex items-center gap-3">
+          <LocalePicker value={locale} onChange={setLocale} />
+          {error && <span className="type-label-sm text-red-400">{error}</span>}
+          {isDirty && (
+            <span className="type-label-sm text-amber-500">Unsaved</span>
+          )}
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving || !isDirty}
+            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-1.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
+          >
+            {saving ? 'Saving...' : 'Save'}
+          </button>
+        </div>
+      </div>
 
-        <div className="flex-1 overflow-y-auto space-y-3">
+      {/* Two-column: editor + preview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px]">
+        {/* Editor */}
+        <div className="p-5 overflow-y-auto space-y-4 border-r border-border">
+          {pricingGroups.length === 0 && (
+            <p className="type-body-sm text-on-surface-secondary">
+              No pricing groups yet. Click &quot;+ Add Group&quot; to start.
+            </p>
+          )}
+
           {pricingGroups.map((group, gIdx) => (
             <div
               key={gIdx}
-              className="bg-surface-elevated rounded-lg p-3 border border-border"
+              className="rounded-lg border border-border overflow-hidden"
             >
-              <div className="flex items-center gap-2 mb-2">
+              {/* Group header */}
+              <div className="bg-surface-elevated px-4 py-3 flex items-center gap-3">
                 <select
                   value={group.type}
                   onChange={(e) =>
@@ -157,131 +204,161 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                       e.target.value as 'vehicle' | 'group-size',
                     )
                   }
-                  className="px-2 py-1 rounded border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
+                  className="px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
                 >
                   <option value="vehicle">Vehicle</option>
                   <option value="group-size">Group Size</option>
                 </select>
                 <input
                   type="text"
-                  placeholder="Icon"
+                  placeholder="Icon (e.g. fa-motorcycle)"
                   value={group.icon ?? ''}
                   onChange={(e) => updateGroupIcon(gIdx, e.target.value)}
-                  className="w-20 px-2 py-1 rounded border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
+                  className="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
                 />
                 <button
                   type="button"
                   onClick={() => removeGroup(gIdx)}
-                  className="type-label-sm text-red-400 hover:text-red-300 ml-auto cursor-pointer"
+                  className="type-label-sm text-red-400 hover:text-red-300 cursor-pointer shrink-0"
                 >
                   Delete
                 </button>
               </div>
 
-              <div className="type-label-sm text-on-surface-secondary mb-2">
-                {group.label[locale]} — {group.tiers.length} tier
-                {group.tiers.length !== 1 ? 's' : ''}
+              {/* Group label */}
+              <div className="px-4 py-2 border-b border-border">
+                <label className="type-label-sm text-on-surface-secondary">
+                  Group Label ({locale.toUpperCase()})
+                </label>
+                <input
+                  type="text"
+                  value={group.label[locale]}
+                  onChange={(e) => updateGroupLabel(gIdx, e.target.value)}
+                  className="w-full mt-1 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                />
               </div>
 
-              {group.tiers.map((tier, tIdx) => (
-                <div key={tIdx} className="flex items-center gap-2 mb-1">
-                  <span className="type-label-sm text-on-surface-secondary truncate flex-1">
-                    {tier.label[locale]}
-                  </span>
-                  <input
-                    type="number"
-                    value={tier.price}
-                    onChange={(e) =>
-                      updateTierField(
-                        gIdx,
-                        tIdx,
-                        'price',
-                        Number(e.target.value),
-                      )
-                    }
-                    className="w-16 px-1 py-0.5 rounded border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
-                  />
-                  {group.type === 'group-size' && (
-                    <>
-                      <input
-                        type="number"
-                        placeholder="min"
-                        value={tier.minGroupSize ?? ''}
-                        onChange={(e) =>
-                          updateTierField(
-                            gIdx,
-                            tIdx,
-                            'minGroupSize',
-                            Number(e.target.value),
-                          )
-                        }
-                        className="w-12 px-1 py-0.5 rounded border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
-                      />
-                      <input
-                        type="number"
-                        placeholder="max"
-                        value={tier.maxGroupSize ?? ''}
-                        onChange={(e) =>
-                          updateTierField(
-                            gIdx,
-                            tIdx,
-                            'maxGroupSize',
-                            Number(e.target.value),
-                          )
-                        }
-                        className="w-12 px-1 py-0.5 rounded border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
-                      />
-                    </>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => removeTier(gIdx, tIdx)}
-                    className="type-label-sm text-red-400 hover:text-red-300 cursor-pointer"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
+              {/* Tiers table */}
+              <div className="px-4 py-3">
+                {group.tiers.length > 0 && (
+                  <div className="space-y-2">
+                    {/* Column headers */}
+                    <div
+                      className={`grid gap-2 type-label-sm text-on-surface-secondary ${
+                        group.type === 'group-size'
+                          ? 'grid-cols-[1fr_80px_60px_60px_28px]'
+                          : 'grid-cols-[1fr_80px_28px]'
+                      }`}
+                    >
+                      <span>Label ({locale.toUpperCase()})</span>
+                      <span>Price ($)</span>
+                      {group.type === 'group-size' && (
+                        <>
+                          <span>Min</span>
+                          <span>Max</span>
+                        </>
+                      )}
+                      <span />
+                    </div>
 
-              <button
-                type="button"
-                onClick={() => addTier(gIdx)}
-                className="type-label-sm text-primary hover:text-primary-light mt-1 cursor-pointer"
-              >
-                + Add Tier
-              </button>
+                    {/* Tier rows */}
+                    {group.tiers.map((tier, tIdx) => (
+                      <div
+                        key={tIdx}
+                        className={`grid gap-2 items-center ${
+                          group.type === 'group-size'
+                            ? 'grid-cols-[1fr_80px_60px_60px_28px]'
+                            : 'grid-cols-[1fr_80px_28px]'
+                        }`}
+                      >
+                        <input
+                          type="text"
+                          value={tier.label[locale]}
+                          onChange={(e) =>
+                            updateTierLabel(gIdx, tIdx, e.target.value)
+                          }
+                          className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                        />
+                        <input
+                          type="number"
+                          value={tier.price}
+                          onChange={(e) =>
+                            updateTierField(
+                              gIdx,
+                              tIdx,
+                              'price',
+                              Number(e.target.value),
+                            )
+                          }
+                          className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                        />
+                        {group.type === 'group-size' && (
+                          <>
+                            <input
+                              type="number"
+                              placeholder="min"
+                              value={tier.minGroupSize ?? ''}
+                              onChange={(e) =>
+                                updateTierField(
+                                  gIdx,
+                                  tIdx,
+                                  'minGroupSize',
+                                  Number(e.target.value),
+                                )
+                              }
+                              className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                            />
+                            <input
+                              type="number"
+                              placeholder="max"
+                              value={tier.maxGroupSize ?? ''}
+                              onChange={(e) =>
+                                updateTierField(
+                                  gIdx,
+                                  tIdx,
+                                  'maxGroupSize',
+                                  Number(e.target.value),
+                                )
+                              }
+                              className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                            />
+                          </>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => removeTier(gIdx, tIdx)}
+                          className="w-7 h-7 flex items-center justify-center rounded-full text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-colors cursor-pointer type-label-sm"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => addTier(gIdx)}
+                  className="type-label-sm text-primary hover:text-primary-light mt-2 cursor-pointer"
+                >
+                  + Add Tier
+                </button>
+              </div>
             </div>
           ))}
         </div>
 
-        {error && <p className="type-label-sm text-red-400 mt-2">{error}</p>}
-
-        {isDirty && (
-          <p className="type-label-sm text-amber-500 mt-2">Unsaved changes</p>
-        )}
-
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving || !isDirty}
-          className="mt-4 bg-primary hover:bg-primary-light text-on-primary px-4 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
-        >
-          {saving ? 'Saving...' : 'Save Pricing'}
-        </button>
-      </div>
-
-      {/* Right panel: live preview */}
-      <div className="flex-1 p-5 bg-surface-alt/30 overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <span className="type-label-sm text-on-surface-secondary">
-            Click prices or labels to edit inline
-          </span>
-          <LocalePicker value={locale} onChange={setLocale} />
+        {/* Live preview */}
+        <div className="p-5 overflow-y-auto bg-surface-alt/30">
+          <p className="type-label-sm text-on-surface-secondary mb-4">
+            Live preview — click prices or labels to edit inline
+          </p>
+          <AdminIntlProvider>
+            <EditableProvider locale={locale} onFieldChange={handleFieldChange}>
+              <TourPricing pricingGroups={pricingGroups} locale={locale} />
+            </EditableProvider>
+          </AdminIntlProvider>
         </div>
-
-        <EditableProvider locale={locale} onFieldChange={handleFieldChange}>
-          <TourPricing pricingGroups={pricingGroups} locale={locale} />
-        </EditableProvider>
       </div>
     </div>
   );

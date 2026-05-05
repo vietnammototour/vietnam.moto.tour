@@ -4,6 +4,7 @@ import {useState, useCallback} from 'react';
 import type {ItineraryDay} from '@/types';
 import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
+import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourItinerary} from '@/components/tour-itinerary';
 
 interface ItineraryTabProps {
@@ -79,6 +80,14 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
     });
   }
 
+  const handleRemoveItem = useCallback((path: string) => {
+    // path: "itinerary.0.items.1"
+    const parts = path.split('.');
+    const dayIndex = Number(parts[1]);
+    const itemIndex = Number(parts[3]);
+    removeItem(dayIndex, itemIndex);
+  }, []);
+
   async function handleSave() {
     setSaving(true);
     setError('');
@@ -93,93 +102,81 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
   }
 
   return (
-    <div className="flex gap-0 min-h-[600px]">
-      {/* Left panel: structural controls */}
-      <div className="w-72 shrink-0 border-r border-border p-5 flex flex-col">
-        <div className="flex items-center justify-between mb-4">
-          <span className="type-title-sm text-on-surface font-semibold">
-            Days
-          </span>
+    <div className="flex flex-col min-h-[600px]">
+      {/* Top toolbar */}
+      <div className="border-b border-border p-4 flex flex-wrap items-center gap-3">
+        {/* Day chips */}
+        <div className="flex flex-wrap items-center gap-2 flex-1">
+          {itinerary.map((day, dayIndex) => (
+            <div
+              key={dayIndex}
+              className="inline-flex items-center gap-2 bg-surface-elevated rounded-lg px-3 py-1.5 border border-border type-label-sm"
+            >
+              <span className="text-on-surface font-medium">
+                {day.dayLabel[locale] || `Day ${dayIndex + 1}`}
+              </span>
+              <span className="text-on-surface-secondary">
+                ({day.items.length})
+              </span>
+              <button
+                type="button"
+                onClick={() => addItem(dayIndex)}
+                className="text-primary hover:text-primary-light cursor-pointer"
+                title="Add item"
+              >
+                +
+              </button>
+              <button
+                type="button"
+                onClick={() => removeDay(dayIndex)}
+                className="text-red-400 hover:text-red-300 cursor-pointer"
+                title="Delete day"
+              >
+                ×
+              </button>
+            </div>
+          ))}
           <button
             type="button"
             onClick={addDay}
-            className="type-label-sm text-primary hover:text-primary-light cursor-pointer"
+            className="type-label-sm text-primary hover:text-primary-light px-3 py-1.5 border border-dashed border-primary/40 rounded-lg cursor-pointer"
           >
             + Add Day
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto space-y-2">
-          {itinerary.map((day, dayIndex) => (
-            <div
-              key={dayIndex}
-              className="bg-surface-elevated rounded-lg p-3 border border-border"
-            >
-              <div className="type-body-sm text-on-surface font-medium">
-                {day.dayLabel[locale]}
-              </div>
-              <div className="type-label-sm text-on-surface-secondary mt-1">
-                {day.items.length} item{day.items.length !== 1 ? 's' : ''}
-              </div>
-              <div className="flex gap-3 mt-2">
-                <button
-                  type="button"
-                  onClick={() => addItem(dayIndex)}
-                  className="type-label-sm text-primary hover:text-primary-light cursor-pointer"
-                >
-                  + Add Item
-                </button>
-                {day.items.map((_, itemIndex) => (
-                  <button
-                    key={itemIndex}
-                    type="button"
-                    onClick={() => removeItem(dayIndex, itemIndex)}
-                    className="type-label-sm text-red-400 hover:text-red-300 cursor-pointer"
-                    title={`Remove item ${itemIndex + 1}`}
-                  >
-                    ×{itemIndex + 1}
-                  </button>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => removeDay(dayIndex)}
-                className="type-label-sm text-red-400 hover:text-red-300 mt-2 cursor-pointer"
-              >
-                Delete Day
-              </button>
-            </div>
-          ))}
+        {/* Right side: locale, status, save */}
+        <div className="flex items-center gap-3">
+          <LocalePicker value={locale} onChange={setLocale} />
+          {error && <span className="type-label-sm text-red-400">{error}</span>}
+          {isDirty && (
+            <span className="type-label-sm text-amber-500">Unsaved</span>
+          )}
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving || !isDirty}
+            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-1.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
+          >
+            {saving ? 'Saving...' : 'Save'}
+          </button>
         </div>
-
-        {error && <p className="type-label-sm text-red-400 mt-2">{error}</p>}
-
-        {isDirty && (
-          <p className="type-label-sm text-amber-500 mt-2">Unsaved changes</p>
-        )}
-
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving || !isDirty}
-          className="mt-4 bg-primary hover:bg-primary-light text-on-primary px-4 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
-        >
-          {saving ? 'Saving...' : 'Save Itinerary'}
-        </button>
       </div>
 
-      {/* Right panel: live preview */}
-      <div className="flex-1 p-5 bg-surface-alt/30 overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <span className="type-label-sm text-on-surface-secondary">
-            Click any text to edit inline
-          </span>
-          <LocalePicker value={locale} onChange={setLocale} />
-        </div>
-
-        <EditableProvider locale={locale} onFieldChange={handleFieldChange}>
-          <TourItinerary itinerary={itinerary} locale={locale} />
-        </EditableProvider>
+      {/* Live preview */}
+      <div className="flex-1 p-5 overflow-y-auto">
+        <p className="type-label-sm text-on-surface-secondary mb-4">
+          Click any text to edit inline. Use + to add items, × to remove days.
+        </p>
+        <AdminIntlProvider>
+          <EditableProvider
+            locale={locale}
+            onFieldChange={handleFieldChange}
+            onRemoveItem={handleRemoveItem}
+          >
+            <TourItinerary itinerary={itinerary} locale={locale} />
+          </EditableProvider>
+        </AdminIntlProvider>
       </div>
     </div>
   );
