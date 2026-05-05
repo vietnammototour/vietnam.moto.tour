@@ -31,7 +31,6 @@ interface DbTour {
   hotel: string;
   guided: string;
   images: unknown;
-  highlights: unknown;
   itinerary: unknown;
   pricingGroups: unknown;
   included: unknown;
@@ -62,7 +61,18 @@ for (const t of toursData) {
   tourSlugToJsonId.set(t.slug, t.id);
 }
 
-function dbTourToTour(row: DbTour, destinationName?: string): Tour {
+function dbTourToTour(
+  row: DbTour & {
+    highlights?: Array<{
+      id: string;
+      destinationId: string;
+      textEn: string;
+      textVi: string;
+      imageUrl: string | null;
+    }>;
+  },
+  destinationName?: string,
+): Tour {
   // Use the JSON numeric destination ID so getDestinationName() works on the client
   const destNumericId = destinationName
     ? (destNameToJsonId.get(destinationName) ?? 0)
@@ -86,7 +96,13 @@ function dbTourToTour(row: DbTour, destinationName?: string): Tour {
     guided: row.guided,
     destinationHeroImage: '',
     images: row.images as string[],
-    highlights: row.highlights as Tour['highlights'],
+    highlights: (row.highlights ?? []).map((h) => ({
+      id: h.id,
+      destinationId: h.destinationId,
+      textEn: h.textEn,
+      textVi: h.textVi,
+      imageUrl: h.imageUrl,
+    })),
     itinerary: row.itinerary as Tour['itinerary'],
     pricingGroups: row.pricingGroups as Tour['pricingGroups'],
     included: row.included as Tour['included'],
@@ -116,7 +132,7 @@ export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   try {
     const rows = await prisma.tour.findMany({
       where: isAdmin ? {} : {status: {in: ['PUBLISHED', 'FEATURED']}},
-      include: {destination: true},
+      include: {destination: true, highlights: true},
     });
 
     return rows.map((row: any) => {
@@ -138,7 +154,7 @@ export async function getTourBySlug(
   try {
     const row = await prisma.tour.findFirst({
       where: isAdmin ? {slug} : {slug, status: {in: ['PUBLISHED', 'FEATURED']}},
-      include: {destination: true},
+      include: {destination: true, highlights: true},
     });
     if (!row) return undefined;
     const tour = dbTourToTour(row as unknown as DbTour, row.destination.name);
