@@ -14,7 +14,7 @@ export default async function handler(
   }
 
   const [tourCount, destinationCount, userCount] = await Promise.all([
-    prisma.tour.count({where: {isActive: true}}),
+    prisma.tour.count({where: {status: {in: ['PUBLISHED', 'FEATURED']}}}),
     prisma.destination.count({where: {isActive: true}}),
     prisma.user.count(),
   ]);
