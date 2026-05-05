@@ -1,6 +1,6 @@
 import type {AppProps} from 'next/app';
 import {SessionProvider} from 'next-auth/react';
-import {NextIntlClientProvider} from 'next-intl';
+import {NextIntlClientProvider, type IntlError} from 'next-intl';
 import {useRouter} from 'next/router';
 import {DM_Sans} from 'next/font/google';
 import localFont from 'next/font/local';
@@ -43,6 +43,11 @@ export default function App({
   const locale = router.locale ?? 'vi';
   const messages = pageProps.messages ?? {};
 
+  function handleIntlError(error: IntlError) {
+    if (error.code === 'MISSING_MESSAGE') return;
+    console.error(error);
+  }
+
   const content = (
     <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
       {isAdmin ? (
@@ -64,6 +69,7 @@ export default function App({
           locale={locale}
           messages={messages}
           timeZone="Asia/Ho_Chi_Minh"
+          onError={handleIntlError}
         >
           {content}
         </NextIntlClientProvider>
