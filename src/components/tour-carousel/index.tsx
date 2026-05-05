@@ -1,10 +1,9 @@
 'use client';
 
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {Navigation, Autoplay, Pagination} from 'swiper/modules';
+import {Autoplay, Pagination} from 'swiper/modules';
 
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import {TourCard} from '../tour-card';
@@ -15,10 +14,9 @@ export const TourCarousel = ({tours}: TourCarouselProps) => {
   return (
     <div className={`relative ${styles.carousel}`}>
       <Swiper
-        modules={[Navigation, Autoplay, Pagination]}
+        modules={[Autoplay, Pagination]}
         spaceBetween={24}
         slidesPerView={1}
-        navigation
         autoplay={{
           delay: 7500,
           disableOnInteraction: false,
@@ -33,7 +31,7 @@ export const TourCarousel = ({tours}: TourCarouselProps) => {
         }}
       >
         {tours.map((tour) => (
-          <SwiperSlide key={tour.id} className="h-auto pb-2">
+          <SwiperSlide key={tour.id} className="h-auto py-2">
             <TourCard tour={tour} />
           </SwiperSlide>
         ))}
