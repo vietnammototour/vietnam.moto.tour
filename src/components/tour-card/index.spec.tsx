@@ -6,8 +6,8 @@ describe('TourCard', () => {
   const tour = buildTour({
     title: 'Da Lat Tour',
     price: 80,
-    duration: '1 Day',
-    distance: '186 Miles',
+    duration: 1,
+    distance: 186,
     destinationId: 1,
     imageUrl: '/dalat.jpg',
     slug: 'da-lat-tour',
@@ -31,12 +31,12 @@ describe('TourCard', () => {
 
   it('renders the duration', () => {
     render(<TourCard tour={tour} />);
-    expect(screen.getByText('1 Day')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument();
   });
 
   it('renders the distance', () => {
     render(<TourCard tour={tour} />);
-    expect(screen.getByText('186 Miles')).toBeInTheDocument();
+    expect(screen.getByText('186')).toBeInTheDocument();
   });
 
   it('renders the location', () => {
