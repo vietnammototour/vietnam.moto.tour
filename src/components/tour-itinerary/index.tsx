@@ -3,15 +3,60 @@ import {useTranslations} from 'next-intl';
 import {useRef} from 'react';
 import type {ItineraryDay} from '@/types';
 import {slideFromLeft, slideFromRight} from '@/utils/motion-variants';
+import {useEditable} from '@/components/admin/EditableContext';
 
 interface TourItineraryProps {
   itinerary: ItineraryDay[];
   locale: string;
 }
 
+function EditableText({
+  value,
+  path,
+  className,
+  tag: Tag = 'span',
+}: {
+  value: string;
+  path: string;
+  className?: string;
+  tag?: 'span' | 'p' | 'h3' | 'div';
+}) {
+  const ctx = useEditable();
+  if (!ctx || !ctx.editable) {
+    return <Tag className={className}>{value}</Tag>;
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
+    const newValue = e.currentTarget.textContent ?? '';
+    if (newValue !== value) {
+      ctx.onFieldChange(path, newValue);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.currentTarget.blur();
+    }
+  };
+
+  return (
+    <Tag
+      contentEditable
+      suppressContentEditableWarning
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
+      className={`${className ?? ''} outline-none border border-dashed border-transparent hover:border-primary/40 focus:border-primary rounded px-0.5 cursor-text`}
+    >
+      {value}
+    </Tag>
+  );
+}
+
 export function TourItinerary({itinerary, locale}: TourItineraryProps) {
   const t = useTranslations('tourDetail');
-  const localeKey = locale as 'en' | 'vi';
+  const ctx = useEditable();
+  const localeKey = ctx?.locale ?? (locale as 'en' | 'vi');
   const containerRef = useRef<HTMLDivElement>(null);
 
   const {scrollYProgress} = useScroll({
@@ -57,7 +102,6 @@ export function TourItinerary({itinerary, locale}: TourItineraryProps) {
               style={{pathLength: scrollYProgress}}
             />
           </svg>
-          {/* Endpoint marker */}
           <motion.div
             className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary"
             style={{opacity: endpointOpacity}}
@@ -69,9 +113,12 @@ export function TourItinerary({itinerary, locale}: TourItineraryProps) {
           {itinerary.map((day, dayIndex) => (
             <div key={dayIndex}>
               {itinerary.length > 1 && (
-                <h3 className="type-title-lg text-on-surface mb-4">
-                  {day.dayLabel[localeKey]}
-                </h3>
+                <EditableText
+                  tag="h3"
+                  value={day.dayLabel[localeKey]}
+                  path={`itinerary.${dayIndex}.dayLabel.${localeKey}`}
+                  className="type-title-lg text-on-surface mb-4"
+                />
               )}
               {day.items.map((item, itemIndex) => (
                 <motion.div
@@ -85,12 +132,18 @@ export function TourItinerary({itinerary, locale}: TourItineraryProps) {
                   className="relative p-4 rounded-lg elevation-1 bg-surface-elevated texture-grain-warm mb-4 last:mb-0"
                 >
                   <div className="relative z-10">
-                    <div className="type-label-lg text-primary font-semibold mb-1">
-                      {item.time}
-                    </div>
-                    <p className="type-body-sm text-on-surface-secondary leading-relaxed">
-                      {item.description[localeKey]}
-                    </p>
+                    <EditableText
+                      tag="div"
+                      value={item.time}
+                      path={`itinerary.${dayIndex}.items.${itemIndex}.time`}
+                      className="type-label-lg text-primary font-semibold mb-1"
+                    />
+                    <EditableText
+                      tag="p"
+                      value={item.description[localeKey]}
+                      path={`itinerary.${dayIndex}.items.${itemIndex}.description.${localeKey}`}
+                      className="type-body-sm text-on-surface-secondary leading-relaxed"
+                    />
                   </div>
                 </motion.div>
               ))}

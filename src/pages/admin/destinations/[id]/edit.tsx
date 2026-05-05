@@ -3,6 +3,7 @@ import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {DestinationForm} from '@/components/admin/DestinationForm';
+import {DestinationHighlights} from '@/components/admin/DestinationHighlights';
 
 export default function EditDestination() {
   const router = useRouter();
@@ -57,6 +58,12 @@ export default function EditDestination() {
         mode="edit"
         destinationId={destination.id as string}
       />
+
+      {id && (
+        <div className="mt-10 pt-10 border-t border-border">
+          <DestinationHighlights destinationId={id} />
+        </div>
+      )}
     </div>
   );
 }

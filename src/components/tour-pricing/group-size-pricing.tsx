@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
 import type {PricingGroup} from '@/types';
+import {useEditable} from '@/components/admin/EditableContext';
 
 interface GroupSizePricingProps {
   group: PricingGroup;
@@ -43,6 +44,8 @@ export function GroupSizePricing({
   onPriceChange,
 }: GroupSizePricingProps) {
   const t = useTranslations('tourDetail');
+  const ctx = useEditable();
+  const activeLocale = ctx?.locale ?? locale;
   const minSize = getMinSize(group);
   const maxSize = getMaxSize(group);
   const [count, setCount] = useState(minSize);
@@ -126,7 +129,7 @@ export function GroupSizePricing({
           <div className="border-t border-border-subtle" />
           <div className="flex justify-between items-center">
             <span className="type-body-sm text-on-surface-secondary">
-              {childrenGroup.label[locale]}
+              {childrenGroup.label[activeLocale]}
             </span>
             <span className="type-title-sm text-on-surface font-semibold">
               ${childrenGroup.tiers[0].price}
