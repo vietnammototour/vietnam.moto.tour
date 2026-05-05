@@ -75,8 +75,14 @@ rm -rf node_modules
 pnpm install --frozen-lockfile
 npx prisma generate
 npx prisma migrate deploy
+# Copy uploads for build (Turbopack rejects symlinks outside project root)
+rm -rf public/uploads
+cp -r /var/www/uploads public/uploads
 rm -rf .next
 pnpm build
+# Replace copy with symlink for runtime serving (new uploads go to /var/www/uploads)
+rm -rf public/uploads
+ln -sfn /var/www/uploads public/uploads
 pm2 restart vietnam-moto-tours
 ```
 
@@ -111,18 +117,22 @@ The deploy process runs `git checkout -- .` which reverts all local changes, the
 
 ## Image Uploads
 
-Uploaded images are stored in `/var/www/uploads/` and symlinked into the project:
+Uploaded images are stored persistently in `/var/www/uploads/` (outside the repo, survives deploys).
+
+**Important:** Turbopack rejects symlinks outside the project root during `pnpm build`, but Next.js serves them fine at runtime. The deploy script handles this with a two-step approach:
+
+1. **Before build:** `cp -r /var/www/uploads public/uploads` (real copy for Turbopack)
+2. **After build:** `rm -rf public/uploads && ln -sfn /var/www/uploads public/uploads` (symlink for runtime — new uploads go to persistent storage and are served immediately)
 
 ```bash
 # Create persistent uploads directory (one-time)
 mkdir -p /var/www/uploads/destinations /var/www/uploads/tours
 chown -R ci-cd:ci-cd /var/www/uploads
-
-# Add to deploy script after build step:
-ln -sfn /var/www/uploads /var/www/vietnam-moto-tours/public/uploads
 ```
 
-The `UPLOAD_DIR` environment variable can override the default path (defaults to `{project}/public/uploads` for local dev).
+**Production `.env` must include:** `UPLOAD_DIR=/var/www/uploads` so the upload API writes to persistent storage, not the project copy.
+
+For local dev, `UPLOAD_DIR` defaults to `{project}/public/uploads`.
 
 ## Auth
 
