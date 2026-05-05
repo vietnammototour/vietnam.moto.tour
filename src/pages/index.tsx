@@ -161,19 +161,21 @@ export default function Home({tours, destinations, isAdmin}: HomeProps) {
           </div>
           {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <motion.div
-              className="sm:col-span-2 sm:row-span-2"
-              custom={0}
-              variants={waveStagger(0.08)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{once: true}}
-            >
-              <DestinationCard
-                destination={destinations[0]}
-                className="h-full"
-              />
-            </motion.div>
+            {destinations[0] && (
+              <motion.div
+                className="sm:col-span-2 sm:row-span-2"
+                custom={0}
+                variants={waveStagger(0.08)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{once: true}}
+              >
+                <DestinationCard
+                  destination={destinations[0]}
+                  className="h-full"
+                />
+              </motion.div>
+            )}
             {destinations.slice(1, 5).map((destination, i) => (
               <motion.div
                 key={destination.id}
