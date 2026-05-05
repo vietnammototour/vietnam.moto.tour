@@ -132,11 +132,10 @@ export function DestinationEditTabs({
         {activeTab === 'general' && (
           <div className="p-5">
             <DestinationGeneralForm
-              form={form}
+              initialData={form}
               locale={locale}
               mode={mode}
               destinationId={destinationId}
-              onFieldChange={updateForm}
               onSaved={handleSaved}
             />
           </div>
