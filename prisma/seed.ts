@@ -80,74 +80,14 @@ function slugify(text: string): string {
     .replace(/^-|-$/g, '');
 }
 
-function flattenTranslations(
-  obj: Record<string, unknown>,
-  namespace: string,
-  result: Array<{namespace: string; key: string; value: string}>,
-): void {
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === 'string') {
-      result.push({namespace, key, value});
-    } else if (typeof value === 'object' && value !== null) {
-      flattenTranslations(value as Record<string, unknown>, namespace, result);
-    }
-  }
-}
-
-function flattenMessages(
-  obj: Record<string, unknown>,
-): Array<{namespace: string; key: string; value: string}> {
-  const result: Array<{namespace: string; key: string; value: string}> = [];
-
-  for (const [namespace, nested] of Object.entries(obj)) {
-    if (typeof nested === 'string') {
-      result.push({namespace, key: namespace, value: nested});
-    } else if (typeof nested === 'object' && nested !== null) {
-      for (const [key, value] of Object.entries(
-        nested as Record<string, unknown>,
-      )) {
-        if (typeof value === 'string') {
-          result.push({namespace, key, value});
-        } else if (typeof value === 'object' && value !== null) {
-          // Handle deeper nesting if needed
-          const flatDeep = (
-            obj: Record<string, unknown>,
-            prefix: string,
-          ): void => {
-            for (const [k, v] of Object.entries(obj)) {
-              const fullKey = `${prefix}.${k}`;
-              if (typeof v === 'string') {
-                result.push({namespace, key: fullKey, value: v});
-              } else if (typeof v === 'object' && v !== null) {
-                flatDeep(v as Record<string, unknown>, fullKey);
-              }
-            }
-          };
-          flatDeep(value as Record<string, unknown>, key);
-        }
-      }
-    }
-  }
-
-  return result;
-}
-
 async function main(): Promise<void> {
   const dataDir = path.join(__dirname, '..', 'src', 'data');
-  const messagesDir = path.join(__dirname, '..', 'src', 'messages');
-
   // Read source data
   const destinations: RawDestination[] = JSON.parse(
     fs.readFileSync(path.join(dataDir, 'destinations.json'), 'utf-8'),
   );
   const tours: RawTour[] = JSON.parse(
     fs.readFileSync(path.join(dataDir, 'tours.json'), 'utf-8'),
-  );
-  const enMessages: Record<string, unknown> = JSON.parse(
-    fs.readFileSync(path.join(messagesDir, 'en.json'), 'utf-8'),
-  );
-  const viMessages: Record<string, unknown> = JSON.parse(
-    fs.readFileSync(path.join(messagesDir, 'vi.json'), 'utf-8'),
   );
 
   console.log(
@@ -170,12 +110,7 @@ async function main(): Promise<void> {
     const heroImage = dest.heroImage || destHeroImageMap.get(dest.id) || '';
     const created = await prisma.destination.upsert({
       where: {slug},
-      update: {
-        name: dest.name,
-        imageUrl: dest.imageUrl,
-        heroImage,
-        size: dest.size,
-      },
+      update: {},
       create: {
         slug,
         name: dest.name,
@@ -204,30 +139,7 @@ async function main(): Promise<void> {
 
     await prisma.tour.upsert({
       where: {slug: tour.slug},
-      update: {
-        title: tour.title,
-        destinationId: destinationUuid,
-        imageUrl: tour.imageUrl,
-        rating: tour.rating,
-        price: tour.price,
-        duration: tour.duration,
-        distance: tour.distance,
-        descriptionVi: tour.description.vi,
-        descriptionEn: tour.description.en,
-        transportation: tour.transportation,
-        groupSize: tour.groupSize,
-        hotel: tour.hotel,
-        guided: tour.guided,
-        images: tour.images,
-        highlights: tour.highlights,
-        itinerary: tour.itinerary,
-        pricingGroups: tour.pricingGroups,
-        included: tour.included,
-        excluded: tour.excluded,
-        paymentDetails: tour.paymentDetails,
-        notes: tour.notes,
-        mealsInfo: tour.mealsInfo,
-      },
+      update: {},
       create: {
         slug: tour.slug,
         title: tour.title,
@@ -260,69 +172,6 @@ async function main(): Promise<void> {
   }
 
   console.log(`Seeded ${tours.length} tours`);
-
-  // --- Seed Translations ---
-  const enFlat = flattenMessages(enMessages);
-  const viFlat = flattenMessages(viMessages);
-
-  // Build a map of vi translations keyed by namespace+key
-  const viMap = new Map<string, string>();
-  for (const entry of viFlat) {
-    viMap.set(`${entry.namespace}::${entry.key}`, entry.value);
-  }
-
-  let translationCount = 0;
-  for (const entry of enFlat) {
-    const viValue = viMap.get(`${entry.namespace}::${entry.key}`) || '';
-
-    await prisma.translation.upsert({
-      where: {
-        namespace_key: {
-          namespace: entry.namespace,
-          key: entry.key,
-        },
-      },
-      update: {
-        valueEn: entry.value,
-        valueVi: viValue,
-      },
-      create: {
-        namespace: entry.namespace,
-        key: entry.key,
-        valueEn: entry.value,
-        valueVi: viValue,
-      },
-    });
-    translationCount++;
-  }
-
-  // Also insert any vi-only keys that don't exist in en
-  for (const entry of viFlat) {
-    const mapKey = `${entry.namespace}::${entry.key}`;
-    const hasEn = enFlat.some((e) => `${e.namespace}::${e.key}` === mapKey);
-    if (!hasEn) {
-      await prisma.translation.upsert({
-        where: {
-          namespace_key: {
-            namespace: entry.namespace,
-            key: entry.key,
-          },
-        },
-        update: {
-          valueVi: entry.value,
-        },
-        create: {
-          namespace: entry.namespace,
-          key: entry.key,
-          valueEn: '',
-          valueVi: entry.value,
-        },
-      });
-      translationCount++;
-    }
-  }
-
-  console.log(`Seeded ${translationCount} translations`);
   console.log('Seed completed successfully!');
 }
 
