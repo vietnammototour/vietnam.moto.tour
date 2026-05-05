@@ -156,7 +156,10 @@ export function DestinationEditTabs({
 
         {activeTab === 'highlights' && destinationId && (
           <div className="p-5">
-            <DestinationHighlights destinationId={destinationId} />
+            <DestinationHighlights
+              destinationId={destinationId}
+              locale={locale}
+            />
           </div>
         )}
       </div>
