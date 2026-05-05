@@ -7,10 +7,10 @@ import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourPricing} from '@/components/tour-pricing';
 
-interface PricingTabProps {
+type PricingTabProps = {
   initialData: PricingGroup[];
   onSave: (pricingGroups: PricingGroup[]) => Promise<void>;
-}
+};
 
 function setNestedValue(
   obj: PricingGroup[],

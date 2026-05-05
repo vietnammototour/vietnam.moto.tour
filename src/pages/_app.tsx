@@ -4,6 +4,7 @@ import {NextIntlClientProvider} from 'next-intl';
 import {useRouter} from 'next/router';
 import {DM_Sans} from 'next/font/google';
 import localFont from 'next/font/local';
+import {routes} from '@/routes';
 import {ThemeProvider} from '@/components/theme-provider';
 import {Layout} from '../components/layout/index';
 import {AdminLayout} from '@/components/admin/AdminLayout';
@@ -38,7 +39,7 @@ export default function App({
   pageProps: {session, ...pageProps},
 }: AppProps) {
   const router = useRouter();
-  const isAdmin = router.pathname.startsWith('/admin');
+  const isAdmin = routes.isAdmin(router.pathname);
   const locale = router.locale ?? 'vi';
   const messages = pageProps.messages ?? {};
 

@@ -19,9 +19,9 @@ const statusConfig: Record<TourStatus, {label: string; classes: string}> = {
   },
 };
 
-interface AdminStatusBadgeProps {
+type AdminStatusBadgeProps = {
   status: TourStatus;
-}
+};
 
 export function AdminStatusBadge({status}: AdminStatusBadgeProps) {
   if (status === 'PUBLISHED') return null;

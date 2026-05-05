@@ -1,9 +1,9 @@
 import {useTranslations} from 'next-intl';
 import type {Tour} from '@/types';
 
-interface TourDetailsProps {
+type TourDetailsProps = {
   tour: Tour;
-}
+};
 
 export function TourDetails({tour}: TourDetailsProps) {
   const t = useTranslations('tourDetail');

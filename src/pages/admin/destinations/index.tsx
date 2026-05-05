@@ -2,15 +2,16 @@ import {useEffect} from 'react';
 import Link from 'next/link';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
+import {routes, api} from '@/routes';
 
-interface AdminDestination {
+type AdminDestination = {
   id: string;
   name: string;
   slug: string;
   isActive: boolean;
   imageUrl: string | null;
   _count: {tours: number};
-}
+};
 
 export default function AdminDestinationsList() {
   const {
@@ -27,10 +28,8 @@ export default function AdminDestinationsList() {
   async function handleDelete(id: string) {
     if (!confirm('Deactivate this destination?')) return;
 
-    const res = await fetch(`/api/admin/destinations/${id}`, {
-      method: 'DELETE',
-    });
-    if (res.ok) {
+    const {error} = await api.admin.destinations.delete(id);
+    if (!error) {
       refetch();
     }
   }
@@ -42,7 +41,7 @@ export default function AdminDestinationsList() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="type-headline-sm">Destinations</h1>
         <Link
-          href="/admin/destinations/new"
+          href={routes.admin.destinations.new.path()}
           className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
         >
           + New Destination
@@ -75,7 +74,7 @@ export default function AdminDestinationsList() {
               >
                 <td className="px-4 py-3">
                   <Link
-                    href={`/admin/destinations/${dest.id}/edit`}
+                    href={routes.admin.destinations.edit.path({id: dest.id})}
                     className="group/link flex items-center gap-3 cursor-pointer"
                   >
                     {dest.imageUrl ? (

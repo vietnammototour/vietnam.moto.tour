@@ -14,6 +14,7 @@ import {getServerSession} from 'next-auth/next';
 import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import Link from 'next/link';
+import {routes} from '@/routes';
 
 import {DestinationCard} from '@/components/destination-card';
 import {TourCarousel} from '@/components/tour-carousel';
@@ -32,7 +33,7 @@ const galleryImageUrls = [
   getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
 ];
 
-interface HomeProps {
+type HomeProps = {
   tours: Tour[];
   destinations: (Destination & {
     tourCount: number;
@@ -40,7 +41,7 @@ interface HomeProps {
     hasBike: boolean;
   })[];
   isAdmin: boolean;
-}
+};
 
 export default function Home({tours, destinations, isAdmin}: HomeProps) {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
@@ -126,7 +127,7 @@ export default function Home({tours, destinations, isAdmin}: HomeProps) {
               animate="visible"
             >
               <Link
-                href="/tours"
+                href={routes.tours.list.path()}
                 className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg cursor-pointer transition-colors elevation-2 hover:elevation-3"
               >
                 {t('bookWithUsNow')}

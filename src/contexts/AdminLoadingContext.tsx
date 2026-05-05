@@ -1,9 +1,9 @@
 import {createContext, useContext, useState, type ReactNode} from 'react';
 
-interface AdminLoadingContextValue {
+type AdminLoadingContextValue = {
   loading: boolean;
   setLoading: (loading: boolean) => void;
-}
+};
 
 const AdminLoadingContext = createContext<AdminLoadingContextValue>({
   loading: false,

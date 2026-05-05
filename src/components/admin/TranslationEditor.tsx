@@ -1,19 +1,13 @@
 'use client';
 
 import {useState, useMemo} from 'react';
+import {api} from '@/routes';
+import type {TranslationRow} from '@/types';
 
-interface TranslationRow {
-  id: string;
-  namespace: string;
-  key: string;
-  valueVi: string;
-  valueEn: string;
-}
-
-interface TranslationEditorProps {
+type TranslationEditorProps = {
   translations: TranslationRow[];
   namespaces: string[];
-}
+};
 
 export function TranslationEditor({
   translations: initial,
@@ -70,15 +64,10 @@ export function TranslationEditor({
         valueEn: t.valueEn,
       }));
 
-    const res = await fetch('/api/admin/translations', {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(toUpdate),
-    });
-
+    const {error} = await api.admin.translations.update(toUpdate);
     setSaving(false);
 
-    if (res.ok) {
+    if (!error) {
       setModified(new Set());
     }
   }

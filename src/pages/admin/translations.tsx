@@ -2,14 +2,7 @@ import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TranslationEditor} from '@/components/admin/TranslationEditor';
-
-interface TranslationRow {
-  id: string;
-  namespace: string;
-  key: string;
-  valueVi: string;
-  valueEn: string;
-}
+import type {TranslationRow} from '@/types';
 
 export default function AdminTranslations() {
   const {data, loading} = useAdminFetch<TranslationRow[]>(

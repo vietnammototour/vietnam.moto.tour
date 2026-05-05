@@ -2,12 +2,12 @@
 
 import {createContext, useContext} from 'react';
 
-interface EditableContextValue {
+type EditableContextValue = {
   editable: boolean;
   locale: 'en' | 'vi';
   onFieldChange: (path: string, value: string | number) => void;
   onRemoveItem?: (path: string) => void;
-}
+};
 
 const EditableContext = createContext<EditableContextValue | null>(null);
 

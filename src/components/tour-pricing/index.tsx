@@ -5,11 +5,11 @@ import {useEditable} from '@/components/admin/EditableContext';
 import {VehiclePricing} from './vehicle-pricing';
 import {GroupSizePricing} from './group-size-pricing';
 
-interface TourPricingProps {
+type TourPricingProps = {
   pricingGroups: PricingGroup[];
   locale: string;
   onPriceChange?: (price: number, label: string) => void;
-}
+};
 
 function findCheapestTier(groups: PricingGroup[]): {
   groupIdx: number;

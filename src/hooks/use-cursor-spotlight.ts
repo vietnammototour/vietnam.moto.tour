@@ -1,13 +1,13 @@
 import {useMotionValue, useSpring, MotionValue} from 'framer-motion';
 import {useCallback, useRef, RefObject} from 'react';
 
-interface CursorSpotlight {
+type CursorSpotlight = {
   ref: RefObject<HTMLElement | null>;
   x: MotionValue<number>;
   y: MotionValue<number>;
   onMouseMove: (e: React.MouseEvent) => void;
   onMouseLeave: () => void;
-}
+};
 
 export function useCursorSpotlight(
   radius = 200,

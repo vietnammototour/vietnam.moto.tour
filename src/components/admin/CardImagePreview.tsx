@@ -3,14 +3,14 @@
 import {DestinationCard} from '@/components/destination-card';
 import {ImageUploadField} from './ImageUploadField';
 
-interface CardImagePreviewProps {
+type CardImagePreviewProps = {
   destinationId: string | null;
   imageUrl: string;
   destinationName: string;
   size: 'small' | 'large';
   onImageChange: (url: string) => void;
   onSizeChange: (size: 'small' | 'large') => void;
-}
+};
 
 function PlaceholderCard({big}: {big?: boolean}) {
   return (

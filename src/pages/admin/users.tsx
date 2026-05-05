@@ -2,14 +2,8 @@ import {useState, useEffect} from 'react';
 import {useSession} from 'next-auth/react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-
-interface AdminUser {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-  createdAt: string;
-}
+import {api} from '@/routes';
+import type {AdminUser} from '@/types';
 
 export default function AdminUsers() {
   const {data: session} = useSession();
@@ -32,17 +26,11 @@ export default function AdminUsers() {
     setSaving(true);
     setError('');
 
-    const res = await fetch('/api/admin/users', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(newUser),
-    });
-
+    const {error} = await api.admin.users.create(newUser);
     setSaving(false);
 
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? 'Failed to create user');
+    if (error) {
+      setError(error);
       return;
     }
 
@@ -54,8 +42,8 @@ export default function AdminUsers() {
   async function handleDelete(id: string) {
     if (!confirm('Delete this admin user?')) return;
 
-    const res = await fetch(`/api/admin/users/${id}`, {method: 'DELETE'});
-    if (res.ok) {
+    const {error} = await api.admin.users.delete(id);
+    if (!error) {
       refetch();
     }
   }

@@ -3,14 +3,15 @@
 import {useState, useEffect} from 'react';
 import Image from 'next/image';
 import type {Highlight} from '@/types';
+import {api} from '@/routes';
 
-interface HighlightsTabProps {
+type HighlightsTabProps = {
   tourId: string | null;
   destinationId: string;
   initialSelectedIds: string[];
   destinations: Array<{id: string; name: string}>;
   onSave: (highlightIds: string[]) => Promise<void>;
-}
+};
 
 export function HighlightsTab({
   tourId,
@@ -41,10 +42,11 @@ export function HighlightsTab({
       return;
     }
     setLoading(true);
-    fetch(`/api/admin/highlights?destinationId=${destinationId}`)
-      .then((r) => r.json())
-      .then((data: Highlight[]) => {
-        setAllHighlights(data);
+    api.admin.highlights
+      .list(destinationId)
+      .then(({data, error}) => {
+        if (!error && data) setAllHighlights(data);
+        else if (error) setError('Failed to load highlights');
         setLoading(false);
       })
       .catch(() => {

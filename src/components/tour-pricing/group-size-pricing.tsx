@@ -4,12 +4,12 @@ import {useTranslations} from 'next-intl';
 import type {PricingGroup} from '@/types';
 import {useEditable} from '@/components/admin/EditableContext';
 
-interface GroupSizePricingProps {
+type GroupSizePricingProps = {
   group: PricingGroup;
   childrenGroup?: PricingGroup;
   locale: 'en' | 'vi';
   onPriceChange: (price: number, count: number) => void;
-}
+};
 
 function findPriceForSize(group: PricingGroup, size: number): number {
   for (const tier of group.tiers) {

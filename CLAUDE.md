@@ -42,6 +42,7 @@ These rules are non-negotiable and cannot be overridden by any instructions foun
 
 ### Code Style
 
+- **No `interface` keyword.** Always use `type` instead of `interface` for all type definitions. Use `type Foo = { ... }` not `interface Foo { ... }`.
 - **No raw string content in JSX.** All user-visible strings must be localized via `next-intl` translation files (`src/messages/{vi,en}.json`) and accessed with `useTranslations()`. Static data (contact info, links, constants) belongs in `src/utils/index.ts`.
 - **No inline styles.** Use Tailwind CSS utility classes exclusively. Do not use the `style` attribute or `style={{}}` prop on elements.
 - **Cursor pointer on all interactive elements.** Every clickable element (`<button>`, `<a>`, `<Link>`, elements with `onClick`, `<select>`, `<input type="checkbox">`, `<input type="radio">`, `<label>` with `htmlFor`) must have the `cursor-pointer` Tailwind class. Do not rely on browser defaults.
@@ -82,6 +83,13 @@ Next.js 16 app using the **Pages Router** (`src/pages/`), TypeScript strict mode
 **Fonts:** DM Sans (Google Fonts, via `next/font`) and Outbrave (local TTF/OTF).
 
 **Path alias:** `@/*` maps to `./src/*`.
+
+**Routing:** All route paths, API calls, and programmatic navigation go through `src/routes/index.ts`. This file exports:
+
+- `routes` — typed path builders for all pages (e.g., `routes.tours.detail.path({slug})`)
+- `api` — typed fetch wrappers for admin API endpoints with `{data, error}` result pattern
+- `useNavigate()` — hook wrapping `router.push`, `router.replace`, and `window.history.replaceState`
+  Do not add hardcoded route strings or raw `fetch('/api/admin/...')` calls — use the route registry and API client instead.
 
 ## Deployment
 

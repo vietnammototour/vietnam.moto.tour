@@ -1,10 +1,10 @@
 import {useTranslations} from 'next-intl';
 import type {LocalizedText} from '@/types';
 
-interface TourPaymentProps {
+type TourPaymentProps = {
   paymentDetails: LocalizedText;
   locale: string;
-}
+};
 
 export function TourPayment({paymentDetails, locale}: TourPaymentProps) {
   const t = useTranslations('tourDetail');

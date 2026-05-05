@@ -4,10 +4,10 @@ import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/admin/TourEditTabs';
 import type {TourStatus} from '@/types';
 
-interface Destination {
+type Destination = {
   id: string;
   name: string;
-}
+};
 
 const emptyGeneral = {
   slug: '',

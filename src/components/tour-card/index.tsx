@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
 import {motion, useTransform} from 'framer-motion';
+import {routes} from '@/routes';
 import {getDestinationName} from '@/data';
 import {useCardTilt} from '@/hooks/use-card-tilt';
 import type {TourCardProps} from '@/types';
@@ -23,7 +24,10 @@ export const TourCard = ({tour}: TourCardProps) => {
   const imageY = useTransform(rotateX, [-4, 4], [-8, 8]);
 
   return (
-    <Link href={`/tours/${slug}`} className="block h-full cursor-pointer">
+    <Link
+      href={routes.tours.detail.path({slug})}
+      className="block h-full cursor-pointer"
+    >
       <motion.div
         ref={ref as React.RefObject<HTMLDivElement>}
         className="group bg-surface-elevated rounded-lg elevation-1 hover:elevation-2 transition-shadow overflow-hidden h-full flex flex-col"

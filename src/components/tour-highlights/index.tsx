@@ -3,10 +3,10 @@ import {useTranslations} from 'next-intl';
 import Image from 'next/image';
 import type {Highlight} from '@/types';
 
-interface TourHighlightsProps {
+type TourHighlightsProps = {
   highlights: Highlight[];
   locale: string;
-}
+};
 
 export function TourHighlights({highlights, locale}: TourHighlightsProps) {
   const t = useTranslations('tourDetail');

@@ -3,11 +3,11 @@ import {useTranslations} from 'next-intl';
 import type {LocalizedText} from '@/types';
 import {riseWithOvershoot} from '@/utils/motion-variants';
 
-interface TourNotesProps {
+type TourNotesProps = {
   notes: LocalizedText[];
   mealsInfo: LocalizedText;
   locale: string;
-}
+};
 
 export function TourNotes({notes, mealsInfo, locale}: TourNotesProps) {
   const t = useTranslations('tourDetail');

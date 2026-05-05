@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
+import {routes} from '@/routes';
 import type {DestinationCardProps} from '@/types';
 
 export const DestinationCard = ({
@@ -17,7 +18,7 @@ export const DestinationCard = ({
       className={className ?? 'aspect-[3/2]'}
     >
       <Link
-        href={`/tours?destination=${id}`}
+        href={routes.tours.byDestination.path({destinationId: id})}
         data-testid="destination-card"
         className="group relative rounded-lg overflow-hidden block cursor-pointer elevation-1 hover:elevation-2 transition-all duration-300 w-full h-full"
       >
