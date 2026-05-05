@@ -12,7 +12,7 @@ export const DestinationCard = ({
 
   return (
     <motion.div
-      whileHover={{y: -4}}
+      whileHover={{y: -2}}
       transition={{duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94]}}
       className={className ?? 'aspect-[3/2]'}
     >
@@ -24,7 +24,7 @@ export const DestinationCard = ({
         <img
           src={imageUrl}
           alt={name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-5">
