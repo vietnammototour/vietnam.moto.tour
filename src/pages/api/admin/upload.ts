@@ -49,12 +49,19 @@ function getDestDir(entityType: EntityType, entityId: string): string {
   return path.join(UPLOAD_DIR, `${entityType}s`, entityId);
 }
 
+function getExtension(file: File): string {
+  const name = file.originalFilename || '';
+  const ext = path.extname(name).toLowerCase();
+  return ext || '.jpg';
+}
+
 function getPublicUrl(
   entityType: EntityType,
   entityId: string,
   imageType: ImageType,
+  ext: string,
 ): string {
-  return `/uploads/${entityType}s/${entityId}/${imageType}.webp`;
+  return `/uploads/${entityType}s/${entityId}/${imageType}${ext}`;
 }
 
 async function updateDbField(
@@ -129,16 +136,16 @@ export default async function handler(
       return res.status(404).json({error: 'Entity not found'});
     }
 
-    // Save the uploaded file (already WebP from client-side processing)
     try {
       const destDir = getDestDir(entityType, entityId);
       await fs.mkdir(destDir, {recursive: true});
 
-      const outputPath = path.join(destDir, `${imageType}.webp`);
+      const ext = getExtension(file);
+      const outputPath = path.join(destDir, `${imageType}${ext}`);
       await fs.copyFile(file.filepath, outputPath);
 
       // Update DB
-      const publicUrl = getPublicUrl(entityType, entityId, imageType);
+      const publicUrl = getPublicUrl(entityType, entityId, imageType, ext);
       await updateDbField(entityType, entityId, imageType, publicUrl);
 
       // Clean up temp file
@@ -180,11 +187,14 @@ export default async function handler(
     }
 
     try {
-      const filePath = path.join(
-        getDestDir(entityType, entityId),
-        `${imageType}.webp`,
-      );
-      await fs.unlink(filePath).catch(() => {});
+      // Remove any file matching imageType regardless of extension
+      const destDir = getDestDir(entityType, entityId);
+      const files = await fs.readdir(destDir).catch(() => [] as string[]);
+      for (const f of files) {
+        if (f.startsWith(`${imageType}.`)) {
+          await fs.unlink(path.join(destDir, f)).catch(() => {});
+        }
+      }
 
       await updateDbField(entityType, entityId, imageType, '');
 

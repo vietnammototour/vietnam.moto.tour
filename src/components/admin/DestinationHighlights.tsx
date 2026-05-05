@@ -13,16 +13,19 @@ interface Highlight {
 
 interface DestinationHighlightsProps {
   destinationId: string;
+  locale: 'en' | 'vi';
 }
 
 export function DestinationHighlights({
   destinationId,
+  locale,
 }: DestinationHighlightsProps) {
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [loading, setLoading] = useState(true);
-  const [newTextEn, setNewTextEn] = useState('');
-  const [newTextVi, setNewTextVi] = useState('');
+  const [newText, setNewText] = useState('');
   const [adding, setAdding] = useState(false);
+
+  const textField = locale === 'en' ? 'textEn' : 'textVi';
 
   const fetchHighlights = useCallback(async () => {
     try {
@@ -43,20 +46,18 @@ export function DestinationHighlights({
   }, [fetchHighlights]);
 
   async function handleAdd() {
-    if (!newTextEn.trim()) return;
+    if (!newText.trim()) return;
     setAdding(true);
     const res = await fetch('/api/admin/highlights', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         destinationId,
-        textEn: newTextEn,
-        textVi: newTextVi,
+        [textField]: newText,
       }),
     });
     if (res.ok) {
-      setNewTextEn('');
-      setNewTextVi('');
+      setNewText('');
       await fetchHighlights();
     }
     setAdding(false);
@@ -129,39 +130,23 @@ export function DestinationHighlights({
             <div className="flex-1 min-w-0 space-y-1">
               <input
                 type="text"
-                value={h.textEn}
+                value={h[textField]}
                 onBlur={(e) => {
-                  if (e.target.value !== h.textEn) {
-                    handleUpdateText(h.id, 'textEn', e.target.value);
+                  if (e.target.value !== h[textField]) {
+                    handleUpdateText(h.id, textField, e.target.value);
                   }
                 }}
                 onChange={(e) => {
                   setHighlights((prev) =>
                     prev.map((x) =>
-                      x.id === h.id ? {...x, textEn: e.target.value} : x,
+                      x.id === h.id ? {...x, [textField]: e.target.value} : x,
                     ),
                   );
                 }}
                 className="w-full px-2 py-1 rounded border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                placeholder="English text"
-              />
-              <input
-                type="text"
-                value={h.textVi}
-                onBlur={(e) => {
-                  if (e.target.value !== h.textVi) {
-                    handleUpdateText(h.id, 'textVi', e.target.value);
-                  }
-                }}
-                onChange={(e) => {
-                  setHighlights((prev) =>
-                    prev.map((x) =>
-                      x.id === h.id ? {...x, textVi: e.target.value} : x,
-                    ),
-                  );
-                }}
-                className="w-full px-2 py-1 rounded border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                placeholder="Vietnamese text"
+                placeholder={
+                  locale === 'en' ? 'English text' : 'Vietnamese text'
+                }
               />
               <ImageUploadField
                 entityType="destination"
@@ -186,30 +171,23 @@ export function DestinationHighlights({
       {/* Add new */}
       <div className="p-4 rounded-lg border border-dashed border-border">
         <h3 className="type-title-sm text-on-surface mb-3">Add Highlight</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+        <div className="flex gap-2 mb-3">
           <input
             type="text"
-            value={newTextEn}
-            onChange={(e) => setNewTextEn(e.target.value)}
-            placeholder="English text"
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+            value={newText}
+            onChange={(e) => setNewText(e.target.value)}
+            placeholder={locale === 'en' ? 'English text' : 'Vietnamese text'}
+            className="flex-1 px-3 py-2 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
           />
-          <input
-            type="text"
-            value={newTextVi}
-            onChange={(e) => setNewTextVi(e.target.value)}
-            placeholder="Vietnamese text"
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-          />
+          <button
+            type="button"
+            onClick={handleAdd}
+            disabled={adding || !newText.trim()}
+            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm transition-colors disabled:opacity-50 cursor-pointer"
+          >
+            {adding ? 'Adding...' : 'Add'}
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleAdd}
-          disabled={adding || !newTextEn.trim()}
-          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm transition-colors disabled:opacity-50 cursor-pointer"
-        >
-          {adding ? 'Adding...' : 'Add Highlight'}
-        </button>
       </div>
     </div>
   );

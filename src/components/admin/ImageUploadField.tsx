@@ -9,6 +9,7 @@ interface ImageUploadFieldProps {
   currentUrl?: string;
   onUploadComplete: (url: string) => void;
   label: string;
+  compact?: boolean;
 }
 
 export function ImageUploadField({
@@ -18,6 +19,7 @@ export function ImageUploadField({
   currentUrl,
   onUploadComplete,
   label,
+  compact,
 }: ImageUploadFieldProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -27,37 +29,6 @@ export function ImageUploadField({
   const hasImage = !!previewUrl;
   const isHero = imageType === 'hero';
 
-  async function compressToWebP(file: File): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        // Resize: max 1920px wide, preserve aspect ratio
-        const maxWidth = 1920;
-        let {width, height} = img;
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
-        }
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return reject(new Error('Canvas not supported'));
-        ctx.drawImage(img, 0, 0, width, height);
-        canvas.toBlob(
-          (blob) => {
-            if (blob) resolve(blob);
-            else reject(new Error('WebP conversion failed'));
-          },
-          'image/webp',
-          0.8,
-        );
-      };
-      img.onerror = () => reject(new Error('Failed to load image'));
-      img.src = URL.createObjectURL(file);
-    });
-  }
-
   async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !entityId) return;
@@ -65,17 +36,8 @@ export function ImageUploadField({
     setUploading(true);
     setError('');
 
-    let uploadBlob: Blob;
-    try {
-      uploadBlob = await compressToWebP(file);
-    } catch {
-      setError('Image compression failed');
-      setUploading(false);
-      return;
-    }
-
     const formData = new FormData();
-    formData.append('file', uploadBlob, 'image.webp');
+    formData.append('file', file, file.name);
     formData.append('entityType', entityType);
     formData.append('entityId', entityId);
     formData.append('imageType', imageType);
@@ -122,6 +84,45 @@ export function ImageUploadField({
     } catch {
       setError('Delete failed');
     }
+  }
+
+  if (compact) {
+    return (
+      <div>
+        {!entityId ? (
+          <span className="type-body-sm text-on-surface-secondary">
+            Save first to upload
+          </span>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm transition-colors cursor-pointer disabled:opacity-50"
+            >
+              {uploading
+                ? 'Uploading...'
+                : hasImage
+                  ? 'Change Image'
+                  : 'Upload Image'}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+          </>
+        )}
+        {error && (
+          <p className="mt-1 type-body-sm text-red-600 dark:text-red-400">
+            {error}
+          </p>
+        )}
+      </div>
+    );
   }
 
   return (
