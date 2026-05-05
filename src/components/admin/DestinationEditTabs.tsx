@@ -2,12 +2,14 @@
 
 import {useState, useCallback} from 'react';
 import {useRouter} from 'next/router';
-import {DestinationForm} from './DestinationForm';
+import {DestinationGeneralForm} from './DestinationGeneralForm';
+import {CardImagePreview} from './CardImagePreview';
 import {DestinationHighlights} from './DestinationHighlights';
+import {LocalePicker, type Locale} from './LocalePicker';
 
-type TabId = 'general' | 'highlights';
+type TabId = 'general' | 'cardImage' | 'highlights';
 
-interface DestinationFormData {
+export interface DestinationFormData {
   slug: string;
   name: string;
   nameVi: string;
@@ -27,6 +29,7 @@ interface DestinationEditTabsProps {
 
 const tabs: {id: TabId; label: string}[] = [
   {id: 'general', label: 'General'},
+  {id: 'cardImage', label: 'Card Image'},
   {id: 'highlights', label: 'Highlights'},
 ];
 
@@ -38,6 +41,8 @@ export function DestinationEditTabs({
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabId>('general');
   const [destinationId, setDestinationId] = useState<string | null>(initialId);
+  const [locale, setLocale] = useState<Locale>('en');
+  const [form, setForm] = useState<DestinationFormData>(initialData);
 
   const handleSaved = useCallback(
     (id: string) => {
@@ -49,8 +54,20 @@ export function DestinationEditTabs({
     [destinationId],
   );
 
+  const updateForm = useCallback(
+    <K extends keyof DestinationFormData>(
+      key: K,
+      value: DestinationFormData[K],
+    ) => {
+      setForm((prev) => ({...prev, [key]: value}));
+    },
+    [],
+  );
+
   const isTabDisabled = (tabId: TabId) =>
     tabId !== 'general' && mode === 'create' && !destinationId;
+
+  const currentName = locale === 'en' ? form.nameEn : form.nameVi;
 
   return (
     <div>
@@ -67,39 +84,59 @@ export function DestinationEditTabs({
         </button>
       </div>
 
-      {/* Tab bar */}
-      <div className="flex border-b-2 border-border mb-0">
-        {tabs.map((tab) => {
-          const disabled = isTabDisabled(tab.id);
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              disabled={disabled}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 type-label-sm transition-colors cursor-pointer ${
-                activeTab === tab.id
-                  ? 'text-primary border-b-2 border-primary -mb-[2px] font-semibold'
-                  : disabled
-                    ? 'text-on-surface-secondary/40 cursor-not-allowed'
-                    : 'text-on-surface-secondary hover:text-on-surface'
-              }`}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
+      {/* Tab bar with locale picker */}
+      <div className="flex items-center justify-between border-b-2 border-border mb-0">
+        <div className="flex">
+          {tabs.map((tab) => {
+            const disabled = isTabDisabled(tab.id);
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                disabled={disabled}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-6 py-3 type-label-sm transition-colors cursor-pointer ${
+                  activeTab === tab.id
+                    ? 'text-primary border-b-2 border-primary -mb-[2px] font-semibold'
+                    : disabled
+                      ? 'text-on-surface-secondary/40 cursor-not-allowed'
+                      : 'text-on-surface-secondary hover:text-on-surface'
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+        <div className="pb-2">
+          <LocalePicker value={locale} onChange={setLocale} />
+        </div>
       </div>
 
       {/* Tab content */}
       <div className="border border-border border-t-0 rounded-b-lg overflow-hidden">
         {activeTab === 'general' && (
           <div className="p-5">
-            <DestinationForm
-              initialData={initialData}
+            <DestinationGeneralForm
+              form={form}
+              locale={locale}
               mode={mode}
-              destinationId={destinationId ?? undefined}
+              destinationId={destinationId}
+              onFieldChange={updateForm}
               onSaved={handleSaved}
+            />
+          </div>
+        )}
+
+        {activeTab === 'cardImage' && (
+          <div className="p-5">
+            <CardImagePreview
+              destinationId={destinationId}
+              imageUrl={form.imageUrl}
+              destinationName={currentName}
+              size={form.size as 'small' | 'large'}
+              onImageChange={(url) => updateForm('imageUrl', url)}
+              onSizeChange={(size) => updateForm('size', size)}
             />
           </div>
         )}
