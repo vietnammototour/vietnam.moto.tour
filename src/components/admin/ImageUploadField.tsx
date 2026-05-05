@@ -1,6 +1,7 @@
 'use client';
 
 import {useState, useRef} from 'react';
+import {api} from '@/routes';
 
 interface ImageUploadFieldProps {
   entityType: 'tour' | 'destination';
@@ -43,21 +44,15 @@ export function ImageUploadField({
     formData.append('imageType', imageType);
 
     try {
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const {data, error} = await api.admin.upload.create(formData);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Upload failed');
+      if (error) {
+        setError(error);
         return;
       }
 
-      // Append cache-buster to force preview refresh
-      setPreviewUrl(`${data.url}?t=${Date.now()}`);
-      onUploadComplete(data.url);
+      setPreviewUrl(`${data!.url}?t=${Date.now()}`);
+      onUploadComplete(data!.url);
     } catch {
       setError('Upload failed');
     } finally {
@@ -71,13 +66,13 @@ export function ImageUploadField({
     if (!entityId || !confirm('Delete this image?')) return;
 
     try {
-      const res = await fetch('/api/admin/upload', {
-        method: 'DELETE',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({entityType, entityId, imageType}),
+      const {error} = await api.admin.upload.delete({
+        entityType,
+        entityId,
+        imageType,
       });
 
-      if (res.ok) {
+      if (!error) {
         setPreviewUrl('');
         onUploadComplete('');
       }

@@ -1,6 +1,7 @@
 'use client';
 
 import {useState, useMemo} from 'react';
+import {api} from '@/routes';
 
 interface TranslationRow {
   id: string;
@@ -70,15 +71,10 @@ export function TranslationEditor({
         valueEn: t.valueEn,
       }));
 
-    const res = await fetch('/api/admin/translations', {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(toUpdate),
-    });
-
+    const {error} = await api.admin.translations.update(toUpdate);
     setSaving(false);
 
-    if (res.ok) {
+    if (!error) {
       setModified(new Set());
     }
   }

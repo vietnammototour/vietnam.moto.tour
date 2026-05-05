@@ -3,6 +3,7 @@
 import {useState, useEffect, useCallback} from 'react';
 import Image from 'next/image';
 import {ImageUploadField} from './ImageUploadField';
+import {api} from '@/routes';
 
 interface Highlight {
   id: string;
@@ -29,11 +30,8 @@ export function DestinationHighlights({
 
   const fetchHighlights = useCallback(async () => {
     try {
-      const res = await fetch(
-        `/api/admin/highlights?destinationId=${destinationId}`,
-      );
-      const data = await res.json();
-      setHighlights(data);
+      const {data, error} = await api.admin.highlights.list(destinationId);
+      if (!error && data) setHighlights(data);
     } catch {
       // silent
     } finally {
@@ -48,15 +46,11 @@ export function DestinationHighlights({
   async function handleAdd() {
     if (!newText.trim()) return;
     setAdding(true);
-    const res = await fetch('/api/admin/highlights', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        destinationId,
-        [textField]: newText,
-      }),
+    const {error} = await api.admin.highlights.create({
+      destinationId,
+      [textField]: newText,
     });
-    if (res.ok) {
+    if (!error) {
       setNewText('');
       await fetchHighlights();
     }
@@ -65,7 +59,7 @@ export function DestinationHighlights({
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this highlight?')) return;
-    await fetch(`/api/admin/highlights/${id}`, {method: 'DELETE'});
+    await api.admin.highlights.delete(id);
     await fetchHighlights();
   }
 
@@ -74,20 +68,12 @@ export function DestinationHighlights({
     field: 'textEn' | 'textVi',
     value: string,
   ) {
-    await fetch(`/api/admin/highlights/${id}`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({[field]: value}),
-    });
+    await api.admin.highlights.update(id, {[field]: value});
     await fetchHighlights();
   }
 
   async function handleImageUpload(id: string, imageUrl: string) {
-    await fetch(`/api/admin/highlights/${id}`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({imageUrl}),
-    });
+    await api.admin.highlights.update(id, {imageUrl});
     await fetchHighlights();
   }
 
