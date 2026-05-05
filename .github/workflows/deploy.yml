@@ -20,5 +20,5 @@ jobs:
             bash /home/ci-cd/deploy.sh
             export PATH="/home/ci-cd/.nvm/versions/node/v24.14.0/bin:$PATH"
             cd /var/www/vietnam-moto-tours
-            npx prisma generate
-            npx tsx prisma/seed.ts
+            ./node_modules/.bin/prisma generate
+            ./node_modules/.bin/tsx prisma/seed.ts
