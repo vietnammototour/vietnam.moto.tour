@@ -149,22 +149,29 @@ export default async function handler(
       // Clean up temp file on failure
       await fs.unlink(file.filepath).catch(() => {});
       console.error('File save failed:', err);
-      return res
-        .status(500)
-        .json({
-          error: 'File save failed',
-          details: err instanceof Error ? err.message : String(err),
-        });
+      return res.status(500).json({
+        error: 'File save failed',
+        details: err instanceof Error ? err.message : String(err),
+      });
     }
   }
 
   if (req.method === 'DELETE') {
-    // DELETE uses regular JSON body
-    const {entityType, entityId, imageType} = req.body as {
-      entityType: EntityType;
-      entityId: string;
-      imageType: ImageType;
-    };
+    // Body parser is disabled for multipart, so parse JSON manually
+    let body: {entityType: EntityType; entityId: string; imageType: ImageType};
+    try {
+      const raw = await new Promise<string>((resolve, reject) => {
+        let data = '';
+        req.on('data', (chunk: Buffer) => (data += chunk));
+        req.on('end', () => resolve(data));
+        req.on('error', reject);
+      });
+      body = JSON.parse(raw);
+    } catch {
+      return res.status(400).json({error: 'Invalid JSON body'});
+    }
+
+    const {entityType, entityId, imageType} = body;
 
     if (
       !entityId ||
