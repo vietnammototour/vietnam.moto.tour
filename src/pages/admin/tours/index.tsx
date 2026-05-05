@@ -66,7 +66,7 @@ export default function AdminToursList() {
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-surface-alt">
-              <th className="w-12 px-4 py-3"></th>
+              <th className="px-4 py-3"></th>
               <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
                 Title
               </th>
@@ -90,12 +90,12 @@ export default function AdminToursList() {
                 key={tour.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
-                <td className="w-12 px-4 py-3">
+                <td className="px-4 py-3">
                   {tour.imageUrl ? (
                     <img
                       src={tour.imageUrl}
                       alt=""
-                      className="w-10 h-10 rounded object-cover"
+                      className="h-[75px] w-auto rounded object-contain"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                         e.currentTarget.nextElementSibling?.classList.remove(
@@ -105,9 +105,9 @@ export default function AdminToursList() {
                     />
                   ) : null}
                   <div
-                    className={`w-10 h-10 rounded bg-surface-alt flex items-center justify-center ${tour.imageUrl ? 'hidden' : ''}`}
+                    className={`h-[75px] w-[75px] rounded bg-surface-alt flex items-center justify-center ${tour.imageUrl ? 'hidden' : ''}`}
                   >
-                    <i className="fa fa-image text-on-surface-tertiary text-sm" />
+                    <i className="fa fa-image text-on-surface-tertiary text-lg" />
                   </div>
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface">

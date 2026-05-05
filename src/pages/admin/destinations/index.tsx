@@ -53,7 +53,7 @@ export default function AdminDestinationsList() {
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-surface-alt">
-              <th className="w-12 px-4 py-3"></th>
+              <th className="px-4 py-3"></th>
               <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
                 Name
               </th>
@@ -74,12 +74,12 @@ export default function AdminDestinationsList() {
                 key={dest.id}
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
-                <td className="w-12 px-4 py-3">
+                <td className="px-4 py-3">
                   {dest.imageUrl ? (
                     <img
                       src={dest.imageUrl}
                       alt=""
-                      className="w-10 h-10 rounded object-cover"
+                      className="h-[75px] w-auto rounded object-contain"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                         e.currentTarget.nextElementSibling?.classList.remove(
@@ -89,9 +89,9 @@ export default function AdminDestinationsList() {
                     />
                   ) : null}
                   <div
-                    className={`w-10 h-10 rounded bg-surface-alt flex items-center justify-center ${dest.imageUrl ? 'hidden' : ''}`}
+                    className={`h-[75px] w-[75px] rounded bg-surface-alt flex items-center justify-center ${dest.imageUrl ? 'hidden' : ''}`}
                   >
-                    <i className="fa fa-image text-on-surface-tertiary text-sm" />
+                    <i className="fa fa-image text-on-surface-tertiary text-lg" />
                   </div>
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface">
