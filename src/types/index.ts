@@ -30,6 +30,8 @@ export interface PricingGroup {
   tiers: PricingTier[];
 }
 
+export type TourStatus = 'DRAFT' | 'PUBLISHED' | 'FEATURED' | 'ARCHIVED';
+
 export interface Tour {
   id: number;
   title: string;
@@ -40,6 +42,7 @@ export interface Tour {
   distance: string;
   destinationId: number;
   slug: string;
+  status: TourStatus;
   description: LocalizedText;
   transportation: string;
   groupSize: string;

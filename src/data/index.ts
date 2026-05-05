@@ -9,7 +9,7 @@ import toursJson from './tours.json';
 export const destinationsData: Destination[] =
   destinationsJson as Destination[];
 
-export const toursData: Tour[] = toursJson as Tour[];
+export const toursData: Tour[] = toursJson as unknown as Tour[];
 
 // ---------------------------------------------------------------------------
 // Sync helpers (used by client-side components like TourCard, TourHero)

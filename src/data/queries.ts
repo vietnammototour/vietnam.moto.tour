@@ -7,7 +7,7 @@
  */
 import type {Destination, Tour} from '@/types';
 import {prisma} from '@/lib/prisma';
-import {toursData, destinationsData, getActiveDestinations} from '@/data';
+import {toursData, destinationsData} from '@/data';
 
 // ---------------------------------------------------------------------------
 // DB row -> frontend type converters
@@ -16,6 +16,7 @@ import {toursData, destinationsData, getActiveDestinations} from '@/data';
 interface DbTour {
   id: string;
   slug: string;
+  status: string;
   title: string;
   imageUrl: string;
   rating: string;
@@ -77,6 +78,7 @@ function dbTourToTour(row: DbTour, destinationName?: string): Tour {
     distance: row.distance,
     destinationId: destNumericId,
     slug: row.slug,
+    status: row.status as Tour['status'],
     description: {en: row.descriptionEn, vi: row.descriptionVi},
     transportation: row.transportation,
     groupSize: row.groupSize,
@@ -109,11 +111,11 @@ function dbDestToDestination(row: DbDestination): Destination {
 // Async Prisma queries (server-side only, with JSON fallback)
 // ---------------------------------------------------------------------------
 
-/** All active tours from DB, falling back to JSON on error */
-export async function getAllTours(): Promise<Tour[]> {
+/** All active tours from DB */
+export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   try {
     const rows = await prisma.tour.findMany({
-      where: {isActive: true},
+      where: isAdmin ? {} : {status: {in: ['PUBLISHED', 'FEATURED']}},
       include: {destination: true},
     });
 
@@ -123,16 +125,19 @@ export async function getAllTours(): Promise<Tour[]> {
       return tour;
     });
   } catch (error) {
-    console.error('getAllTours: DB query failed, using JSON fallback', error);
-    return toursData.map((t) => ({...t, destinationHeroImage: ''}));
+    console.error('getAllTours: DB query failed', error);
+    return [];
   }
 }
 
 /** Single tour by slug from DB */
-export async function getTourBySlug(slug: string): Promise<Tour | undefined> {
+export async function getTourBySlug(
+  slug: string,
+  isAdmin = false,
+): Promise<Tour | undefined> {
   try {
-    const row = await prisma.tour.findUnique({
-      where: {slug, isActive: true},
+    const row = await prisma.tour.findFirst({
+      where: isAdmin ? {slug} : {slug, status: {in: ['PUBLISHED', 'FEATURED']}},
       include: {destination: true},
     });
     if (!row) return undefined;
@@ -140,9 +145,7 @@ export async function getTourBySlug(slug: string): Promise<Tour | undefined> {
     tour.destinationHeroImage = row.destination.heroImage ?? '';
     return tour;
   } catch (error) {
-    console.error('getTourBySlug: DB query failed, using JSON fallback', error);
-    const fallback = toursData.find((t) => t.slug === slug);
-    if (fallback) return {...fallback, destinationHeroImage: ''};
+    console.error('getTourBySlug: DB query failed', error);
     return undefined;
   }
 }
@@ -151,29 +154,31 @@ export async function getTourBySlug(slug: string): Promise<Tour | undefined> {
 export async function getAllTourSlugs(): Promise<string[]> {
   try {
     const rows = await prisma.tour.findMany({
-      where: {isActive: true},
+      where: {status: {in: ['PUBLISHED', 'FEATURED']}},
       select: {slug: true},
     });
     return rows.map((r: any) => r.slug);
   } catch (error) {
-    console.error(
-      'getAllTourSlugs: DB query failed, using JSON fallback',
-      error,
-    );
-    return toursData.map((t) => t.slug);
+    console.error('getAllTourSlugs: DB query failed', error);
+    return [];
   }
 }
 
 /** Active destinations with tour count and transport flags from DB */
-export async function getActiveDestinationsFromDb(): Promise<
+export async function getActiveDestinationsFromDb(
+  isAdmin = false,
+): Promise<
   (Destination & {tourCount: number; hasCar: boolean; hasBike: boolean})[]
 > {
   try {
+    const tourFilter = isAdmin
+      ? {}
+      : {status: {in: ['PUBLISHED' as const, 'FEATURED' as const]}};
     const destinations = await prisma.destination.findMany({
       where: {isActive: true},
       include: {
         tours: {
-          where: {isActive: true},
+          where: tourFilter,
           select: {transportation: true},
         },
       },
@@ -188,11 +193,8 @@ export async function getActiveDestinationsFromDb(): Promise<
         hasBike: d.tours.some((t: any) => /motorbike/i.test(t.transportation)),
       }));
   } catch (error) {
-    console.error(
-      'getActiveDestinationsFromDb: DB query failed, using JSON fallback',
-      error,
-    );
-    return getActiveDestinations();
+    console.error('getActiveDestinationsFromDb: DB query failed', error);
+    return [];
   }
 }
 
