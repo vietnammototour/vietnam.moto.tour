@@ -74,7 +74,10 @@ export default function AdminDestinationsList() {
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
                 <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
+                  <Link
+                    href={`/admin/destinations/${dest.id}/edit`}
+                    className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                  >
                     {dest.imageUrl ? (
                       <img
                         src={dest.imageUrl}
@@ -96,7 +99,7 @@ export default function AdminDestinationsList() {
                     <span className="type-body-lg text-on-surface">
                       {dest.name}
                     </span>
-                  </div>
+                  </Link>
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {dest._count.tours}
@@ -113,20 +116,13 @@ export default function AdminDestinationsList() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-4">
-                    <Link
-                      href={`/admin/destinations/${dest.id}/edit`}
-                      className="type-label-sm text-primary hover:text-primary-light transition-colors cursor-pointer"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(dest.id)}
-                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleDelete(dest.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors cursor-pointer"
+                  >
+                    <i className="fa fa-trash text-xs" />
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

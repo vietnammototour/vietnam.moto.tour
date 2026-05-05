@@ -90,7 +90,10 @@ export default function AdminToursList() {
                 className="border-b border-border last:border-0 hover:bg-surface-alt/50"
               >
                 <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
+                  <Link
+                    href={`/admin/tours/${tour.id}/edit`}
+                    className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                  >
                     {tour.imageUrl ? (
                       <img
                         src={tour.imageUrl}
@@ -112,7 +115,7 @@ export default function AdminToursList() {
                     <span className="type-body-lg text-on-surface">
                       {tour.title}
                     </span>
-                  </div>
+                  </Link>
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {tour.destination.name}
@@ -127,20 +130,13 @@ export default function AdminToursList() {
                   />
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-4">
-                    <Link
-                      href={`/admin/tours/${tour.id}/edit`}
-                      className="type-label-sm text-primary hover:text-primary-light transition-colors cursor-pointer"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(tour.id)}
-                      className="type-label-sm text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-                    >
-                      Archive
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleDelete(tour.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors cursor-pointer"
+                  >
+                    <i className="fa fa-archive text-xs" />
+                    Archive
+                  </button>
                 </td>
               </tr>
             ))}
