@@ -1,7 +1,9 @@
 import {useMemo} from 'react';
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
-import type {GetStaticPropsContext} from 'next';
+import type {GetServerSidePropsContext} from 'next';
+import {getServerSession} from 'next-auth/next';
+import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {PageHeader} from '@/components/page-header';
@@ -15,9 +17,10 @@ const fadeInUp = {
 
 interface ToursPageProps {
   allTours: Tour[];
+  isAdmin: boolean;
 }
 
-export default function Tours({allTours}: ToursPageProps) {
+export default function Tours({allTours, isAdmin}: ToursPageProps) {
   const t = useTranslations('tours');
   const tMeta = useTranslations('meta');
   const router = useRouter();
@@ -81,18 +84,25 @@ export default function Tours({allTours}: ToursPageProps) {
   );
 }
 
-export async function getStaticProps({locale}: GetStaticPropsContext) {
+export async function getServerSideProps({
+  req,
+  res,
+  locale,
+}: GetServerSidePropsContext) {
   const {getAllTours, getMessagesFromDb} = await import('@/data/queries');
+  const session = await getServerSession(req, res, authOptions);
+  const isAdmin = session?.user?.role === 'ADMIN';
+
   const [allTours, dbMessages] = await Promise.all([
-    getAllTours(),
+    getAllTours(isAdmin),
     getMessagesFromDb(locale ?? 'vi'),
   ]);
 
   return {
     props: {
       allTours,
+      isAdmin,
       messages: dbMessages,
     },
-    revalidate: 60,
   };
 }

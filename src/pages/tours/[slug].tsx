@@ -1,6 +1,8 @@
 import {useState, useCallback} from 'react';
 import {useTranslations} from 'next-intl';
-import type {GetStaticPaths, GetStaticPropsContext} from 'next';
+import type {GetServerSidePropsContext} from 'next';
+import {getServerSession} from 'next-auth/next';
+import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import type {Tour} from '@/types';
@@ -18,9 +20,10 @@ import {TourNotes} from '@/components/tour-notes';
 
 interface TourDetailProps {
   tour: Tour;
+  isAdmin: boolean;
 }
 
-export default function TourDetail({tour}: TourDetailProps) {
+export default function TourDetail({tour, isAdmin}: TourDetailProps) {
   const router = useRouter();
   const locale = (router.locale ?? 'vi') as 'en' | 'vi';
   const t = useTranslations('tourDetail');
@@ -157,27 +160,19 @@ export default function TourDetail({tour}: TourDetailProps) {
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const {getAllTourSlugs} = await import('@/data/queries');
-  const slugs = await getAllTourSlugs();
-  const paths = slugs.flatMap((slug) =>
-    ['vi', 'en'].map((locale) => ({
-      params: {slug},
-      locale,
-    })),
-  );
-
-  return {
-    paths,
-    fallback: 'blocking',
-  };
-};
-
-export async function getStaticProps({params, locale}: GetStaticPropsContext) {
+export async function getServerSideProps({
+  params,
+  req,
+  res,
+  locale,
+}: GetServerSidePropsContext) {
   const {getTourBySlug, getMessagesFromDb} = await import('@/data/queries');
+  const session = await getServerSession(req, res, authOptions);
+  const isAdmin = session?.user?.role === 'ADMIN';
+
   const slug = params?.slug as string;
   const [tour, dbMessages] = await Promise.all([
-    getTourBySlug(slug),
+    getTourBySlug(slug, isAdmin),
     getMessagesFromDb(locale ?? 'vi'),
   ]);
 
@@ -188,8 +183,8 @@ export async function getStaticProps({params, locale}: GetStaticPropsContext) {
   return {
     props: {
       tour,
+      isAdmin,
       messages: dbMessages,
     },
-    revalidate: 60,
   };
 }

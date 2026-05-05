@@ -9,7 +9,9 @@ import {
   waveStagger,
 } from '@/utils/motion-variants';
 import {useTranslations} from 'next-intl';
-import type {GetStaticPropsContext} from 'next';
+import type {GetServerSidePropsContext} from 'next';
+import {getServerSession} from 'next-auth/next';
+import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -37,9 +39,10 @@ interface HomeProps {
     hasCar: boolean;
     hasBike: boolean;
   })[];
+  isAdmin: boolean;
 }
 
-export default function Home({tours, destinations}: HomeProps) {
+export default function Home({tours, destinations, isAdmin}: HomeProps) {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const t = useTranslations('home');
@@ -437,12 +440,19 @@ export default function Home({tours, destinations}: HomeProps) {
   );
 }
 
-export async function getStaticProps({locale}: GetStaticPropsContext) {
+export async function getServerSideProps({
+  req,
+  res,
+  locale,
+}: GetServerSidePropsContext) {
   const {getAllTours, getActiveDestinationsFromDb, getMessagesFromDb} =
     await import('@/data/queries');
+  const session = await getServerSession(req, res, authOptions);
+  const isAdmin = session?.user?.role === 'ADMIN';
+
   const [tours, destinations, dbMessages] = await Promise.all([
-    getAllTours(),
-    getActiveDestinationsFromDb(),
+    getAllTours(isAdmin),
+    getActiveDestinationsFromDb(isAdmin),
     getMessagesFromDb(locale ?? 'vi'),
   ]);
 
@@ -450,8 +460,8 @@ export async function getStaticProps({locale}: GetStaticPropsContext) {
     props: {
       tours,
       destinations,
+      isAdmin,
       messages: dbMessages,
     },
-    revalidate: 60,
   };
 }

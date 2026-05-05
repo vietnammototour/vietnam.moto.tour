@@ -17,6 +17,7 @@ const config: Config = {
     '^swiper/css/(.*)$': '<rootDir>/src/__mocks__/styleMock.ts',
     '^framer-motion$': '<rootDir>/src/__mocks__/framer-motion.tsx',
   },
+  transformIgnorePatterns: ['node_modules/(?!(jose|@panva)/)'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testMatch: [
     '<rootDir>/src/**/*.spec.{ts,tsx}',
