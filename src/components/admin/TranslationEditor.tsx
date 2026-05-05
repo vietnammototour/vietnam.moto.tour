@@ -2,14 +2,7 @@
 
 import {useState, useMemo} from 'react';
 import {api} from '@/routes';
-
-interface TranslationRow {
-  id: string;
-  namespace: string;
-  key: string;
-  valueVi: string;
-  valueEn: string;
-}
+import type {TranslationRow} from '@/types';
 
 interface TranslationEditorProps {
   translations: TranslationRow[];

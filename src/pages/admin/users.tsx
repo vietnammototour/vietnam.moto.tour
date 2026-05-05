@@ -3,14 +3,7 @@ import {useSession} from 'next-auth/react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {api} from '@/routes';
-
-interface AdminUser {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-  createdAt: string;
-}
+import type {AdminUser} from '@/types';
 
 export default function AdminUsers() {
   const {data: session} = useSession();
