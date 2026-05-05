@@ -4,6 +4,7 @@ import {type ReactNode} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useSession, signOut} from 'next-auth/react';
+import {routes} from '@/routes';
 import {ProgressBar} from './ProgressBar';
 import {
   AdminLoadingProvider,
@@ -20,15 +21,23 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
   const {loading} = useAdminLoading();
 
   const navItems = [
-    {href: '/admin', label: 'Dashboard', icon: 'fa-tachometer-alt'},
-    {href: '/admin/tours', label: 'Tours', icon: 'fa-route'},
     {
-      href: '/admin/destinations',
+      href: routes.admin.dashboard.path(),
+      label: 'Dashboard',
+      icon: 'fa-tachometer-alt',
+    },
+    {href: routes.admin.tours.list.path(), label: 'Tours', icon: 'fa-route'},
+    {
+      href: routes.admin.destinations.list.path(),
       label: 'Destinations',
       icon: 'fa-map-marker-alt',
     },
-    {href: '/admin/translations', label: 'Translations', icon: 'fa-language'},
-    {href: '/admin/users', label: 'Users', icon: 'fa-users'},
+    {
+      href: routes.admin.translations.path(),
+      label: 'Translations',
+      icon: 'fa-language',
+    },
+    {href: routes.admin.users.path(), label: 'Users', icon: 'fa-users'},
   ];
 
   return (
@@ -38,15 +47,18 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
       {/* Sidebar */}
       <aside className="w-64 bg-surface-elevated border-r border-border flex flex-col">
         <div className="p-4 border-b border-border">
-          <Link href="/" className="type-title-sm text-primary cursor-pointer">
+          <Link
+            href={routes.home.path()}
+            className="type-title-sm text-primary cursor-pointer"
+          >
             VMT Admin
           </Link>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => {
             const isActive =
-              item.href === '/admin'
-                ? router.pathname === '/admin'
+              item.href === routes.admin.dashboard.path()
+                ? router.pathname === routes.admin.dashboard.path()
                 : router.pathname.startsWith(item.href);
 
             return (
