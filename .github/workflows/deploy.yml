@@ -17,8 +17,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            bash /home/ci-cd/deploy.sh
             export PATH="/home/ci-cd/.nvm/versions/node/v24.14.0/bin:$PATH"
+            bash /home/ci-cd/deploy.sh
             cd /var/www/vietnam-moto-tours
-            ./node_modules/.bin/prisma generate
-            ./node_modules/.bin/tsx prisma/seed.ts
+            set -a && source .env && set +a
+            npx --yes tsx prisma/seed.ts
