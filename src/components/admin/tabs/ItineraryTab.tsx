@@ -64,14 +64,17 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
     );
   }
 
-  function handleRemoveItem(dayIndex: number, itemIndex: number) {
-    const currentItems = getValues(`days.${dayIndex}.items`);
-    setValue(
-      `days.${dayIndex}.items` as any,
-      currentItems.filter((_: unknown, i: number) => i !== itemIndex),
-      {shouldDirty: true},
-    );
-  }
+  const handleRemoveItem = useCallback(
+    (dayIndex: number, itemIndex: number) => {
+      const currentItems = getValues(`days.${dayIndex}.items`);
+      setValue(
+        `days.${dayIndex}.items` as any,
+        currentItems.filter((_: unknown, i: number) => i !== itemIndex),
+        {shouldDirty: true},
+      );
+    },
+    [getValues, setValue],
+  );
 
   const handleFieldChange = useCallback(
     (path: string, value: string | number) => {
@@ -84,13 +87,16 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
     [setValue],
   );
 
-  const handleRemoveItemFromPreview = useCallback((path: string) => {
-    // path: "itinerary.0.items.1"
-    const parts = path.split('.');
-    const dayIndex = Number(parts[1]);
-    const itemIndex = Number(parts[3]);
-    handleRemoveItem(dayIndex, itemIndex);
-  }, []);
+  const handleRemoveItemFromPreview = useCallback(
+    (path: string) => {
+      // path: "itinerary.0.items.1"
+      const parts = path.split('.');
+      const dayIndex = Number(parts[1]);
+      const itemIndex = Number(parts[3]);
+      handleRemoveItem(dayIndex, itemIndex);
+    },
+    [handleRemoveItem],
+  );
 
   async function handleSave() {
     setSaving(true);
