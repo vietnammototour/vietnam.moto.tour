@@ -7,13 +7,21 @@ import {getDestinationName} from '@/data';
 import type {Tour} from '@/types';
 
 interface TourHeroProps {
-  tour: Tour;
+  tour?: Tour;
+  preview?: {
+    heroImage: string;
+    destinationName: string;
+  };
 }
 
-export function TourHero({tour}: TourHeroProps) {
+export function TourHero({tour, preview}: TourHeroProps) {
   const t = useTranslations('tourDetail');
   const spotlight = useCursorSpotlight(250, 0.12);
   const spotlightBg = useMotionTemplate`radial-gradient(250px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.12), transparent)`;
+
+  const isPreview = !!preview;
+  const heroImage = preview?.heroImage ?? tour?.destinationHeroImage;
+  const displayName = preview?.destinationName ?? tour?.title;
 
   return (
     <section className="relative">
@@ -23,10 +31,10 @@ export function TourHero({tour}: TourHeroProps) {
         onMouseLeave={spotlight.onMouseLeave}
         className="relative h-72 md:h-96 lg:h-[28rem] overflow-hidden texture-grain-warm"
       >
-        {tour.destinationHeroImage && (
+        {heroImage && (
           <motion.div
             className="absolute inset-0 bg-cover bg-center"
-            style={{backgroundImage: `url(${tour.destinationHeroImage})`}}
+            style={{backgroundImage: `url(${heroImage})`}}
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -41,66 +49,74 @@ export function TourHero({tour}: TourHeroProps) {
             animate="visible"
             className="type-display-sm md:type-display-lg text-on-surface-inverse mb-3 max-w-[70%]"
           >
-            {tour.title}
+            {displayName}
           </motion.h1>
-          <motion.div
-            variants={slideFromLeft}
-            initial="hidden"
-            animate="visible"
-            transition={{delay: 0.3}}
-            className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface-inverse/80 type-body-sm"
-          >
-            <span className="flex items-center gap-1.5">
-              <i className="fa fa-map-marker-alt" />{' '}
-              {getDestinationName(tour.destinationId)}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <i className="fa fa-clock" /> {tour.duration} {t('days')}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <i className="fa fa-road" /> {tour.distance} km
-            </span>
-            <span className="flex items-center gap-1.5">
-              <i className="fa fa-motorcycle" /> {tour.transportation}
-            </span>
-          </motion.div>
-          <motion.div
-            variants={slideFromLeft}
-            initial="hidden"
-            animate="visible"
-            transition={{delay: 0.5}}
-            className="mt-4 text-on-surface-inverse"
-          >
-            <span className="type-headline-lg">
-              {t('from')} ${tour.price}
-            </span>
-            <span className="type-body-sm ml-1 opacity-80">
-              {t('perPerson')}
-            </span>
-          </motion.div>
+          {!isPreview && tour && (
+            <>
+              <motion.div
+                variants={slideFromLeft}
+                initial="hidden"
+                animate="visible"
+                transition={{delay: 0.3}}
+                className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface-inverse/80 type-body-sm"
+              >
+                <span className="flex items-center gap-1.5">
+                  <i className="fa fa-map-marker-alt" />{' '}
+                  {getDestinationName(tour.destinationId)}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <i className="fa fa-clock" /> {tour.duration} {t('days')}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <i className="fa fa-road" /> {tour.distance} km
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <i className="fa fa-motorcycle" /> {tour.transportation}
+                </span>
+              </motion.div>
+              <motion.div
+                variants={slideFromLeft}
+                initial="hidden"
+                animate="visible"
+                transition={{delay: 0.5}}
+                className="mt-4 text-on-surface-inverse"
+              >
+                <span className="type-headline-lg">
+                  {t('from')} ${tour.price}
+                </span>
+                <span className="type-body-sm ml-1 opacity-80">
+                  {t('perPerson')}
+                </span>
+              </motion.div>
+            </>
+          )}
         </div>
       </div>
-      <div className="bg-surface-alt py-3">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center gap-2 type-body-sm text-on-surface-secondary">
-            <Link
-              href="/"
-              className="hover:text-primary transition-colors cursor-pointer"
-            >
-              {t('breadcrumbHome')}
-            </Link>
-            <span>/</span>
-            <Link
-              href="/tours"
-              className="hover:text-primary transition-colors cursor-pointer"
-            >
-              {t('breadcrumbTours')}
-            </Link>
-            <span>/</span>
-            <span className="text-on-surface type-label-lg">{tour.title}</span>
-          </nav>
+      {!isPreview && tour && (
+        <div className="bg-surface-alt py-3">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <nav className="flex items-center gap-2 type-body-sm text-on-surface-secondary">
+              <Link
+                href="/"
+                className="hover:text-primary transition-colors cursor-pointer"
+              >
+                {t('breadcrumbHome')}
+              </Link>
+              <span>/</span>
+              <Link
+                href="/tours"
+                className="hover:text-primary transition-colors cursor-pointer"
+              >
+                {t('breadcrumbTours')}
+              </Link>
+              <span>/</span>
+              <span className="text-on-surface type-label-lg">
+                {tour.title}
+              </span>
+            </nav>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
