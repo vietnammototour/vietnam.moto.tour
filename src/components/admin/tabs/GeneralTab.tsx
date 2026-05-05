@@ -1,41 +1,24 @@
 'use client';
 
 import {useState} from 'react';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 import {ImageUploadField} from '@/components/admin/ImageUploadField';
 import {StatusPicker} from '@/components/admin/StatusPicker';
-import type {TourStatus, LocalizedText} from '@/types';
+import {FormFieldError} from '@/components/admin/FormFieldError';
+import {
+  generalTabSchema,
+  type GeneralTabFormData,
+} from './GeneralTab.form-utils';
 
-export type GeneralTabData = {
-  slug: string;
-  destinationId: string;
-  title: string;
-  titleVi: string;
-  titleEn: string;
-  imageUrl: string;
-  price: number;
-  duration: number;
-  distance: number;
-  descriptionVi: string;
-  descriptionEn: string;
-  transportation: string;
-  groupSize: number;
-  hotel: string;
-  guided: string;
-  images: string[];
-  included: LocalizedText[];
-  excluded: LocalizedText[];
-  paymentDetails: LocalizedText;
-  notes: LocalizedText[];
-  mealsInfo: LocalizedText;
-  status: TourStatus;
-};
+export type {GeneralTabFormData as GeneralTabData};
 
 type GeneralTabProps = {
-  initialData: GeneralTabData;
+  initialData: GeneralTabFormData;
   destinations: Array<{id: string; name: string}>;
   tourId: string | null;
   onDestinationChange?: (destinationId: string) => void;
-  onSave: (data: GeneralTabData) => Promise<void>;
+  onSave: (data: GeneralTabFormData) => Promise<void>;
 };
 
 export function GeneralTab({
@@ -45,53 +28,49 @@ export function GeneralTab({
   onDestinationChange,
   onSave,
 }: GeneralTabProps) {
-  const [form, setForm] = useState<GeneralTabData>(initialData);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [savedForm, setSavedForm] = useState<GeneralTabData>(initialData);
+  const [submitError, setSubmitError] = useState('');
 
-  const isDirty = JSON.stringify(form) !== JSON.stringify(savedForm);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: {errors, isSubmitting, isDirty},
+    reset,
+  } = useForm<GeneralTabFormData>({
+    resolver: yupResolver(generalTabSchema),
+    defaultValues: initialData,
+    shouldFocusError: true,
+  });
 
-  function updateField<K extends keyof GeneralTabData>(
-    key: K,
-    value: GeneralTabData[K],
-  ) {
-    setForm((prev) => {
-      const next = {...prev, [key]: value};
-      if (key === 'destinationId') {
-        onDestinationChange?.(value as string);
-      }
-      return next;
-    });
-  }
+  const status = watch('status');
+  const imageUrl = watch('imageUrl');
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
-    setError('');
+  async function onSubmit(data: GeneralTabFormData) {
+    setSubmitError('');
     try {
-      await onSave(form);
-      setSavedForm(form);
+      await onSave(data);
+      reset(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to save');
-    } finally {
-      setSaving(false);
+      setSubmitError(err instanceof Error ? err.message : 'Failed to save');
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-4xl">
       <div className="flex items-center justify-between">
         <h2 className="type-title-lg text-on-surface">General Info</h2>
         <StatusPicker
-          value={form.status}
-          onChange={(status) => updateField('status', status)}
+          value={status}
+          onChange={(s) => {
+            setValue('status', s, {shouldDirty: true});
+          }}
         />
       </div>
 
-      {error && (
+      {submitError && (
         <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-sm">
-          {error}
+          {submitError}
         </div>
       )}
 
@@ -103,20 +82,19 @@ export function GeneralTab({
           </label>
           <input
             type="text"
-            required
-            value={form.slug}
-            onChange={(e) => updateField('slug', e.target.value)}
+            {...register('slug')}
             className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
           />
+          <FormFieldError message={errors.slug?.message} />
         </div>
         <div>
           <label className="block type-label-sm text-on-surface-secondary mb-1">
             Destination
           </label>
           <select
-            required
-            value={form.destinationId}
-            onChange={(e) => updateField('destinationId', e.target.value)}
+            {...register('destinationId', {
+              onChange: (e) => onDestinationChange?.(e.target.value),
+            })}
             className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
           >
             <option value="">Select...</option>
@@ -126,6 +104,7 @@ export function GeneralTab({
               </option>
             ))}
           </select>
+          <FormFieldError message={errors.destinationId?.message} />
         </div>
       </div>
 
@@ -135,11 +114,10 @@ export function GeneralTab({
         </label>
         <input
           type="text"
-          required
-          value={form.title}
-          onChange={(e) => updateField('title', e.target.value)}
+          {...register('title')}
           className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
         />
+        <FormFieldError message={errors.title?.message} />
       </div>
 
       {/* Localized descriptions */}
@@ -150,8 +128,7 @@ export function GeneralTab({
           </label>
           <textarea
             rows={4}
-            value={form.descriptionEn}
-            onChange={(e) => updateField('descriptionEn', e.target.value)}
+            {...register('descriptionEn')}
             className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
           />
         </div>
@@ -161,8 +138,7 @@ export function GeneralTab({
           </label>
           <textarea
             rows={4}
-            value={form.descriptionVi}
-            onChange={(e) => updateField('descriptionVi', e.target.value)}
+            {...register('descriptionVi')}
             className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
           />
         </div>
@@ -182,13 +158,11 @@ export function GeneralTab({
             </label>
             <input
               type="number"
+              {...register(key, {valueAsNumber: true})}
               min={0}
-              value={form[key]}
-              onChange={(e) =>
-                updateField(key, Number(e.target.value) as never)
-              }
               className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             />
+            <FormFieldError message={errors[key]?.message} />
           </div>
         ))}
       </div>
@@ -205,8 +179,7 @@ export function GeneralTab({
             </label>
             <input
               type="text"
-              value={form[key]}
-              onChange={(e) => updateField(key, e.target.value)}
+              {...register(key)}
               className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             />
           </div>
@@ -218,8 +191,10 @@ export function GeneralTab({
         entityType="tour"
         entityId={tourId}
         imageType="card"
-        currentUrl={form.imageUrl}
-        onUploadComplete={(url) => updateField('imageUrl', url)}
+        currentUrl={imageUrl}
+        onUploadComplete={(url) =>
+          setValue('imageUrl', url, {shouldDirty: true})
+        }
         label="Card Image"
       />
 
@@ -227,10 +202,10 @@ export function GeneralTab({
       <div className="flex gap-4 pt-4">
         <button
           type="submit"
-          disabled={saving || !isDirty}
+          disabled={isSubmitting || !isDirty}
           className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
         >
-          {saving ? 'Saving...' : 'Save General'}
+          {isSubmitting ? 'Saving...' : 'Save General'}
         </button>
       </div>
 
