@@ -20,7 +20,6 @@ export default function NewTour() {
 
   return (
     <div>
-      <h1 className="type-headline-sm mb-6">Create New Tour</h1>
       {!loading && destinations && (
         <TourForm destinations={destinations} mode="create" />
       )}

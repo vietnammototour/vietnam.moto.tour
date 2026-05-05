@@ -46,6 +46,7 @@ export default async function handler(
         paymentDetails: data.paymentDetails ?? {},
         notes: data.notes ?? [],
         mealsInfo: data.mealsInfo ?? {},
+        status: data.status ?? 'DRAFT',
       },
     });
     return res.status(201).json(tour);

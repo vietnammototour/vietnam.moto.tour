@@ -9,7 +9,9 @@ import {
   waveStagger,
 } from '@/utils/motion-variants';
 import {useTranslations} from 'next-intl';
-import type {GetStaticPropsContext} from 'next';
+import type {GetServerSidePropsContext} from 'next';
+import {getServerSession} from 'next-auth/next';
+import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -37,9 +39,10 @@ interface HomeProps {
     hasCar: boolean;
     hasBike: boolean;
   })[];
+  isAdmin: boolean;
 }
 
-export default function Home({tours, destinations}: HomeProps) {
+export default function Home({tours, destinations, isAdmin}: HomeProps) {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const t = useTranslations('home');
@@ -158,19 +161,21 @@ export default function Home({tours, destinations}: HomeProps) {
           </div>
           {/* Magazine grid: hero left spanning 2 rows, 2x2 small cards right */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <motion.div
-              className="sm:col-span-2 sm:row-span-2"
-              custom={0}
-              variants={waveStagger(0.08)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{once: true}}
-            >
-              <DestinationCard
-                destination={destinations[0]}
-                className="h-full"
-              />
-            </motion.div>
+            {destinations[0] && (
+              <motion.div
+                className="sm:col-span-2 sm:row-span-2"
+                custom={0}
+                variants={waveStagger(0.08)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{once: true}}
+              >
+                <DestinationCard
+                  destination={destinations[0]}
+                  className="h-full"
+                />
+              </motion.div>
+            )}
             {destinations.slice(1, 5).map((destination, i) => (
               <motion.div
                 key={destination.id}
@@ -437,12 +442,19 @@ export default function Home({tours, destinations}: HomeProps) {
   );
 }
 
-export async function getStaticProps({locale}: GetStaticPropsContext) {
+export async function getServerSideProps({
+  req,
+  res,
+  locale,
+}: GetServerSidePropsContext) {
   const {getAllTours, getActiveDestinationsFromDb, getMessagesFromDb} =
     await import('@/data/queries');
+  const session = await getServerSession(req, res, authOptions);
+  const isAdmin = session?.user?.role === 'ADMIN';
+
   const [tours, destinations, dbMessages] = await Promise.all([
-    getAllTours(),
-    getActiveDestinationsFromDb(),
+    getAllTours(isAdmin),
+    getActiveDestinationsFromDb(isAdmin),
     getMessagesFromDb(locale ?? 'vi'),
   ]);
 
@@ -450,8 +462,8 @@ export async function getStaticProps({locale}: GetStaticPropsContext) {
     props: {
       tours,
       destinations,
+      isAdmin,
       messages: dbMessages,
     },
-    revalidate: 60,
   };
 }

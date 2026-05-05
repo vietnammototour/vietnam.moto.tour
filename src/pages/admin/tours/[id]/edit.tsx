@@ -3,6 +3,7 @@ import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourForm} from '@/components/admin/TourForm';
+import type {TourStatus} from '@/types';
 
 interface Destination {
   id: string;
@@ -76,11 +77,11 @@ export default function EditTour() {
     },
     notes: (tour.notes as Array<{en: string; vi: string}>) ?? [],
     mealsInfo: (tour.mealsInfo as {en: string; vi: string}) ?? {en: '', vi: ''},
+    status: (tour.status as TourStatus) ?? 'DRAFT',
   };
 
   return (
     <div>
-      <h1 className="type-headline-sm mb-6">Edit Tour</h1>
       <TourForm
         initialData={initialData}
         destinations={destinations}

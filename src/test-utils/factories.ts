@@ -11,6 +11,7 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
     distance: '100 Miles',
     destinationId: 1,
     slug: 'test-tour',
+    status: 'PUBLISHED',
     description: {en: 'Test tour description', vi: 'Test tour description'},
     transportation: 'Motorbike',
     groupSize: 'Min 1 Person',

@@ -33,6 +33,19 @@ export const TourCard = ({tour}: TourCardProps) => {
         onMouseEnter={onMouseEnter}
       >
         <div className="relative overflow-hidden aspect-[3/2] bg-secondary/10">
+          {tour.status && tour.status !== 'PUBLISHED' && (
+            <span
+              className={`absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full type-label-sm uppercase tracking-wider text-white ${
+                tour.status === 'DRAFT'
+                  ? 'bg-amber-500/90'
+                  : tour.status === 'FEATURED'
+                    ? 'bg-blue-500/90'
+                    : 'bg-gray-500/90'
+              }`}
+            >
+              {tour.status}
+            </span>
+          )}
           {imageUrl ? (
             <>
               <motion.img

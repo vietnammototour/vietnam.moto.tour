@@ -3,6 +3,8 @@
 import {useState} from 'react';
 import {useRouter} from 'next/router';
 import {ImageUploadField} from './ImageUploadField';
+import {StatusPicker} from './StatusPicker';
+import type {TourStatus} from '@/types';
 
 interface TourFormData {
   slug: string;
@@ -42,6 +44,7 @@ interface TourFormData {
   paymentDetails: {en: string; vi: string};
   notes: Array<{en: string; vi: string}>;
   mealsInfo: {en: string; vi: string};
+  status: TourStatus;
 }
 
 interface TourFormProps {
@@ -77,6 +80,7 @@ const emptyForm: TourFormData = {
   paymentDetails: {en: '', vi: ''},
   notes: [],
   mealsInfo: {en: '', vi: ''},
+  status: 'DRAFT' as TourStatus,
 };
 
 export function TourForm({
@@ -125,6 +129,16 @@ export function TourForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+      <div className="flex items-center justify-between">
+        <h1 className="type-headline-sm">
+          {mode === 'create' ? 'Create New Tour' : 'Edit Tour'}
+        </h1>
+        <StatusPicker
+          value={form.status}
+          onChange={(status) => updateField('status', status)}
+        />
+      </div>
+
       {error && (
         <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-sm">
           {error}

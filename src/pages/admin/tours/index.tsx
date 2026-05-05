@@ -2,12 +2,14 @@ import {useEffect} from 'react';
 import Link from 'next/link';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
+import {StatusPicker} from '@/components/admin/StatusPicker';
+import type {TourStatus} from '@/types';
 
 interface AdminTour {
   id: string;
   title: string;
   slug: string;
-  isActive: boolean;
+  status: TourStatus;
   destination: {name: string};
   price: number;
   duration: string;
@@ -26,7 +28,7 @@ export default function AdminToursList() {
   }, [loading, setLoading]);
 
   async function handleDelete(id: string) {
-    if (!confirm('Deactivate this tour?')) return;
+    if (!confirm('Archive this tour?')) return;
 
     const res = await fetch(`/api/admin/tours/${id}`, {method: 'DELETE'});
     if (res.ok) {
@@ -34,11 +36,11 @@ export default function AdminToursList() {
     }
   }
 
-  async function handleToggleActive(id: string, isActive: boolean) {
+  async function handleStatusChange(id: string, status: TourStatus) {
     const res = await fetch(`/api/admin/tours/${id}`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({isActive: !isActive}),
+      body: JSON.stringify({status}),
     });
     if (res.ok) {
       refetch();
@@ -96,16 +98,10 @@ export default function AdminToursList() {
                   ${tour.price}
                 </td>
                 <td className="px-4 py-3">
-                  <button
-                    onClick={() => handleToggleActive(tour.id, tour.isActive)}
-                    className={`type-label-sm px-2 py-0.5 rounded cursor-pointer ${
-                      tour.isActive
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                    }`}
-                  >
-                    {tour.isActive ? 'Active' : 'Inactive'}
-                  </button>
+                  <StatusPicker
+                    value={tour.status}
+                    onChange={(status) => handleStatusChange(tour.id, status)}
+                  />
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-4">
@@ -119,7 +115,7 @@ export default function AdminToursList() {
                       onClick={() => handleDelete(tour.id)}
                       className="type-label-sm text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                     >
-                      Delete
+                      Archive
                     </button>
                   </div>
                 </td>

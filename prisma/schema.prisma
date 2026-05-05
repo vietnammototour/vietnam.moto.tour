@@ -6,6 +6,13 @@ datasource db {
   provider = "postgresql"
 }
 
+enum TourStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  FEATURED
+}
+
 enum Role {
   ADMIN
 }
@@ -48,7 +55,7 @@ model Tour {
   paymentDetails Json        @default("{}")
   notes          Json        @default("[]")
   mealsInfo      Json        @default("{}")
-  isActive       Boolean     @default(true)
+  status         TourStatus  @default(DRAFT)
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
