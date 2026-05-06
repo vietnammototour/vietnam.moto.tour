@@ -22,6 +22,7 @@ const config: Config = {
   testMatch: [
     '<rootDir>/src/**/*.spec.{ts,tsx}',
     '<rootDir>/__tests__/**/*.spec.{ts,tsx}',
+    '<rootDir>/scripts/**/*.spec.{ts,tsx}',
   ],
   modulePathIgnorePatterns: ['<rootDir>/.worktrees/'],
 };
