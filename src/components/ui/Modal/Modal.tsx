@@ -1,7 +1,6 @@
 'use client';
 
 import {useEffect, useCallback, type ReactNode} from 'react';
-import {createPortal} from 'react-dom';
 
 type ModalProps = {
   open: boolean;
@@ -47,7 +46,7 @@ export function Modal({
 
   if (!open) return null;
 
-  const modal = (
+  return (
     <>
       <div
         data-testid="modal-backdrop"
@@ -82,7 +81,4 @@ export function Modal({
       </div>
     </>
   );
-
-  if (typeof document === 'undefined') return null;
-  return createPortal(modal, document.body);
 }
