@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 import Image from 'next/image';
 import type {Highlight} from '@/types';
 import {api} from '@/routes';
+import {Button} from '@/components/ui';
 
 type HighlightsTabProps = {
   tourId: string | null;
@@ -161,14 +162,15 @@ export function HighlightsTab({
         <p className="type-label-sm text-amber-500 mb-2">Unsaved changes</p>
       )}
 
-      <button
+      <Button
         type="button"
         onClick={handleSave}
-        disabled={saving || !isDirty || !tourId}
-        className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
+        disabled={!isDirty || !tourId}
+        loading={saving}
+        size="lg"
       >
-        {saving ? 'Saving...' : 'Save Highlights'}
-      </button>
+        Save Highlights
+      </Button>
     </div>
   );
 }

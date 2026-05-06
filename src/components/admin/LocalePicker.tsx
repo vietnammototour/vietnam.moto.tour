@@ -1,6 +1,13 @@
 'use client';
 
+import {SegmentedControl} from '@/components/ui';
+
 type Locale = 'en' | 'vi';
+
+const localeOptions: {value: Locale; label: string}[] = [
+  {value: 'en', label: 'EN'},
+  {value: 'vi', label: 'VI'},
+];
 
 type LocalePickerProps = {
   value: Locale;
@@ -9,30 +16,11 @@ type LocalePickerProps = {
 
 export function LocalePicker({value, onChange}: LocalePickerProps) {
   return (
-    <div className="flex rounded-lg border border-border overflow-hidden">
-      <button
-        type="button"
-        onClick={() => onChange('en')}
-        className={`px-3.5 py-1.5 type-label-sm transition-colors cursor-pointer ${
-          value === 'en'
-            ? 'bg-primary text-on-primary'
-            : 'bg-surface text-on-surface-secondary hover:bg-surface-alt'
-        }`}
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange('vi')}
-        className={`px-3.5 py-1.5 type-label-sm transition-colors cursor-pointer ${
-          value === 'vi'
-            ? 'bg-primary text-on-primary'
-            : 'bg-surface text-on-surface-secondary hover:bg-surface-alt'
-        }`}
-      >
-        VI
-      </button>
-    </div>
+    <SegmentedControl
+      options={localeOptions}
+      value={value}
+      onChange={onChange}
+    />
   );
 }
 

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {ImageUploadField} from './ImageUploadField';
-import {FormFieldError} from './FormFieldError';
+import {TextInput, Button} from '@/components/ui';
 import {api} from '@/routes';
 import {
   addHighlightSchema,
@@ -155,13 +155,13 @@ export function DestinationHighlights({
                 label=""
               />
             </div>
-            <button
-              type="button"
+            <Button
+              variant="danger"
+              size="sm"
               onClick={() => handleDelete(h.id)}
-              className="type-label-sm text-red-400 hover:text-red-300 shrink-0 cursor-pointer"
             >
               Delete
-            </button>
+            </Button>
           </div>
         ))}
       </div>
@@ -174,21 +174,15 @@ export function DestinationHighlights({
         <h3 className="type-title-sm text-on-surface mb-3">Add Highlight</h3>
         <div className="flex gap-2 mb-3">
           <div className="flex-1">
-            <input
-              type="text"
+            <TextInput
               {...register('text')}
               placeholder={locale === 'en' ? 'English text' : 'Vietnamese text'}
-              className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+              error={errors.text?.message}
             />
-            <FormFieldError message={errors.text?.message} />
           </div>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm transition-colors disabled:opacity-50 cursor-pointer"
-          >
-            {isSubmitting ? 'Adding...' : 'Add'}
-          </button>
+          <Button type="submit" loading={isSubmitting} size="sm">
+            Add
+          </Button>
         </div>
       </form>
     </div>

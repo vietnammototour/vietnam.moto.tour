@@ -8,6 +8,7 @@ import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourPricing} from '@/components/tour-pricing';
+import {TextInput, NumberInput, Button} from '@/components/ui';
 import {pricingSchema, type PricingFormData} from './PricingTab.form-utils';
 
 type PricingTabProps = {
@@ -107,13 +108,14 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
           <span className="type-title-sm text-on-surface font-semibold">
             Pricing Groups
           </span>
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
             onClick={handleAddGroup}
-            className="type-label-sm text-primary hover:text-primary-light px-3 py-1.5 border border-dashed border-primary/40 rounded-lg cursor-pointer"
           >
             + Add Group
-          </button>
+          </Button>
         </div>
         <div className="flex items-center gap-3">
           <LocalePicker value={locale} onChange={setLocale} />
@@ -123,14 +125,16 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
           {isDirty && (
             <span className="type-label-sm text-amber-500">Unsaved</span>
           )}
-          <button
+          <Button
             type="button"
+            variant="primary"
+            size="lg"
+            loading={saving}
+            disabled={!isDirty}
             onClick={handleSave}
-            disabled={saving || !isDirty}
-            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-1.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
           >
-            {saving ? 'Saving...' : 'Save'}
-          </button>
+            Save
+          </Button>
         </div>
       </div>
 
@@ -169,28 +173,26 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                     <option value="vehicle">Vehicle</option>
                     <option value="group-size">Group Size</option>
                   </select>
-                  <input
-                    type="text"
+                  <TextInput
                     placeholder="Icon (e.g. fa-motorcycle)"
+                    className="flex-1 min-w-0"
                     {...register(`groups.${gIdx}.icon`)}
-                    className="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
                   />
-                  <button
+                  <Button
                     type="button"
+                    variant="danger"
+                    size="sm"
                     onClick={() => removeGroup(gIdx)}
-                    className="type-label-sm text-red-400 hover:text-red-300 cursor-pointer shrink-0"
+                    className="shrink-0"
                   >
                     Delete
-                  </button>
+                  </Button>
                 </div>
 
                 {/* Group label */}
                 <div className="px-4 py-2 border-b border-border">
-                  <label className="type-label-sm text-on-surface-secondary">
-                    Group Label ({locale.toUpperCase()})
-                  </label>
-                  <input
-                    type="text"
+                  <TextInput
+                    label={`Group Label (${locale.toUpperCase()})`}
                     value={group.label[locale]}
                     onChange={(e) =>
                       setValue(
@@ -199,7 +201,6 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                         {shouldDirty: true},
                       )
                     }
-                    className="w-full mt-1 px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
                   />
                 </div>
 
@@ -236,8 +237,7 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                               : 'grid-cols-[1fr_80px_28px]'
                           }`}
                         >
-                          <input
-                            type="text"
+                          <TextInput
                             value={tier.label[locale]}
                             onChange={(e) =>
                               setValue(
@@ -246,10 +246,8 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                                 {shouldDirty: true},
                               )
                             }
-                            className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
                           />
-                          <input
-                            type="number"
+                          <NumberInput
                             value={tier.price}
                             onChange={(e) =>
                               setValue(
@@ -258,12 +256,10 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                                 {shouldDirty: true},
                               )
                             }
-                            className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
                           />
                           {group.type === 'group-size' && (
                             <>
-                              <input
-                                type="number"
+                              <NumberInput
                                 placeholder="min"
                                 value={tier.minGroupSize ?? ''}
                                 onChange={(e) =>
@@ -273,10 +269,8 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                                     {shouldDirty: true},
                                   )
                                 }
-                                className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
                               />
-                              <input
-                                type="number"
+                              <NumberInput
                                 placeholder="max"
                                 value={tier.maxGroupSize ?? ''}
                                 onChange={(e) =>
@@ -286,29 +280,31 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
                                     {shouldDirty: true},
                                   )
                                 }
-                                className="w-full px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
                               />
                             </>
                           )}
-                          <button
+                          <Button
                             type="button"
+                            variant="danger"
+                            size="sm"
                             onClick={() => handleRemoveTier(gIdx, tIdx)}
-                            className="w-7 h-7 flex items-center justify-center rounded-full text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-colors cursor-pointer type-label-sm"
                           >
                             ×
-                          </button>
+                          </Button>
                         </div>
                       ))}
                     </div>
                   )}
 
-                  <button
+                  <Button
                     type="button"
+                    variant="secondary"
+                    size="sm"
                     onClick={() => handleAddTier(gIdx)}
-                    className="type-label-sm text-primary hover:text-primary-light mt-2 cursor-pointer"
+                    className="mt-2"
                   >
                     + Add Tier
-                  </button>
+                  </Button>
                 </div>
               </div>
             );

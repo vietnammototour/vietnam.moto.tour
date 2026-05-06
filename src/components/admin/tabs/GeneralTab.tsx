@@ -5,7 +5,7 @@ import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {ImageUploadField} from '@/components/admin/ImageUploadField';
 import {StatusPicker} from '@/components/admin/StatusPicker';
-import {FormFieldError} from '@/components/admin/FormFieldError';
+import {TextInput, Textarea, NumberInput, Button} from '@/components/ui';
 import {
   generalTabSchema,
   type GeneralTabFormData,
@@ -76,17 +76,11 @@ export function GeneralTab({
 
       {/* Basic fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block type-label-sm text-on-surface-secondary mb-1">
-            Slug
-          </label>
-          <input
-            type="text"
-            {...register('slug')}
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-          />
-          <FormFieldError message={errors.slug?.message} />
-        </div>
+        <TextInput
+          label="Slug"
+          {...register('slug')}
+          error={errors.slug?.message}
+        />
         <div>
           <label className="block type-label-sm text-on-surface-secondary mb-1">
             Destination
@@ -104,44 +98,19 @@ export function GeneralTab({
               </option>
             ))}
           </select>
-          <FormFieldError message={errors.destinationId?.message} />
         </div>
       </div>
 
-      <div>
-        <label className="block type-label-sm text-on-surface-secondary mb-1">
-          Title
-        </label>
-        <input
-          type="text"
-          {...register('title')}
-          className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-        />
-        <FormFieldError message={errors.title?.message} />
-      </div>
+      <TextInput
+        label="Title"
+        {...register('title')}
+        error={errors.title?.message}
+      />
 
       {/* Localized descriptions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block type-label-sm text-on-surface-secondary mb-1">
-            Description (EN)
-          </label>
-          <textarea
-            rows={4}
-            {...register('descriptionEn')}
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-          />
-        </div>
-        <div>
-          <label className="block type-label-sm text-on-surface-secondary mb-1">
-            Description (VI)
-          </label>
-          <textarea
-            rows={4}
-            {...register('descriptionVi')}
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-          />
-        </div>
+        <Textarea label="Description (EN)" {...register('descriptionEn')} />
+        <Textarea label="Description (VI)" {...register('descriptionVi')} />
       </div>
 
       {/* Numeric fields */}
@@ -152,18 +121,13 @@ export function GeneralTab({
           {key: 'distance' as const, label: 'Distance (km)'},
           {key: 'groupSize' as const, label: 'Group Size'},
         ].map(({key, label}) => (
-          <div key={key}>
-            <label className="block type-label-sm text-on-surface-secondary mb-1">
-              {label}
-            </label>
-            <input
-              type="number"
-              {...register(key, {valueAsNumber: true})}
-              min={0}
-              className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-            />
-            <FormFieldError message={errors[key]?.message} />
-          </div>
+          <NumberInput
+            key={key}
+            label={label}
+            {...register(key, {valueAsNumber: true})}
+            min={0}
+            error={errors[key]?.message}
+          />
         ))}
       </div>
 
@@ -173,16 +137,7 @@ export function GeneralTab({
           {key: 'hotel' as const, label: 'Hotel'},
           {key: 'guided' as const, label: 'Guided'},
         ].map(({key, label}) => (
-          <div key={key}>
-            <label className="block type-label-sm text-on-surface-secondary mb-1">
-              {label}
-            </label>
-            <input
-              type="text"
-              {...register(key)}
-              className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-            />
-          </div>
+          <TextInput key={key} label={label} {...register(key)} />
         ))}
       </div>
 
@@ -200,13 +155,14 @@ export function GeneralTab({
 
       {/* Submit */}
       <div className="flex gap-4 pt-4">
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting || !isDirty}
-          className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
+          loading={isSubmitting}
+          size="lg"
         >
-          {isSubmitting ? 'Saving...' : 'Save General'}
-        </button>
+          Save General
+        </Button>
       </div>
 
       {isDirty && (

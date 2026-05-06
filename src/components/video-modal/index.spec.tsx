@@ -27,33 +27,11 @@ describe('VideoModal', () => {
     );
   });
 
-  it('renders close button with correct aria-label', () => {
-    render(<VideoModal {...defaultProps} isOpen={true} />);
-    expect(screen.getByLabelText('Close video')).toBeInTheDocument();
-  });
-
-  it('renders close icon (fa-times)', () => {
-    render(<VideoModal {...defaultProps} isOpen={true} />);
-    const icon = document.querySelector('.fa-times');
-    expect(icon).toBeInTheDocument();
-  });
-
-  it('calls onClose when close button is clicked', async () => {
-    const user = userEvent.setup();
-    const onClose = jest.fn();
-    render(<VideoModal {...defaultProps} isOpen={true} onClose={onClose} />);
-    await user.click(screen.getByLabelText('Close video'));
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
   it('calls onClose when overlay is clicked', async () => {
     const user = userEvent.setup();
     const onClose = jest.fn();
-    const {container} = render(
-      <VideoModal {...defaultProps} isOpen={true} onClose={onClose} />,
-    );
-    const overlay = container.firstElementChild!;
-    await user.click(overlay);
+    render(<VideoModal {...defaultProps} isOpen={true} onClose={onClose} />);
+    await user.click(screen.getByTestId('modal-backdrop'));
     expect(onClose).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,11 @@
 import type {TourStatus} from '@/types';
+import {SegmentedControl} from '@/components/ui';
 
-const statuses: {value: TourStatus; label: string; activeClasses: string}[] = [
+const statusOptions: {
+  value: TourStatus;
+  label: string;
+  activeClasses: string;
+}[] = [
   {
     value: 'DRAFT',
     label: 'Draft',
@@ -35,31 +40,11 @@ export function StatusPicker({
   disabled = false,
 }: StatusPickerProps) {
   return (
-    <div
-      role="radiogroup"
-      aria-label="Tour status"
-      className="inline-flex rounded-lg border border-border overflow-hidden"
-    >
-      {statuses.map((s) => {
-        const isSelected = s.value === value;
-        return (
-          <button
-            key={s.value}
-            type="button"
-            role="radio"
-            aria-checked={isSelected}
-            disabled={disabled}
-            onClick={() => onChange(s.value)}
-            className={`px-3 py-1 type-label-sm transition-colors cursor-pointer border-r border-border last:border-r-0 ${
-              isSelected
-                ? s.activeClasses
-                : 'bg-surface text-on-surface-secondary hover:bg-surface-alt'
-            } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            {s.label}
-          </button>
-        );
-      })}
-    </div>
+    <SegmentedControl
+      options={statusOptions}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+    />
   );
 }

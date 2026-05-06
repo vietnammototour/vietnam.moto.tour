@@ -1,9 +1,9 @@
 'use client';
 
 import {useState, useCallback} from 'react';
-import {useRouter} from 'next/router';
 import type {ItineraryDay, PricingGroup} from '@/types';
 import {routes, api, useNavigate} from '@/routes';
+import {Tabs, TabPanel, Button} from '@/components/ui';
 import {GeneralTab} from './tabs/GeneralTab';
 import type {GeneralTabData} from './tabs/GeneralTab';
 import {ItineraryTab} from './tabs/ItineraryTab';
@@ -22,13 +22,6 @@ type TourEditTabsProps = {
   initialHighlightIds: string[];
 };
 
-const tabs: {id: TabId; label: string}[] = [
-  {id: 'general', label: 'General'},
-  {id: 'itinerary', label: 'Itinerary'},
-  {id: 'pricing', label: 'Pricing'},
-  {id: 'highlights', label: 'Highlights'},
-];
-
 export function TourEditTabs({
   mode,
   tourId: initialTourId,
@@ -38,7 +31,6 @@ export function TourEditTabs({
   initialPricingGroups,
   initialHighlightIds,
 }: TourEditTabsProps) {
-  const router = useRouter();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('general');
   const [tourId, setTourId] = useState<string | null>(initialTourId);
@@ -105,42 +97,41 @@ export function TourEditTabs({
         <h1 className="type-headline-sm">
           {mode === 'create' ? 'Create New Tour' : 'Edit Tour'}
         </h1>
-        <button
-          type="button"
+        <Button
+          variant="secondary"
           onClick={() => navigate.to(routes.admin.tours.list)}
-          className="px-4 py-2 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
         >
           Back to Tours
-        </button>
+        </Button>
       </div>
 
-      {/* Tab bar */}
-      <div className="flex border-b-2 border-border mb-0">
-        {tabs.map((tab) => {
-          const disabled = isTabDisabled(tab.id);
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              disabled={disabled}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 type-label-sm transition-colors cursor-pointer ${
-                activeTab === tab.id
-                  ? 'text-primary border-b-2 border-primary -mb-[2px] font-semibold'
-                  : disabled
-                    ? 'text-on-surface-secondary/40 cursor-not-allowed'
-                    : 'text-on-surface-secondary hover:text-on-surface'
-              }`}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Tab content */}
-      <div className="border border-border border-t-0 rounded-b-lg overflow-hidden">
-        {activeTab === 'general' && (
+      <Tabs
+        items={[
+          {
+            key: 'general',
+            label: 'General',
+            disabled: isTabDisabled('general'),
+          },
+          {
+            key: 'itinerary',
+            label: 'Itinerary',
+            disabled: isTabDisabled('itinerary'),
+          },
+          {
+            key: 'pricing',
+            label: 'Pricing',
+            disabled: isTabDisabled('pricing'),
+          },
+          {
+            key: 'highlights',
+            label: 'Highlights',
+            disabled: isTabDisabled('highlights'),
+          },
+        ]}
+        activeKey={activeTab}
+        onChange={(key) => setActiveTab(key as TabId)}
+      >
+        <TabPanel tabKey="general">
           <div className="p-5">
             <GeneralTab
               initialData={initialGeneral}
@@ -150,23 +141,20 @@ export function TourEditTabs({
               onSave={handleGeneralSave}
             />
           </div>
-        )}
-
-        {activeTab === 'itinerary' && (
+        </TabPanel>
+        <TabPanel tabKey="itinerary">
           <ItineraryTab
             initialData={initialItinerary}
             onSave={handleItinerarySave}
           />
-        )}
-
-        {activeTab === 'pricing' && (
+        </TabPanel>
+        <TabPanel tabKey="pricing">
           <PricingTab
             initialData={initialPricingGroups}
             onSave={handlePricingSave}
           />
-        )}
-
-        {activeTab === 'highlights' && (
+        </TabPanel>
+        <TabPanel tabKey="highlights">
           <HighlightsTab
             tourId={tourId}
             destinationId={destinationId}
@@ -174,8 +162,8 @@ export function TourEditTabs({
             destinations={destinations}
             onSave={handleHighlightsSave}
           />
-        )}
-      </div>
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }
