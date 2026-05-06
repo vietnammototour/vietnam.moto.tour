@@ -16,7 +16,11 @@ type LocalePickerProps = {
 
 export function LocalePicker({value, onChange}: LocalePickerProps) {
   return (
-    <SegmentedControl options={localeOptions} value={value} onChange={onChange} />
+    <SegmentedControl
+      options={localeOptions}
+      value={value}
+      onChange={onChange}
+    />
   );
 }
 
