@@ -2,8 +2,17 @@
 
 import {useState, useEffect, useCallback} from 'react';
 import Image from 'next/image';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 import {ImageUploadField} from './ImageUploadField';
+import {FormFieldError} from './FormFieldError';
 import {api} from '@/routes';
+import {
+  addHighlightSchema,
+  addHighlightDefaults,
+  submitAddHighlight,
+  type AddHighlightFormData,
+} from './DestinationHighlights.form-utils';
 
 type Highlight = {
   id: string;
@@ -23,10 +32,19 @@ export function DestinationHighlights({
 }: DestinationHighlightsProps) {
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [loading, setLoading] = useState(true);
-  const [newText, setNewText] = useState('');
-  const [adding, setAdding] = useState(false);
 
   const textField = locale === 'en' ? 'textEn' : 'textVi';
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors, isSubmitting},
+    reset,
+  } = useForm<AddHighlightFormData>({
+    resolver: yupResolver(addHighlightSchema),
+    defaultValues: addHighlightDefaults,
+    shouldFocusError: true,
+  });
 
   const fetchHighlights = useCallback(async () => {
     try {
@@ -43,18 +61,12 @@ export function DestinationHighlights({
     fetchHighlights();
   }, [fetchHighlights]);
 
-  async function handleAdd() {
-    if (!newText.trim()) return;
-    setAdding(true);
-    const {error} = await api.admin.highlights.create({
-      destinationId,
-      [textField]: newText,
-    });
+  async function onSubmitAdd(data: AddHighlightFormData) {
+    const {error} = await submitAddHighlight(data, destinationId, locale);
     if (!error) {
-      setNewText('');
+      reset();
       await fetchHighlights();
     }
-    setAdding(false);
   }
 
   async function handleDelete(id: string) {
@@ -91,7 +103,7 @@ export function DestinationHighlights({
         Destination Highlights
       </h2>
 
-      {/* Existing highlights */}
+      {/* Existing highlights — inline editing stays as-is */}
       <div className="space-y-3 mb-6">
         {highlights.map((h) => (
           <div
@@ -154,27 +166,31 @@ export function DestinationHighlights({
         ))}
       </div>
 
-      {/* Add new */}
-      <div className="p-4 rounded-lg border border-dashed border-border">
+      {/* Add new — migrated to RHF */}
+      <form
+        onSubmit={handleSubmit(onSubmitAdd)}
+        className="p-4 rounded-lg border border-dashed border-border"
+      >
         <h3 className="type-title-sm text-on-surface mb-3">Add Highlight</h3>
         <div className="flex gap-2 mb-3">
-          <input
-            type="text"
-            value={newText}
-            onChange={(e) => setNewText(e.target.value)}
-            placeholder={locale === 'en' ? 'English text' : 'Vietnamese text'}
-            className="flex-1 px-3 py-2 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-          />
+          <div className="flex-1">
+            <input
+              type="text"
+              {...register('text')}
+              placeholder={locale === 'en' ? 'English text' : 'Vietnamese text'}
+              className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+            />
+            <FormFieldError message={errors.text?.message} />
+          </div>
           <button
-            type="button"
-            onClick={handleAdd}
-            disabled={adding || !newText.trim()}
+            type="submit"
+            disabled={isSubmitting}
             className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm transition-colors disabled:opacity-50 cursor-pointer"
           >
-            {adding ? 'Adding...' : 'Add'}
+            {isSubmitting ? 'Adding...' : 'Add'}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

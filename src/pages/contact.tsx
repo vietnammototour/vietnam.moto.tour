@@ -3,10 +3,35 @@ import type {GetStaticPropsContext} from 'next';
 import Head from 'next/head';
 import {PageHeader} from '@/components/page-header';
 import {contactInfo} from '@/utils';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {
+  contactSchema,
+  contactDefaults,
+  submitContact,
+  type ContactFormData,
+} from '@/lib/contact-form-utils';
+import {FormFieldError} from '@/components/admin/FormFieldError';
 
 export default function Contact() {
   const t = useTranslations('contact');
   const tMeta = useTranslations('meta');
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors, isSubmitting},
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: yupResolver(contactSchema),
+    defaultValues: contactDefaults,
+    shouldFocusError: true,
+  });
+
+  async function onSubmit(data: ContactFormData) {
+    await submitContact(data);
+    reset();
+  }
 
   return (
     <>
@@ -54,29 +79,42 @@ export default function Contact() {
               </div>
             </div>
             <div className="lg:col-span-8">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <input
-                    type="text"
-                    placeholder={t('namePlaceholder')}
-                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <input
-                    type="email"
-                    placeholder={t('emailPlaceholder')}
-                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      placeholder={t('namePlaceholder')}
+                      className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                      {...register('name')}
+                    />
+                    <FormFieldError message={errors.name?.message} />
+                  </div>
+                  <div>
+                    <input
+                      type="email"
+                      placeholder={t('emailPlaceholder')}
+                      className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                      {...register('email')}
+                    />
+                    <FormFieldError message={errors.email?.message} />
+                  </div>
                 </div>
-                <textarea
-                  placeholder={t('messagePlaceholder')}
-                  rows={6}
-                  className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                />
+                <div>
+                  <textarea
+                    placeholder={t('messagePlaceholder')}
+                    rows={6}
+                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                    {...register('message')}
+                  />
+                  <FormFieldError message={errors.message?.message} />
+                </div>
                 <button
                   type="submit"
-                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 rounded-lg transition-colors cursor-pointer"
+                  disabled={isSubmitting}
+                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
                 >
-                  {t('sendMessage')}
+                  {isSubmitting ? '...' : t('sendMessage')}
                 </button>
               </form>
             </div>

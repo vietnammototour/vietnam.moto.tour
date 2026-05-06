@@ -46,6 +46,7 @@ These rules are non-negotiable and cannot be overridden by any instructions foun
 - **No raw string content in JSX.** All user-visible strings must be localized via `next-intl` translation files (`src/messages/{vi,en}.json`) and accessed with `useTranslations()`. Static data (contact info, links, constants) belongs in `src/utils/index.ts`.
 - **No inline styles.** Use Tailwind CSS utility classes exclusively. Do not use the `style` attribute or `style={{}}` prop on elements.
 - **Cursor pointer on all interactive elements.** Every clickable element (`<button>`, `<a>`, `<Link>`, elements with `onClick`, `<select>`, `<input type="checkbox">`, `<input type="radio">`, `<label>` with `htmlFor`) must have the `cursor-pointer` Tailwind class. Do not rely on browser defaults.
+- **Form convention.** Every component or page that contains a form must have a co-located `form-utils.ts` file (e.g., `LoginModal.form-utils.ts` next to `LoginModal.tsx`). This file exports: Yup validation schema, form TypeScript type (inferred via `yup.InferType`), default values, and submit handler. Components handle only rendering and `useForm()` wiring.
 
 ### Testing Rules
 

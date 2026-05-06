@@ -1,9 +1,18 @@
 import {useState, useEffect} from 'react';
 import {useSession} from 'next-auth/react';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {api} from '@/routes';
 import type {AdminUser} from '@/types';
+import {
+  createUserSchema,
+  createUserDefaults,
+  submitCreateUser,
+  type CreateUserFormData,
+} from '@/lib/users-form-utils';
+import {FormFieldError} from '@/components/admin/FormFieldError';
 
 export default function AdminUsers() {
   const {data: session} = useSession();
@@ -13,28 +22,31 @@ export default function AdminUsers() {
   const users = data ?? [];
 
   const [showForm, setShowForm] = useState(false);
-  const [newUser, setNewUser] = useState({email: '', name: '', password: ''});
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [submitError, setSubmitError] = useState('');
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors, isSubmitting},
+    reset,
+  } = useForm<CreateUserFormData>({
+    resolver: yupResolver(createUserSchema),
+    defaultValues: createUserDefaults,
+    shouldFocusError: true,
+  });
 
   useEffect(() => {
     setLoading(loading);
   }, [loading, setLoading]);
 
-  async function handleCreate(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
-    setError('');
-
-    const {error} = await api.admin.users.create(newUser);
-    setSaving(false);
-
+  async function onSubmit(data: CreateUserFormData) {
+    setSubmitError('');
+    const {error} = await submitCreateUser(data);
     if (error) {
-      setError(error);
+      setSubmitError(error);
       return;
     }
-
-    setNewUser({email: '', name: '', password: ''});
+    reset();
     setShowForm(false);
     refetch();
   }
@@ -62,12 +74,12 @@ export default function AdminUsers() {
 
       {showForm && (
         <form
-          onSubmit={handleCreate}
+          onSubmit={handleSubmit(onSubmit)}
           className="bg-surface-elevated rounded-xl border border-border p-6 mb-6 max-w-lg"
         >
-          {error && (
+          {submitError && (
             <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-lg mb-4">
-              {error}
+              {submitError}
             </div>
           )}
           <div className="space-y-4">
@@ -77,13 +89,10 @@ export default function AdminUsers() {
               </label>
               <input
                 type="text"
-                required
-                value={newUser.name}
-                onChange={(e) =>
-                  setNewUser((p) => ({...p, name: e.target.value}))
-                }
+                {...register('name')}
                 className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <FormFieldError message={errors.name?.message} />
             </div>
             <div>
               <label className="block type-label-sm text-on-surface-secondary mb-1">
@@ -91,13 +100,10 @@ export default function AdminUsers() {
               </label>
               <input
                 type="email"
-                required
-                value={newUser.email}
-                onChange={(e) =>
-                  setNewUser((p) => ({...p, email: e.target.value}))
-                }
+                {...register('email')}
                 className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <FormFieldError message={errors.email?.message} />
             </div>
             <div>
               <label className="block type-label-sm text-on-surface-secondary mb-1">
@@ -105,21 +111,17 @@ export default function AdminUsers() {
               </label>
               <input
                 type="password"
-                required
-                minLength={8}
-                value={newUser.password}
-                onChange={(e) =>
-                  setNewUser((p) => ({...p, password: e.target.value}))
-                }
+                {...register('password')}
                 className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <FormFieldError message={errors.password?.message} />
             </div>
             <button
               type="submit"
-              disabled={saving}
+              disabled={isSubmitting}
               className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
             >
-              {saving ? 'Creating...' : 'Create User'}
+              {isSubmitting ? 'Creating...' : 'Create User'}
             </button>
           </div>
         </form>
