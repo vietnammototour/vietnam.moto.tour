@@ -1,11 +1,11 @@
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
-import type {LocalizedText} from '@/types';
+import type * as VMT from '@/domain';
 import {riseWithOvershoot} from '@/utils/motion-variants';
 
 type TourNotesProps = {
-  notes: LocalizedText[];
-  mealsInfo: LocalizedText;
+  notes: VMT.LocalizedText[];
+  mealsInfo: VMT.LocalizedText;
   locale: string;
 };
 

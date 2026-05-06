@@ -1,10 +1,10 @@
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
 import Image from 'next/image';
-import type {Highlight} from '@/types';
+import type * as VMT from '@/domain';
 
 type TourHighlightsProps = {
-  highlights: Highlight[];
+  highlights: VMT.Highlight[];
   locale: string;
 };
 
@@ -14,7 +14,7 @@ export function TourHighlights({highlights, locale}: TourHighlightsProps) {
 
   if (highlights.length === 0) return null;
 
-  const text = (h: Highlight) => (localeKey === 'en' ? h.textEn : h.textVi);
+  const text = (h: VMT.Highlight) => (localeKey === 'en' ? h.textEn : h.textVi);
 
   return (
     <motion.section

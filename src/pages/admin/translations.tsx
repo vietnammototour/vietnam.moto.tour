@@ -2,10 +2,10 @@ import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TranslationEditor} from '@/components/Admin/TranslationEditor';
-import type {TranslationRow} from '@/types';
+import type * as VMT from '@/domain';
 
 export default function AdminTranslations() {
-  const {data, loading} = useAdminFetch<TranslationRow[]>(
+  const {data, loading} = useAdminFetch<VMT.Translation[]>(
     '/api/admin/translations',
   );
   const {setLoading} = useAdminLoading();

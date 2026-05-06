@@ -1,17 +1,17 @@
 import {useState} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
-import type {PricingGroup} from '@/types';
+import type * as VMT from '@/domain';
 import {useEditable} from '@/components/Admin/EditableContext';
 
 type GroupSizePricingProps = {
-  group: PricingGroup;
-  childrenGroup?: PricingGroup;
+  group: VMT.PricingGroup;
+  childrenGroup?: VMT.PricingGroup;
   locale: 'en' | 'vi';
   onPriceChange: (price: number, count: number) => void;
 };
 
-function findPriceForSize(group: PricingGroup, size: number): number {
+function findPriceForSize(group: VMT.PricingGroup, size: number): number {
   for (const tier of group.tiers) {
     if (tier.minGroupSize === undefined) continue;
     const min = tier.minGroupSize;
@@ -22,14 +22,14 @@ function findPriceForSize(group: PricingGroup, size: number): number {
   return last.price;
 }
 
-function getMinSize(group: PricingGroup): number {
+function getMinSize(group: VMT.PricingGroup): number {
   return group.tiers.reduce((min, t) => {
     if (t.minGroupSize === undefined) return min;
     return Math.min(min, t.minGroupSize);
   }, Infinity);
 }
 
-function getMaxSize(group: PricingGroup): number {
+function getMaxSize(group: VMT.PricingGroup): number {
   return group.tiers.reduce((max, t) => {
     if (t.minGroupSize === undefined) return max;
     const tierMax = t.maxGroupSize ?? t.minGroupSize;

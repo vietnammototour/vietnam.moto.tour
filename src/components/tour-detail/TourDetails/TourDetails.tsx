@@ -1,8 +1,8 @@
 import {useTranslations} from 'next-intl';
-import type {Tour} from '@/types';
+import type * as VMT from '@/domain';
 
 type TourDetailsProps = {
-  tour: Tour;
+  tour: VMT.Tour;
 };
 
 export function TourDetails({tour}: TourDetailsProps) {

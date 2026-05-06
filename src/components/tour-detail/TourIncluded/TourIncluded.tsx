@@ -1,11 +1,11 @@
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
-import type {LocalizedText} from '@/types';
+import type * as VMT from '@/domain';
 import {waveStagger} from '@/utils/motion-variants';
 
 type TourIncludedProps = {
-  included: LocalizedText[];
-  excluded: LocalizedText[];
+  included: VMT.LocalizedText[];
+  excluded: VMT.LocalizedText[];
   locale: string;
 };
 

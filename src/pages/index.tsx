@@ -22,7 +22,7 @@ import {GalleryItem} from '@/components/home/GalleryItem';
 import {VideoModal} from '@/components/VideoModal';
 import {contactInfo} from '@/utils';
 
-import type {Destination, Tour} from '@/types';
+import type * as VMT from '@/domain';
 import {getUrl} from '@/utils';
 
 const galleryImageUrls = [
@@ -34,8 +34,8 @@ const galleryImageUrls = [
 ];
 
 type HomeProps = {
-  tours: Tour[];
-  destinations: (Destination & {
+  tours: VMT.Tour[];
+  destinations: (VMT.Destination & {
     tourCount: number;
     hasCar: boolean;
     hasBike: boolean;

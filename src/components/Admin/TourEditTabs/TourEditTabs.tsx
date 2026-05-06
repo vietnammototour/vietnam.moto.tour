@@ -1,7 +1,7 @@
 'use client';
 
 import {useState, useCallback} from 'react';
-import type {ItineraryDay, PricingGroup} from '@/types';
+import type * as VMT from '@/domain';
 import {routes, api, useNavigate} from '@/routes';
 import {Tabs, TabPanel, Button} from '@/components/ui';
 import {GeneralTab} from '../tabs/GeneralTab';
@@ -17,8 +17,8 @@ type TourEditTabsProps = {
   tourId: string | null;
   destinations: Array<{id: string; name: string}>;
   initialGeneral: GeneralTabData;
-  initialItinerary: ItineraryDay[];
-  initialPricingGroups: PricingGroup[];
+  initialItinerary: VMT.ItineraryDay[];
+  initialPricingGroups: VMT.PricingGroup[];
   initialHighlightIds: string[];
 };
 
@@ -62,7 +62,7 @@ export function TourEditTabs({
   );
 
   const handleItinerarySave = useCallback(
-    async (itinerary: ItineraryDay[]) => {
+    async (itinerary: VMT.ItineraryDay[]) => {
       if (!tourId) throw new Error('Save General tab first');
       const {error} = await api.admin.tours.update(tourId, {itinerary});
       if (error) throw new Error(error);
@@ -71,7 +71,7 @@ export function TourEditTabs({
   );
 
   const handlePricingSave = useCallback(
-    async (pricingGroups: PricingGroup[]) => {
+    async (pricingGroups: VMT.PricingGroup[]) => {
       if (!tourId) throw new Error('Save General tab first');
       const {error} = await api.admin.tours.update(tourId, {pricingGroups});
       if (error) throw new Error(error);

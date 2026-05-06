@@ -1,8 +1,8 @@
-import type {TourStatus} from '@/types';
+import type * as VMT from '@/domain';
 import {SegmentedControl} from '@/components/ui';
 
 const statusOptions: {
-  value: TourStatus;
+  value: VMT.TourStatus;
   label: string;
   activeClasses: string;
 }[] = [
@@ -29,8 +29,8 @@ const statusOptions: {
 ];
 
 type StatusPickerProps = {
-  value: TourStatus;
-  onChange: (status: TourStatus) => void;
+  value: VMT.TourStatus;
+  onChange: (status: VMT.TourStatus) => void;
   disabled?: boolean;
 };
 

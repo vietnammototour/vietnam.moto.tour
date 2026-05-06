@@ -1,14 +1,15 @@
-import type {Tour, Destination, ContactInfo} from '@/types';
+import type * as VMT from '@/domain';
+import type {ContactInfo} from '@/utils/contact';
 
-export function buildTour(overrides?: Partial<Tour>): Tour {
+export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
   return {
-    id: 1,
-    title: 'Test Tour',
+    id: 'tour-1',
+    title: {en: 'Test Tour', vi: 'Test Tour'},
     imageUrl: '/test-tour.jpg',
     price: 80,
     duration: 1,
     distance: 100,
-    destinationId: 1,
+    destinationId: 'dest-1',
     slug: 'test-tour',
     status: 'PUBLISHED',
     description: {en: 'Test tour description', vi: 'Test tour description'},
@@ -17,6 +18,7 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
     hotel: 'Pick up & Drop off',
     guided: 'Fully Guided Tour',
     destinationHeroImage: '',
+    destinationName: 'Test Destination',
     images: [],
     highlights: [],
     itinerary: [
@@ -54,14 +56,16 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
 }
 
 export function buildDestination(
-  overrides?: Partial<Destination>,
-): Destination {
+  overrides?: Partial<VMT.Destination>,
+): VMT.Destination {
   return {
-    id: 1,
+    id: 'dest-1',
+    slug: 'test-destination',
     name: 'Test Destination',
     imageUrl: '/test-destination.jpg',
     heroImage: '',
     size: 'small',
+    isActive: true,
     ...overrides,
   };
 }

@@ -1,12 +1,10 @@
 import {useRouter} from 'next/router';
-import type {
-  Tour,
-  Destination,
-  Highlight,
-  AdminUser,
-  TranslationRow,
-  AdminStats,
-} from '@/types';
+import type * as VMT from '@/domain';
+type AdminStats = {
+  tourCount: number;
+  destinationCount: number;
+  userCount: number;
+};
 
 // ─── Route Registry ───────────────────────────────────────
 
@@ -74,15 +72,15 @@ async function request<T>(
 export const api = {
   admin: {
     tours: {
-      list: () => request<Tour[]>('/api/admin/tours'),
-      get: (id: string) => request<Tour>(`/api/admin/tours/${id}`),
+      list: () => request<VMT.Tour[]>('/api/admin/tours'),
+      get: (id: string) => request<VMT.Tour>(`/api/admin/tours/${id}`),
       create: (data: Record<string, unknown>) =>
-        request<Tour>('/api/admin/tours', {
+        request<VMT.Tour>('/api/admin/tours', {
           method: 'POST',
           body: JSON.stringify(data),
         }),
       update: (id: string, data: Record<string, unknown>) =>
-        request<Tour>(`/api/admin/tours/${id}`, {
+        request<VMT.Tour>(`/api/admin/tours/${id}`, {
           method: 'PUT',
           body: JSON.stringify(data),
         }),
@@ -90,16 +88,16 @@ export const api = {
         request<void>(`/api/admin/tours/${id}`, {method: 'DELETE'}),
     },
     destinations: {
-      list: () => request<Destination[]>('/api/admin/destinations'),
+      list: () => request<VMT.Destination[]>('/api/admin/destinations'),
       get: (id: string) =>
-        request<Destination>(`/api/admin/destinations/${id}`),
+        request<VMT.Destination>(`/api/admin/destinations/${id}`),
       create: (data: Record<string, unknown>) =>
-        request<Destination>('/api/admin/destinations', {
+        request<VMT.Destination>('/api/admin/destinations', {
           method: 'POST',
           body: JSON.stringify(data),
         }),
       update: (id: string, data: Record<string, unknown>) =>
-        request<Destination>(`/api/admin/destinations/${id}`, {
+        request<VMT.Destination>(`/api/admin/destinations/${id}`, {
           method: 'PUT',
           body: JSON.stringify(data),
         }),
@@ -108,16 +106,16 @@ export const api = {
     },
     highlights: {
       list: (destinationId: string) =>
-        request<Highlight[]>(
+        request<VMT.Highlight[]>(
           `/api/admin/highlights?destinationId=${destinationId}`,
         ),
       create: (data: Record<string, unknown>) =>
-        request<Highlight>('/api/admin/highlights', {
+        request<VMT.Highlight>('/api/admin/highlights', {
           method: 'POST',
           body: JSON.stringify(data),
         }),
       update: (id: string, data: Record<string, unknown>) =>
-        request<Highlight>(`/api/admin/highlights/${id}`, {
+        request<VMT.Highlight>(`/api/admin/highlights/${id}`, {
           method: 'PUT',
           body: JSON.stringify(data),
         }),
@@ -125,9 +123,9 @@ export const api = {
         request<void>(`/api/admin/highlights/${id}`, {method: 'DELETE'}),
     },
     users: {
-      list: () => request<AdminUser[]>('/api/admin/users'),
+      list: () => request<VMT.User[]>('/api/admin/users'),
       create: (data: Record<string, unknown>) =>
-        request<AdminUser>('/api/admin/users', {
+        request<VMT.User>('/api/admin/users', {
           method: 'POST',
           body: JSON.stringify(data),
         }),
@@ -135,9 +133,9 @@ export const api = {
         request<void>(`/api/admin/users/${id}`, {method: 'DELETE'}),
     },
     translations: {
-      list: () => request<TranslationRow[]>('/api/admin/translations'),
+      list: () => request<VMT.Translation[]>('/api/admin/translations'),
       update: (data: Record<string, unknown>[]) =>
-        request<TranslationRow[]>('/api/admin/translations', {
+        request<VMT.Translation[]>('/api/admin/translations', {
           method: 'PUT',
           body: JSON.stringify(data),
         }),

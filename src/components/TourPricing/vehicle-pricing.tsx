@@ -1,9 +1,9 @@
 import {useTranslations} from 'next-intl';
-import type {PricingGroup} from '@/types';
+import type * as VMT from '@/domain';
 import {useEditable} from '@/components/Admin/EditableContext';
 
 type VehiclePricingProps = {
-  groups: PricingGroup[];
+  groups: VMT.PricingGroup[];
   locale: 'en' | 'vi';
   selectedIndex: {groupIdx: number; tierIdx: number};
   onSelect: (groupIdx: number, tierIdx: number) => void;

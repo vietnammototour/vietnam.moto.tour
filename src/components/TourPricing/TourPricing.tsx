@@ -1,17 +1,17 @@
 import {useState, useCallback, useEffect, useMemo} from 'react';
 import {useTranslations} from 'next-intl';
-import type {PricingGroup} from '@/types';
+import type * as VMT from '@/domain';
 import {useEditable} from '@/components/Admin/EditableContext';
 import {VehiclePricing} from './vehicle-pricing';
 import {GroupSizePricing} from './group-size-pricing';
 
 type TourPricingProps = {
-  pricingGroups: PricingGroup[];
+  pricingGroups: VMT.PricingGroup[];
   locale: string;
   onPriceChange?: (price: number, label: string) => void;
 };
 
-function findCheapestTier(groups: PricingGroup[]): {
+function findCheapestTier(groups: VMT.PricingGroup[]): {
   groupIdx: number;
   tierIdx: number;
   price: number;

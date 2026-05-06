@@ -3,7 +3,7 @@
 import {useState, useCallback} from 'react';
 import {useForm, useFieldArray, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import type {ItineraryDay} from '@/types';
+import type * as VMT from '@/domain';
 import {EditableProvider} from '../../EditableContext';
 import {LocalePicker} from '../../LocalePicker';
 import {AdminIntlProvider} from '../../AdminIntlProvider';
@@ -15,8 +15,8 @@ import {
 } from './ItineraryTab.form-utils';
 
 type ItineraryTabProps = {
-  initialData: ItineraryDay[];
-  onSave: (itinerary: ItineraryDay[]) => Promise<void>;
+  initialData: VMT.ItineraryDay[];
+  onSave: (itinerary: VMT.ItineraryDay[]) => Promise<void>;
 };
 
 export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
@@ -41,7 +41,7 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
     remove: removeDay,
   } = useFieldArray({control, name: 'days'});
 
-  const watchedDays = useWatch({control, name: 'days'}) as ItineraryDay[];
+  const watchedDays = useWatch({control, name: 'days'}) as VMT.ItineraryDay[];
 
   function handleAddDay() {
     appendDay({
@@ -104,7 +104,7 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
     setSubmitError('');
     try {
       const data = getValues();
-      await onSave(data.days as ItineraryDay[]);
+      await onSave(data.days as VMT.ItineraryDay[]);
       reset(data);
     } catch (err: unknown) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save');

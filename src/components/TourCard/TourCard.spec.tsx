@@ -4,11 +4,12 @@ import {buildTour} from '@/test-utils/factories';
 
 describe('TourCard', () => {
   const tour = buildTour({
-    title: 'Da Lat Tour',
+    title: {en: 'Da Lat Tour', vi: 'Da Lat Tour'},
     price: 80,
     duration: 1,
     distance: 186,
-    destinationId: 1,
+    destinationId: 'dest-1',
+    destinationName: 'Dalat',
     imageUrl: '/dalat.jpg',
     slug: 'da-lat-tour',
   });

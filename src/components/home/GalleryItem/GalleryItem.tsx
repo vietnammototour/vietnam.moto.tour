@@ -1,9 +1,14 @@
 'use client';
 
 import {useState} from 'react';
-import type {GalleryItemProps} from '@/types';
 
-export const GalleryItem = ({imageSrc, alt}: GalleryItemProps) => {
+type Props = {
+  imageSrc: string;
+  alt: string;
+  delay: number;
+};
+
+export const GalleryItem = ({imageSrc, alt}: Props) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   return (

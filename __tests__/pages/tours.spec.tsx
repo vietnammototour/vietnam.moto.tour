@@ -1,6 +1,6 @@
 import {render, screen} from '@/test-utils/render';
 import Tours, {getServerSideProps} from '@/pages/tours';
-import {toursData} from '@/data';
+import {buildTour} from '@/test-utils/factories';
 
 jest.mock('next-auth/next', () => ({
   getServerSession: jest.fn().mockResolvedValue(null),
@@ -14,6 +14,18 @@ jest.mock('@/data/queries', () => ({
   getAllTours: jest.fn().mockResolvedValue([]),
   getMessagesFromDb: jest.fn().mockResolvedValue(null),
 }));
+
+const sampleTours = [
+  buildTour({
+    title: {en: 'Da Lat Tour', vi: 'Da Lat Tour'},
+    slug: 'da-lat-tour',
+  }),
+  buildTour({
+    title: {en: 'Hoi An Tour', vi: 'Hoi An Tour'},
+    slug: 'hoi-an-tour',
+    id: 'tour-2',
+  }),
+];
 
 describe('Tours page', () => {
   it('renders meta title translation key', () => {
@@ -33,16 +45,16 @@ describe('Tours page', () => {
   });
 
   it('renders a TourCard for each tour in data', () => {
-    render(<Tours allTours={toursData} isAdmin={false} />);
-    for (const tour of toursData) {
-      expect(screen.getByText(tour.title)).toBeInTheDocument();
+    render(<Tours allTours={sampleTours} isAdmin={false} />);
+    for (const tour of sampleTours) {
+      expect(screen.getByText(tour.title.en)).toBeInTheDocument();
     }
   });
 
   it('renders correct number of tour cards', () => {
-    render(<Tours allTours={toursData} isAdmin={false} />);
+    render(<Tours allTours={sampleTours} isAdmin={false} />);
     const prices = screen.getAllByText('perPerson');
-    expect(prices).toHaveLength(toursData.length);
+    expect(prices).toHaveLength(sampleTours.length);
   });
 });
 

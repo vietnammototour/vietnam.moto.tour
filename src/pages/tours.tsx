@@ -8,7 +8,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {PageHeader} from '@/components/PageHeader';
 import {TourCard} from '@/components/TourCard';
-import type {Tour} from '@/types';
+import type * as VMT from '@/domain';
 
 const fadeInUp = {
   hidden: {opacity: 0, y: 30},
@@ -16,7 +16,7 @@ const fadeInUp = {
 };
 
 type ToursPageProps = {
-  allTours: Tour[];
+  allTours: VMT.Tour[];
   isAdmin: boolean;
 };
 
@@ -27,15 +27,12 @@ export default function Tours({allTours, isAdmin}: ToursPageProps) {
 
   const tours = useMemo(() => {
     const destinationParam = router.query.destination;
-    if (typeof destinationParam === 'string') {
-      const destinationId = Number(destinationParam);
-      if (!Number.isNaN(destinationId)) {
-        const filtered = allTours.filter(
-          (t) => t.destinationId === destinationId,
-        );
-        if (filtered.length > 0) {
-          return filtered;
-        }
+    if (typeof destinationParam === 'string' && destinationParam) {
+      const filtered = allTours.filter(
+        (t) => t.destinationId === destinationParam,
+      );
+      if (filtered.length > 0) {
+        return filtered;
       }
     }
     return allTours;

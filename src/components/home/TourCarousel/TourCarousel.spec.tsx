@@ -4,9 +4,9 @@ import {buildTour} from '@/test-utils/factories';
 
 describe('TourCarousel', () => {
   const tours = [
-    buildTour({id: 1, title: 'Tour One'}),
-    buildTour({id: 2, title: 'Tour Two'}),
-    buildTour({id: 3, title: 'Tour Three'}),
+    buildTour({id: 'tour-1', title: {en: 'Tour One', vi: 'Tour One'}}),
+    buildTour({id: 'tour-2', title: {en: 'Tour Two', vi: 'Tour Two'}}),
+    buildTour({id: 'tour-3', title: {en: 'Tour Three', vi: 'Tour Three'}}),
   ];
 
   it('renders a Swiper container', () => {

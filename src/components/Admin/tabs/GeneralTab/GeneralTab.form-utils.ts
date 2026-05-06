@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import type {TourStatus, LocalizedText} from '@/types';
+import type * as VMT from '@/domain';
 
 export const generalTabSchema = yup.object({
   slug: yup.string().required('Slug is required'),
@@ -21,12 +21,12 @@ export const generalTabSchema = yup.object({
   hotel: yup.string().defined(),
   guided: yup.string().defined(),
   images: yup.array().of(yup.string().required()).defined(),
-  included: yup.mixed<LocalizedText[]>().defined(),
-  excluded: yup.mixed<LocalizedText[]>().defined(),
-  paymentDetails: yup.mixed<LocalizedText>().defined(),
-  notes: yup.mixed<LocalizedText[]>().defined(),
-  mealsInfo: yup.mixed<LocalizedText>().defined(),
-  status: yup.mixed<TourStatus>().required('Status is required'),
+  included: yup.mixed<VMT.LocalizedText[]>().defined(),
+  excluded: yup.mixed<VMT.LocalizedText[]>().defined(),
+  paymentDetails: yup.mixed<VMT.LocalizedText>().defined(),
+  notes: yup.mixed<VMT.LocalizedText[]>().defined(),
+  mealsInfo: yup.mixed<VMT.LocalizedText>().defined(),
+  status: yup.mixed<VMT.TourStatus>().required('Status is required'),
 });
 
 export type GeneralTabFormData = yup.InferType<typeof generalTabSchema>;

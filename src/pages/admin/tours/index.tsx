@@ -4,13 +4,13 @@ import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes, api} from '@/routes';
-import type {TourStatus} from '@/types';
+import type * as VMT from '@/domain';
 
 type AdminTour = {
   id: string;
   title: string;
   slug: string;
-  status: TourStatus;
+  status: VMT.TourStatus;
   destination: {name: string};
   price: number;
   duration: string;
@@ -38,7 +38,7 @@ export default function AdminToursList() {
     }
   }
 
-  async function handleStatusChange(id: string, status: TourStatus) {
+  async function handleStatusChange(id: string, status: VMT.TourStatus) {
     const {error} = await api.admin.tours.update(id, {status});
     if (!error) {
       refetch();

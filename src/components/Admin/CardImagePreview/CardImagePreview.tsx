@@ -32,11 +32,13 @@ export function CardImagePreview({
   onSizeChange,
 }: CardImagePreviewProps) {
   const cardDestination = {
-    id: 0,
+    id: destinationId ?? '',
+    slug: '',
     name: destinationName || 'Destination Name',
     imageUrl: imageUrl,
     heroImage: '',
     size: size,
+    isActive: true,
     tourCount: 3,
     hasCar: false,
     hasBike: true,
