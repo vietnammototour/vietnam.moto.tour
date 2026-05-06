@@ -8,6 +8,7 @@ import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
 import {TourItinerary} from '@/components/tour-itinerary';
+import {Button} from '@/components/ui';
 import {
   itinerarySchema,
   type ItineraryFormData,
@@ -130,31 +131,34 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
               <span className="text-on-surface-secondary">
                 ({watchedDays?.[dayIndex]?.items.length ?? 0})
               </span>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => handleAddItem(dayIndex)}
-                className="text-primary hover:text-primary-light cursor-pointer"
                 title="Add item"
               >
                 +
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="danger"
+                size="sm"
                 onClick={() => removeDay(dayIndex)}
-                className="text-red-400 hover:text-red-300 cursor-pointer"
                 title="Delete day"
               >
                 ×
-              </button>
+              </Button>
             </div>
           ))}
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
             onClick={handleAddDay}
-            className="type-label-sm text-primary hover:text-primary-light px-3 py-1.5 border border-dashed border-primary/40 rounded-lg cursor-pointer"
           >
             + Add Day
-          </button>
+          </Button>
         </div>
 
         {/* Right side: locale, status, save */}
@@ -166,14 +170,16 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
           {isDirty && (
             <span className="type-label-sm text-amber-500">Unsaved</span>
           )}
-          <button
+          <Button
             type="button"
+            variant="primary"
+            size="lg"
+            loading={saving}
+            disabled={!isDirty}
             onClick={handleSave}
-            disabled={saving || !isDirty}
-            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-1.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
           >
-            {saving ? 'Saving...' : 'Save'}
-          </button>
+            Save
+          </Button>
         </div>
       </div>
 
