@@ -1,5 +1,8 @@
 import * as yup from 'yup';
 import type * as VMT from '@/domain';
+import {imageSlotSchema, type ImageSlot} from '@/lib/image-slot';
+
+export type {ImageSlot};
 
 export const generalTabSchema = yup.object({
   slug: yup.string().required('Slug is required'),
@@ -7,7 +10,7 @@ export const generalTabSchema = yup.object({
   title: yup.string().required('Title is required'),
   titleVi: yup.string().defined(),
   titleEn: yup.string().defined(),
-  imageUrl: yup.string().defined(),
+  imageCard: imageSlotSchema().required(),
   price: yup
     .number()
     .min(0, 'Price must be positive')

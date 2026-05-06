@@ -3,6 +3,7 @@ import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
+import {savedSlot} from '@/lib/image-slot';
 import type * as VMT from '@/domain';
 
 type Destination = {
@@ -55,7 +56,7 @@ export default function EditTour() {
     title: tour.title as string,
     titleVi: (tour.titleVi as string) ?? '',
     titleEn: (tour.titleEn as string) ?? '',
-    imageUrl: (tour.imageUrl as string) ?? '',
+    imageCard: savedSlot(tour.imageUrl as string | null),
     price: (tour.price as number) ?? 0,
     duration: (tour.duration as number) ?? 1,
     distance: (tour.distance as number) ?? 0,

@@ -39,7 +39,7 @@ export function TourEditTabs({
   );
 
   const handleGeneralSave = useCallback(
-    async (data: GeneralTabData) => {
+    async (data: Omit<GeneralTabData, 'imageCard'>) => {
       const isNew = mode === 'create' && !tourId;
       const result = isNew
         ? await api.admin.tours.create(
