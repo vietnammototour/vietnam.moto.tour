@@ -2,7 +2,7 @@
 
 import {useState, useEffect} from 'react';
 import Image from 'next/image';
-import type {Highlight} from '@/types';
+import type * as VMT from '@/domain';
 import {api} from '@/routes';
 import {Button} from '@/components/ui';
 
@@ -21,7 +21,7 @@ export function HighlightsTab({
   destinations,
   onSave,
 }: HighlightsTabProps) {
-  const [allHighlights, setAllHighlights] = useState<Highlight[]>([]);
+  const [allHighlights, setAllHighlights] = useState<VMT.Highlight[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
     new Set(initialSelectedIds),
   );

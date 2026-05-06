@@ -3,7 +3,7 @@
 import {useState, useCallback} from 'react';
 import {useForm, useFieldArray, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import type {PricingGroup} from '@/types';
+import type * as VMT from '@/domain';
 import {EditableProvider} from '../../EditableContext';
 import {LocalePicker} from '../../LocalePicker';
 import {AdminIntlProvider} from '../../AdminIntlProvider';
@@ -12,8 +12,8 @@ import {TextInput, NumberInput, Button} from '@/components/ui';
 import {pricingSchema, type PricingFormData} from './PricingTab.form-utils';
 
 type PricingTabProps = {
-  initialData: PricingGroup[];
-  onSave: (pricingGroups: PricingGroup[]) => Promise<void>;
+  initialData: VMT.PricingGroup[];
+  onSave: (pricingGroups: VMT.PricingGroup[]) => Promise<void>;
 };
 
 export function PricingTab({initialData, onSave}: PricingTabProps) {
@@ -39,7 +39,10 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
     remove: removeGroup,
   } = useFieldArray({control, name: 'groups'});
 
-  const watchedGroups = useWatch({control, name: 'groups'}) as PricingGroup[];
+  const watchedGroups = useWatch({
+    control,
+    name: 'groups',
+  }) as VMT.PricingGroup[];
 
   function handleAddGroup() {
     appendGroup({
@@ -91,7 +94,7 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
     setSubmitError('');
     try {
       const data = getValues();
-      await onSave(data.groups as PricingGroup[]);
+      await onSave(data.groups as VMT.PricingGroup[]);
       reset(data);
     } catch (err: unknown) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save');
@@ -319,7 +322,7 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
           <AdminIntlProvider>
             <EditableProvider locale={locale} onFieldChange={handleFieldChange}>
               <TourPricing
-                pricingGroups={(watchedGroups ?? []) as PricingGroup[]}
+                pricingGroups={(watchedGroups ?? []) as VMT.PricingGroup[]}
                 locale={locale}
               />
             </EditableProvider>

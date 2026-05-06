@@ -2,10 +2,10 @@
 
 import {useState, useMemo} from 'react';
 import {api} from '@/routes';
-import type {TranslationRow} from '@/types';
+import type * as VMT from '@/domain';
 
 type TranslationEditorProps = {
-  translations: TranslationRow[];
+  translations: VMT.Translation[];
   namespaces: string[];
 };
 
