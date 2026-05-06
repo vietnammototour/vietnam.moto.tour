@@ -69,15 +69,14 @@ When adding form fields, use shared components instead of inline `<input>` + `<l
 ## Commands
 
 ```bash
-pnpm dev          # Start dev server
-pnpm build        # Production build (also runs TypeScript type checking)
-pnpm start        # Start production server
-pnpm lint         # ESLint (flat config, v9)
+pnpm dev            # Start dev server
+pnpm build          # Production build (also runs TypeScript type checking)
+pnpm start          # Start production server
+pnpm lint           # ESLint (flat config, v9)
+pnpm test           # Jest unit tests (watch mode)
+pnpm test:watch     # Jest watch mode (alias)
+pnpm test:coverage  # Jest with coverage
 ```
-
-pnpm test # Jest unit tests (watch mode)
-pnpm test:watch # Jest watch mode (alias)
-pnpm test:coverage # Jest with coverage
 
 **Key dependencies:** `next` 16, `react` 19, `tailwindcss` 4, `next-intl` 4, `framer-motion` 12, `swiper` 12.
 
