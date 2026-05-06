@@ -103,7 +103,7 @@ async function encodeWebp(
   const canvas = new OffscreenCanvas(w, h);
   const ctx = canvas.getContext('2d');
   if (!ctx) throw {code: 'encode_failed'} satisfies TranscodeError;
-  (ctx as CanvasRenderingContext2D).drawImage(bitmap, 0, 0, w, h);
+  ctx.drawImage(bitmap, 0, 0, w, h);
   return canvas.convertToBlob({type: 'image/webp', quality});
 }
 
