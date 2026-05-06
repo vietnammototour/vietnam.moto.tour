@@ -6,7 +6,7 @@ import {Autoplay, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import {TourCard} from '../tour-card';
+import {TourCard} from '@/components/TourCard';
 import type {TourCarouselProps} from '@/types';
 import styles from './TourCarousel.module.css';
 

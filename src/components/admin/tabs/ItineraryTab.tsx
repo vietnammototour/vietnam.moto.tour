@@ -7,7 +7,7 @@ import type {ItineraryDay} from '@/types';
 import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
-import {TourItinerary} from '@/components/tour-itinerary';
+import {TourItinerary} from '@/components/TourItinerary';
 import {Button} from '@/components/ui';
 import {
   itinerarySchema,

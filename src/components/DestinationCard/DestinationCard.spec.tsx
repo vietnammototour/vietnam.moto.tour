@@ -1,5 +1,5 @@
 import {render, screen} from '@/test-utils/render';
-import {DestinationCard} from './index';
+import {DestinationCard} from './DestinationCard';
 import {buildDestination} from '@/test-utils/factories';
 
 describe('DestinationCard', () => {

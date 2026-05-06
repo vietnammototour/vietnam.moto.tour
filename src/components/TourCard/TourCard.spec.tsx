@@ -1,5 +1,5 @@
 import {render, screen} from '@/test-utils/render';
-import {TourCard} from './index';
+import {TourCard} from './TourCard';
 import {buildTour} from '@/test-utils/factories';
 
 describe('TourCard', () => {

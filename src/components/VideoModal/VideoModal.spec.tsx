@@ -1,6 +1,6 @@
 import {render, screen} from '@/test-utils/render';
 import userEvent from '@testing-library/user-event';
-import {VideoModal} from './index';
+import {VideoModal} from './VideoModal';
 
 describe('VideoModal', () => {
   const defaultProps = {

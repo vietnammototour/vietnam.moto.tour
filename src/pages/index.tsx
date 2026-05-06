@@ -16,10 +16,10 @@ import Head from 'next/head';
 import Link from 'next/link';
 import {routes} from '@/routes';
 
-import {DestinationCard} from '@/components/destination-card';
+import {DestinationCard} from '@/components/DestinationCard';
 import {TourCarousel} from '@/components/tour-carousel';
 import {GalleryItem} from '@/components/gallery-item';
-import {VideoModal} from '@/components/video-modal';
+import {VideoModal} from '@/components/VideoModal';
 import {contactInfo} from '@/utils';
 
 import type {Destination, Tour} from '@/types';

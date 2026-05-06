@@ -1,7 +1,7 @@
 import {useTranslations} from 'next-intl';
 import type {GetStaticPropsContext} from 'next';
 import Head from 'next/head';
-import {PageHeader} from '@/components/page-header';
+import {PageHeader} from '@/components/PageHeader';
 import {contactInfo} from '@/utils';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';

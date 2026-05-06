@@ -7,7 +7,7 @@ import type {PricingGroup} from '@/types';
 import {EditableProvider} from '@/components/admin/EditableContext';
 import {LocalePicker} from '@/components/admin/LocalePicker';
 import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
-import {TourPricing} from '@/components/tour-pricing';
+import {TourPricing} from '@/components/TourPricing';
 import {TextInput, NumberInput, Button} from '@/components/ui';
 import {pricingSchema, type PricingFormData} from './PricingTab.form-utils';
 

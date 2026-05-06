@@ -6,7 +6,7 @@ import {useRouter} from 'next/router';
 import {DM_Sans} from 'next/font/google';
 import localFont from 'next/font/local';
 import {routes} from '@/routes';
-import {ThemeProvider} from '@/components/theme-provider';
+import {ThemeProvider} from '@/components/ThemeProvider';
 import {Layout} from '@/components/Layout';
 import {AdminLayout} from '@/components/admin/AdminLayout';
 import '@/styles/globals.css';

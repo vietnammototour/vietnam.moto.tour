@@ -1,0 +1,1 @@
+export {TourPricing} from './TourPricing';

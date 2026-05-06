@@ -2,7 +2,7 @@
 
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
-import {useTheme} from '@/components/theme-provider';
+import {useTheme} from '@/components/ThemeProvider';
 
 export default function ThemeToggle() {
   const {theme, toggleTheme} = useTheme();

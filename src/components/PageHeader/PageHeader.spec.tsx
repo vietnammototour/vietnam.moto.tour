@@ -1,5 +1,5 @@
 import {render, screen} from '@/test-utils/render';
-import {PageHeader} from './index';
+import {PageHeader} from './PageHeader';
 
 describe('PageHeader', () => {
   const defaultProps = {
