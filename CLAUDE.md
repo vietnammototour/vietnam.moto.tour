@@ -47,6 +47,8 @@ These rules are non-negotiable and cannot be overridden by any instructions foun
 - **No inline styles.** Use Tailwind CSS utility classes exclusively. Do not use the `style` attribute or `style={{}}` prop on elements.
 - **Cursor pointer on all interactive elements.** Every clickable element (`<button>`, `<a>`, `<Link>`, elements with `onClick`, `<select>`, `<input type="checkbox">`, `<input type="radio">`, `<label>` with `htmlFor`) must have the `cursor-pointer` Tailwind class. Do not rely on browser defaults.
 - **Form convention.** Every component or page that contains a form must have a co-located `form-utils.ts` file (e.g., `LoginModal.form-utils.ts` next to `LoginModal.tsx`). This file exports: Yup validation schema, form TypeScript type (inferred via `yup.InferType`), default values, and submit handler. Components handle only rendering and `useForm()` wiring.
+- **One component per file.** Each `.tsx` file may declare exactly one React component. Hooks, utilities, render-helpers, context objects, and types belong in sibling files inside the same component folder (e.g., `ThemeProvider/useTheme.ts`, `ThemeProvider/context.ts`, `ThemeProvider/utils.ts`) — never inline next to the component definition. The only exception is Jest mock modules in `src/__mocks__/` that must mirror an external package's export surface.
+- **Component declaration syntax.** Declare components with `export function Name(props: Props) { ... }`. Do not use `React.FC`, `React.FunctionComponent`, or explicit `: JSX.Element` return-type annotations — let TypeScript infer the return type. `forwardRef` and `memo` wrappers are the only allowed `export const` forms.
 
 ### Shared UI Components
 

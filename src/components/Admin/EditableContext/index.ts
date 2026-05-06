@@ -1,1 +1,2 @@
-export {EditableProvider, useEditable} from './EditableContext';
+export {EditableProvider} from './EditableContext';
+export {useEditable} from './useEditable';

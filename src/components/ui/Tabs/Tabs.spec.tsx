@@ -1,7 +1,8 @@
 // src/components/ui/Tabs/Tabs.spec.tsx
 import {render, screen} from '@/test-utils/render';
 import userEvent from '@testing-library/user-event';
-import {Tabs, TabPanel} from './Tabs';
+import {Tabs} from './Tabs';
+import {TabPanel} from './TabPanel';
 
 const items = [
   {key: 'general', label: 'General'},

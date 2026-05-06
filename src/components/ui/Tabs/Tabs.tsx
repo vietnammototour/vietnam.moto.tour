@@ -6,6 +6,7 @@ import {
   Children,
   isValidElement,
 } from 'react';
+import {type TabPanelProps} from './TabPanel';
 
 type TabItem = {
   key: string;
@@ -19,15 +20,6 @@ type TabsProps = {
   onChange: (key: string) => void;
   children: ReactNode;
 };
-
-type TabPanelProps = {
-  tabKey: string;
-  children: ReactNode;
-};
-
-export function TabPanel({children}: TabPanelProps) {
-  return <div role="tabpanel">{children}</div>;
-}
 
 export function Tabs({items, activeKey, onChange, children}: TabsProps) {
   const activePanel = Children.toArray(children).find(
