@@ -1,5 +1,6 @@
 import {useRouter} from 'next/router';
 import type * as VMT from '@/domain';
+import type {EntityType, ImageType} from '@/lib/upload-entities';
 type AdminStats = {
   tourCount: number;
   destinationCount: number;
@@ -142,16 +143,40 @@ export const api = {
     },
     stats: () => request<AdminStats>('/api/admin/stats'),
     upload: {
-      create: (formData: FormData) =>
-        request<{url: string}>('/api/admin/upload', {
-          method: 'POST',
-          body: formData,
-          headers: {},
-        }),
-      delete: (data: Record<string, unknown>) =>
-        request<void>('/api/admin/upload', {
+      create: ({
+        entityType,
+        entityId,
+        imageType,
+        blob,
+      }: {
+        entityType: EntityType;
+        entityId: string;
+        imageType: ImageType;
+        blob: Blob;
+      }) => {
+        const fd = new FormData();
+        fd.append('entityType', entityType);
+        fd.append('entityId', entityId);
+        fd.append('imageType', imageType);
+        fd.append('file', blob, `upload.webp`);
+        return request<{url: string; hash: string; byteSize: number}>(
+          '/api/admin/upload',
+          {method: 'POST', body: fd, headers: {}},
+        );
+      },
+      delete: ({
+        entityType,
+        entityId,
+        imageType,
+      }: {
+        entityType: EntityType;
+        entityId: string;
+        imageType: ImageType;
+      }) =>
+        request<{success: true}>('/api/admin/upload', {
           method: 'DELETE',
-          body: JSON.stringify(data),
+          body: JSON.stringify({entityType, entityId, imageType}),
+          headers: {'Content-Type': 'application/json'},
         }),
     },
   },
