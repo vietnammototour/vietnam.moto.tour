@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import {TranslationEditor} from '@/components/admin/TranslationEditor';
+import {TranslationEditor} from '@/components/Admin/TranslationEditor';
 import type {TranslationRow} from '@/types';
 
 export default function AdminTranslations() {

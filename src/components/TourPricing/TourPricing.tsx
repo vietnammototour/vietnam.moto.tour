@@ -1,7 +1,7 @@
 import {useState, useCallback, useEffect, useMemo} from 'react';
 import {useTranslations} from 'next-intl';
 import type {PricingGroup} from '@/types';
-import {useEditable} from '@/components/admin/EditableContext';
+import {useEditable} from '@/components/Admin/EditableContext';
 import {VehiclePricing} from './vehicle-pricing';
 import {GroupSizePricing} from './group-size-pricing';
 

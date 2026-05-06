@@ -3,7 +3,7 @@
 import {useState} from 'react';
 import {api} from '@/routes';
 import {TourHero} from '@/components/TourHero';
-import {ImageUploadField} from './ImageUploadField';
+import {ImageUploadField} from '../ImageUploadField';
 
 type HeroImagePreviewProps = {
   destinationId: string | null;

@@ -4,7 +4,7 @@ import {useState, useEffect, useCallback} from 'react';
 import Image from 'next/image';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {ImageUploadField} from './ImageUploadField';
+import {ImageUploadField} from '../ImageUploadField';
 import {TextInput, Button} from '@/components/ui';
 import {api} from '@/routes';
 import {

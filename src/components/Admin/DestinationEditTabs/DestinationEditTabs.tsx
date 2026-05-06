@@ -3,11 +3,11 @@
 import {useState, useCallback, useEffect, useRef} from 'react';
 import {routes, api, useNavigate} from '@/routes';
 import {Tabs, TabPanel, Button} from '@/components/ui';
-import {DestinationGeneralForm} from './DestinationGeneralForm';
-import {HeroImagePreview} from './HeroImagePreview';
-import {CardImagePreview} from './CardImagePreview';
-import {DestinationHighlights} from './DestinationHighlights';
-import {LocalePicker, type Locale} from './LocalePicker';
+import {DestinationGeneralForm} from '../DestinationGeneralForm';
+import {HeroImagePreview} from '../HeroImagePreview';
+import {CardImagePreview} from '../CardImagePreview';
+import {DestinationHighlights} from '../DestinationHighlights';
+import {LocalePicker, type Locale} from '../LocalePicker';
 
 type TabId = 'general' | 'heroImage' | 'cardImage' | 'highlights';
 

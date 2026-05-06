@@ -1,0 +1,1 @@
+export {AdminIntlProvider} from './AdminIntlProvider';

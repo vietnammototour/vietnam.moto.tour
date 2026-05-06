@@ -4,9 +4,9 @@ import {useState, useCallback} from 'react';
 import {useForm, useFieldArray, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import type {ItineraryDay} from '@/types';
-import {EditableProvider} from '@/components/admin/EditableContext';
-import {LocalePicker} from '@/components/admin/LocalePicker';
-import {AdminIntlProvider} from '@/components/admin/AdminIntlProvider';
+import {EditableProvider} from '../../EditableContext';
+import {LocalePicker} from '../../LocalePicker';
+import {AdminIntlProvider} from '../../AdminIntlProvider';
 import {TourItinerary} from '@/components/TourItinerary';
 import {Button} from '@/components/ui';
 import {

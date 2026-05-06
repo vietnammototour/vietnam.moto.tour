@@ -1,0 +1,1 @@
+export {DestinationEditTabs} from './DestinationEditTabs';

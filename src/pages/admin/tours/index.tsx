@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import Link from 'next/link';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import {StatusPicker} from '@/components/admin/StatusPicker';
+import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes, api} from '@/routes';
 import type {TourStatus} from '@/types';
 

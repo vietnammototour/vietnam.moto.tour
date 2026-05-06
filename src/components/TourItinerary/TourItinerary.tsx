@@ -3,7 +3,7 @@ import {useTranslations} from 'next-intl';
 import {useRef} from 'react';
 import type {ItineraryDay} from '@/types';
 import {slideFromLeft, slideFromRight} from '@/utils/motion-variants';
-import {useEditable} from '@/components/admin/EditableContext';
+import {useEditable} from '@/components/Admin/EditableContext';
 
 type TourItineraryProps = {
   itinerary: ItineraryDay[];

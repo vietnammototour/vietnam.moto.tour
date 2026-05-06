@@ -8,7 +8,7 @@ import localFont from 'next/font/local';
 import {routes} from '@/routes';
 import {ThemeProvider} from '@/components/ThemeProvider';
 import {Layout} from '@/components/Layout';
-import {AdminLayout} from '@/components/admin/AdminLayout';
+import {AdminLayout} from '@/components/Admin/AdminLayout';
 import '@/styles/globals.css';
 
 const dmSans = DM_Sans({

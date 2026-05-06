@@ -11,7 +11,7 @@ import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
 import {ThemeToggle} from '@/components/ui';
-import {LoginModal} from '@/components/admin/LoginModal';
+import {LoginModal} from '@/components/Admin/LoginModal';
 
 export const Header = () => {
   const router = useRouter();

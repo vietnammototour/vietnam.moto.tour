@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useSession, signOut} from 'next-auth/react';
 import {routes} from '@/routes';
-import {ProgressBar} from './ProgressBar';
+import {ProgressBar} from '../ProgressBar';
 import {
   AdminLoadingProvider,
   useAdminLoading,

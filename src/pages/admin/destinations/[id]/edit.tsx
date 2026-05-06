@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import {DestinationEditTabs} from '@/components/admin/DestinationEditTabs';
+import {DestinationEditTabs} from '@/components/Admin/DestinationEditTabs';
 
 export default function EditDestination() {
   const router = useRouter();

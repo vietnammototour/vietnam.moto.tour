@@ -1,7 +1,7 @@
 'use client';
 
 import {DestinationCard} from '@/components/DestinationCard';
-import {ImageUploadField} from './ImageUploadField';
+import {ImageUploadField} from '../ImageUploadField';
 
 type CardImagePreviewProps = {
   destinationId: string | null;

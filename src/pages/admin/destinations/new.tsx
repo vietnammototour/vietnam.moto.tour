@@ -1,4 +1,4 @@
-import {DestinationEditTabs} from '@/components/admin/DestinationEditTabs';
+import {DestinationEditTabs} from '@/components/Admin/DestinationEditTabs';
 
 const emptyData = {
   slug: '',

@@ -4,11 +4,11 @@ import {useState, useCallback} from 'react';
 import type {ItineraryDay, PricingGroup} from '@/types';
 import {routes, api, useNavigate} from '@/routes';
 import {Tabs, TabPanel, Button} from '@/components/ui';
-import {GeneralTab} from './tabs/GeneralTab';
-import type {GeneralTabData} from './tabs/GeneralTab';
-import {ItineraryTab} from './tabs/ItineraryTab';
-import {PricingTab} from './tabs/PricingTab';
-import {HighlightsTab} from './tabs/HighlightsTab';
+import {GeneralTab} from '../tabs/GeneralTab';
+import type {GeneralTabData} from '../tabs/GeneralTab';
+import {ItineraryTab} from '../tabs/ItineraryTab';
+import {PricingTab} from '../tabs/PricingTab';
+import {HighlightsTab} from '../tabs/HighlightsTab';
 
 type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights';
 

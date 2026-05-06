@@ -10,7 +10,7 @@ import {
   submitDestination,
   type DestinationFormData,
 } from './DestinationGeneralForm.form-utils';
-import type {Locale} from './LocalePicker';
+import type {Locale} from '../LocalePicker';
 
 type DestinationGeneralFormProps = {
   initialData: DestinationFormData;

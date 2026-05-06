@@ -1,6 +1,6 @@
 import {useTranslations} from 'next-intl';
 import type {PricingGroup} from '@/types';
-import {useEditable} from '@/components/admin/EditableContext';
+import {useEditable} from '@/components/Admin/EditableContext';
 
 type VehiclePricingProps = {
   groups: PricingGroup[];

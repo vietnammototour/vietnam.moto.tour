@@ -3,8 +3,8 @@
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {ImageUploadField} from '@/components/admin/ImageUploadField';
-import {StatusPicker} from '@/components/admin/StatusPicker';
+import {ImageUploadField} from '../../ImageUploadField';
+import {StatusPicker} from '../../StatusPicker';
 import {TextInput, Textarea, NumberInput, Button} from '@/components/ui';
 import {
   generalTabSchema,
