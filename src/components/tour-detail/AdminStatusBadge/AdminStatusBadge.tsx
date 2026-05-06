@@ -1,8 +1,8 @@
-import type {TourStatus} from '@/types';
+import type * as VMT from '@/domain';
 import {Badge} from '@/components/ui';
 
 const variantMap: Record<
-  TourStatus,
+  VMT.TourStatus,
   'warning' | 'success' | 'info' | 'neutral'
 > = {
   DRAFT: 'warning',
@@ -12,7 +12,7 @@ const variantMap: Record<
 };
 
 type AdminStatusBadgeProps = {
-  status: TourStatus;
+  status: VMT.TourStatus;
 };
 
 export function AdminStatusBadge({status}: AdminStatusBadgeProps) {

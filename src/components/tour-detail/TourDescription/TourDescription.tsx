@@ -1,9 +1,9 @@
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
-import type {LocalizedText} from '@/types';
+import type * as VMT from '@/domain';
 
 type TourDescriptionProps = {
-  description: LocalizedText;
+  description: VMT.LocalizedText;
   locale: string;
 };
 

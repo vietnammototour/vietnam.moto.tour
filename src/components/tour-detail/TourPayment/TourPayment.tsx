@@ -1,8 +1,8 @@
 import {useTranslations} from 'next-intl';
-import type {LocalizedText} from '@/types';
+import type * as VMT from '@/domain';
 
 type TourPaymentProps = {
-  paymentDetails: LocalizedText;
+  paymentDetails: VMT.LocalizedText;
   locale: string;
 };
 

@@ -4,10 +4,10 @@ import {motion, useMotionTemplate} from 'framer-motion';
 import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
 import {clipReveal, slideFromLeft} from '@/utils/motion-variants';
 import {routes} from '@/routes';
-import type {Tour} from '@/types';
+import type * as VMT from '@/domain';
 
 type TourHeroProps = {
-  tour?: Tour;
+  tour?: VMT.Tour;
   preview?: {
     heroImage: string;
     destinationName: string;

@@ -1,12 +1,12 @@
 import {motion, useScroll, useTransform} from 'framer-motion';
 import {useTranslations} from 'next-intl';
 import {useRef} from 'react';
-import type {ItineraryDay} from '@/types';
+import type * as VMT from '@/domain';
 import {slideFromLeft, slideFromRight} from '@/utils/motion-variants';
 import {useEditable} from '@/components/Admin/EditableContext';
 
 type TourItineraryProps = {
-  itinerary: ItineraryDay[];
+  itinerary: VMT.ItineraryDay[];
   locale: string;
 };
 
