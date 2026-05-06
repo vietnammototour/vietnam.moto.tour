@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
-import type {TourStatus} from '@/types';
+import type * as VMT from '@/domain';
 
 type Destination = {
   id: string;
@@ -31,7 +31,7 @@ const emptyGeneral = {
   paymentDetails: {en: '', vi: ''},
   notes: [] as Array<{en: string; vi: string}>,
   mealsInfo: {en: '', vi: ''},
-  status: 'DRAFT' as TourStatus,
+  status: 'DRAFT' as VMT.TourStatus,
 };
 
 export default function NewTour() {

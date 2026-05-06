@@ -5,7 +5,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {api} from '@/routes';
-import type {AdminUser} from '@/types';
+import type * as VMT from '@/domain';
 import {
   createUserSchema,
   createUserDefaults,
@@ -17,7 +17,7 @@ import {TextInput, Button} from '@/components/ui';
 export default function AdminUsers() {
   const {data: session} = useSession();
   const {data, loading, refetch} =
-    useAdminFetch<AdminUser[]>('/api/admin/users');
+    useAdminFetch<VMT.User[]>('/api/admin/users');
   const {setLoading} = useAdminLoading();
   const users = data ?? [];
 

@@ -3,7 +3,7 @@ import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
-import type {TourStatus} from '@/types';
+import type * as VMT from '@/domain';
 
 type Destination = {
   id: string;
@@ -74,7 +74,7 @@ export default function EditTour() {
     },
     notes: (tour.notes as Array<{en: string; vi: string}>) ?? [],
     mealsInfo: (tour.mealsInfo as {en: string; vi: string}) ?? {en: '', vi: ''},
-    status: (tour.status as TourStatus) ?? 'DRAFT',
+    status: (tour.status as VMT.TourStatus) ?? 'DRAFT',
   };
 
   return (

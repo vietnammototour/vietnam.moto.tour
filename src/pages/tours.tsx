@@ -8,7 +8,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {PageHeader} from '@/components/PageHeader';
 import {TourCard} from '@/components/TourCard';
-import type {Tour} from '@/types';
+import type * as VMT from '@/domain';
 
 const fadeInUp = {
   hidden: {opacity: 0, y: 30},
@@ -16,7 +16,7 @@ const fadeInUp = {
 };
 
 type ToursPageProps = {
-  allTours: Tour[];
+  allTours: VMT.Tour[];
   isAdmin: boolean;
 };
 

@@ -5,7 +5,7 @@ import {getServerSession} from 'next-auth/next';
 import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import type {Tour} from '@/types';
+import type * as VMT from '@/domain';
 import {contactInfo} from '@/utils';
 import {AdminStatusBadge} from '@/components/tour-detail/AdminStatusBadge';
 import {TourHero} from '@/components/TourHero';
@@ -20,7 +20,7 @@ import {TourPayment} from '@/components/tour-detail/TourPayment';
 import {TourNotes} from '@/components/tour-detail/TourNotes';
 
 type TourDetailProps = {
-  tour: Tour;
+  tour: VMT.Tour;
   isAdmin: boolean;
 };
 
