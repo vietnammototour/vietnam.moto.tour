@@ -19,7 +19,7 @@ type GeneralTabProps = {
   destinations: Array<{id: string; name: string}>;
   tourId: string | null;
   onDestinationChange?: (destinationId: string) => void;
-  onSave: (data: Omit<GeneralTabFormData, 'imageCard'>) => Promise<void>;
+  onSave: (data: Omit<GeneralTabFormData, 'imageCard'>) => Promise<string>;
 };
 
 export function GeneralTab({
@@ -52,22 +52,17 @@ export function GeneralTab({
     setSubmitError('');
     try {
       const {imageCard, ...textFields} = data;
-      await onSave(textFields);
-      if (tourId) {
-        const {errors: imgErrors, updated} = await flushImageSlots({
-          entityType: 'tour',
-          entityId: tourId,
-          slots: {card: imageCard},
-        });
-        if (imgErrors.card) throw new Error(imgErrors.card);
-        if (updated.card) {
-          reset({...data, imageCard: updated.card});
-        } else {
-          reset(data);
-        }
-      } else {
-        reset(data);
-      }
+      const id = await onSave(textFields);
+      const {errors: imgErrors, updated} = await flushImageSlots({
+        entityType: 'tour',
+        entityId: id,
+        slots: {card: imageCard},
+      });
+      if (imgErrors.card) throw new Error(imgErrors.card);
+      reset({
+        ...data,
+        imageCard: updated.card ?? imageCard,
+      });
     } catch (err: unknown) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save');
     }

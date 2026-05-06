@@ -39,7 +39,7 @@ export function TourEditTabs({
   );
 
   const handleGeneralSave = useCallback(
-    async (data: Omit<GeneralTabData, 'imageCard'>) => {
+    async (data: Omit<GeneralTabData, 'imageCard'>): Promise<string> => {
       const isNew = mode === 'create' && !tourId;
       const result = isNew
         ? await api.admin.tours.create(
@@ -53,10 +53,12 @@ export function TourEditTabs({
       if (result.error) throw new Error(result.error);
 
       if (isNew && result.data) {
-        const saved = result.data;
-        setTourId(String(saved.id));
-        navigate.replaceUrl(routes.admin.tours.edit, {id: String(saved.id)});
+        const newId = String(result.data.id);
+        setTourId(newId);
+        navigate.replaceUrl(routes.admin.tours.edit, {id: newId});
+        return newId;
       }
+      return tourId!;
     },
     [mode, tourId, navigate],
   );
