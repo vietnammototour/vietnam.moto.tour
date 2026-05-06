@@ -17,8 +17,8 @@ import Link from 'next/link';
 import {routes} from '@/routes';
 
 import {DestinationCard} from '@/components/DestinationCard';
-import {TourCarousel} from '@/components/tour-carousel';
-import {GalleryItem} from '@/components/gallery-item';
+import {TourCarousel} from '@/components/home/TourCarousel';
+import {GalleryItem} from '@/components/home/GalleryItem';
 import {VideoModal} from '@/components/VideoModal';
 import {contactInfo} from '@/utils';
 

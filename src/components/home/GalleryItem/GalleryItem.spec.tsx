@@ -1,6 +1,6 @@
 import {render, screen} from '@/test-utils/render';
 import userEvent from '@testing-library/user-event';
-import {GalleryItem} from './index';
+import {GalleryItem} from './GalleryItem';
 
 describe('GalleryItem', () => {
   it('renders an image with the correct src', () => {

@@ -1,5 +1,5 @@
 import {render, screen} from '@/test-utils/render';
-import {TourCarousel} from './index';
+import {TourCarousel} from './TourCarousel';
 import {buildTour} from '@/test-utils/factories';
 
 describe('TourCarousel', () => {
