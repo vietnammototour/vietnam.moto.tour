@@ -9,7 +9,7 @@ import {routes} from '@/routes';
 import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
-import {LanguageSwitcher} from '@/components/language-switcher';
+import {LanguageSwitcher} from './components/LanguageSwitcher';
 import {ThemeToggle} from '@/components/ui';
 import {LoginModal} from '@/components/admin/LoginModal';
 

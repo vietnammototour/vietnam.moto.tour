@@ -1,5 +1,5 @@
 import {render, screen} from '@/test-utils/render';
-import {Layout} from '@/components/layout';
+import {Layout} from '@/components/Layout';
 
 jest.mock('next/router', () => ({
   useRouter: () => ({

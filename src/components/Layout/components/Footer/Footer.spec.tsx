@@ -1,5 +1,5 @@
 import {render, screen} from '@/test-utils/render';
-import {Footer} from './index';
+import {Footer} from './Footer';
 import {contactInfo} from '@/utils';
 
 describe('Footer', () => {
@@ -80,8 +80,6 @@ describe('Footer', () => {
   it('renders copyright with year param', () => {
     render(<Footer />);
     const year = new Date().getFullYear();
-    expect(
-      screen.getByText(`copyright:{"year":${year}}`),
-    ).toBeInTheDocument();
+    expect(screen.getByText(`copyright:{"year":${year}}`)).toBeInTheDocument();
   });
 });

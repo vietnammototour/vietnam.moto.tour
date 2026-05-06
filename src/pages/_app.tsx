@@ -7,7 +7,7 @@ import {DM_Sans} from 'next/font/google';
 import localFont from 'next/font/local';
 import {routes} from '@/routes';
 import {ThemeProvider} from '@/components/theme-provider';
-import {Layout} from '../components/layout/index';
+import {Layout} from '@/components/Layout';
 import {AdminLayout} from '@/components/admin/AdminLayout';
 import '@/styles/globals.css';
 

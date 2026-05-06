@@ -1,6 +1,6 @@
 import {render, screen} from '@/test-utils/render';
 import userEvent from '@testing-library/user-event';
-import {ScrollToTop} from './index';
+import {ScrollToTop} from './ScrollToTop';
 
 let mockScrollY = 0;
 jest.mock('@/hooks/useScrollDirection', () => ({

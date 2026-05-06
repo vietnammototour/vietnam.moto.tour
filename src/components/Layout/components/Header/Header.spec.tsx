@@ -1,6 +1,6 @@
 import {render, screen} from '@/test-utils/render';
 import userEvent from '@testing-library/user-event';
-import {Header} from './index';
+import {Header} from './Header';
 import {useRouter} from 'next/router';
 
 jest.mock('next/router', () => ({
