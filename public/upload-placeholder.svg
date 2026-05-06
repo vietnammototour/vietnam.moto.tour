@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150">
+  <rect width="200" height="150" fill="#e5e5e5"/>
+  <text x="100" y="80" font-family="sans-serif" font-size="14" text-anchor="middle" fill="#999">image not found</text>
+</svg>
