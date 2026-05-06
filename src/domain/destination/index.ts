@@ -8,8 +8,12 @@ export type Destination = Omit<
   | 'descriptionEn'
   | 'createdAt'
   | 'updatedAt'
+  | 'imageUrl'
+  | 'heroImage'
 > & {
   size: 'small' | 'large';
+  imageUrl: string;
+  heroImage: string;
 };
 
 export type DestinationWithStats = Destination & {

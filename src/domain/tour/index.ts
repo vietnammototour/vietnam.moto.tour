@@ -27,7 +27,9 @@ export type Tour = Omit<
   | 'mealsInfo'
   | 'createdAt'
   | 'updatedAt'
+  | 'imageUrl'
 > & {
+  imageUrl: string;
   title: LocalizedText;
   description: LocalizedText;
   images: string[];

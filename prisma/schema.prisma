@@ -35,7 +35,7 @@ model Tour {
   title          String
   titleVi        String      @default("")
   titleEn        String      @default("")
-  imageUrl       String      @default("")
+  imageUrl       String?
   price          Float       @default(0)
   duration       Int         @default(1)
   distance       Int         @default(0)
@@ -65,8 +65,8 @@ model Destination {
   name          String
   nameVi        String   @default("")
   nameEn        String   @default("")
-  imageUrl      String   @default("")
-  heroImage     String   @default("")
+  imageUrl      String?
+  heroImage     String?
   descriptionVi String   @default("")
   descriptionEn String   @default("")
   size          String   @default("small")
