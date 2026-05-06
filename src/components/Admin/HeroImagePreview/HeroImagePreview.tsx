@@ -1,9 +1,11 @@
 'use client';
 
 import {useState} from 'react';
-import {api} from '@/routes';
 import {TourHero} from '@/components/TourHero';
-import {ImageUploadField} from '../ImageUploadField';
+import {ImageUpload} from '@/components/ui';
+import {flushImageSlots} from '@/lib/submit-with-images';
+import {savedSlot, type ImageSlot, isDirty} from '@/lib/image-slot';
+import {Button} from '@/components/ui/Button';
 
 type HeroImagePreviewProps = {
   destinationId: string | null;
@@ -18,28 +20,35 @@ export function HeroImagePreview({
   destinationName,
   onImageChange,
 }: HeroImagePreviewProps) {
-  const [deleting, setDeleting] = useState(false);
+  const [slot, setSlot] = useState<ImageSlot>(savedSlot(heroImage));
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  async function handleDelete() {
-    if (!destinationId || !confirm('Delete hero image?')) return;
-
-    setDeleting(true);
-    try {
-      const {error} = await api.admin.upload.delete({
-        entityType: 'destination',
-        entityId: destinationId,
-        imageType: 'hero',
-      });
-
-      if (!error) {
-        onImageChange('');
-      }
-    } catch {
-      // silently fail
-    } finally {
-      setDeleting(false);
+  async function handleSave() {
+    if (!destinationId || !isDirty(slot)) return;
+    setSaving(true);
+    setError(null);
+    const {errors, updated} = await flushImageSlots({
+      entityType: 'destination',
+      entityId: destinationId,
+      slots: {hero: slot},
+    });
+    setSaving(false);
+    if (errors.hero) {
+      setError(errors.hero);
+      return;
     }
+    const next = updated.hero!;
+    setSlot(next);
+    onImageChange(next.kind === 'saved' ? next.url : '');
   }
+
+  const previewUrl =
+    slot.kind === 'saved'
+      ? slot.url
+      : slot.kind === 'pending-replace'
+        ? slot.previewUrl
+        : '';
 
   return (
     <div>
@@ -48,31 +57,31 @@ export function HeroImagePreview({
           Hero Image Preview
         </span>
         <div className="flex items-center gap-2">
-          {heroImage && destinationId && (
-            <button
+          {isDirty(slot) && destinationId && (
+            <Button
               type="button"
-              onClick={handleDelete}
-              disabled={deleting}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg type-label-sm transition-colors cursor-pointer disabled:opacity-50"
+              variant="primary"
+              size="sm"
+              onClick={handleSave}
+              loading={saving}
             >
-              {deleting ? 'Deleting...' : 'Delete'}
-            </button>
+              Save
+            </Button>
           )}
-          <ImageUploadField
-            entityType="destination"
-            entityId={destinationId}
-            imageType="hero"
-            currentUrl={heroImage}
-            onUploadComplete={onImageChange}
-            label=""
-            compact
-          />
         </div>
+      </div>
+      <div className="mb-4">
+        <ImageUpload
+          value={slot}
+          onChange={setSlot}
+          preset="hero"
+          error={error ?? undefined}
+        />
       </div>
       <div className="rounded-lg overflow-hidden">
         <TourHero
           preview={{
-            heroImage: heroImage,
+            heroImage: previewUrl,
             destinationName: destinationName || 'Destination Name',
           }}
         />
