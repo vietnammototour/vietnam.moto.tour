@@ -1,6 +1,6 @@
 import {render, screen} from '@/test-utils/render';
 import userEvent from '@testing-library/user-event';
-import ThemeToggle from './index';
+import ThemeToggle from './ThemeToggle';
 
 describe('ThemeToggle', () => {
   it('renders the label translation key', () => {

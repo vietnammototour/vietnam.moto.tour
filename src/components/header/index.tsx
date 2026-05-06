@@ -10,7 +10,7 @@ import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from '@/components/language-switcher';
-import ThemeToggle from '@/components/theme-toggle';
+import {ThemeToggle} from '@/components/ui';
 import {LoginModal} from '@/components/admin/LoginModal';
 
 export const Header = () => {
