@@ -55,8 +55,9 @@ next-env.d.ts
 /blob-report/
 /playwright/.cache/
 
-# Uploaded images (symlink to /var/www/uploads on VPS)
-public/uploads
+# Uploaded user images live outside the repo (UPLOAD_DIR)
+/public/uploads/
+/.uploads/
 
 # Superpowers cache
 .superpowers/
