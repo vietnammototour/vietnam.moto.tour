@@ -1,4 +1,4 @@
-import type {ContactInfo} from '@/types';
+import type {ContactInfo} from './contact';
 
 export const getUrl = (path: string): string =>
   `${process.env.__NEXT_ROUTER_BASEPATH || ''}/${path}`;

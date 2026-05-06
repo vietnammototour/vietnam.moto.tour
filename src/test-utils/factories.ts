@@ -1,5 +1,5 @@
 import type * as VMT from '@/domain';
-import type {ContactInfo} from '@/types';
+import type {ContactInfo} from '@/utils/contact';
 
 export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
   return {

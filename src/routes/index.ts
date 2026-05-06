@@ -1,6 +1,10 @@
 import {useRouter} from 'next/router';
 import type * as VMT from '@/domain';
-import type {AdminStats} from '@/types';
+type AdminStats = {
+  tourCount: number;
+  destinationCount: number;
+  userCount: number;
+};
 
 // ─── Route Registry ───────────────────────────────────────
 

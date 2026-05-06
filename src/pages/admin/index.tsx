@@ -2,7 +2,11 @@ import {useSession} from 'next-auth/react';
 import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import type {AdminStats} from '@/types';
+type AdminStats = {
+  tourCount: number;
+  destinationCount: number;
+  userCount: number;
+};
 
 export default function AdminDashboard() {
   const {data: session} = useSession();

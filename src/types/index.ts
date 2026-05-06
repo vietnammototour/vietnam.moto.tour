@@ -15,20 +15,3 @@ export type {
 } from '@/domain';
 export type {User as AdminUser} from '@/domain';
 export type {Translation as TranslationRow} from '@/domain';
-
-// Non-domain types kept here for now.
-export type ContactInfo = {
-  phone: string;
-  email: string;
-  youtubeLink: string;
-  tripadvisorLink: string;
-  whatsApp: string;
-  address: string;
-  city: string;
-};
-
-export type AdminStats = {
-  tourCount: number;
-  destinationCount: number;
-  userCount: number;
-};
