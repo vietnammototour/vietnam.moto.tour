@@ -11,7 +11,7 @@ import {
   submitContact,
   type ContactFormData,
 } from '@/lib/contact-form-utils';
-import {FormFieldError} from '@/components/admin/FormFieldError';
+import {FormField} from '@/components/ui';
 
 export default function Contact() {
   const t = useTranslations('contact');
@@ -81,34 +81,31 @@ export default function Contact() {
             <div className="lg:col-span-8">
               <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
+                  <FormField error={errors.name?.message}>
                     <input
                       type="text"
                       placeholder={t('namePlaceholder')}
                       className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       {...register('name')}
                     />
-                    <FormFieldError message={errors.name?.message} />
-                  </div>
-                  <div>
+                  </FormField>
+                  <FormField error={errors.email?.message}>
                     <input
                       type="email"
                       placeholder={t('emailPlaceholder')}
                       className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       {...register('email')}
                     />
-                    <FormFieldError message={errors.email?.message} />
-                  </div>
+                  </FormField>
                 </div>
-                <div>
+                <FormField error={errors.message?.message}>
                   <textarea
                     placeholder={t('messagePlaceholder')}
                     rows={6}
                     className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                     {...register('message')}
                   />
-                  <FormFieldError message={errors.message?.message} />
-                </div>
+                </FormField>
                 <button
                   type="submit"
                   disabled={isSubmitting}

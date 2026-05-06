@@ -12,7 +12,7 @@ import {
   submitCreateUser,
   type CreateUserFormData,
 } from '@/lib/users-form-utils';
-import {FormFieldError} from '@/components/admin/FormFieldError';
+import {TextInput, Button} from '@/components/ui';
 
 export default function AdminUsers() {
   const {data: session} = useSession();
@@ -83,46 +83,26 @@ export default function AdminUsers() {
             </div>
           )}
           <div className="space-y-4">
-            <div>
-              <label className="block type-label-sm text-on-surface-secondary mb-1">
-                Name
-              </label>
-              <input
-                type="text"
-                {...register('name')}
-                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormFieldError message={errors.name?.message} />
-            </div>
-            <div>
-              <label className="block type-label-sm text-on-surface-secondary mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                {...register('email')}
-                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormFieldError message={errors.email?.message} />
-            </div>
-            <div>
-              <label className="block type-label-sm text-on-surface-secondary mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                {...register('password')}
-                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormFieldError message={errors.password?.message} />
-            </div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
-            >
-              {isSubmitting ? 'Creating...' : 'Create User'}
-            </button>
+            <TextInput
+              label="Name"
+              {...register('name')}
+              error={errors.name?.message}
+            />
+            <TextInput
+              label="Email"
+              type="email"
+              {...register('email')}
+              error={errors.email?.message}
+            />
+            <TextInput
+              label="Password"
+              type="password"
+              {...register('password')}
+              error={errors.password?.message}
+            />
+            <Button type="submit" loading={isSubmitting}>
+              Create User
+            </Button>
           </div>
         </form>
       )}
