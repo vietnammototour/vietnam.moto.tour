@@ -4,7 +4,7 @@ import {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {routes, useNavigate} from '@/routes';
-import {FormFieldError} from './FormFieldError';
+import {TextInput, Textarea, Button} from '@/components/ui';
 import {
   destinationSchema,
   submitDestination,
@@ -72,54 +72,29 @@ export function DestinationGeneralForm({
 
       <div className="max-w-2xl space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block type-label-sm text-on-surface-secondary mb-1">
-              Slug
-            </label>
-            <input
-              type="text"
-              {...register('slug')}
-              className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <FormFieldError message={errors.slug?.message} />
-          </div>
-          <div>
-            <label className="block type-label-sm text-on-surface-secondary mb-1">
-              Name ({locale.toUpperCase()})
-            </label>
-            <input
-              type="text"
-              {...register(nameField)}
-              className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <FormFieldError message={errors[nameField]?.message} />
-          </div>
+          <TextInput
+            label="Slug"
+            {...register('slug')}
+            error={errors.slug?.message}
+          />
+          <TextInput
+            label={`Name (${locale.toUpperCase()})`}
+            {...register(nameField)}
+            error={errors[nameField]?.message}
+          />
         </div>
 
-        <div>
-          <label className="block type-label-sm text-on-surface-secondary mb-1">
-            Description ({locale.toUpperCase()})
-          </label>
-          <textarea
-            rows={4}
-            {...register(descField)}
-            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-          <FormFieldError message={errors[descField]?.message} />
-        </div>
+        <Textarea
+          label={`Description (${locale.toUpperCase()})`}
+          rows={4}
+          {...register(descField)}
+          error={errors[descField]?.message}
+        />
 
         <div className="flex gap-4 pt-4">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-primary hover:bg-primary-light text-on-primary px-6 py-2.5 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 cursor-pointer"
-          >
-            {isSubmitting
-              ? 'Saving...'
-              : mode === 'create'
-                ? 'Create Destination'
-                : 'Save Changes'}
-          </button>
+          <Button type="submit" loading={isSubmitting} size="lg">
+            {mode === 'create' ? 'Create Destination' : 'Save Changes'}
+          </Button>
         </div>
       </div>
     </form>
