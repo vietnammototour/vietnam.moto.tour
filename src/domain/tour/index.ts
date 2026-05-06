@@ -11,8 +11,10 @@ export type TourStatus = PrismaTourStatus;
 
 export type Tour = Omit<
   PrismaTour,
+  | 'title'
   | 'titleVi'
   | 'titleEn'
+  | 'description'
   | 'descriptionVi'
   | 'descriptionEn'
   | 'images'
