@@ -3,9 +3,13 @@ import {useTranslations, useLocale} from 'next-intl';
 import {motion, useTransform} from 'framer-motion';
 import {routes} from '@/routes';
 import {useCardTilt} from '@/hooks/use-card-tilt';
-import type {TourCardProps} from '@/types';
+import type * as VMT from '@/domain';
 
-export const TourCard = ({tour}: TourCardProps) => {
+type Props = {
+  tour: VMT.Tour;
+};
+
+export const TourCard = ({tour}: Props) => {
   const {imageUrl, price, duration, distance, slug} = tour;
   const locale = useLocale();
   const title = tour.title[locale as 'en' | 'vi'] ?? tour.title.vi;

@@ -1,9 +1,14 @@
 'use client';
 
-import type {VideoModalProps} from '@/types';
 import {Modal} from '@/components/ui';
 
-export function VideoModal({videoUrl, isOpen, onClose}: VideoModalProps) {
+type Props = {
+  videoUrl: string;
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export function VideoModal({videoUrl, isOpen, onClose}: Props) {
   const embedUrl = videoUrl.replace('watch?v=', 'embed/') + '?autoplay=1';
 
   return (

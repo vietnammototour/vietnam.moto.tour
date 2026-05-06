@@ -6,11 +6,15 @@ import {Autoplay, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+import type * as VMT from '@/domain';
 import {TourCard} from '@/components/TourCard';
-import type {TourCarouselProps} from '@/types';
 import styles from './TourCarousel.module.css';
 
-export const TourCarousel = ({tours}: TourCarouselProps) => {
+type Props = {
+  tours: VMT.Tour[];
+};
+
+export const TourCarousel = ({tours}: Props) => {
   return (
     <div className={`relative ${styles.carousel}`}>
       <Swiper

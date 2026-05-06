@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import type {PageHeaderProps} from '@/types';
 
-export function PageHeader({
-  title,
-  breadcrumbs,
-  backgroundImage,
-}: PageHeaderProps) {
+type Props = {
+  title: string;
+  breadcrumbs: {label: string; href?: string}[];
+  backgroundImage: string;
+};
+
+export function PageHeader({title, breadcrumbs, backgroundImage}: Props) {
   return (
     <section className="relative">
       <div className="relative h-64 md:h-80 overflow-hidden">

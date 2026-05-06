@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
+import type * as VMT from '@/domain';
 import {routes} from '@/routes';
-import type {DestinationCardProps} from '@/types';
+
+type Props = {
+  destination: VMT.DestinationWithStats;
+};
 
 export const DestinationCard = ({
   destination,
   className,
-}: DestinationCardProps & {className?: string}) => {
+}: Props & {className?: string}) => {
   const {name, imageUrl, tourCount, id, hasCar, hasBike} = destination;
   const t = useTranslations('common');
 
