@@ -1,6 +1,7 @@
-import type {Tour, Destination, ContactInfo} from '@/types';
+import type * as VMT from '@/domain';
+import type {ContactInfo} from '@/types';
 
-export function buildTour(overrides?: Partial<Tour>): Tour {
+export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
   return {
     id: 'tour-1',
     title: {en: 'Test Tour', vi: 'Test Tour'},
@@ -55,8 +56,8 @@ export function buildTour(overrides?: Partial<Tour>): Tour {
 }
 
 export function buildDestination(
-  overrides?: Partial<Destination>,
-): Destination {
+  overrides?: Partial<VMT.Destination>,
+): VMT.Destination {
   return {
     id: 'dest-1',
     slug: 'test-destination',
