@@ -1,8 +1,8 @@
 'use client';
 
 import {useState, useCallback, useEffect, useRef} from 'react';
-import {useRouter} from 'next/router';
 import {routes, api, useNavigate} from '@/routes';
+import {Tabs, TabPanel, Button} from '@/components/ui';
 import {DestinationGeneralForm} from './DestinationGeneralForm';
 import {HeroImagePreview} from './HeroImagePreview';
 import {CardImagePreview} from './CardImagePreview';
@@ -29,19 +29,11 @@ type DestinationEditTabsProps = {
   initialData: DestinationFormData;
 };
 
-const tabs: {id: TabId; label: string}[] = [
-  {id: 'general', label: 'General'},
-  {id: 'heroImage', label: 'Hero Image'},
-  {id: 'cardImage', label: 'Card Image'},
-  {id: 'highlights', label: 'Highlights'},
-];
-
 export function DestinationEditTabs({
   mode,
   destinationId: initialId,
   initialData,
 }: DestinationEditTabsProps) {
-  const router = useRouter();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('general');
   const [destinationId, setDestinationId] = useState<string | null>(initialId);
@@ -89,47 +81,44 @@ export function DestinationEditTabs({
         <h1 className="type-headline-sm">
           {mode === 'create' ? 'Create New Destination' : 'Edit Destination'}
         </h1>
-        <button
-          type="button"
-          onClick={() => navigate.to(routes.admin.destinations.list)}
-          className="px-4 py-2 rounded-lg border border-border type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
-        >
-          Back to Destinations
-        </button>
-      </div>
-
-      {/* Tab bar with locale picker */}
-      <div className="flex items-center justify-between border-b-2 border-border mb-0">
-        <div className="flex">
-          {tabs.map((tab) => {
-            const disabled = isTabDisabled(tab.id);
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                disabled={disabled}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-3 type-label-sm transition-colors cursor-pointer ${
-                  activeTab === tab.id
-                    ? 'text-primary border-b-2 border-primary -mb-[2px] font-semibold'
-                    : disabled
-                      ? 'text-on-surface-secondary/40 cursor-not-allowed'
-                      : 'text-on-surface-secondary hover:text-on-surface'
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-        <div className="pb-2">
+        <div className="flex items-center gap-3">
           <LocalePicker value={locale} onChange={setLocale} />
+          <Button
+            variant="secondary"
+            onClick={() => navigate.to(routes.admin.destinations.list)}
+          >
+            Back to Destinations
+          </Button>
         </div>
       </div>
 
-      {/* Tab content */}
-      <div className="border border-border border-t-0 rounded-b-lg overflow-hidden">
-        {activeTab === 'general' && (
+      <Tabs
+        items={[
+          {
+            key: 'general',
+            label: 'General',
+            disabled: isTabDisabled('general'),
+          },
+          {
+            key: 'heroImage',
+            label: 'Hero Image',
+            disabled: isTabDisabled('heroImage'),
+          },
+          {
+            key: 'cardImage',
+            label: 'Card Image',
+            disabled: isTabDisabled('cardImage'),
+          },
+          {
+            key: 'highlights',
+            label: 'Highlights',
+            disabled: isTabDisabled('highlights'),
+          },
+        ]}
+        activeKey={activeTab}
+        onChange={(key) => setActiveTab(key as TabId)}
+      >
+        <TabPanel tabKey="general">
           <div className="p-5">
             <DestinationGeneralForm
               initialData={form}
@@ -139,9 +128,8 @@ export function DestinationEditTabs({
               onSaved={handleSaved}
             />
           </div>
-        )}
-
-        {activeTab === 'heroImage' && (
+        </TabPanel>
+        <TabPanel tabKey="heroImage">
           <div className="p-5">
             <HeroImagePreview
               destinationId={destinationId}
@@ -155,9 +143,8 @@ export function DestinationEditTabs({
               }}
             />
           </div>
-        )}
-
-        {activeTab === 'cardImage' && (
+        </TabPanel>
+        <TabPanel tabKey="cardImage">
           <div className="p-5">
             <CardImagePreview
               destinationId={destinationId}
@@ -171,17 +158,18 @@ export function DestinationEditTabs({
               onSizeChange={(size) => updateForm('size', size)}
             />
           </div>
-        )}
-
-        {activeTab === 'highlights' && destinationId && (
+        </TabPanel>
+        <TabPanel tabKey="highlights">
           <div className="p-5">
-            <DestinationHighlights
-              destinationId={destinationId}
-              locale={locale}
-            />
+            {destinationId && (
+              <DestinationHighlights
+                destinationId={destinationId}
+                locale={locale}
+              />
+            )}
           </div>
-        )}
-      </div>
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }
