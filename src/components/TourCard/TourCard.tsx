@@ -1,14 +1,14 @@
 import Link from 'next/link';
-import {useTranslations} from 'next-intl';
+import {useTranslations, useLocale} from 'next-intl';
 import {motion, useTransform} from 'framer-motion';
 import {routes} from '@/routes';
-import {getDestinationName} from '@/data';
 import {useCardTilt} from '@/hooks/use-card-tilt';
 import type {TourCardProps} from '@/types';
 
 export const TourCard = ({tour}: TourCardProps) => {
-  const {title, imageUrl, price, duration, distance, destinationId, slug} =
-    tour;
+  const {imageUrl, price, duration, distance, slug} = tour;
+  const locale = useLocale();
+  const title = tour.title[locale as 'en' | 'vi'] ?? tour.title.vi;
   const t = useTranslations('common');
   const {
     ref,
@@ -85,7 +85,7 @@ export const TourCard = ({tour}: TourCardProps) => {
             </li>
             <li className="flex items-center gap-1">
               <i className="fa fa-map-marker-alt text-on-surface-secondary" />{' '}
-              {getDestinationName(destinationId)}
+              {tour.destinationName}
             </li>
           </ul>
         </div>

@@ -32,8 +32,9 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
 
   const metaDescription = tour.description[locale].slice(0, 160);
 
+  const tourTitle = tour.title[locale];
   const whatsappMessage = encodeURIComponent(
-    `Hi! I'm interested in the "${tour.title}" tour.`,
+    `Hi! I'm interested in the "${tourTitle}" tour.`,
   );
   const whatsappUrl = `https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}?text=${whatsappMessage}`;
 
@@ -52,7 +53,7 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
         <AdminStatusBadge status={tour.status} />
       )}
       <Head>
-        <title>{tMeta('tourDetailTitle', {tourTitle: tour.title})}</title>
+        <title>{tMeta('tourDetailTitle', {tourTitle: tourTitle})}</title>
         <meta name="description" content={metaDescription} />
       </Head>
 
@@ -107,7 +108,7 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
                       locale={locale}
                       onPriceChange={handlePriceChange}
                     />
-                    <TourCTA tourTitle={tour.title} />
+                    <TourCTA tourTitle={tourTitle} />
                     <TourDetails tour={tour} />
                     <TourPayment
                       paymentDetails={tour.paymentDetails}
@@ -152,7 +153,7 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
               WhatsApp
             </a>
             <a
-              href={`mailto:${contactInfo.email}?subject=${encodeURIComponent(`Inquiry: ${tour.title}`)}`}
+              href={`mailto:${contactInfo.email}?subject=${encodeURIComponent(`Inquiry: ${tourTitle}`)}`}
               className="bg-primary text-on-primary px-4 py-2 rounded-lg type-label-sm font-semibold"
             >
               Email

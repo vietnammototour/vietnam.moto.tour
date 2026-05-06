@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import {useTranslations} from 'next-intl';
+import {useTranslations, useLocale} from 'next-intl';
 import {motion, useMotionTemplate} from 'framer-motion';
 import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
 import {clipReveal, slideFromLeft} from '@/utils/motion-variants';
 import {routes} from '@/routes';
-import {getDestinationName} from '@/data';
 import type {Tour} from '@/types';
 
 type TourHeroProps = {
@@ -17,12 +16,14 @@ type TourHeroProps = {
 
 export function TourHero({tour, preview}: TourHeroProps) {
   const t = useTranslations('tourDetail');
+  const locale = useLocale();
   const spotlight = useCursorSpotlight(250, 0.12);
   const spotlightBg = useMotionTemplate`radial-gradient(250px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.12), transparent)`;
 
   const isPreview = !!preview;
   const heroImage = preview?.heroImage ?? tour?.destinationHeroImage;
-  const displayName = preview?.destinationName ?? tour?.title;
+  const tourTitle = tour?.title[locale as 'en' | 'vi'] ?? tour?.title.vi ?? '';
+  const displayName = preview?.destinationName ?? tourTitle;
 
   return (
     <section className="relative">
@@ -62,8 +63,7 @@ export function TourHero({tour, preview}: TourHeroProps) {
                 className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface-inverse/80 type-body-sm"
               >
                 <span className="flex items-center gap-1.5">
-                  <i className="fa fa-map-marker-alt" />{' '}
-                  {getDestinationName(tour.destinationId)}
+                  <i className="fa fa-map-marker-alt" /> {tour.destinationName}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <i className="fa fa-clock" /> {tour.duration} {t('days')}
@@ -111,9 +111,7 @@ export function TourHero({tour, preview}: TourHeroProps) {
                 {t('breadcrumbTours')}
               </Link>
               <span>/</span>
-              <span className="text-on-surface type-label-lg">
-                {tour.title}
-              </span>
+              <span className="text-on-surface type-label-lg">{tourTitle}</span>
             </nav>
           </div>
         </div>

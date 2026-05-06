@@ -27,15 +27,12 @@ export default function Tours({allTours, isAdmin}: ToursPageProps) {
 
   const tours = useMemo(() => {
     const destinationParam = router.query.destination;
-    if (typeof destinationParam === 'string') {
-      const destinationId = Number(destinationParam);
-      if (!Number.isNaN(destinationId)) {
-        const filtered = allTours.filter(
-          (t) => t.destinationId === destinationId,
-        );
-        if (filtered.length > 0) {
-          return filtered;
-        }
+    if (typeof destinationParam === 'string' && destinationParam) {
+      const filtered = allTours.filter(
+        (t) => t.destinationId === destinationParam,
+      );
+      if (filtered.length > 0) {
+        return filtered;
       }
     }
     return allTours;
