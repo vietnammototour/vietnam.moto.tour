@@ -3,82 +3,100 @@ import {requireAdmin} from '@/lib/admin-auth';
 import {prisma} from '@/lib/prisma';
 import {promises as fs} from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import {IncomingForm, type File} from 'formidable';
+import {resolveUploadPath} from '@/lib/upload-dir';
+import {sniffImageFormat} from '@/lib/image-magic';
+import {
+  isValidEntityType,
+  isValidImageType,
+  isValidCombination,
+  getDbField,
+  type EntityType,
+  type ImageType,
+} from '@/lib/upload-entities';
 
-// Disable Next.js body parser for multipart
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export const config = {api: {bodyParser: false}};
 
-const UPLOAD_DIR =
-  process.env.UPLOAD_DIR || path.join(process.cwd(), 'public/uploads');
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_BYTES = 2 * 1024 * 1024;
 
-const VALID_ENTITY_TYPES = ['tour', 'destination'] as const;
-const VALID_IMAGE_TYPES = ['card', 'hero'] as const;
-
-type EntityType = (typeof VALID_ENTITY_TYPES)[number];
-type ImageType = (typeof VALID_IMAGE_TYPES)[number];
-
-function parseForm(
-  req: NextApiRequest,
-): Promise<{fields: Record<string, string>; file: File}> {
+function parseForm(req: NextApiRequest): Promise<{
+  fields: Record<string, string>;
+  file: File;
+}> {
   return new Promise((resolve, reject) => {
     const form = new IncomingForm({
-      maxFileSize: MAX_FILE_SIZE,
-      filter: ({mimetype}) => !!mimetype && mimetype.startsWith('image/'),
+      maxFileSize: MAX_BYTES,
+      filter: ({mimetype}) => mimetype === 'image/webp',
     });
-
     form.parse(req, (err, fields, files) => {
       if (err) return reject(err);
       const file = Array.isArray(files.file) ? files.file[0] : files.file;
       if (!file) return reject(new Error('No file uploaded'));
-
-      const parsed: Record<string, string> = {};
-      for (const [key, val] of Object.entries(fields)) {
-        parsed[key] = Array.isArray(val) ? val[0] : (val ?? '');
+      const flat: Record<string, string> = {};
+      for (const [k, v] of Object.entries(fields)) {
+        flat[k] = Array.isArray(v) ? v[0] : (v ?? '');
       }
-      resolve({fields: parsed, file});
+      resolve({fields: flat, file});
     });
   });
 }
 
-function getDestDir(entityType: EntityType, entityId: string): string {
-  return path.join(UPLOAD_DIR, `${entityType}s`, entityId);
-}
-
-function getExtension(file: File): string {
-  const name = file.originalFilename || '';
-  const ext = path.extname(name).toLowerCase();
-  return ext || '.jpg';
-}
-
-function getPublicUrl(
+async function checkEntityExists(
   entityType: EntityType,
   entityId: string,
-  imageType: ImageType,
-  ext: string,
-): string {
-  return `/uploads/${entityType}s/${entityId}/${imageType}${ext}`;
-}
-
-async function updateDbField(
-  entityType: EntityType,
-  entityId: string,
-  imageType: ImageType,
-  url: string,
-) {
+): Promise<boolean> {
+  if (entityType === 'tour') {
+    return !!(await prisma.tour.findUnique({where: {id: entityId}}));
+  }
   if (entityType === 'destination') {
-    const field = imageType === 'card' ? 'imageUrl' : 'heroImage';
-    await prisma.destination.update({
-      where: {id: entityId},
-      data: {[field]: url},
-    });
-  } else {
-    // Tour only has 'card' (imageUrl)
-    await prisma.tour.update({where: {id: entityId}, data: {imageUrl: url}});
+    return !!(await prisma.destination.findUnique({where: {id: entityId}}));
+  }
+  return !!(await prisma.highlight.findUnique({where: {id: entityId}}));
+}
+
+async function readPreviousUrl(
+  entityType: EntityType,
+  entityId: string,
+  imageType: ImageType,
+): Promise<string | null> {
+  if (entityType === 'destination' && imageType === 'hero') {
+    const r = await prisma.destination.findUnique({where: {id: entityId}});
+    return r?.heroImage ?? null;
+  }
+  if (entityType === 'tour') {
+    const r = await prisma.tour.findUnique({where: {id: entityId}});
+    return r?.imageUrl ?? null;
+  }
+  if (entityType === 'destination') {
+    const r = await prisma.destination.findUnique({where: {id: entityId}});
+    return r?.imageUrl ?? null;
+  }
+  const r = await prisma.highlight.findUnique({where: {id: entityId}});
+  return r?.imageUrl ?? null;
+}
+
+async function updateDb(
+  entityType: EntityType,
+  entityId: string,
+  imageType: ImageType,
+  url: string | null,
+) {
+  const {model, field} = getDbField(entityType, imageType);
+  const data = {[field]: url};
+  if (model === 'tour') await prisma.tour.update({where: {id: entityId}, data});
+  else if (model === 'destination')
+    await prisma.destination.update({where: {id: entityId}, data});
+  else await prisma.highlight.update({where: {id: entityId}, data});
+}
+
+async function unlinkPublicUrl(url: string | null | undefined) {
+  if (!url || !url.startsWith('/uploads/')) return;
+  try {
+    const abs = resolveUploadPath(url.replace(/^\/uploads\//, ''));
+    await fs.unlink(abs);
+  } catch {
+    /* best-effort */
   }
 }
 
@@ -86,128 +104,117 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const isAuthed = await requireAdmin(req, res);
-  if (!isAuthed) return;
+  const ok = await requireAdmin(req, res);
+  if (!ok) return;
 
-  if (req.method === 'POST') {
-    let parsed;
-    try {
-      parsed = await parseForm(req);
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'Invalid upload';
-      return res.status(400).json({error: message});
-    }
-
-    const {fields, file} = parsed;
-    const entityType = fields.entityType as EntityType;
-    const entityId = fields.entityId;
-    const imageType = fields.imageType as ImageType;
-
-    // Validate entityType
-    if (!VALID_ENTITY_TYPES.includes(entityType)) {
-      return res.status(400).json({error: `Invalid entityType: ${entityType}`});
-    }
-
-    // Validate imageType
-    if (!VALID_IMAGE_TYPES.includes(imageType)) {
-      return res.status(400).json({error: `Invalid imageType: ${imageType}`});
-    }
-
-    // hero only valid for destinations
-    if (imageType === 'hero' && entityType !== 'destination') {
-      return res
-        .status(400)
-        .json({error: 'hero imageType only valid for destinations'});
-    }
-
-    // Validate entity exists
-    try {
-      if (entityType === 'destination') {
-        const dest = await prisma.destination.findUnique({
-          where: {id: entityId},
-        });
-        if (!dest)
-          return res.status(404).json({error: 'Destination not found'});
-      } else {
-        const tour = await prisma.tour.findUnique({where: {id: entityId}});
-        if (!tour) return res.status(404).json({error: 'Tour not found'});
-      }
-    } catch {
-      return res.status(404).json({error: 'Entity not found'});
-    }
-
-    try {
-      const destDir = getDestDir(entityType, entityId);
-      await fs.mkdir(destDir, {recursive: true});
-
-      const ext = getExtension(file);
-      const outputPath = path.join(destDir, `${imageType}${ext}`);
-      await fs.copyFile(file.filepath, outputPath);
-
-      // Update DB
-      const publicUrl = getPublicUrl(entityType, entityId, imageType, ext);
-      await updateDbField(entityType, entityId, imageType, publicUrl);
-
-      // Clean up temp file
-      await fs.unlink(file.filepath).catch(() => {});
-
-      return res.json({success: true, url: publicUrl});
-    } catch (err) {
-      // Clean up temp file on failure
-      await fs.unlink(file.filepath).catch(() => {});
-      console.error('File save failed:', err);
-      return res.status(500).json({
-        error: 'File save failed',
-        details: err instanceof Error ? err.message : String(err),
-      });
-    }
-  }
-
-  if (req.method === 'DELETE') {
-    // Body parser is disabled for multipart, so parse JSON manually
-    let body: {entityType: EntityType; entityId: string; imageType: ImageType};
-    try {
-      const chunks: Buffer[] = [];
-      for await (const chunk of req) {
-        chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
-      }
-      body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
-    } catch {
-      return res.status(400).json({error: 'Invalid JSON body'});
-    }
-
-    const {entityType, entityId, imageType} = body;
-
-    if (
-      !entityId ||
-      !VALID_ENTITY_TYPES.includes(entityType) ||
-      !VALID_IMAGE_TYPES.includes(imageType)
-    ) {
-      return res.status(400).json({error: 'Invalid parameters'});
-    }
-
-    try {
-      // Remove any file matching imageType regardless of extension
-      const destDir = getDestDir(entityType, entityId);
-      const files = await fs.readdir(destDir).catch(() => [] as string[]);
-      for (const f of files) {
-        if (f.startsWith(`${imageType}.`)) {
-          await fs.unlink(path.join(destDir, f)).catch(() => {});
-        }
-      }
-
-      await updateDbField(entityType, entityId, imageType, '');
-
-      return res.json({success: true});
-    } catch (err) {
-      console.error('Image delete failed:', err);
-      return res.status(500).json({
-        error: 'Delete failed',
-        details: err instanceof Error ? err.message : String(err),
-      });
-    }
-  }
-
+  if (req.method === 'POST') return handlePost(req, res);
+  if (req.method === 'DELETE') return handleDelete(req, res);
   res.setHeader('Allow', 'POST, DELETE');
   return res.status(405).json({error: 'Method not allowed'});
+}
+
+async function handlePost(req: NextApiRequest, res: NextApiResponse) {
+  let parsed;
+  try {
+    parsed = await parseForm(req);
+  } catch (e) {
+    return res
+      .status(400)
+      .json({error: e instanceof Error ? e.message : 'Invalid upload'});
+  }
+  const {fields, file} = parsed;
+  const entityType = fields.entityType;
+  const entityId = fields.entityId;
+  const imageType = fields.imageType;
+
+  if (!isValidEntityType(entityType))
+    return res.status(400).json({error: `Invalid entityType: ${entityType}`});
+  if (!isValidImageType(imageType))
+    return res.status(400).json({error: `Invalid imageType: ${imageType}`});
+  if (!isValidCombination(entityType, imageType))
+    return res.status(400).json({error: 'Invalid entityType/imageType pair'});
+
+  const exists = await checkEntityExists(entityType, entityId);
+  if (!exists) {
+    await fs.unlink(file.filepath).catch(() => {});
+    return res.status(404).json({error: 'Entity not found'});
+  }
+
+  const head = await fs.readFile(file.filepath);
+  // Node Buffers share an underlying ArrayBuffer pool — slice to get the exact
+  // window before passing to the magic-byte sniffer.
+  const sniff = sniffImageFormat(
+    head.buffer.slice(head.byteOffset, head.byteOffset + head.byteLength),
+  );
+  if (sniff !== 'webp') {
+    await fs.unlink(file.filepath).catch(() => {});
+    return res.status(400).json({error: 'invalid_format'});
+  }
+
+  const hash = crypto
+    .createHash('sha256')
+    .update(head)
+    .digest('hex')
+    .slice(0, 8);
+
+  const relDir = `${entityType}s/${entityId}`;
+  const relFile = `${relDir}/${imageType}.${hash}.webp`;
+  const absFile = resolveUploadPath(relFile);
+  const tmpFile = absFile + '.tmp';
+
+  try {
+    await fs.mkdir(path.dirname(absFile), {recursive: true});
+    await fs.writeFile(tmpFile, head);
+    await fs.rename(tmpFile, absFile);
+  } catch {
+    await fs.unlink(tmpFile).catch(() => {});
+    await fs.unlink(file.filepath).catch(() => {});
+    return res.status(500).json({error: 'write_failed'});
+  }
+
+  const previousUrl = await readPreviousUrl(entityType, entityId, imageType);
+  const publicUrl = `/uploads/${relFile}`;
+
+  try {
+    await updateDb(entityType, entityId, imageType, publicUrl);
+  } catch {
+    await fs.unlink(absFile).catch(() => {});
+    await fs.unlink(file.filepath).catch(() => {});
+    return res.status(500).json({error: 'db_update_failed'});
+  }
+
+  if (previousUrl && previousUrl !== publicUrl) {
+    await unlinkPublicUrl(previousUrl);
+  }
+  await fs.unlink(file.filepath).catch(() => {});
+
+  return res.status(200).json({url: publicUrl, hash, byteSize: head.length});
+}
+
+async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
+  let body: {entityType: string; entityId: string; imageType: string};
+  try {
+    const chunks: Buffer[] = [];
+    for await (const c of req) {
+      chunks.push(typeof c === 'string' ? Buffer.from(c) : c);
+    }
+    body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
+  } catch {
+    return res.status(400).json({error: 'Invalid JSON body'});
+  }
+
+  const {entityType, entityId, imageType} = body;
+  if (!isValidEntityType(entityType) || !isValidImageType(imageType))
+    return res.status(400).json({error: 'Invalid parameters'});
+  if (!isValidCombination(entityType, imageType))
+    return res.status(400).json({error: 'Invalid entityType/imageType pair'});
+
+  const previous = await readPreviousUrl(entityType, entityId, imageType);
+  try {
+    await updateDb(entityType, entityId, imageType, null);
+  } catch {
+    return res.status(500).json({error: 'db_update_failed'});
+  }
+  if (previous) await unlinkPublicUrl(previous);
+  return res.status(200).json({success: true});
 }

@@ -6,8 +6,8 @@ export function toDestination(row: PrismaDestination): Destination {
     id: row.id,
     slug: row.slug,
     name: row.name,
-    imageUrl: row.imageUrl,
-    heroImage: row.heroImage,
+    imageUrl: row.imageUrl ?? '',
+    heroImage: row.heroImage ?? '',
     size: row.size === 'large' ? 'large' : 'small',
     isActive: row.isActive,
   };

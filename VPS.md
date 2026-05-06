@@ -165,3 +165,52 @@ sudo -u postgres psql -d vietnam_moto_tours -c "INSERT INTO \"User\" (id, email,
 free -h
 df -h
 ```
+
+## Image uploads (post-migration)
+
+Files live at `/var/lib/vmt-uploads`, owned by the pm2 user. **Not** inside the repo. Deploys cannot touch them.
+
+Bootstrap (run once as root):
+
+    mkdir -p /var/lib/vmt-uploads
+    chown <pm2-user>:<pm2-user> /var/lib/vmt-uploads
+    chmod 0750 /var/lib/vmt-uploads
+
+Set in `.env` on the VPS:
+
+    UPLOAD_DIR=/var/lib/vmt-uploads
+
+Health check: `curl localhost:3000/api/health/uploads` → `{writable, freeBytes}`.
+
+### Weekly orphan sweep
+
+Add to root crontab:
+
+    0 4 * * 0 cd /var/www/vietnam-moto-tours && /home/ci-cd/.nvm/versions/node/v24.14.0/bin/pnpm sweep:uploads >> /var/log/vmt-sweep.log 2>&1
+
+### Backup
+
+    0 3 * * * rsync -a /var/lib/vmt-uploads/ /backup/vmt-uploads/
+
+### One-shot legacy migration
+
+Run once after deploying the new code, before the final cleanup commit:
+
+    cd /var/www/vietnam-moto-tours
+    pnpm migrate:uploads --dry-run    # review
+    pnpm migrate:uploads
+
+### Manual VPS migration runbook
+
+1. SSH to VPS.
+2. Run bootstrap commands above.
+3. Confirm `/var/lib/vmt-uploads` exists and is writable by pm2 user.
+4. Pull the deployed code (latest with upload changes).
+5. Run `pnpm migrate:uploads --dry-run`, review output.
+6. Run `pnpm migrate:uploads`.
+7. Edit `/var/www/vietnam-moto-tours/.env`, add `UPLOAD_DIR=/var/lib/vmt-uploads`.
+8. `pm2ci restart all`.
+9. Open the site, verify destination/tour images render.
+10. Verify admin panel upload + delete works end to end.
+
+**Rollback:** comment out `UPLOAD_DIR` in `.env`, `pm2ci restart all`. Code falls back to `<cwd>/.uploads`. To restore service quickly: `mv /var/lib/vmt-uploads/* <repo>/public/uploads/`.

@@ -2,6 +2,7 @@ import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
+import {type ImageSlot} from '@/lib/image-slot';
 import type * as VMT from '@/domain';
 
 type Destination = {
@@ -15,7 +16,7 @@ const emptyGeneral = {
   title: '',
   titleVi: '',
   titleEn: '',
-  imageUrl: '',
+  imageCard: {kind: 'empty'} as ImageSlot,
   price: 0,
   duration: 1,
   distance: 0,

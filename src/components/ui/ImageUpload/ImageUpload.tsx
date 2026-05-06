@@ -1,69 +1,82 @@
 'use client';
 
-import {useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Button} from '@/components/ui/Button';
+import {transcodeImage, type ImagePreset} from '@/lib/image-transcode';
+import type {ImageSlot} from '@/lib/image-slot';
 
 type ImageUploadProps = {
-  value?: string;
-  onChange: (file: File | null) => void;
-  onRemove?: () => void;
-  accept?: string;
-  maxSize?: number;
-  compact?: boolean;
-  error?: string;
+  value: ImageSlot;
+  onChange: (next: ImageSlot) => void;
+  preset: ImagePreset;
   label?: string;
+  error?: string;
 };
 
 export function ImageUpload({
   value,
   onChange,
-  onRemove,
-  accept = 'image/*',
-  maxSize,
-  compact = false,
-  error,
+  preset,
   label,
+  error,
 }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
 
-  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+  useEffect(() => {
+    return () => {
+      if (value.kind === 'pending-replace') {
+        URL.revokeObjectURL(value.previewUrl);
+      }
+    };
+  }, [value]);
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    setBusy(true);
+    setLocalError(null);
 
-    if (maxSize && file.size > maxSize) {
-      return;
+    try {
+      const out = await transcodeImage(file, preset);
+      const previewUrl = URL.createObjectURL(out.blob);
+      if (value.kind === 'pending-replace') {
+        URL.revokeObjectURL(value.previewUrl);
+      }
+      onChange({
+        kind: 'pending-replace',
+        blob: out.blob,
+        previewUrl,
+        hash: out.hash,
+      });
+    } catch (err) {
+      setLocalError(localizeError(err));
+    } finally {
+      setBusy(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
-
-    onChange(file);
-    if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
-  if (compact) {
-    return (
-      <div>
-        {label && (
-          <label className="block type-label-sm text-on-surface-secondary mb-1">
-            {label}
-          </label>
-        )}
-        <Button
-          type="button"
-          size="sm"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          {value ? 'Change' : 'Upload'}
-        </Button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept={accept}
-          onChange={handleFileSelect}
-          className="hidden"
-        />
-        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-      </div>
-    );
+  function handleRemove() {
+    if (value.kind === 'saved') {
+      onChange({kind: 'pending-delete', previousUrl: value.url});
+    } else if (value.kind === 'pending-replace') {
+      URL.revokeObjectURL(value.previewUrl);
+      onChange({kind: 'empty'});
+    } else if (value.kind === 'pending-delete') {
+      onChange({kind: 'empty'});
+    }
   }
+
+  const displayUrl =
+    value.kind === 'saved'
+      ? value.url
+      : value.kind === 'pending-replace'
+        ? value.previewUrl
+        : null;
+  const showRemove = value.kind === 'saved' || value.kind === 'pending-replace';
+  const errMsg = localError ?? error ?? undefined;
 
   return (
     <div>
@@ -72,30 +85,30 @@ export function ImageUpload({
           {label}
         </label>
       )}
-
       <div className="relative group border-2 border-dashed border-border rounded-lg overflow-hidden h-40">
-        {value ? (
+        {displayUrl ? (
           <>
             <img
-              src={value}
+              src={displayUrl}
               alt="Upload preview"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
               <Button
+                type="button"
                 variant="secondary"
                 size="sm"
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-white text-gray-800"
               >
                 Replace
               </Button>
-              {onRemove && (
+              {showRemove && (
                 <Button
+                  type="button"
                   variant="danger"
                   size="sm"
-                  onClick={onRemove}
-                  aria-label="Remove image"
+                  onClick={handleRemove}
+                  aria-label="Delete"
                 >
                   Delete
                 </Button>
@@ -106,35 +119,45 @@ export function ImageUpload({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
+            disabled={busy}
             className="w-full h-full flex flex-col items-center justify-center text-on-surface-secondary hover:text-primary transition-colors cursor-pointer"
           >
-            <svg
-              className="w-8 h-8 mb-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <span className="type-body-sm">Click to upload</span>
+            <span className="type-body-sm">
+              {busy ? 'Processing…' : 'Click to upload'}
+            </span>
           </button>
         )}
-
         <input
           ref={fileInputRef}
           type="file"
-          accept={accept}
-          onChange={handleFileSelect}
+          aria-label="upload-input"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onChange={handleFile}
           className="hidden"
         />
       </div>
-
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {errMsg && <p className="mt-1 text-sm text-red-500">{errMsg}</p>}
     </div>
   );
+}
+
+function localizeError(err: unknown): string {
+  if (err && typeof err === 'object' && 'code' in err) {
+    const code = (err as {code: string}).code;
+    const sniffed = (err as {sniffed?: string}).sniffed;
+    switch (code) {
+      case 'unsupported_format':
+        if (sniffed === 'heic' || sniffed === 'heif') {
+          return 'HEIC is not supported. Export as JPEG/PNG/WebP first.';
+        }
+        return 'Use JPEG, PNG, WebP, or GIF';
+      case 'too_large':
+        return 'Image must be under 25MB';
+      case 'decode_failed':
+        return 'Could not decode this image';
+      case 'encode_failed':
+        return 'Could not produce WebP output';
+    }
+  }
+  return 'Upload failed';
 }

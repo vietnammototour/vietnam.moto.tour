@@ -20,7 +20,9 @@
     "db:seed": "npx tsx prisma/seed.ts",
     "db:seed-admin": "npx tsx prisma/seed-admin.ts",
     "db:migrate": "npx prisma migrate dev",
-    "db:studio": "npx prisma studio"
+    "db:studio": "npx prisma studio",
+    "migrate:uploads": "npx tsx scripts/migrate-uploads.ts",
+    "sweep:uploads": "npx tsx scripts/sweep-orphan-uploads.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

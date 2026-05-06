@@ -1,7 +1,11 @@
 'use client';
 
+import {useState} from 'react';
 import {DestinationCard} from '@/components/DestinationCard';
-import {ImageUploadField} from '../ImageUploadField';
+import {ImageUpload} from '@/components/ui';
+import {Button} from '@/components/ui/Button';
+import {flushImageSlots} from '@/lib/submit-with-images';
+import {savedSlot, type ImageSlot, isDirty} from '@/lib/image-slot';
 
 type CardImagePreviewProps = {
   destinationId: string | null;
@@ -31,11 +35,41 @@ export function CardImagePreview({
   onImageChange,
   onSizeChange,
 }: CardImagePreviewProps) {
+  const [slot, setSlot] = useState<ImageSlot>(savedSlot(imageUrl));
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSave() {
+    if (!destinationId || !isDirty(slot)) return;
+    setSaving(true);
+    setError(null);
+    const {errors, updated} = await flushImageSlots({
+      entityType: 'destination',
+      entityId: destinationId,
+      slots: {card: slot},
+    });
+    setSaving(false);
+    if (errors.card) {
+      setError(errors.card);
+      return;
+    }
+    const next = updated.card!;
+    setSlot(next);
+    onImageChange(next.kind === 'saved' ? next.url : '');
+  }
+
+  const previewUrl =
+    slot.kind === 'saved'
+      ? slot.url
+      : slot.kind === 'pending-replace'
+        ? slot.previewUrl
+        : '';
+
   const cardDestination = {
     id: destinationId ?? '',
     slug: '',
     name: destinationName || 'Destination Name',
-    imageUrl: imageUrl,
+    imageUrl: previewUrl,
     heroImage: '',
     size: size,
     isActive: true,
@@ -46,7 +80,6 @@ export function CardImagePreview({
 
   return (
     <div className="space-y-5">
-      {/* Controls row */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="type-label-sm text-on-surface-secondary">
@@ -77,22 +110,29 @@ export function CardImagePreview({
             </button>
           </div>
         </div>
-        <ImageUploadField
-          entityType="destination"
-          entityId={destinationId}
-          imageType="card"
-          currentUrl={imageUrl}
-          onUploadComplete={onImageChange}
-          label=""
-          compact
-        />
+        {isDirty(slot) && destinationId && (
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            onClick={handleSave}
+            loading={saving}
+          >
+            Save
+          </Button>
+        )}
       </div>
 
-      {/* Masonry grid preview */}
+      <ImageUpload
+        value={slot}
+        onChange={setSlot}
+        preset="card"
+        error={error ?? undefined}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {size === 'large' ? (
           <>
-            {/* Position 1: edited card (big, 2x2) */}
             <div className="sm:col-span-2 sm:row-span-2 relative">
               <div className="absolute top-2 left-2 z-30 bg-primary text-on-primary px-2 py-0.5 rounded type-label-sm uppercase">
                 Editing
@@ -104,7 +144,6 @@ export function CardImagePreview({
                 />
               </div>
             </div>
-            {/* Positions 2-5: placeholders */}
             <PlaceholderCard />
             <PlaceholderCard />
             <PlaceholderCard />
@@ -112,11 +151,9 @@ export function CardImagePreview({
           </>
         ) : (
           <>
-            {/* Position 1: placeholder (big, 2x2) */}
             <div className="sm:col-span-2 sm:row-span-2">
               <PlaceholderCard big />
             </div>
-            {/* Position 2: edited card (small) */}
             <div className="relative">
               <div className="absolute top-2 left-2 z-30 bg-primary text-on-primary px-2 py-0.5 rounded type-label-sm uppercase">
                 Editing
@@ -125,7 +162,6 @@ export function CardImagePreview({
                 <DestinationCard destination={cardDestination} />
               </div>
             </div>
-            {/* Positions 3-5: placeholders */}
             <PlaceholderCard />
             <PlaceholderCard />
             <PlaceholderCard />

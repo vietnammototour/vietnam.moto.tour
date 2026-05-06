@@ -4,7 +4,7 @@ import {useState, useEffect, useCallback} from 'react';
 import Image from 'next/image';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {ImageUploadField} from '../ImageUploadField';
+import {HighlightRowImage} from './HighlightRowImage';
 import {TextInput, Button} from '@/components/ui';
 import {api} from '@/routes';
 import {
@@ -84,11 +84,6 @@ export function DestinationHighlights({
     await fetchHighlights();
   }
 
-  async function handleImageUpload(id: string, imageUrl: string) {
-    await api.admin.highlights.update(id, {imageUrl});
-    await fetchHighlights();
-  }
-
   if (loading) {
     return (
       <p className="type-body-sm text-on-surface-secondary">
@@ -146,13 +141,10 @@ export function DestinationHighlights({
                   locale === 'en' ? 'English text' : 'Vietnamese text'
                 }
               />
-              <ImageUploadField
-                entityType="destination"
-                entityId={h.id}
-                imageType="card"
-                currentUrl={h.imageUrl ?? ''}
-                onUploadComplete={(url) => handleImageUpload(h.id, url)}
-                label=""
+              <HighlightRowImage
+                highlightId={h.id}
+                initialUrl={h.imageUrl}
+                onSaved={fetchHighlights}
               />
             </div>
             <Button
