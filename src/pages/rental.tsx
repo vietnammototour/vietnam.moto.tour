@@ -2,7 +2,7 @@ import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
 import type {GetStaticPropsContext} from 'next';
 import Head from 'next/head';
-import {PageHeader} from '@/components/page-header';
+import {PageHeader} from '@/components/PageHeader';
 
 const fadeInUp = {
   hidden: {opacity: 0, y: 30},

@@ -1,0 +1,1 @@
+export {TourHighlights} from './TourHighlights';

@@ -1,0 +1,1 @@
+export {TourHero} from './TourHero';

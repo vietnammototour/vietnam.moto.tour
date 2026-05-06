@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import {TourEditTabs} from '@/components/admin/TourEditTabs';
+import {TourEditTabs} from '@/components/Admin/TourEditTabs';
 import type {TourStatus} from '@/types';
 
 type Destination = {

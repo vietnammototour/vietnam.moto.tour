@@ -1,0 +1,1 @@
+export {HighlightsTab} from './HighlightsTab';

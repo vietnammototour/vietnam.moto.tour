@@ -7,17 +7,17 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import type {Tour} from '@/types';
 import {contactInfo} from '@/utils';
-import {AdminStatusBadge} from '@/components/admin-status-badge';
-import {TourHero} from '@/components/tour-hero';
-import {TourDescription} from '@/components/tour-description';
-import {TourHighlights} from '@/components/tour-highlights';
-import {TourItinerary} from '@/components/tour-itinerary';
-import {TourIncluded} from '@/components/tour-included';
-import {TourPricing} from '@/components/tour-pricing';
-import {TourCTA} from '@/components/tour-cta';
-import {TourDetails} from '@/components/tour-details';
-import {TourPayment} from '@/components/tour-payment';
-import {TourNotes} from '@/components/tour-notes';
+import {AdminStatusBadge} from '@/components/tour-detail/AdminStatusBadge';
+import {TourHero} from '@/components/TourHero';
+import {TourDescription} from '@/components/tour-detail/TourDescription';
+import {TourHighlights} from '@/components/tour-detail/TourHighlights';
+import {TourItinerary} from '@/components/TourItinerary';
+import {TourIncluded} from '@/components/tour-detail/TourIncluded';
+import {TourPricing} from '@/components/TourPricing';
+import {TourCTA} from '@/components/tour-detail/TourCTA';
+import {TourDetails} from '@/components/tour-detail/TourDetails';
+import {TourPayment} from '@/components/tour-detail/TourPayment';
+import {TourNotes} from '@/components/tour-detail/TourNotes';
 
 type TourDetailProps = {
   tour: Tour;

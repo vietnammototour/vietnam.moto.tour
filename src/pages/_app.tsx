@@ -6,9 +6,9 @@ import {useRouter} from 'next/router';
 import {DM_Sans} from 'next/font/google';
 import localFont from 'next/font/local';
 import {routes} from '@/routes';
-import {ThemeProvider} from '@/components/theme-provider';
-import {Layout} from '../components/layout/index';
-import {AdminLayout} from '@/components/admin/AdminLayout';
+import {ThemeProvider} from '@/components/ThemeProvider';
+import {Layout} from '@/components/Layout';
+import {AdminLayout} from '@/components/Admin/AdminLayout';
 import '@/styles/globals.css';
 
 const dmSans = DM_Sans({

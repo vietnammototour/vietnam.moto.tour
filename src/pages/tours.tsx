@@ -6,8 +6,8 @@ import {getServerSession} from 'next-auth/next';
 import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {PageHeader} from '@/components/page-header';
-import {TourCard} from '@/components/tour-card';
+import {PageHeader} from '@/components/PageHeader';
+import {TourCard} from '@/components/TourCard';
 import type {Tour} from '@/types';
 
 const fadeInUp = {

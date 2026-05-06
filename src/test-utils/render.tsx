@@ -1,7 +1,7 @@
 import {render, type RenderOptions} from '@testing-library/react';
 import type {ReactElement, ReactNode} from 'react';
 import {SessionProvider} from 'next-auth/react';
-import {ThemeProvider} from '@/components/theme-provider';
+import {ThemeProvider} from '@/components/ThemeProvider';
 
 function AllProviders({children}: {children: ReactNode}) {
   return (
