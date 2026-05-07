@@ -41,6 +41,7 @@ export function PerksTab({
 }: PerksTabProps) {
   const t = useTranslations('admin.tours.perksTab');
   const tPerks = useTranslations('admin.perks');
+  const tc = useTranslations('common');
   const [allPerks, setAllPerks] = useState<VMT.Perk[]>([]);
   const [included, setIncluded] = useState<Set<string>>(
     new Set(initialIncludedIds),
@@ -151,7 +152,7 @@ export function PerksTab({
           <div className="w-full flex gap-2 mb-2">
             <input
               type="search"
-              placeholder={tPerks('searchPlaceholder')}
+              placeholder={tc('search')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="px-3 py-2 border border-border rounded bg-surface"
@@ -161,7 +162,7 @@ export function PerksTab({
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="cursor-pointer px-3 py-2 border border-border rounded bg-surface"
             >
-              <option value="">{tPerks('allCategories')}</option>
+              <option value="">{tc('allCategories')}</option>
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>
                   {tPerks(`category.${c}`)}
@@ -213,7 +214,7 @@ export function PerksTab({
         {error && <p className="text-error">{error}</p>}
 
         <Button onClick={handleSave} disabled={!isDirty || saving || !tourId}>
-          {saving ? tPerks('form.saving') : t('save')}
+          {saving ? tc('form.saving') : t('save')}
         </Button>
       </div>
     </DndContext>

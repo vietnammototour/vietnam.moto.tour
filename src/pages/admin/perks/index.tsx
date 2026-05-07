@@ -17,6 +17,7 @@ const CATEGORIES: VMT.PerkCategory[] = [
 
 export default function PerksListPage() {
   const t = useTranslations('admin.perks');
+  const tc = useTranslations('common');
   const navigate = useNavigate();
   const [perks, setPerks] = useState<VMT.Perk[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,7 +80,7 @@ export default function PerksListPage() {
       <div className="flex gap-3 mb-4">
         <input
           type="search"
-          placeholder={t('searchPlaceholder')}
+          placeholder={tc('search')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="px-3 py-2 border border-border rounded bg-surface"
@@ -89,7 +90,7 @@ export default function PerksListPage() {
           onChange={(e) => setCategoryFilter(e.target.value)}
           className="cursor-pointer px-3 py-2 border border-border rounded bg-surface"
         >
-          <option value="">{t('allCategories')}</option>
+          <option value="">{tc('allCategories')}</option>
           {CATEGORIES.map((c) => (
             <option key={c} value={c}>
               {t(`category.${c}`)}
@@ -103,7 +104,7 @@ export default function PerksListPage() {
             onChange={(e) => setShowArchived(e.target.checked)}
             className="cursor-pointer"
           />
-          {t('showArchived')}
+          {tc('showArchived')}
         </label>
       </div>
 
@@ -129,23 +130,23 @@ export default function PerksListPage() {
                 </div>
                 {p.archived && (
                   <span className="px-2 py-0.5 text-xs bg-surface-alt rounded">
-                    {t('archived')}
+                    {tc('archived')}
                   </span>
                 )}
                 <Link
                   href={routes.admin.perks.edit.path({id: p.id})}
                   className="text-primary cursor-pointer"
                 >
-                  {t('edit')}
+                  {tc('edit')}
                 </Link>
                 <Button
                   variant="secondary"
                   onClick={() => handleArchiveToggle(p)}
                 >
-                  {p.archived ? t('unarchive') : t('archive')}
+                  {p.archived ? tc('unarchive') : tc('archive')}
                 </Button>
                 <Button variant="secondary" onClick={() => handleDelete(p)}>
-                  {t('delete')}
+                  {tc('delete')}
                 </Button>
               </li>
             ))}

@@ -19,6 +19,7 @@ type PerkFormProps = {
 
 export function PerkForm({mode, initialData, onSubmit}: PerkFormProps) {
   const t = useTranslations('admin.perks');
+  const tc = useTranslations('common');
   const {
     register,
     handleSubmit,
@@ -39,20 +40,20 @@ export function PerkForm({mode, initialData, onSubmit}: PerkFormProps) {
     >
       <TextInput
         id="labelEn"
-        label={t('form.labelEn')}
+        label={tc('form.labelEn')}
         {...register('labelEn')}
         error={errors.labelEn?.message}
       />
 
       <TextInput
         id="labelVi"
-        label={t('form.labelVi')}
+        label={tc('form.labelVi')}
         {...register('labelVi')}
         error={errors.labelVi?.message}
       />
 
       <FormField
-        label={t('form.category')}
+        label={tc('form.category')}
         htmlFor="category"
         error={errors.category?.message}
       >
@@ -70,7 +71,7 @@ export function PerkForm({mode, initialData, onSubmit}: PerkFormProps) {
       </FormField>
 
       <FormField
-        label={t('form.icon')}
+        label={tc('form.icon')}
         htmlFor="icon"
         error={errors.icon?.message}
       >
@@ -81,7 +82,7 @@ export function PerkForm({mode, initialData, onSubmit}: PerkFormProps) {
       </FormField>
 
       {mode === 'edit' && (
-        <FormField label={t('form.archived')} htmlFor="archived">
+        <FormField label={tc('form.archived')} htmlFor="archived">
           <input
             id="archived"
             type="checkbox"
@@ -92,7 +93,7 @@ export function PerkForm({mode, initialData, onSubmit}: PerkFormProps) {
       )}
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? t('form.saving') : t('form.save')}
+        {isSubmitting ? tc('form.saving') : tc('form.save')}
       </Button>
     </form>
   );
