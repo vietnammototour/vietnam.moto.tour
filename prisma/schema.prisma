@@ -45,6 +45,7 @@ model Tour {
   guided         String      @default("")
   images         Json        @default("[]")
   highlights     Highlight[]
+  perks          TourPerk[]
   itinerary      Json        @default("[]")
   pricingGroups  Json        @default("[]")
   included       Json        @default("[]")
@@ -84,6 +85,43 @@ model Highlight {
   imageUrl      String?
   createdAt     DateTime    @default(now())
   tours         Tour[]
+}
+
+enum PerkCategory {
+  TRANSPORT
+  FOOD
+  ACCOMMODATION
+  GUIDE
+  SUPPORT
+  OTHER
+}
+
+enum PerkBucket {
+  INCLUDED
+  EXCLUDED
+}
+
+model Perk {
+  id        String       @id @default(uuid())
+  labelEn   String
+  labelVi   String
+  icon      String
+  category  PerkCategory @default(OTHER)
+  archived  Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  tours     TourPerk[]
+}
+
+model TourPerk {
+  tourId String
+  perkId String
+  bucket PerkBucket
+  tour   Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  perk   Perk @relation(fields: [perkId], references: [id], onDelete: Cascade)
+
+  @@id([tourId, perkId])
+  @@index([perkId])
 }
 
 model Translation {
