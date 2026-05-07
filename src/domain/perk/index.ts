@@ -6,4 +6,4 @@ import type {
 
 export type PerkCategory = PrismaPerkCategory;
 export type PerkBucket = PrismaPerkBucket;
-export type Perk = Omit<PrismaPerk, 'createdAt'>;
+export type Perk = Omit<PrismaPerk, 'createdAt' | 'updatedAt'>;

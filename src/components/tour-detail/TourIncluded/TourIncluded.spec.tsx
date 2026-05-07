@@ -10,7 +10,6 @@ function makePerk(overrides: Partial<VMT.Perk> = {}): VMT.Perk {
     icon: 'fa fa-bed',
     category: 'ACCOMMODATION',
     archived: false,
-    updatedAt: new Date('2026-01-01T00:00:00Z'),
     ...overrides,
   };
 }

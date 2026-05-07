@@ -21,7 +21,7 @@ export type PrismaTourWithRelations = PrismaTour & {
 };
 
 function toPerk(p: PrismaPerk): Perk {
-  const {createdAt: _omit, ...rest} = p;
+  const {createdAt: _c, updatedAt: _u, ...rest} = p;
   return rest;
 }
 

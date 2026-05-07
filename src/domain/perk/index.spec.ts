@@ -9,7 +9,6 @@ describe('Perk domain types', () => {
       icon: 'fa-solid fa-motorcycle',
       category: 'TRANSPORT',
       archived: false,
-      updatedAt: new Date(),
     };
     expect(p.labelEn).toBe('Bike Hire');
   });
