@@ -23,6 +23,7 @@
     "db:studio": "npx prisma studio",
     "migrate:uploads": "npx tsx scripts/migrate-uploads.ts",
     "migrate:perks": "npx tsx scripts/migrate-perks.ts",
+    "migrate:perks-translations": "npx tsx scripts/migrate-perks-translations.ts",
     "sweep:uploads": "npx tsx scripts/sweep-orphan-uploads.ts"
   },
   "dependencies": {
