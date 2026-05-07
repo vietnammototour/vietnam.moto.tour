@@ -19,8 +19,6 @@ export const generalTabSchema = yup.object({
   hotel: yup.string().defined(),
   guided: yup.string().defined(),
   images: yup.array().of(yup.string().required()).defined(),
-  included: yup.mixed<VMT.LocalizedText[]>().defined(),
-  excluded: yup.mixed<VMT.LocalizedText[]>().defined(),
   paymentDetails: yup.mixed<VMT.LocalizedText>().defined(),
   notes: yup.mixed<VMT.LocalizedText[]>().defined(),
   mealsInfo: yup.mixed<VMT.LocalizedText>().defined(),

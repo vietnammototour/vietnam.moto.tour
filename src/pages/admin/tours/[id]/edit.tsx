@@ -74,8 +74,6 @@ export default function EditTour() {
     hotel: (tour.hotel as string) ?? '',
     guided: (tour.guided as string) ?? '',
     images: (tour.images as string[]) ?? [],
-    included: (tour.included as Array<{en: string; vi: string}>) ?? [],
-    excluded: (tour.excluded as Array<{en: string; vi: string}>) ?? [],
     paymentDetails: (tour.paymentDetails as {en: string; vi: string}) ?? {
       en: '',
       vi: '',

@@ -40,8 +40,6 @@ export default async function handler(
       'images',
       'itinerary',
       'pricingGroups',
-      'included',
-      'excluded',
       'paymentDetails',
       'notes',
       'mealsInfo',

@@ -25,8 +25,6 @@ const emptyGeneral = {
   hotel: '',
   guided: '',
   images: [] as string[],
-  included: [] as Array<{en: string; vi: string}>,
-  excluded: [] as Array<{en: string; vi: string}>,
   paymentDetails: {en: '', vi: ''},
   notes: [] as Array<{en: string; vi: string}>,
   mealsInfo: {en: '', vi: ''},

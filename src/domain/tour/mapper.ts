@@ -24,8 +24,6 @@ export function toTour(row: PrismaTourWithRelations): Tour {
     images: row.images as unknown as string[],
     itinerary: row.itinerary as unknown as ItineraryDay[],
     pricingGroups: row.pricingGroups as unknown as PricingGroup[],
-    included: row.included as unknown as LocalizedText[],
-    excluded: row.excluded as unknown as LocalizedText[],
     paymentDetails: row.paymentDetails as unknown as LocalizedText,
     notes: row.notes as unknown as LocalizedText[],
     mealsInfo: row.mealsInfo as unknown as LocalizedText,

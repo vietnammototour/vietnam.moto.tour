@@ -20,8 +20,6 @@ export type Tour = Omit<
   | 'images'
   | 'itinerary'
   | 'pricingGroups'
-  | 'included'
-  | 'excluded'
   | 'paymentDetails'
   | 'notes'
   | 'mealsInfo'
@@ -35,8 +33,6 @@ export type Tour = Omit<
   images: string[];
   itinerary: ItineraryDay[];
   pricingGroups: PricingGroup[];
-  included: LocalizedText[];
-  excluded: LocalizedText[];
   paymentDetails: LocalizedText;
   notes: LocalizedText[];
   mealsInfo: LocalizedText;

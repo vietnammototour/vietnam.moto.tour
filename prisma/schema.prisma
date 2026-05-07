@@ -48,8 +48,6 @@ model Tour {
   perks          TourPerk[]
   itinerary      Json        @default("[]")
   pricingGroups  Json        @default("[]")
-  included       Json        @default("[]")
-  excluded       Json        @default("[]")
   paymentDetails Json        @default("{}")
   notes          Json        @default("[]")
   mealsInfo      Json        @default("{}")
