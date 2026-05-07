@@ -2,38 +2,65 @@
 
 import {NextIntlClientProvider} from 'next-intl';
 
-/**
- * Wraps public-facing components used in admin previews with
- * hardcoded English translations so keys render as readable text.
- */
-
-const adminMessages = {
-  tourDetail: {
-    pricing: 'Pricing',
-    pricingPerPerson: 'per person',
-    howManyPeople: 'How many people?',
-    decreasePeople: 'Decrease',
-    increasePeople: 'Increase',
-    people: 'people',
-    pax: 'pax',
-    largerGroupBetterPrice: 'Larger group = better price',
-    itinerary: 'Itinerary',
-    days: 'days',
-    transportation: 'Transportation',
-    duration: 'Duration',
-    distance: 'Distance',
-    group: 'Group Size',
-    hotel: 'Hotel',
-    guided: 'Guided',
+const messagesByLocale = {
+  en: {
+    tourDetail: {
+      tourDetails: 'Tour details',
+      pricing: 'Pricing',
+      pricingPerPerson: 'per person',
+      howManyPeople: 'How many people?',
+      decreasePeople: 'Decrease',
+      increasePeople: 'Increase',
+      people: 'people',
+      pax: 'pax',
+      largerGroupBetterPrice: 'Larger group = better price',
+      itinerary: 'Itinerary',
+      days: 'days',
+      transportation: 'Transportation',
+      duration: 'Duration',
+      distance: 'Distance',
+      group: 'Group Size',
+      hotel: 'Hotel',
+      guided: 'Guided',
+    },
+    common: {
+      perPerson: 'per person',
+    },
   },
-  common: {
-    perPerson: 'per person',
+  vi: {
+    tourDetail: {
+      tourDetails: 'Chi tiết tour',
+      pricing: 'Giá',
+      pricingPerPerson: 'mỗi người',
+      howManyPeople: 'Bao nhiêu người?',
+      decreasePeople: 'Giảm',
+      increasePeople: 'Tăng',
+      people: 'người',
+      pax: 'khách',
+      largerGroupBetterPrice: 'Nhóm lớn hơn = giá tốt hơn',
+      itinerary: 'Lịch trình',
+      days: 'ngày',
+      transportation: 'Di chuyển',
+      duration: 'Thời lượng',
+      distance: 'Khoảng cách',
+      group: 'Nhóm',
+      hotel: 'Khách sạn',
+      guided: 'Hướng dẫn',
+    },
+    common: {
+      perPerson: 'mỗi người',
+    },
   },
 };
 
-export function AdminIntlProvider({children}: {children: React.ReactNode}) {
+type Props = {
+  children: React.ReactNode;
+  locale?: 'en' | 'vi';
+};
+
+export function AdminIntlProvider({children, locale = 'en'}: Props) {
   return (
-    <NextIntlClientProvider locale="en" messages={adminMessages}>
+    <NextIntlClientProvider locale={locale} messages={messagesByLocale[locale]}>
       {children}
     </NextIntlClientProvider>
   );

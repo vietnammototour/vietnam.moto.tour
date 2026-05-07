@@ -9,6 +9,8 @@ import type {GeneralTabData} from '../tabs/GeneralTab';
 import {ItineraryTab} from '../tabs/ItineraryTab';
 import {PricingTab} from '../tabs/PricingTab';
 import {HighlightsTab} from '../tabs/HighlightsTab';
+import {LocalePicker, type Locale} from '../LocalePicker';
+import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
 
 type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights';
 
@@ -37,6 +39,10 @@ export function TourEditTabs({
   const [destinationId, setDestinationId] = useState(
     initialGeneral.destinationId,
   );
+  const [locale, setLocale] = useState<Locale>('en');
+
+  const destinationName =
+    destinations.find((d) => d.id === destinationId)?.name ?? '';
 
   const handleGeneralSave = useCallback(
     async (data: Omit<GeneralTabData, 'imageCard'>): Promise<string> => {
@@ -93,18 +99,36 @@ export function TourEditTabs({
   const isTabDisabled = (tabId: TabId) =>
     tabId !== 'general' && mode === 'create' && !tourId;
 
+  const tourName =
+    initialGeneral.title ||
+    initialGeneral.titleEn ||
+    initialGeneral.titleVi ||
+    '';
+  const currentLabel =
+    mode === 'create' ? 'New tour' : tourName || 'Untitled tour';
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">
-          {mode === 'create' ? 'Create New Tour' : 'Edit Tour'}
-        </h1>
-        <Button
-          variant="secondary"
-          onClick={() => navigate.to(routes.admin.tours.list)}
-        >
-          Back to Tours
-        </Button>
+      <div className="flex items-start justify-between mb-6 gap-4">
+        <div className="min-w-0">
+          <AdminBreadcrumbs
+            items={[
+              {label: 'Admin', href: routes.admin.dashboard.path()},
+              {label: 'Tours', href: routes.admin.tours.list.path()},
+              {label: currentLabel},
+            ]}
+          />
+          <h1 className="type-headline-sm truncate">{currentLabel}</h1>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
+          <LocalePicker value={locale} onChange={setLocale} />
+          <Button
+            variant="secondary"
+            onClick={() => navigate.to(routes.admin.tours.list)}
+          >
+            Back to Tours
+          </Button>
+        </div>
       </div>
 
       <Tabs
@@ -139,6 +163,8 @@ export function TourEditTabs({
               initialData={initialGeneral}
               destinations={destinations}
               tourId={tourId}
+              locale={locale}
+              destinationName={destinationName}
               onDestinationChange={setDestinationId}
               onSave={handleGeneralSave}
             />
@@ -147,12 +173,14 @@ export function TourEditTabs({
         <TabPanel tabKey="itinerary">
           <ItineraryTab
             initialData={initialItinerary}
+            locale={locale}
             onSave={handleItinerarySave}
           />
         </TabPanel>
         <TabPanel tabKey="pricing">
           <PricingTab
             initialData={initialPricingGroups}
+            locale={locale}
             onSave={handlePricingSave}
           />
         </TabPanel>

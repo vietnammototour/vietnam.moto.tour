@@ -8,6 +8,7 @@ import {HeroImagePreview} from '../HeroImagePreview';
 import {CardImagePreview} from '../CardImagePreview';
 import {DestinationHighlights} from '../DestinationHighlights';
 import {LocalePicker, type Locale} from '../LocalePicker';
+import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
 
 type TabId = 'general' | 'heroImage' | 'cardImage' | 'highlights';
 
@@ -75,13 +76,27 @@ export function DestinationEditTabs({
 
   const currentName = locale === 'en' ? form.nameEn : form.nameVi;
 
+  const destName = form.name || form.nameEn || form.nameVi || '';
+  const currentLabel =
+    mode === 'create' ? 'New destination' : destName || 'Untitled destination';
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">
-          {mode === 'create' ? 'Create New Destination' : 'Edit Destination'}
-        </h1>
-        <div className="flex items-center gap-3">
+      <div className="flex items-start justify-between mb-6 gap-4">
+        <div className="min-w-0">
+          <AdminBreadcrumbs
+            items={[
+              {label: 'Admin', href: routes.admin.dashboard.path()},
+              {
+                label: 'Destinations',
+                href: routes.admin.destinations.list.path(),
+              },
+              {label: currentLabel},
+            ]}
+          />
+          <h1 className="type-headline-sm truncate">{currentLabel}</h1>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
           <LocalePicker value={locale} onChange={setLocale} />
           <Button
             variant="secondary"

@@ -5,7 +5,6 @@ import {useForm, useFieldArray, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import type * as VMT from '@/domain';
 import {EditableProvider} from '../../EditableContext';
-import {LocalePicker} from '../../LocalePicker';
 import {AdminIntlProvider} from '../../AdminIntlProvider';
 import {TourPricing} from '@/components/TourPricing';
 import {TextInput, NumberInput, Button} from '@/components/ui';
@@ -13,11 +12,11 @@ import {pricingSchema, type PricingFormData} from './PricingTab.form-utils';
 
 type PricingTabProps = {
   initialData: VMT.PricingGroup[];
+  locale: 'en' | 'vi';
   onSave: (pricingGroups: VMT.PricingGroup[]) => Promise<void>;
 };
 
-export function PricingTab({initialData, onSave}: PricingTabProps) {
-  const [locale, setLocale] = useState<'en' | 'vi'>('en');
+export function PricingTab({initialData, locale, onSave}: PricingTabProps) {
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -121,7 +120,6 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
           </Button>
         </div>
         <div className="flex items-center gap-3">
-          <LocalePicker value={locale} onChange={setLocale} />
           {submitError && (
             <span className="type-label-sm text-red-400">{submitError}</span>
           )}
@@ -319,7 +317,7 @@ export function PricingTab({initialData, onSave}: PricingTabProps) {
           <p className="type-label-sm text-on-surface-secondary mb-4">
             Live preview — click prices or labels to edit inline
           </p>
-          <AdminIntlProvider>
+          <AdminIntlProvider locale={locale}>
             <EditableProvider locale={locale} onFieldChange={handleFieldChange}>
               <TourPricing
                 pricingGroups={(watchedGroups ?? []) as VMT.PricingGroup[]}

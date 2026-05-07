@@ -5,7 +5,6 @@ import {useForm, useFieldArray, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import type * as VMT from '@/domain';
 import {EditableProvider} from '../../EditableContext';
-import {LocalePicker} from '../../LocalePicker';
 import {AdminIntlProvider} from '../../AdminIntlProvider';
 import {TourItinerary} from '@/components/TourItinerary';
 import {Button} from '@/components/ui';
@@ -16,11 +15,11 @@ import {
 
 type ItineraryTabProps = {
   initialData: VMT.ItineraryDay[];
+  locale: 'en' | 'vi';
   onSave: (itinerary: VMT.ItineraryDay[]) => Promise<void>;
 };
 
-export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
-  const [locale, setLocale] = useState<'en' | 'vi'>('en');
+export function ItineraryTab({initialData, locale, onSave}: ItineraryTabProps) {
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -161,9 +160,8 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
           </Button>
         </div>
 
-        {/* Right side: locale, status, save */}
+        {/* Right side: status, save */}
         <div className="flex items-center gap-3">
-          <LocalePicker value={locale} onChange={setLocale} />
           {submitError && (
             <span className="type-label-sm text-red-400">{submitError}</span>
           )}
@@ -188,7 +186,7 @@ export function ItineraryTab({initialData, onSave}: ItineraryTabProps) {
         <p className="type-label-sm text-on-surface-secondary mb-4">
           Click any text to edit inline. Use + to add items, × to remove days.
         </p>
-        <AdminIntlProvider>
+        <AdminIntlProvider locale={locale}>
           <EditableProvider
             locale={locale}
             onFieldChange={handleFieldChange}
