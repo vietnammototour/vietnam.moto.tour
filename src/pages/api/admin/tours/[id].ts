@@ -121,7 +121,7 @@ export default async function handler(
             prisma.tour.update({where: {id}, data: updateData}),
             ...perkOps,
           ])
-          .then((results) => results[0])
+          .then((results: unknown[]) => results[0])
       : await prisma.tour.update({where: {id}, data: updateData});
     return res.json(updatedTour);
   }
