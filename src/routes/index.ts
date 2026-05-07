@@ -36,6 +36,11 @@ export const routes = {
         path: (p: {id: string | number}) => `/admin/destinations/${p.id}/edit`,
       },
     },
+    perks: {
+      list: {path: () => '/admin/perks'},
+      new: {path: () => '/admin/perks/new'},
+      edit: {path: (p: {id: string | number}) => `/admin/perks/${p.id}/edit`},
+    },
     translations: {path: () => '/admin/translations'},
     users: {path: () => '/admin/users'},
   },
@@ -122,6 +127,34 @@ export const api = {
         }),
       delete: (id: string) =>
         request<void>(`/api/admin/highlights/${id}`, {method: 'DELETE'}),
+    },
+    perks: {
+      list: (params?: {
+        archived?: boolean;
+        category?: string;
+        search?: string;
+      }) => {
+        const qs = new URLSearchParams();
+        if (params?.archived !== undefined)
+          qs.set('archived', String(params.archived));
+        if (params?.category) qs.set('category', params.category);
+        if (params?.search) qs.set('search', params.search);
+        const suffix = qs.toString() ? `?${qs.toString()}` : '';
+        return request<VMT.Perk[]>(`/api/admin/perks${suffix}`);
+      },
+      get: (id: string) => request<VMT.Perk>(`/api/admin/perks/${id}`),
+      create: (data: Record<string, unknown>) =>
+        request<VMT.Perk>('/api/admin/perks', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        }),
+      update: (id: string, data: Record<string, unknown>) =>
+        request<VMT.Perk>(`/api/admin/perks/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(data),
+        }),
+      delete: (id: string) =>
+        request<void>(`/api/admin/perks/${id}`, {method: 'DELETE'}),
     },
     users: {
       list: () => request<VMT.User[]>('/api/admin/users'),
