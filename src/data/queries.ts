@@ -115,20 +115,14 @@ export async function getMessagesFromDb(
     const messages: Record<string, unknown> = {};
 
     for (const row of rows) {
-      if (!messages[row.namespace]) {
-        messages[row.namespace] = {};
-      }
-
-      const parts = row.key.split('.');
-      let current = messages[row.namespace] as Record<string, unknown>;
-
+      const parts = [...row.namespace.split('.'), ...row.key.split('.')];
+      let current = messages;
       for (let i = 0; i < parts.length - 1; i++) {
         if (!current[parts[i]] || typeof current[parts[i]] !== 'object') {
           current[parts[i]] = {};
         }
         current = current[parts[i]] as Record<string, unknown>;
       }
-
       current[parts[parts.length - 1]] =
         (row as Record<string, unknown>)[valueKey] ?? '';
     }
