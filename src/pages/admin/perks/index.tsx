@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import type {GetServerSidePropsContext} from 'next';
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
 import {api, routes, useNavigate} from '@/routes';
@@ -155,4 +156,10 @@ export default function PerksListPage() {
       ))}
     </div>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

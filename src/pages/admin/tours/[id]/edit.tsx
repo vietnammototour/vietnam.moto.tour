@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import type {GetServerSidePropsContext} from 'next';
 import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -96,4 +97,10 @@ export default function EditTour() {
       initialExcludedPerkIds={initialExcludedPerkIds}
     />
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }
