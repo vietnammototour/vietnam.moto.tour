@@ -29,8 +29,8 @@ export function Tabs({items, activeKey, onChange, children}: TabsProps) {
   );
 
   return (
-    <div>
-      <div role="tablist" className="flex border-b-2 border-border">
+    <div className="flex flex-col flex-1 min-h-0">
+      <div role="tablist" className="flex border-b-2 border-border shrink-0">
         {items.map((item) => {
           const isActive = item.key === activeKey;
           return (
@@ -55,7 +55,7 @@ export function Tabs({items, activeKey, onChange, children}: TabsProps) {
           );
         })}
       </div>
-      {activePanel}
+      <div className="flex-1 min-h-0 overflow-y-auto">{activePanel}</div>
     </div>
   );
 }
