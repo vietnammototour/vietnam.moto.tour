@@ -9,10 +9,11 @@ import type {GeneralTabData} from '../tabs/GeneralTab';
 import {ItineraryTab} from '../tabs/ItineraryTab';
 import {PricingTab} from '../tabs/PricingTab';
 import {HighlightsTab} from '../tabs/HighlightsTab';
+import {PerksTab} from '../tabs/PerksTab';
 import {LocalePicker, type Locale} from '../LocalePicker';
 import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
 
-type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights';
+type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights' | 'perks';
 
 type TourEditTabsProps = {
   mode: 'create' | 'edit';
@@ -22,6 +23,8 @@ type TourEditTabsProps = {
   initialItinerary: VMT.ItineraryDay[];
   initialPricingGroups: VMT.PricingGroup[];
   initialHighlightIds: string[];
+  initialIncludedPerkIds: string[];
+  initialExcludedPerkIds: string[];
 };
 
 export function TourEditTabs({
@@ -32,6 +35,8 @@ export function TourEditTabs({
   initialItinerary,
   initialPricingGroups,
   initialHighlightIds,
+  initialIncludedPerkIds,
+  initialExcludedPerkIds,
 }: TourEditTabsProps) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('general');
@@ -96,6 +101,15 @@ export function TourEditTabs({
     [tourId],
   );
 
+  const handlePerksSave = useCallback(
+    async (data: {includedPerkIds: string[]; excludedPerkIds: string[]}) => {
+      if (!tourId) throw new Error('Save General tab first');
+      const {error} = await api.admin.tours.update(tourId, data);
+      if (error) throw new Error(error);
+    },
+    [tourId],
+  );
+
   const isTabDisabled = (tabId: TabId) =>
     tabId !== 'general' && mode === 'create' && !tourId;
 
@@ -153,6 +167,7 @@ export function TourEditTabs({
             label: 'Highlights',
             disabled: isTabDisabled('highlights'),
           },
+          {key: 'perks', label: 'Perks', disabled: isTabDisabled('perks')},
         ]}
         activeKey={activeTab}
         onChange={(key) => setActiveTab(key as TabId)}
@@ -191,6 +206,15 @@ export function TourEditTabs({
             initialSelectedIds={initialHighlightIds}
             destinations={destinations}
             onSave={handleHighlightsSave}
+          />
+        </TabPanel>
+        <TabPanel tabKey="perks">
+          <PerksTab
+            tourId={tourId}
+            initialIncludedIds={initialIncludedPerkIds}
+            initialExcludedIds={initialExcludedPerkIds}
+            locale={locale}
+            onSave={handlePerksSave}
           />
         </TabPanel>
       </Tabs>

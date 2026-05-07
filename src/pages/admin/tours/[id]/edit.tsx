@@ -49,6 +49,15 @@ export default function EditTour() {
   }
 
   const highlights = (tour.highlights as Array<{id: string}>) ?? [];
+  const tourPerks =
+    (tour.perks as Array<{perkId: string; bucket: 'INCLUDED' | 'EXCLUDED'}>) ??
+    [];
+  const initialIncludedPerkIds = tourPerks
+    .filter((tp) => tp.bucket === 'INCLUDED')
+    .map((tp) => tp.perkId);
+  const initialExcludedPerkIds = tourPerks
+    .filter((tp) => tp.bucket === 'EXCLUDED')
+    .map((tp) => tp.perkId);
 
   const initialGeneral = {
     slug: tour.slug as string,
@@ -85,6 +94,8 @@ export default function EditTour() {
       initialItinerary={(tour.itinerary as never) ?? []}
       initialPricingGroups={(tour.pricingGroups as never) ?? []}
       initialHighlightIds={highlights.map((h) => h.id)}
+      initialIncludedPerkIds={initialIncludedPerkIds}
+      initialExcludedPerkIds={initialExcludedPerkIds}
     />
   );
 }

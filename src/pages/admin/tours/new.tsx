@@ -54,6 +54,8 @@ export default function NewTour() {
       initialItinerary={[]}
       initialPricingGroups={[]}
       initialHighlightIds={[]}
+      initialIncludedPerkIds={[]}
+      initialExcludedPerkIds={[]}
     />
   );
 }

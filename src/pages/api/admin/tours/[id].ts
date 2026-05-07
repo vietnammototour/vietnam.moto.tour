@@ -14,7 +14,7 @@ export default async function handler(
   if (req.method === 'GET') {
     const tour = await prisma.tour.findUnique({
       where: {id},
-      include: {highlights: true},
+      include: {highlights: true, perks: {include: {perk: true}}},
     });
     if (!tour) return res.status(404).json({error: 'Tour not found'});
     return res.json(tour);
