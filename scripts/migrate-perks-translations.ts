@@ -115,6 +115,14 @@ const entries: Entry[] = [
     valueVi: 'Khác',
   },
 
+  // admin.tours.tabs — tab labels in tour edit page
+  {
+    namespace: 'admin.tours.tabs',
+    key: 'perks',
+    valueEn: 'Perks',
+    valueVi: 'Tiện ích',
+  },
+
   // admin.tours.perksTab — tour edit perks tab
   {
     namespace: 'admin.tours.perksTab',

@@ -1,4 +1,5 @@
 import {useDraggable} from '@dnd-kit/core';
+import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import type {Locale} from '@/components/Admin/LocalePicker';
 
@@ -10,6 +11,7 @@ type PerkChipProps = {
 };
 
 export function PerkChip({perk, locale, zone, onRemove}: PerkChipProps) {
+  const tPerks = useTranslations('admin.perks');
   const {attributes, listeners, setNodeRef, transform, isDragging} =
     useDraggable({
       id: `${zone}:${perk.id}`,
@@ -34,7 +36,7 @@ export function PerkChip({perk, locale, zone, onRemove}: PerkChipProps) {
       <i className={`${perk.icon} text-base`} />
       <span className="text-sm">{label}</span>
       <span className="text-xs text-on-surface-secondary">
-        ({perk.category})
+        ({tPerks(`category.${perk.category}`)})
       </span>
       {onRemove && (
         <button
