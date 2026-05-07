@@ -33,6 +33,11 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
       icon: 'fa-map-marker-alt',
     },
     {
+      href: routes.admin.perks.list.path(),
+      label: 'Perks',
+      icon: 'fa-circle-check',
+    },
+    {
       href: routes.admin.translations.path(),
       label: 'Translations',
       icon: 'fa-language',
