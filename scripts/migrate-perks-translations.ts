@@ -197,6 +197,41 @@ const entries: Entry[] = [
     valueEn: 'Saving...',
     valueVi: 'Đang lưu...',
   },
+
+  // common.* — list/filter/action labels used across admin
+  {namespace: 'common', key: 'search', valueEn: 'Search', valueVi: 'Tìm kiếm'},
+  {
+    namespace: 'common',
+    key: 'allCategories',
+    valueEn: 'All categories',
+    valueVi: 'Tất cả danh mục',
+  },
+  {
+    namespace: 'common',
+    key: 'showArchived',
+    valueEn: 'Show archived',
+    valueVi: 'Hiện đã lưu trữ',
+  },
+  {
+    namespace: 'common',
+    key: 'archived',
+    valueEn: 'Archived',
+    valueVi: 'Đã lưu trữ',
+  },
+  {
+    namespace: 'common',
+    key: 'archive',
+    valueEn: 'Archive',
+    valueVi: 'Lưu trữ',
+  },
+  {
+    namespace: 'common',
+    key: 'unarchive',
+    valueEn: 'Unarchive',
+    valueVi: 'Bỏ lưu trữ',
+  },
+  {namespace: 'common', key: 'edit', valueEn: 'Edit', valueVi: 'Sửa'},
+  {namespace: 'common', key: 'delete', valueEn: 'Delete', valueVi: 'Xóa'},
 ];
 
 async function main(): Promise<void> {

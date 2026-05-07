@@ -61,3 +61,6 @@ next-env.d.ts
 
 # Superpowers cache
 .superpowers/
+
+# Local DB dumps for VPS sync
+/perks-data.json
