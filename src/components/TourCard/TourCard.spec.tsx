@@ -5,7 +5,13 @@ import {buildTour} from '@/test-utils/factories';
 describe('TourCard', () => {
   const tour = buildTour({
     title: {en: 'Da Lat Tour', vi: 'Da Lat Tour'},
-    price: 80,
+    pricingGroups: [
+      {
+        type: 'vehicle',
+        label: {en: 'By Motorbike', vi: 'Xe Máy'},
+        tiers: [{label: {en: 'Solo', vi: 'Solo'}, price: 80}],
+      },
+    ],
     duration: 1,
     distance: 186,
     destinationId: 'dest-1',

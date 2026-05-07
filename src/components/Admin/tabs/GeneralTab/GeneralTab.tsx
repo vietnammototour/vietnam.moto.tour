@@ -139,12 +139,10 @@ export function GeneralTab({
           />
 
           {/* Numeric fields */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
-              {key: 'price' as const, label: 'Price ($)'},
               {key: 'duration' as const, label: 'Duration (days)'},
               {key: 'distance' as const, label: 'Distance (km)'},
-              {key: 'groupSize' as const, label: 'Group Size'},
             ].map(({key, label}) => (
               <NumberInput
                 key={key}

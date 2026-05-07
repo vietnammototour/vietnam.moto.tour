@@ -4,6 +4,7 @@ import {motion, useTransform} from 'framer-motion';
 import {routes} from '@/routes';
 import {useCardTilt} from '@/hooks/use-card-tilt';
 import type * as VMT from '@/domain';
+import {getMinPrice} from '@/domain';
 
 type Props = {
   tour: VMT.Tour;
@@ -11,7 +12,8 @@ type Props = {
 };
 
 export const TourCard = ({tour, interactive = true}: Props) => {
-  const {imageUrl, price, duration, distance, slug} = tour;
+  const {imageUrl, duration, distance, slug} = tour;
+  const price = getMinPrice(tour.pricingGroups);
   const locale = useLocale();
   const title = tour.title[locale as 'en' | 'vi'] ?? tour.title.vi;
   const t = useTranslations('common');
