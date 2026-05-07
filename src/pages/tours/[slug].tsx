@@ -79,8 +79,11 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
               </div>
 
               <TourItinerary itinerary={tour.itinerary} locale={locale} />
-              {/* TODO Task 20: wire Perk-based included/excluded */}
-              <TourIncluded included={[]} excluded={[]} locale={locale} />
+              <TourIncluded
+                included={tour.included}
+                excluded={tour.excluded}
+                locale={locale}
+              />
 
               {/* On mobile: payment + notes after included */}
               <div className="lg:hidden">

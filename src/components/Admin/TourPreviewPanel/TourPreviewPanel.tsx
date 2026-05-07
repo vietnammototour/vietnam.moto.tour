@@ -66,6 +66,8 @@ export function TourPreviewPanel({control, locale, destinationName}: Props) {
     },
     status: values.status ?? 'DRAFT',
     highlights: [],
+    included: [],
+    excluded: [],
   };
 
   return (

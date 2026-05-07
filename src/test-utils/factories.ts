@@ -19,6 +19,8 @@ export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
     destinationName: 'Test Destination',
     images: [],
     highlights: [],
+    included: [],
+    excluded: [],
     itinerary: [
       {
         dayLabel: {en: 'Itinerary', vi: 'Lịch trình'},
