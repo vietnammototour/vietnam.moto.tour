@@ -32,10 +32,6 @@ export default function Document() {
           rel="stylesheet"
           href={getUrl('assets/vendors/fontawesome/css/all.min.css')}
         />
-        <link
-          rel="stylesheet"
-          href={getUrl('assets/vendors/tevily-icons/style.css')}
-        />
       </Head>
       <body>
         <script
