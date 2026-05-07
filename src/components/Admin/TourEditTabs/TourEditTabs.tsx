@@ -108,8 +108,8 @@ export function TourEditTabs({
     mode === 'create' ? 'New tour' : tourName || 'Untitled tour';
 
   return (
-    <div>
-      <div className="flex items-start justify-between mb-6 gap-4">
+    <div className="h-full flex flex-col min-h-0">
+      <div className="flex items-start justify-between mb-6 gap-4 shrink-0">
         <div className="min-w-0">
           <AdminBreadcrumbs
             items={[

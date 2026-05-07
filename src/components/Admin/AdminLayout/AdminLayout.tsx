@@ -41,7 +41,7 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
   ];
 
   return (
-    <div className="flex min-h-screen bg-surface">
+    <div className="flex h-screen overflow-hidden bg-surface">
       <ProgressBar loading={loading} />
 
       {/* Sidebar */}
@@ -91,7 +91,9 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 p-8">{children}</main>
+      <main className="flex-1 overflow-y-auto flex flex-col p-8">
+        {children}
+      </main>
     </div>
   );
 }
