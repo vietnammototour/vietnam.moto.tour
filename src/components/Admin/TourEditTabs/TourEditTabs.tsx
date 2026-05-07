@@ -1,6 +1,7 @@
 'use client';
 
 import {useState, useCallback} from 'react';
+import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import {routes, api, useNavigate} from '@/routes';
 import {Tabs, TabPanel, Button} from '@/components/ui';
@@ -9,10 +10,11 @@ import type {GeneralTabData} from '../tabs/GeneralTab';
 import {ItineraryTab} from '../tabs/ItineraryTab';
 import {PricingTab} from '../tabs/PricingTab';
 import {HighlightsTab} from '../tabs/HighlightsTab';
+import {PerksTab} from '../tabs/PerksTab';
 import {LocalePicker, type Locale} from '../LocalePicker';
 import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
 
-type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights';
+type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights' | 'perks';
 
 type TourEditTabsProps = {
   mode: 'create' | 'edit';
@@ -22,6 +24,8 @@ type TourEditTabsProps = {
   initialItinerary: VMT.ItineraryDay[];
   initialPricingGroups: VMT.PricingGroup[];
   initialHighlightIds: string[];
+  initialIncludedPerkIds: string[];
+  initialExcludedPerkIds: string[];
 };
 
 export function TourEditTabs({
@@ -32,7 +36,10 @@ export function TourEditTabs({
   initialItinerary,
   initialPricingGroups,
   initialHighlightIds,
+  initialIncludedPerkIds,
+  initialExcludedPerkIds,
 }: TourEditTabsProps) {
+  const t = useTranslations('admin.tours.tabs');
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('general');
   const [tourId, setTourId] = useState<string | null>(initialTourId);
@@ -96,6 +103,15 @@ export function TourEditTabs({
     [tourId],
   );
 
+  const handlePerksSave = useCallback(
+    async (data: {includedPerkIds: string[]; excludedPerkIds: string[]}) => {
+      if (!tourId) throw new Error('Save General tab first');
+      const {error} = await api.admin.tours.update(tourId, data);
+      if (error) throw new Error(error);
+    },
+    [tourId],
+  );
+
   const isTabDisabled = (tabId: TabId) =>
     tabId !== 'general' && mode === 'create' && !tourId;
 
@@ -153,6 +169,7 @@ export function TourEditTabs({
             label: 'Highlights',
             disabled: isTabDisabled('highlights'),
           },
+          {key: 'perks', label: t('perks'), disabled: isTabDisabled('perks')},
         ]}
         activeKey={activeTab}
         onChange={(key) => setActiveTab(key as TabId)}
@@ -191,6 +208,15 @@ export function TourEditTabs({
             initialSelectedIds={initialHighlightIds}
             destinations={destinations}
             onSave={handleHighlightsSave}
+          />
+        </TabPanel>
+        <TabPanel tabKey="perks">
+          <PerksTab
+            tourId={tourId}
+            initialIncludedIds={initialIncludedPerkIds}
+            initialExcludedIds={initialExcludedPerkIds}
+            locale={locale}
+            onSave={handlePerksSave}
           />
         </TabPanel>
       </Tabs>

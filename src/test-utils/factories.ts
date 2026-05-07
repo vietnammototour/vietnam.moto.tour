@@ -19,6 +19,8 @@ export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
     destinationName: 'Test Destination',
     images: [],
     highlights: [],
+    included: [],
+    excluded: [],
     itinerary: [
       {
         dayLabel: {en: 'Itinerary', vi: 'Lịch trình'},
@@ -44,8 +46,6 @@ export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
         ],
       },
     ],
-    included: [{en: 'Guide', vi: 'Hướng dẫn viên'}],
-    excluded: [{en: 'Flights', vi: 'Vé máy bay'}],
     paymentDetails: {en: '20% deposit required', vi: 'Đặt cọc 20%'},
     notes: [{en: 'Check availability', vi: 'Kiểm tra chỗ trống'}],
     mealsInfo: {en: '1 meal included', vi: '1 meal included'},

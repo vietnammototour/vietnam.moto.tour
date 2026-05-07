@@ -4,14 +4,18 @@ import type * as VMT from '@/domain';
 import {waveStagger} from '@/utils/motion-variants';
 
 type TourIncludedProps = {
-  included: VMT.LocalizedText[];
-  excluded: VMT.LocalizedText[];
+  included: VMT.Perk[];
+  excluded: VMT.Perk[];
   locale: string;
 };
 
+function perkLabel(perk: VMT.Perk, locale: string): string {
+  if (locale === 'vi' && perk.labelVi) return perk.labelVi;
+  return perk.labelEn;
+}
+
 export function TourIncluded({included, excluded, locale}: TourIncludedProps) {
   const t = useTranslations('tourDetail');
-  const localeKey = locale as 'en' | 'vi';
 
   return (
     <motion.section
@@ -29,9 +33,9 @@ export function TourIncluded({included, excluded, locale}: TourIncludedProps) {
               {t('whatsIncluded')}
             </h2>
             <ul className="space-y-2.5">
-              {included.map((item, i) => (
+              {included.map((perk, i) => (
                 <motion.li
-                  key={i}
+                  key={perk.id}
                   custom={i}
                   variants={waveStagger(0.06)}
                   initial="hidden"
@@ -39,8 +43,8 @@ export function TourIncluded({included, excluded, locale}: TourIncludedProps) {
                   viewport={{once: true}}
                   className="flex items-start gap-2 type-body-sm text-on-surface-secondary"
                 >
-                  <i className="fa fa-check text-secondary mt-1 shrink-0" />
-                  {item[localeKey]}
+                  <i className={`${perk.icon} text-secondary mt-1 shrink-0`} />
+                  {perkLabel(perk, locale)}
                 </motion.li>
               ))}
             </ul>
@@ -53,9 +57,9 @@ export function TourIncluded({included, excluded, locale}: TourIncludedProps) {
               {t('whatsNotIncluded')}
             </h2>
             <ul className="space-y-2.5">
-              {excluded.map((item, i) => (
+              {excluded.map((perk, i) => (
                 <motion.li
-                  key={i}
+                  key={perk.id}
                   custom={i}
                   variants={waveStagger(0.06)}
                   initial="hidden"
@@ -63,8 +67,8 @@ export function TourIncluded({included, excluded, locale}: TourIncludedProps) {
                   viewport={{once: true}}
                   className="flex items-start gap-2 type-body-sm text-on-surface-secondary"
                 >
-                  <i className="fa fa-times text-red-500 mt-1 shrink-0" />
-                  {item[localeKey]}
+                  <i className={`${perk.icon} text-red-500 mt-1 shrink-0`} />
+                  {perkLabel(perk, locale)}
                 </motion.li>
               ))}
             </ul>

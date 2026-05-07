@@ -40,8 +40,6 @@ export default async function handler(
         images: data.images ?? [],
         itinerary: data.itinerary ?? [],
         pricingGroups: data.pricingGroups ?? [],
-        included: data.included ?? [],
-        excluded: data.excluded ?? [],
         paymentDetails: data.paymentDetails ?? {},
         notes: data.notes ?? [],
         mealsInfo: data.mealsInfo ?? {},

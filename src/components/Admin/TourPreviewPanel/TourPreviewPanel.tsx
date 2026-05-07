@@ -53,8 +53,6 @@ export function TourPreviewPanel({control, locale, destinationName}: Props) {
     guided: values.guided ?? '',
     itinerary: [],
     pricingGroups: [],
-    included: (values.included as VMT.LocalizedText[] | undefined) ?? [],
-    excluded: (values.excluded as VMT.LocalizedText[] | undefined) ?? [],
     paymentDetails: (values.paymentDetails as
       | VMT.LocalizedText
       | undefined) ?? {
@@ -68,6 +66,8 @@ export function TourPreviewPanel({control, locale, destinationName}: Props) {
     },
     status: values.status ?? 'DRAFT',
     highlights: [],
+    included: [],
+    excluded: [],
   };
 
   return (

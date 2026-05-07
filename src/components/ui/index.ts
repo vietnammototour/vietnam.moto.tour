@@ -9,3 +9,4 @@ export {Modal} from './Modal';
 export {Tabs, TabPanel} from './Tabs';
 export {ImageUpload} from './ImageUpload';
 export {ThemeToggle} from './ThemeToggle';
+export {IconPicker} from './IconPicker';

@@ -4,6 +4,7 @@ import type {
 } from '@prisma/client';
 import type {LocalizedText} from '../shared/localized-text';
 import type {Highlight} from '../highlight';
+import type {Perk} from '../perk';
 import type {ItineraryDay} from './itinerary';
 import type {PricingGroup} from './pricing';
 
@@ -20,8 +21,6 @@ export type Tour = Omit<
   | 'images'
   | 'itinerary'
   | 'pricingGroups'
-  | 'included'
-  | 'excluded'
   | 'paymentDetails'
   | 'notes'
   | 'mealsInfo'
@@ -35,12 +34,12 @@ export type Tour = Omit<
   images: string[];
   itinerary: ItineraryDay[];
   pricingGroups: PricingGroup[];
-  included: LocalizedText[];
-  excluded: LocalizedText[];
   paymentDetails: LocalizedText;
   notes: LocalizedText[];
   mealsInfo: LocalizedText;
   destinationName: string;
   destinationHeroImage: string;
   highlights: Highlight[];
+  included: Perk[];
+  excluded: Perk[];
 };

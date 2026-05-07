@@ -14,7 +14,14 @@ export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   try {
     const rows = await prisma.tour.findMany({
       where: isAdmin ? {} : {status: {in: ['PUBLISHED', 'FEATURED']}},
-      include: {destination: true, highlights: true},
+      include: {
+        destination: true,
+        highlights: true,
+        perks: {
+          where: {perk: {archived: false}},
+          include: {perk: true},
+        },
+      },
     });
     return rows.map(toTour);
   } catch (error) {
@@ -30,7 +37,14 @@ export async function getTourBySlug(
   try {
     const row = await prisma.tour.findFirst({
       where: isAdmin ? {slug} : {slug, status: {in: ['PUBLISHED', 'FEATURED']}},
-      include: {destination: true, highlights: true},
+      include: {
+        destination: true,
+        highlights: true,
+        perks: {
+          where: {perk: {archived: false}},
+          include: {perk: true},
+        },
+      },
     });
     return row ? toTour(row) : undefined;
   } catch (error) {
