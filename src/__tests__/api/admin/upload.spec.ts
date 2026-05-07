@@ -6,7 +6,7 @@ import {PassThrough} from 'stream';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import handler from './upload';
+import handler from '@/pages/api/admin/upload';
 import {prisma} from '@/lib/prisma';
 
 jest.mock('@/lib/admin-auth', () => ({

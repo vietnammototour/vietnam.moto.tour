@@ -2,7 +2,7 @@ import {createMocks} from 'node-mocks-http';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import handler from './[...path]';
+import handler from '@/pages/api/uploads/[...path]';
 
 describe('GET /api/uploads/[...path]', () => {
   let tmpDir: string;
