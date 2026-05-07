@@ -11,16 +11,11 @@ export const generalTabSchema = yup.object({
   titleVi: yup.string().defined(),
   titleEn: yup.string().defined(),
   imageCard: imageSlotSchema().required(),
-  price: yup
-    .number()
-    .min(0, 'Price must be positive')
-    .required('Price is required'),
   duration: yup.number().min(0).required('Duration is required'),
   distance: yup.number().min(0).required('Distance is required'),
   descriptionVi: yup.string().defined(),
   descriptionEn: yup.string().defined(),
   transportation: yup.string().defined(),
-  groupSize: yup.number().min(0).required('Group size is required'),
   hotel: yup.string().defined(),
   guided: yup.string().defined(),
   images: yup.array().of(yup.string().required()).defined(),

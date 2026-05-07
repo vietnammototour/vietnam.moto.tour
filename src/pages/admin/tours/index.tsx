@@ -5,6 +5,7 @@ import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes, api} from '@/routes';
 import type * as VMT from '@/domain';
+import {getMinPrice} from '@/domain';
 
 type AdminTour = {
   id: string;
@@ -12,7 +13,7 @@ type AdminTour = {
   slug: string;
   status: VMT.TourStatus;
   destination: {name: string};
-  price: number;
+  pricingGroups: VMT.PricingGroup[];
   duration: string;
   imageUrl: string | null;
 };
@@ -118,7 +119,7 @@ export default function AdminToursList() {
                   {tour.destination.name}
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface">
-                  ${tour.price}
+                  ${getMinPrice(tour.pricingGroups)}
                 </td>
                 <td className="px-4 py-3">
                   <StatusPicker

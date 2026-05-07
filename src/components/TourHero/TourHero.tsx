@@ -5,6 +5,7 @@ import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
 import {clipReveal, slideFromLeft} from '@/utils/motion-variants';
 import {routes} from '@/routes';
 import type * as VMT from '@/domain';
+import {getMinPrice} from '@/domain';
 
 type TourHeroProps = {
   tour?: VMT.Tour;
@@ -83,7 +84,7 @@ export function TourHero({tour, preview}: TourHeroProps) {
                 className="mt-4 text-on-surface-inverse"
               >
                 <span className="type-headline-lg">
-                  {t('from')} ${tour.price}
+                  {t('from')} ${getMinPrice(tour.pricingGroups)}
                 </span>
                 <span className="type-body-sm ml-1 opacity-80">
                   {t('perPerson')}

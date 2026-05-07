@@ -6,6 +6,7 @@ import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import type * as VMT from '@/domain';
+import {getMinPrice} from '@/domain';
 import {contactInfo} from '@/utils';
 import {AdminStatusBadge} from '@/components/tour-detail/AdminStatusBadge';
 import {TourHero} from '@/components/TourHero';
@@ -41,7 +42,7 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
   const [selectedPrice, setSelectedPrice] = useState<{
     price: number;
     label: string;
-  }>({price: tour.price, label: ''});
+  }>({price: getMinPrice(tour.pricingGroups), label: ''});
 
   const handlePriceChange = useCallback((price: number, label: string) => {
     setSelectedPrice({price, label});

@@ -12,7 +12,6 @@ export function TourDetails({tour}: TourDetailsProps) {
     {label: t('transportation'), value: tour.transportation},
     {label: t('duration'), value: `${tour.duration} ${t('days')}`},
     {label: t('distance'), value: `${tour.distance} km`},
-    {label: t('group'), value: `${tour.groupSize}`},
     {label: t('hotel'), value: tour.hotel},
     {label: t('guided'), value: tour.guided},
   ];

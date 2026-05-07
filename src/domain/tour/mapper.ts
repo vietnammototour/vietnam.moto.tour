@@ -34,11 +34,9 @@ export function toTour(row: PrismaTourWithRelations): Tour {
     highlights: row.highlights.map(toHighlight),
     status: row.status,
     imageUrl: row.imageUrl ?? '',
-    price: row.price,
     duration: row.duration,
     distance: row.distance,
     transportation: row.transportation,
-    groupSize: row.groupSize,
     hotel: row.hotel,
     guided: row.guided,
   };

@@ -36,13 +36,11 @@ model Tour {
   titleVi        String      @default("")
   titleEn        String      @default("")
   imageUrl       String?
-  price          Float       @default(0)
   duration       Int         @default(1)
   distance       Int         @default(0)
   descriptionVi  String      @default("")
   descriptionEn  String      @default("")
   transportation String      @default("")
-  groupSize      Int         @default(2)
   hotel          String      @default("")
   guided         String      @default("")
   images         Json        @default("[]")
