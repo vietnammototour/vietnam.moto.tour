@@ -1,3 +1,4 @@
+import type {GetServerSidePropsContext} from 'next';
 import {useTranslations} from 'next-intl';
 import {api, routes, useNavigate} from '@/routes';
 import {PerkForm, type PerkFormValues} from '@/components/Admin/PerkForm';
@@ -23,4 +24,10 @@ export default function NewPerkPage() {
       <PerkForm mode="create" onSubmit={handleSubmit} />
     </div>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

@@ -1,3 +1,4 @@
+import type {GetServerSidePropsContext} from 'next';
 import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
@@ -40,4 +41,10 @@ export default function EditPerkPage() {
       <PerkForm mode="edit" initialData={initialData} onSubmit={handleSubmit} />
     </div>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }
