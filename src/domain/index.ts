@@ -7,3 +7,4 @@ export type {Destination, DestinationWithStats} from './destination';
 export type {Highlight} from './highlight';
 export type {User, Role} from './user';
 export type {Translation} from './translation';
+export type {Perk, PerkCategory, PerkBucket} from './perk';
