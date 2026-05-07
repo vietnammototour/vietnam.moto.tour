@@ -69,10 +69,60 @@ export default async function handler(
         set: validHighlights.map((h: {id: string}) => ({id: h.id})),
       };
     }
-    const updatedTour = await prisma.tour.update({
-      where: {id},
-      data: updateData,
-    });
+    // Handle perks (replace-all semantics)
+    const hasIncluded = Array.isArray(data.includedPerkIds);
+    const hasExcluded = Array.isArray(data.excludedPerkIds);
+    let perkOps: Array<Promise<unknown>> | null = null;
+    if (hasIncluded || hasExcluded) {
+      const includedIds: string[] = hasIncluded ? data.includedPerkIds : [];
+      const excludedIds: string[] = hasExcluded ? data.excludedPerkIds : [];
+
+      const overlap = includedIds.filter((pid) => excludedIds.includes(pid));
+      if (overlap.length > 0) {
+        return res
+          .status(400)
+          .json({error: 'Perk cannot be in both included and excluded lists'});
+      }
+
+      const allRequested = [...new Set([...includedIds, ...excludedIds])];
+      if (allRequested.length > 0) {
+        const validPerks = await prisma.perk.findMany({
+          where: {id: {in: allRequested}, archived: false},
+          select: {id: true},
+        });
+        const validSet = new Set(validPerks.map((p: {id: string}) => p.id));
+        const filteredIncluded = includedIds.filter((pid) => validSet.has(pid));
+        const filteredExcluded = excludedIds.filter((pid) => validSet.has(pid));
+        perkOps = [
+          prisma.tourPerk.deleteMany({where: {tourId: id}}),
+          prisma.tourPerk.createMany({
+            data: [
+              ...filteredIncluded.map((perkId) => ({
+                tourId: id,
+                perkId,
+                bucket: 'INCLUDED' as const,
+              })),
+              ...filteredExcluded.map((perkId) => ({
+                tourId: id,
+                perkId,
+                bucket: 'EXCLUDED' as const,
+              })),
+            ],
+          }),
+        ];
+      } else {
+        perkOps = [prisma.tourPerk.deleteMany({where: {tourId: id}})];
+      }
+    }
+
+    const updatedTour = perkOps
+      ? await prisma
+          .$transaction([
+            prisma.tour.update({where: {id}, data: updateData}),
+            ...perkOps,
+          ])
+          .then((results) => results[0])
+      : await prisma.tour.update({where: {id}, data: updateData});
     return res.json(updatedTour);
   }
 
