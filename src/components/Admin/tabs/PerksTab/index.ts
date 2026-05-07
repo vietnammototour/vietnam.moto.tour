@@ -1,0 +1,1 @@
+export {PerksTab} from './PerksTab';
