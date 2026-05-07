@@ -114,3 +114,5 @@ Next.js 16 app using the **Pages Router** (`src/pages/`), TypeScript strict mode
 Pushes to `main` trigger SSH deployment to production (`/var/www/vietnam-moto-tours`) via `.github/workflows/deploy.yml`. The workflow calls an external deploy script at `/home/ci-cd/deploy.sh` on the VPS via SSH (user: `ci-cd`). The server runs the app with pm2.
 
 **Full VPS documentation:** See [VPS.md](./VPS.md) for server setup, PostgreSQL, CI/CD gotchas, auth, and useful commands.
+
+**Image uploads / object storage:** See [STORAGE.md](./STORAGE.md) for the `UPLOAD_DIR` env var, canonical filesystem layout, transcode pipeline, API routes, sweep/backup cron jobs, and the migration runbook.
