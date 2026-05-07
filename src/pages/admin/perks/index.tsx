@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
+import {useTranslations} from 'next-intl';
 import {api, routes, useNavigate} from '@/routes';
 import {Button} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -15,6 +16,7 @@ const CATEGORIES: VMT.PerkCategory[] = [
 ];
 
 export default function PerksListPage() {
+  const t = useTranslations('admin.perks');
   const navigate = useNavigate();
   const [perks, setPerks] = useState<VMT.Perk[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,8 +53,7 @@ export default function PerksListPage() {
   }
 
   async function handleDelete(perk: VMT.Perk) {
-    if (!confirm(`Delete perk "${perk.labelEn}"? This cannot be undone.`))
-      return;
+    if (!confirm(t('deleteConfirm', {label: perk.labelEn}))) return;
     const {error} = await api.admin.perks.delete(perk.id);
     if (error) {
       alert(error);
@@ -69,16 +70,16 @@ export default function PerksListPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">Perks</h1>
+        <h1 className="type-headline-sm">{t('title')}</h1>
         <Button onClick={() => navigate.to(routes.admin.perks.new)}>
-          + New Perk
+          {t('new')}
         </Button>
       </div>
 
       <div className="flex gap-3 mb-4">
         <input
           type="search"
-          placeholder="Search…"
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="px-3 py-2 border border-border rounded bg-surface"
@@ -88,10 +89,10 @@ export default function PerksListPage() {
           onChange={(e) => setCategoryFilter(e.target.value)}
           className="cursor-pointer px-3 py-2 border border-border rounded bg-surface"
         >
-          <option value="">All categories</option>
+          <option value="">{t('allCategories')}</option>
           {CATEGORIES.map((c) => (
             <option key={c} value={c}>
-              {c}
+              {t(`category.${c}`)}
             </option>
           ))}
         </select>
@@ -102,17 +103,17 @@ export default function PerksListPage() {
             onChange={(e) => setShowArchived(e.target.checked)}
             className="cursor-pointer"
           />
-          Show archived
+          {t('showArchived')}
         </label>
       </div>
 
       {!loading && perks.length === 0 && (
-        <p className="text-on-surface-secondary">No perks found.</p>
+        <p className="text-on-surface-secondary">{t('empty')}</p>
       )}
 
       {Object.entries(grouped).map(([category, items]) => (
         <section key={category} className="mb-6">
-          <h2 className="type-title-sm mb-2">{category}</h2>
+          <h2 className="type-title-sm mb-2">{t(`category.${category}`)}</h2>
           <ul className="space-y-1">
             {items.map((p) => (
               <li
@@ -128,23 +129,23 @@ export default function PerksListPage() {
                 </div>
                 {p.archived && (
                   <span className="px-2 py-0.5 text-xs bg-surface-alt rounded">
-                    archived
+                    {t('archived')}
                   </span>
                 )}
                 <Link
                   href={routes.admin.perks.edit.path({id: p.id})}
                   className="text-primary cursor-pointer"
                 >
-                  Edit
+                  {t('edit')}
                 </Link>
                 <Button
                   variant="secondary"
                   onClick={() => handleArchiveToggle(p)}
                 >
-                  {p.archived ? 'Unarchive' : 'Archive'}
+                  {p.archived ? t('unarchive') : t('archive')}
                 </Button>
                 <Button variant="secondary" onClick={() => handleDelete(p)}>
-                  Delete
+                  {t('delete')}
                 </Button>
               </li>
             ))}

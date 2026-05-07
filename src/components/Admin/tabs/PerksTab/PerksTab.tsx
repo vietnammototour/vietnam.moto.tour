@@ -2,6 +2,7 @@
 
 import {useState, useEffect, useMemo} from 'react';
 import {DndContext, type DragEndEvent} from '@dnd-kit/core';
+import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import {api} from '@/routes';
 import {Button} from '@/components/ui';
@@ -38,6 +39,8 @@ export function PerksTab({
   locale,
   onSave,
 }: PerksTabProps) {
+  const t = useTranslations('admin.tours.perksTab');
+  const tPerks = useTranslations('admin.perks');
   const [allPerks, setAllPerks] = useState<VMT.Perk[]>([]);
   const [included, setIncluded] = useState<Set<string>>(
     new Set(initialIncludedIds),
@@ -122,7 +125,7 @@ export function PerksTab({
 
   async function handleSave() {
     if (!tourId) {
-      setError('Save the General tab first.');
+      setError(t('saveGeneralFirst'));
       return;
     }
     setSaving(true);
@@ -135,7 +138,7 @@ export function PerksTab({
       setSavedIncluded(new Set(included));
       setSavedExcluded(new Set(excluded));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save');
+      setError(err instanceof Error ? err.message : t('saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -144,11 +147,11 @@ export function PerksTab({
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div className="space-y-4 p-5">
-        <PerkDropZone id="available" title="Available perks">
+        <PerkDropZone id="available" title={t('available')}>
           <div className="w-full flex gap-2 mb-2">
             <input
               type="search"
-              placeholder="Search…"
+              placeholder={tPerks('searchPlaceholder')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="px-3 py-2 border border-border rounded bg-surface"
@@ -158,10 +161,10 @@ export function PerksTab({
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="cursor-pointer px-3 py-2 border border-border rounded bg-surface"
             >
-              <option value="">All categories</option>
+              <option value="">{tPerks('allCategories')}</option>
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>
-                  {c}
+                  {tPerks(`category.${c}`)}
                 </option>
               ))}
             </select>
@@ -171,13 +174,13 @@ export function PerksTab({
           ))}
           {availablePerks.length === 0 && (
             <p className="text-on-surface-secondary text-sm">
-              No perks available.
+              {t('noneAvailable')}
             </p>
           )}
         </PerkDropZone>
 
         <div className="grid grid-cols-2 gap-4">
-          <PerkDropZone id="included" title="✓ Included">
+          <PerkDropZone id="included" title={t('included')}>
             {[...included].map((id) => {
               const p = perkMap.get(id);
               return p ? (
@@ -191,7 +194,7 @@ export function PerksTab({
               ) : null;
             })}
           </PerkDropZone>
-          <PerkDropZone id="excluded" title="✗ Excluded">
+          <PerkDropZone id="excluded" title={t('excluded')}>
             {[...excluded].map((id) => {
               const p = perkMap.get(id);
               return p ? (
@@ -210,7 +213,7 @@ export function PerksTab({
         {error && <p className="text-error">{error}</p>}
 
         <Button onClick={handleSave} disabled={!isDirty || saving || !tourId}>
-          {saving ? 'Saving…' : 'Save Perks'}
+          {saving ? tPerks('form.saving') : t('save')}
         </Button>
       </div>
     </DndContext>

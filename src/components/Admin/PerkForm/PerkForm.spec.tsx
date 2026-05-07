@@ -16,9 +16,9 @@ describe('PerkForm', () => {
         onSubmit={async () => {}}
       />,
     );
-    expect(screen.getByLabelText(/label \(en\)/i)).toHaveValue('Bike Hire');
-    expect(screen.getByLabelText(/label \(vi\)/i)).toHaveValue('Thuê xe');
-    expect(screen.getByLabelText(/category/i)).toHaveValue('TRANSPORT');
+    expect(screen.getByLabelText(/form\.labelEn/i)).toHaveValue('Bike Hire');
+    expect(screen.getByLabelText(/form\.labelVi/i)).toHaveValue('Thuê xe');
+    expect(screen.getByLabelText(/form\.category/i)).toHaveValue('TRANSPORT');
   });
 
   it('shows validation error when labelEn empty', async () => {
@@ -32,13 +32,13 @@ describe('PerkForm', () => {
   it('calls onSubmit with values when valid', async () => {
     const onSubmit = jest.fn().mockResolvedValue(undefined);
     render(<PerkForm mode="create" onSubmit={onSubmit} />);
-    fireEvent.change(screen.getByLabelText(/label \(en\)/i), {
+    fireEvent.change(screen.getByLabelText(/form\.labelEn/i), {
       target: {value: 'Bike'},
     });
-    fireEvent.change(screen.getByLabelText(/label \(vi\)/i), {
+    fireEvent.change(screen.getByLabelText(/form\.labelVi/i), {
       target: {value: 'Xe'},
     });
-    fireEvent.change(screen.getByLabelText(/category/i), {
+    fireEvent.change(screen.getByLabelText(/form\.category/i), {
       target: {value: 'TRANSPORT'},
     });
     fireEvent.click(screen.getByRole('button', {name: /save/i}));

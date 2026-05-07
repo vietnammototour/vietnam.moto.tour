@@ -1,7 +1,9 @@
+import {useTranslations} from 'next-intl';
 import {api, routes, useNavigate} from '@/routes';
 import {PerkForm, type PerkFormValues} from '@/components/Admin/PerkForm';
 
 export default function NewPerkPage() {
+  const t = useTranslations('admin.perks');
   const navigate = useNavigate();
 
   async function handleSubmit(values: PerkFormValues) {
@@ -17,7 +19,7 @@ export default function NewPerkPage() {
 
   return (
     <div>
-      <h1 className="type-headline-sm mb-6">New Perk</h1>
+      <h1 className="type-headline-sm mb-6">{t('new')}</h1>
       <PerkForm mode="create" onSubmit={handleSubmit} />
     </div>
   );

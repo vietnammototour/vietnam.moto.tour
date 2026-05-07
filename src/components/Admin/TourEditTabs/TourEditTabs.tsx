@@ -1,6 +1,7 @@
 'use client';
 
 import {useState, useCallback} from 'react';
+import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import {routes, api, useNavigate} from '@/routes';
 import {Tabs, TabPanel, Button} from '@/components/ui';
@@ -38,6 +39,7 @@ export function TourEditTabs({
   initialIncludedPerkIds,
   initialExcludedPerkIds,
 }: TourEditTabsProps) {
+  const t = useTranslations('admin.tours.tabs');
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('general');
   const [tourId, setTourId] = useState<string | null>(initialTourId);
@@ -167,7 +169,7 @@ export function TourEditTabs({
             label: 'Highlights',
             disabled: isTabDisabled('highlights'),
           },
-          {key: 'perks', label: 'Perks', disabled: isTabDisabled('perks')},
+          {key: 'perks', label: t('perks'), disabled: isTabDisabled('perks')},
         ]}
         activeKey={activeTab}
         onChange={(key) => setActiveTab(key as TabId)}
