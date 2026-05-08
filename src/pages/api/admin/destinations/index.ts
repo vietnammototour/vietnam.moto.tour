@@ -10,7 +10,15 @@ export default async function handler(
   if (!isAuthed) return;
 
   if (req.method === 'GET') {
+    const archivedParam = req.query.archived;
+    const where =
+      archivedParam === 'true'
+        ? {isActive: false}
+        : archivedParam === 'false'
+          ? {isActive: true}
+          : undefined;
     const destinations = await prisma.destination.findMany({
+      where,
       orderBy: {createdAt: 'desc'},
       include: {_count: {select: {tours: true}}},
     });

@@ -35,7 +35,13 @@ async function request<T>(
 export const api = {
   admin: {
     tours: {
-      list: () => request<VMT.Tour[]>('/api/admin/tours'),
+      list: (params?: {archived?: boolean}) => {
+        const qs = new URLSearchParams();
+        if (params?.archived !== undefined)
+          qs.set('archived', String(params.archived));
+        const suffix = qs.toString() ? `?${qs.toString()}` : '';
+        return request<VMT.Tour[]>(`/api/admin/tours${suffix}`);
+      },
       get: (id: string) => request<VMT.Tour>(`/api/admin/tours/${id}`),
       create: (data: Record<string, unknown>) =>
         request<VMT.Tour>('/api/admin/tours', {
@@ -47,11 +53,21 @@ export const api = {
           method: 'PUT',
           body: JSON.stringify(data),
         }),
-      delete: (id: string) =>
-        request<void>(`/api/admin/tours/${id}`, {method: 'DELETE'}),
+      delete: (id: string, options?: {hard?: boolean}) => {
+        const suffix = options?.hard ? '?hard=true' : '';
+        return request<void>(`/api/admin/tours/${id}${suffix}`, {
+          method: 'DELETE',
+        });
+      },
     },
     destinations: {
-      list: () => request<VMT.Destination[]>('/api/admin/destinations'),
+      list: (params?: {archived?: boolean}) => {
+        const qs = new URLSearchParams();
+        if (params?.archived !== undefined)
+          qs.set('archived', String(params.archived));
+        const suffix = qs.toString() ? `?${qs.toString()}` : '';
+        return request<VMT.Destination[]>(`/api/admin/destinations${suffix}`);
+      },
       get: (id: string) =>
         request<VMT.Destination>(`/api/admin/destinations/${id}`),
       create: (data: Record<string, unknown>) =>
@@ -64,8 +80,12 @@ export const api = {
           method: 'PUT',
           body: JSON.stringify(data),
         }),
-      delete: (id: string) =>
-        request<void>(`/api/admin/destinations/${id}`, {method: 'DELETE'}),
+      delete: (id: string, options?: {hard?: boolean}) => {
+        const suffix = options?.hard ? '?hard=true' : '';
+        return request<void>(`/api/admin/destinations/${id}${suffix}`, {
+          method: 'DELETE',
+        });
+      },
     },
     highlights: {
       list: (destinationId: string) =>
