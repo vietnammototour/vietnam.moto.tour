@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type * as VMT from '@/domain';
 
 type Props = {
@@ -11,12 +10,10 @@ export function DestinationHero({destination, locale}: Props) {
 
   return (
     <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
-      <Image
+      <img
         src={destination.heroImage || destination.imageUrl}
         alt={destination.name}
-        fill
-        priority
-        className="object-cover"
+        className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
       <div className="absolute inset-0 flex items-end">

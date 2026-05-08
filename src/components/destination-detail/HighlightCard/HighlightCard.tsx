@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type * as VMT from '@/domain';
 
 type Props = {
@@ -14,11 +13,9 @@ export function HighlightCard({highlight, locale}: Props) {
   return (
     <article className="rounded-lg overflow-hidden elevation-1 bg-surface">
       {highlight.imageUrl && (
-        <Image
+        <img
           src={highlight.imageUrl}
           alt={title}
-          width={480}
-          height={320}
           className="w-full aspect-[3/2] object-cover"
         />
       )}
