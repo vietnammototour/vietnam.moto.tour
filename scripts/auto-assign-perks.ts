@@ -1,20 +1,22 @@
 /**
- * Auto-assign Perk rows to Tour records based on keyword matches against
- * tour text fields (title, transportation, hotel, guided, descriptions,
- * mealsInfo). Perks themselves must already exist in the DB.
+ * Auto-assign Perk rows to Tour records.
+ *
+ * Splits each tour's text into INCLUDED and EXCLUDED segments using common
+ * heading markers (English + Vietnamese), then matches Perks by token against
+ * each segment.
  *
  * Run on VPS:
- *   npx tsx scripts/auto-assign-perks.ts            # dry-run summary
- *   npx tsx scripts/auto-assign-perks.ts --apply    # write TourPerk rows
- *   npx tsx scripts/auto-assign-perks.ts --apply --force   # overwrite even tours that already have perks
+ *   npx tsx scripts/auto-assign-perks.ts              # dry-run preview
+ *   npx tsx scripts/auto-assign-perks.ts --apply      # wipe TourPerk rows for
+ *                                                     #   every tour and rewrite
  *
- * Default behavior:
- *   - Skip tours that already have any TourPerk rows (unless --force).
- *   - Only assigns INCLUDED perks. Explicit exclusions stay manual.
- *   - For each perk, derive keyword tokens from labelEn + labelVi (length >= 3,
- *     stopwords removed). A perk matches when any of its significant tokens
- *     is found in the combined tour text (case-insensitive, accent-insensitive
- *     for Vietnamese). Tweak STRICT to require all tokens.
+ * --apply NEVER touches the Perk catalog table. Only TourPerk join rows are
+ * replaced (per tour, full overwrite).
+ *
+ * Flags:
+ *   --apply        commit changes (default: dry-run)
+ *   --strict       require ALL perk tokens to appear in segment (default: any)
+ *   --tour <slug>  limit to a single tour slug (repeatable)
  */
 
 import {PrismaClient} from '@prisma/client';
@@ -51,10 +53,16 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
-const args = new Set(process.argv.slice(2));
-const APPLY = args.has('--apply');
-const FORCE = args.has('--force');
-const STRICT = args.has('--strict');
+const argv = process.argv.slice(2);
+const APPLY = argv.includes('--apply');
+const STRICT = argv.includes('--strict');
+const TOUR_FILTERS: string[] = [];
+for (let i = 0; i < argv.length; i++) {
+  if (argv[i] === '--tour' && argv[i + 1]) {
+    TOUR_FILTERS.push(argv[i + 1]);
+    i++;
+  }
+}
 
 const dbUrl = process.env.DATABASE_URL.split('?')[0];
 const adapter = new PrismaPg(dbUrl);
@@ -74,36 +82,71 @@ const STOPWORDS = new Set([
   'any',
   'one',
   'two',
-  'của',
+  'have',
+  'has',
+  'are',
+  'not',
+  'will',
+  'cua',
   'cho',
-  'với',
+  'voi',
   'theo',
-  'tới',
-  'đến',
+  'toi',
+  'den',
   'trong',
-  'một',
-  'và',
-  'các',
+  'mot',
+  'va',
+  'cac',
   'khi',
-  'như',
+  'nhu',
+  'co',
 ]);
 
-// Hand-curated keyword → perk-labelEn boosts. Add aliases tour copy uses but
-// perk labels do not. Match is case-insensitive on the tour text.
+// Tour copy aliases that aren't covered by perk labels themselves.
+// Keys are matched case-insensitively against perk labels (en+vi).
 const ALIASES: Record<string, string[]> = {
-  helmet: ['helmet', 'mũ bảo hiểm'],
-  fuel: ['fuel', 'gas', 'petrol', 'xăng'],
-  guide: ['guide', 'guided', 'hướng dẫn viên', 'tour leader'],
-  motorbike: ['motorbike', 'bike', 'xe máy', 'motor'],
-  hotel: ['hotel', 'homestay', 'guesthouse', 'lodging', 'khách sạn', 'nghỉ'],
-  breakfast: ['breakfast', 'sáng'],
-  lunch: ['lunch', 'trưa'],
-  dinner: ['dinner', 'tối'],
-  water: ['water', 'bottled', 'nước'],
-  insurance: ['insurance', 'bảo hiểm'],
-  pickup: ['pickup', 'pick up', 'transfer', 'đón'],
-  fee: ['entrance', 'ticket', 'admission', 'phí'],
+  helmet: ['helmet', 'mu bao hiem'],
+  fuel: ['fuel', 'gas', 'petrol', 'xang'],
+  guide: ['guide', 'guided', 'huong dan vien', 'tour leader'],
+  motorbike: ['motorbike', 'bike', 'xe may', 'motor'],
+  hotel: ['hotel', 'homestay', 'guesthouse', 'lodging', 'khach san', 'nghi'],
+  breakfast: ['breakfast', 'sang'],
+  lunch: ['lunch', 'trua'],
+  dinner: ['dinner', 'toi'],
+  water: ['water', 'bottled', 'nuoc'],
+  insurance: ['insurance', 'bao hiem'],
+  pickup: ['pickup', 'pick up', 'transfer', 'don'],
+  fee: ['entrance', 'ticket', 'admission', 'phi vao cua', 'phi'],
 };
+
+// Heading markers that delimit included vs excluded sections.
+const INCLUDED_HEADERS = [
+  'whats included',
+  'what is included',
+  'what s included',
+  'included',
+  'inclusions',
+  'tour includes',
+  'price includes',
+  'bao gom',
+  'gia bao gom',
+  'tour bao gom',
+];
+const EXCLUDED_HEADERS = [
+  'not included',
+  'whats not included',
+  'what is not included',
+  'excluded',
+  'exclusions',
+  'tour excludes',
+  'price excludes',
+  'extra cost',
+  'own expense',
+  'khong bao gom',
+  'gia khong bao gom',
+  'tour khong bao gom',
+  'chi phi them',
+];
 
 function stripDiacritics(s: string) {
   return s
@@ -123,23 +166,65 @@ function tokenize(s: string): string[] {
     .filter((t) => t.length >= 3 && !STOPWORDS.has(t));
 }
 
-type LocalizedText = {en?: string; vi?: string} | null | undefined;
-
 function flatten(value: unknown): string {
   if (value == null) return '';
   if (typeof value === 'string') return value;
   if (typeof value === 'number' || typeof value === 'boolean')
     return String(value);
-  if (Array.isArray(value)) return value.map(flatten).join(' ');
+  if (Array.isArray(value)) return value.map(flatten).join('\n');
   if (typeof value === 'object') {
     return Object.values(value as Record<string, unknown>)
       .map(flatten)
-      .join(' ');
+      .join('\n');
   }
   return '';
 }
 
-function buildTourText(tour: {
+type Segments = {included: string; excluded: string};
+
+/**
+ * Walks a normalized text body and assigns each line to the included or
+ * excluded bucket based on the most recent heading marker. Lines before the
+ * first marker default to "included" (most tour copy describes inclusions
+ * implicitly).
+ */
+function splitSegments(rawText: string): Segments {
+  const lines = rawText.split(/\r?\n/);
+  let bucket: 'included' | 'excluded' = 'included';
+  const incChunks: string[] = [];
+  const excChunks: string[] = [];
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    const norm = normalize(line);
+    let switched = false;
+    for (const h of EXCLUDED_HEADERS) {
+      if (norm.startsWith(h) || norm === h || norm.includes(h)) {
+        bucket = 'excluded';
+        switched = true;
+        break;
+      }
+    }
+    if (!switched) {
+      for (const h of INCLUDED_HEADERS) {
+        if (norm.startsWith(h) || norm === h || norm.includes(h)) {
+          bucket = 'included';
+          switched = true;
+          break;
+        }
+      }
+    }
+    if (switched) continue;
+    if (bucket === 'included') incChunks.push(norm);
+    else excChunks.push(norm);
+  }
+  return {
+    included: incChunks.join(' \n '),
+    excluded: excChunks.join(' \n '),
+  };
+}
+
+function buildTourSegments(tour: {
   title: string;
   titleEn: string;
   titleVi: string;
@@ -151,22 +236,31 @@ function buildTourText(tour: {
   mealsInfo: unknown;
   itinerary: unknown;
   highlights: {titleEn: string; titleVi: string}[];
-}) {
-  return [
+}): Segments {
+  // Headers and section splits typically live in description fields.
+  const descriptionBlob = [tour.descriptionEn, tour.descriptionVi].join('\n');
+  const descriptionSegments = splitSegments(descriptionBlob);
+
+  // Other fields are inclusion-by-definition (transport offered, hotel listed,
+  // meals served, etc). Append to included segment.
+  const inclusionExtras = [
     tour.title,
     tour.titleEn,
     tour.titleVi,
     tour.transportation,
     tour.hotel,
     tour.guided,
-    tour.descriptionEn,
-    tour.descriptionVi,
     flatten(tour.mealsInfo),
     flatten(tour.itinerary),
     tour.highlights.map((h) => `${h.titleEn} ${h.titleVi}`).join(' '),
   ]
     .map(normalize)
     .join(' \n ');
+
+  return {
+    included: `${descriptionSegments.included} \n ${inclusionExtras}`,
+    excluded: descriptionSegments.excluded,
+  };
 }
 
 function perkTokens(labelEn: string, labelVi: string): string[] {
@@ -178,11 +272,11 @@ function perkTokens(labelEn: string, labelVi: string): string[] {
       for (const a of list) aliasHits.add(normalize(a));
     }
   }
-  return [...new Set([...base, ...aliasHits])];
+  return [...new Set([...base, ...aliasHits])].filter((t) => t.length >= 3);
 }
 
 function matches(text: string, tokens: string[]): boolean {
-  if (tokens.length === 0) return false;
+  if (!text || tokens.length === 0) return false;
   if (STRICT) return tokens.every((t) => text.includes(t));
   return tokens.some((t) => text.includes(t));
 }
@@ -202,6 +296,7 @@ async function main() {
   }));
 
   const tours = await prisma.tour.findMany({
+    where: TOUR_FILTERS.length > 0 ? {slug: {in: TOUR_FILTERS}} : undefined,
     select: {
       id: true,
       slug: true,
@@ -216,61 +311,67 @@ async function main() {
       mealsInfo: true,
       itinerary: true,
       highlights: {select: {titleEn: true, titleVi: true}},
-      perks: {select: {perkId: true}},
+      perks: {select: {perkId: true, bucket: true}},
     },
   });
 
-  let touched = 0;
-  let skipped = 0;
-  let totalAssignments = 0;
+  let processed = 0;
+  let totalIncluded = 0;
+  let totalExcluded = 0;
 
   for (const tour of tours) {
-    if (tour.perks.length > 0 && !FORCE) {
-      skipped += 1;
-      continue;
-    }
+    const segments = buildTourSegments(tour);
 
-    const text = buildTourText(tour);
-    const matched = perkIndex.filter((p) => matches(text, p.tokens));
+    const excludedMatches = perkIndex.filter((p) =>
+      matches(segments.excluded, p.tokens),
+    );
+    const excludedIds = new Set(excludedMatches.map((p) => p.id));
 
-    if (matched.length === 0) {
-      console.log(`- ${tour.slug}: no matches`);
-      continue;
-    }
+    // Included = matches in included segment, minus anything explicitly
+    // marked excluded (exclusion wins on conflict).
+    const includedMatches = perkIndex
+      .filter((p) => matches(segments.included, p.tokens))
+      .filter((p) => !excludedIds.has(p.id));
 
+    console.log(`\n${tour.slug}`);
     console.log(
-      `+ ${tour.slug}: ${matched.length} match(es): ${matched
-        .map((p) => p.labelEn)
-        .join(', ')}`,
+      `  INCLUDED (${includedMatches.length}): ${includedMatches.map((p) => p.labelEn).join(', ') || '—'}`,
+    );
+    console.log(
+      `  EXCLUDED (${excludedMatches.length}): ${excludedMatches.map((p) => p.labelEn).join(', ') || '—'}`,
     );
 
     if (APPLY) {
-      const ops = [];
-      if (FORCE) {
-        ops.push(prisma.tourPerk.deleteMany({where: {tourId: tour.id}}));
-      }
-      ops.push(
+      await prisma.$transaction([
+        prisma.tourPerk.deleteMany({where: {tourId: tour.id}}),
         prisma.tourPerk.createMany({
-          data: matched.map((p) => ({
-            tourId: tour.id,
-            perkId: p.id,
-            bucket: 'INCLUDED' as const,
-          })),
+          data: [
+            ...includedMatches.map((p) => ({
+              tourId: tour.id,
+              perkId: p.id,
+              bucket: 'INCLUDED' as const,
+            })),
+            ...excludedMatches.map((p) => ({
+              tourId: tour.id,
+              perkId: p.id,
+              bucket: 'EXCLUDED' as const,
+            })),
+          ],
           skipDuplicates: true,
         }),
-      );
-      await prisma.$transaction(ops);
+      ]);
     }
 
-    touched += 1;
-    totalAssignments += matched.length;
+    processed += 1;
+    totalIncluded += includedMatches.length;
+    totalExcluded += excludedMatches.length;
   }
 
-  console.log('---');
+  console.log('\n---');
   console.log(
-    `${APPLY ? 'Applied' : 'Dry-run'}: tours touched=${touched} skipped=${skipped} assignments=${totalAssignments}`,
+    `${APPLY ? 'Applied' : 'Dry-run'}: tours=${processed} included=${totalIncluded} excluded=${totalExcluded}`,
   );
-  if (!APPLY) console.log('Re-run with --apply to write changes.');
+  if (!APPLY) console.log('Re-run with --apply to overwrite TourPerk rows.');
 
   await prisma.$disconnect();
 }
@@ -279,6 +380,3 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-
-// Suppress unused-type lint for documentation-only alias.
-export type {LocalizedText};

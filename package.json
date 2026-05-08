@@ -26,6 +26,7 @@
     "migrate:perks-translations": "npx tsx scripts/migrate-perks-translations.ts",
     "export:perks-data": "npx tsx scripts/export-perks-data.ts",
     "import:perks-data": "npx tsx scripts/import-perks-data.ts",
+    "perks:auto-assign": "npx tsx scripts/auto-assign-perks.ts",
     "sweep:uploads": "npx tsx scripts/sweep-orphan-uploads.ts"
   },
   "dependencies": {
