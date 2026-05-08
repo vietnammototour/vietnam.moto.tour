@@ -21,6 +21,7 @@ export const TourCarousel = ({tours}: Props) => {
         modules={[Autoplay, Pagination]}
         spaceBetween={24}
         slidesPerView={1}
+        slidesPerGroup={1}
         autoplay={{
           delay: 7500,
           disableOnInteraction: false,
@@ -28,10 +29,10 @@ export const TourCarousel = ({tours}: Props) => {
         loop={false}
         pagination={{clickable: true}}
         breakpoints={{
-          640: {slidesPerView: 2, spaceBetween: 20},
-          768: {slidesPerView: 2, spaceBetween: 24},
-          1024: {slidesPerView: 3, spaceBetween: 24},
-          1280: {slidesPerView: 4, spaceBetween: 24},
+          640: {slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 20},
+          768: {slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 24},
+          1024: {slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 24},
+          1280: {slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 24},
         }}
       >
         {tours.map((tour) => (
