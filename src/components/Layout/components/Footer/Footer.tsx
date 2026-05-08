@@ -102,7 +102,7 @@ export const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-primary-light transition-colors cursor-pointer"
               >
-                <TripAdvisorIcon className="h-[1em] w-auto" />
+                <TripAdvisorIcon className="h-[0.8em] w-auto" />
               </a>
               <a
                 href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}

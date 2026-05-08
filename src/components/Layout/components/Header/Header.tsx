@@ -89,7 +89,7 @@ export const Header = () => {
                 rel="noopener noreferrer"
                 className="hover:text-primary-light transition-colors cursor-pointer"
               >
-                <TripAdvisorIcon className="h-[1em] w-auto" />
+                <TripAdvisorIcon className="h-[0.8em] w-auto" />
               </a>
               <a
                 href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
@@ -245,7 +245,7 @@ export const Header = () => {
               rel="noopener noreferrer"
               className="text-on-surface-secondary hover:text-on-surface-inverse"
             >
-              <TripAdvisorIcon className="h-[1em] w-auto" />
+              <TripAdvisorIcon className="h-[0.8em] w-auto" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
