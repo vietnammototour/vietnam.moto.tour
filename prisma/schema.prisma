@@ -107,7 +107,6 @@ model Perk {
   labelVi   String
   icon      String
   category  PerkCategory @default(OTHER)
-  archived  Boolean      @default(false)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   tours     TourPerk[]

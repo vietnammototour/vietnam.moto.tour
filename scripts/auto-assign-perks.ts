@@ -282,7 +282,7 @@ function matches(text: string, tokens: string[]): boolean {
 }
 
 async function main() {
-  const perks = await prisma.perk.findMany({where: {archived: false}});
+  const perks = await prisma.perk.findMany();
   if (perks.length === 0) {
     console.error('No perks in DB — aborting.');
     process.exit(1);

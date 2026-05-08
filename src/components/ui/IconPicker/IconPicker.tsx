@@ -7,9 +7,14 @@ import {FA_ICONS} from '@/data/fa-icons';
 type IconPickerProps = {
   value: string;
   onChange: (className: string) => void;
+  compact?: boolean;
 };
 
-export function IconPicker({value, onChange}: IconPickerProps) {
+export function IconPicker({
+  value,
+  onChange,
+  compact = false,
+}: IconPickerProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -21,26 +26,52 @@ export function IconPicker({value, onChange}: IconPickerProps) {
 
   return (
     <>
-      <div className="flex items-center gap-3">
-        {value ? (
-          <i data-testid="icon-picker-current" className={`${value} text-xl`} />
-        ) : (
-          <span
-            data-testid="icon-picker-current"
-            className="text-on-surface-secondary"
-          >
-            —
-          </span>
-        )}
-        <Button
+      {compact ? (
+        <button
           type="button"
-          variant="secondary"
           onClick={() => setOpen(true)}
           aria-label="Pick icon"
+          className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-lg border border-border bg-surface hover:bg-surface-alt"
         >
-          Pick icon
-        </Button>
-      </div>
+          {value ? (
+            <i
+              data-testid="icon-picker-current"
+              className={`${value} text-xl`}
+            />
+          ) : (
+            <span
+              data-testid="icon-picker-current"
+              className="text-on-surface-secondary"
+            >
+              —
+            </span>
+          )}
+        </button>
+      ) : (
+        <div className="flex items-center gap-3">
+          {value ? (
+            <i
+              data-testid="icon-picker-current"
+              className={`${value} text-xl`}
+            />
+          ) : (
+            <span
+              data-testid="icon-picker-current"
+              className="text-on-surface-secondary"
+            >
+              —
+            </span>
+          )}
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => setOpen(true)}
+            aria-label="Pick icon"
+          >
+            Pick icon
+          </Button>
+        </div>
+      )}
 
       <Modal
         open={open}

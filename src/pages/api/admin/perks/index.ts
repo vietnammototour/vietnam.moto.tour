@@ -21,8 +21,6 @@ export default async function handler(
 
   if (req.method === 'GET') {
     const where: Record<string, unknown> = {};
-    if (req.query.archived === 'true') where.archived = true;
-    if (req.query.archived === 'false') where.archived = false;
     if (
       typeof req.query.category === 'string' &&
       VALID_CATEGORIES.includes(req.query.category as PerkCategory)

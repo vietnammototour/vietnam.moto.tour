@@ -44,12 +44,12 @@ describe('GET /api/admin/perks', () => {
     expect(res.json).toHaveBeenCalledWith([{id: '1'}]);
   });
 
-  it('filters by archived=false when query param given', async () => {
+  it('filters by category when query param given', async () => {
     (prisma.perk.findMany as jest.Mock).mockResolvedValue([]);
     const res = mockRes();
-    await handler(mockReq({method: 'GET', query: {archived: 'false'}}), res);
+    await handler(mockReq({method: 'GET', query: {category: 'FOOD'}}), res);
     expect(prisma.perk.findMany).toHaveBeenCalledWith({
-      where: {archived: false},
+      where: {category: 'FOOD'},
       orderBy: [{category: 'asc'}, {labelEn: 'asc'}],
     });
   });

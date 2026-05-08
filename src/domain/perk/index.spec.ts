@@ -8,7 +8,6 @@ describe('Perk domain types', () => {
       labelVi: 'Thuê xe',
       icon: 'fa-solid fa-motorcycle',
       category: 'TRANSPORT',
-      archived: false,
     };
     expect(p.labelEn).toBe('Bike Hire');
   });

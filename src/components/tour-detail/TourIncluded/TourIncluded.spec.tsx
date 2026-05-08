@@ -9,7 +9,6 @@ function makePerk(overrides: Partial<VMT.Perk> = {}): VMT.Perk {
     labelVi: 'Khách sạn',
     icon: 'fa fa-bed',
     category: 'ACCOMMODATION',
-    archived: false,
     ...overrides,
   };
 }

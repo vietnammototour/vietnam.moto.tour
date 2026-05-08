@@ -76,8 +76,6 @@ export const routes = {
     },
     perks: {
       list: {path: () => '/admin/perks'},
-      new: {path: () => '/admin/perks/new'},
-      edit: {path: (p: {id: string | number}) => `/admin/perks/${p.id}/edit`},
     },
     translations: {path: () => '/admin/translations'},
     users: {path: () => '/admin/users'},

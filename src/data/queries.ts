@@ -19,7 +19,6 @@ export async function getAllTours(isAdmin = false): Promise<Tour[]> {
         destination: true,
         highlights: true,
         perks: {
-          where: {perk: {archived: false}},
           include: {perk: true},
         },
       },
@@ -42,7 +41,6 @@ export async function getTourBySlug(
         destination: true,
         highlights: true,
         perks: {
-          where: {perk: {archived: false}},
           include: {perk: true},
         },
       },
@@ -126,7 +124,6 @@ export async function getDestinationBySlug(
             destination: true,
             highlights: true,
             perks: {
-              where: {perk: {archived: false}},
               include: {perk: true},
             },
           },

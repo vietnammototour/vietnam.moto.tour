@@ -106,14 +106,8 @@ export const api = {
         request<void>(`/api/admin/highlights/${id}`, {method: 'DELETE'}),
     },
     perks: {
-      list: (params?: {
-        archived?: boolean;
-        category?: string;
-        search?: string;
-      }) => {
+      list: (params?: {category?: string; search?: string}) => {
         const qs = new URLSearchParams();
-        if (params?.archived !== undefined)
-          qs.set('archived', String(params.archived));
         if (params?.category) qs.set('category', params.category);
         if (params?.search) qs.set('search', params.search);
         const suffix = qs.toString() ? `?${qs.toString()}` : '';
