@@ -26,6 +26,21 @@ export function getMinPrice(groups: PricingGroup[] | undefined): number {
   return Number.isFinite(min) ? min : 0;
 }
 
+export function getMinPriceByType(
+  groups: PricingGroup[] | undefined,
+  type: PricingGroup['type'],
+): number | null {
+  if (!groups?.length) return null;
+  let min = Infinity;
+  for (const g of groups) {
+    if (g.type !== type) continue;
+    for (const t of g.tiers) {
+      if (typeof t.price === 'number' && t.price < min) min = t.price;
+    }
+  }
+  return Number.isFinite(min) ? min : null;
+}
+
 export function getMaxGroupSize(groups: PricingGroup[] | undefined): number {
   if (!groups?.length) return 0;
   let max = 0;

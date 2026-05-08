@@ -12,7 +12,8 @@ export const DestinationCard = ({
   destination,
   className,
 }: Props & {className?: string}) => {
-  const {name, imageUrl, tourCount, slug, hasCar, hasBike} = destination;
+  const {name, imageUrl, tourCount, slug, carTourCount, bikeTourCount} =
+    destination;
   const t = useTranslations('common');
 
   return (
@@ -41,20 +42,28 @@ export const DestinationCard = ({
               {tourCount} {t('tours', {count: tourCount})}
             </span>
             <div className="flex items-center gap-1.5">
-              {hasBike && (
+              {bikeTourCount > 0 && (
                 <span
-                  className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm text-white"
-                  title={t('motorbike')}
+                  className="inline-flex items-center gap-1 h-7 px-2 rounded-full bg-white/20 backdrop-blur-sm text-white"
+                  title={t('tours', {count: bikeTourCount})}
+                  aria-label={`${bikeTourCount} ${t('motorbike')}`}
                 >
-                  <i className="fa fa-motorcycle text-xs" />
+                  <i className="fa fa-motorcycle text-xs" aria-hidden="true" />
+                  <span className="type-label-sm leading-none tabular-nums">
+                    {bikeTourCount}
+                  </span>
                 </span>
               )}
-              {hasCar && (
+              {carTourCount > 0 && (
                 <span
-                  className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm text-white"
-                  title={t('car')}
+                  className="inline-flex items-center gap-1 h-7 px-2 rounded-full bg-white/20 backdrop-blur-sm text-white"
+                  title={t('tours', {count: carTourCount})}
+                  aria-label={`${carTourCount} ${t('car')}`}
                 >
-                  <i className="fa fa-car text-xs" />
+                  <i className="fa fa-car text-xs" aria-hidden="true" />
+                  <span className="type-label-sm leading-none tabular-nums">
+                    {carTourCount}
+                  </span>
                 </span>
               )}
             </div>

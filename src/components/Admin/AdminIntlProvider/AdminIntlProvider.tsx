@@ -25,6 +25,9 @@ const messagesByLocale = {
     },
     common: {
       perPerson: 'per person',
+      perVehicle: 'per vehicle',
+      priceUnitPerson: 'Per person',
+      priceUnitVehicle: 'Per vehicle',
     },
   },
   vi: {
@@ -49,6 +52,9 @@ const messagesByLocale = {
     },
     common: {
       perPerson: 'mỗi người',
+      perVehicle: 'mỗi xe',
+      priceUnitPerson: 'Mỗi người',
+      priceUnitVehicle: 'Mỗi xe',
     },
   },
 };

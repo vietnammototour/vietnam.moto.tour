@@ -39,6 +39,8 @@ type HomeProps = {
     tourCount: number;
     hasCar: boolean;
     hasBike: boolean;
+    carTourCount: number;
+    bikeTourCount: number;
   })[];
   isAdmin: boolean;
 };

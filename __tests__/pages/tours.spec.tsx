@@ -53,7 +53,7 @@ describe('Tours page', () => {
 
   it('renders correct number of tour cards', () => {
     render(<Tours allTours={sampleTours} isAdmin={false} />);
-    const prices = screen.getAllByText('perPerson');
+    const prices = screen.getAllByText('priceUnitVehicle');
     expect(prices).toHaveLength(sampleTours.length);
   });
 });
