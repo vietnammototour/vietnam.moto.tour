@@ -6,9 +6,10 @@
  * It pulls in the Prisma client which depends on Node.js-only modules (pg, tls).
  */
 import {prisma} from '@/lib/prisma';
-import type {Tour, DestinationWithStats} from '@/domain';
+import type {Tour, DestinationWithStats, DestinationDetail} from '@/domain';
 import {toTour} from '@/domain/tour/mapper';
 import {toDestination} from '@/domain/destination/mapper';
+import {toHighlight} from '@/domain/highlight/mapper';
 
 export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   try {
@@ -98,6 +99,44 @@ export async function getActiveDestinationsFromDb(
   } catch (error) {
     console.error('getActiveDestinationsFromDb: DB query failed', error);
     return [];
+  }
+}
+
+export async function getDestinationBySlug(
+  slug: string,
+  isAdmin = false,
+): Promise<DestinationDetail | undefined> {
+  try {
+    const tourFilter = isAdmin
+      ? {}
+      : {status: {in: ['PUBLISHED' as const, 'FEATURED' as const]}};
+    const row = await prisma.destination.findUnique({
+      where: {slug},
+      include: {
+        highlights: {orderBy: {createdAt: 'asc'}},
+        tours: {
+          where: tourFilter,
+          include: {
+            destination: true,
+            highlights: true,
+            perks: {
+              where: {perk: {archived: false}},
+              include: {perk: true},
+            },
+          },
+        },
+      },
+    });
+    if (!row || !row.isActive) return undefined;
+    return {
+      ...toDestination(row),
+      description: {en: row.descriptionEn, vi: row.descriptionVi},
+      highlights: row.highlights.map(toHighlight),
+      tours: row.tours.map(toTour),
+    };
+  } catch (error) {
+    console.error('getDestinationBySlug: DB query failed', error);
+    return undefined;
   }
 }
 
