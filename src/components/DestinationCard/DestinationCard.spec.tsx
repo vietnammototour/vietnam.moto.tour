@@ -13,7 +13,21 @@ describe('DestinationCard', () => {
     tourCount: 5,
     hasCar: true,
     hasBike: true,
+    carTourCount: 2,
+    bikeTourCount: 3,
   };
+
+  it('renders bike tour count with motorcycle icon', () => {
+    render(<DestinationCard destination={destination} />);
+    expect(document.querySelector('.fa-motorcycle')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+  });
+
+  it('renders car tour count with car icon', () => {
+    render(<DestinationCard destination={destination} />);
+    expect(document.querySelector('.fa-car')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+  });
 
   it('renders the destination name as a link to the destination detail page', () => {
     render(<DestinationCard destination={destination} />);

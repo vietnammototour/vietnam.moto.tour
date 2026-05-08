@@ -75,6 +75,18 @@ const entries: Entry[] = [
     valueVi: '{count} km',
   },
   {
+    namespace: 'common',
+    key: 'priceUnitPerson',
+    valueEn: 'Per person',
+    valueVi: 'Mỗi người',
+  },
+  {
+    namespace: 'common',
+    key: 'priceUnitVehicle',
+    valueEn: 'Per vehicle',
+    valueVi: 'Mỗi xe',
+  },
+  {
     namespace: 'admin.tours.tabs',
     key: 'general',
     valueEn: 'General',

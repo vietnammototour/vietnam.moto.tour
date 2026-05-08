@@ -76,6 +76,8 @@ export function CardImagePreview({
     tourCount: 3,
     hasCar: false,
     hasBike: true,
+    carTourCount: 0,
+    bikeTourCount: 3,
   };
 
   return (

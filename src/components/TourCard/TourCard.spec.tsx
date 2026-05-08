@@ -31,9 +31,64 @@ describe('TourCard', () => {
     expect(screen.getByText('$80')).toBeInTheDocument();
   });
 
-  it('renders the perPerson translation key', () => {
+  it('renders the priceUnitVehicle translation key for vehicle pricing', () => {
     render(<TourCard tour={tour} />);
-    expect(screen.getByText('perPerson')).toBeInTheDocument();
+    expect(screen.getByText('priceUnitVehicle')).toBeInTheDocument();
+  });
+
+  it('renders the priceUnitPerson translation key for group-size pricing', () => {
+    const groupTour = buildTour({
+      title: {en: 'Group Tour', vi: 'Group Tour'},
+      pricingGroups: [
+        {
+          type: 'group-size',
+          label: {en: 'Group', vi: 'Nhóm'},
+          tiers: [
+            {
+              label: {en: '2-4', vi: '2-4'},
+              price: 150,
+              minGroupSize: 2,
+              maxGroupSize: 4,
+            },
+          ],
+        },
+      ],
+      slug: 'group-tour',
+    });
+    render(<TourCard tour={groupTour} />);
+    expect(screen.getByText('priceUnitPerson')).toBeInTheDocument();
+    expect(screen.getByText('$150')).toBeInTheDocument();
+  });
+
+  it('renders both prices when both pricing types are present', () => {
+    const bothTour = buildTour({
+      title: {en: 'Both Tour', vi: 'Both Tour'},
+      pricingGroups: [
+        {
+          type: 'vehicle',
+          label: {en: 'Bike', vi: 'Xe'},
+          tiers: [{label: {en: 'Solo', vi: 'Solo'}, price: 80}],
+        },
+        {
+          type: 'group-size',
+          label: {en: 'Group', vi: 'Nhóm'},
+          tiers: [
+            {
+              label: {en: '2-4', vi: '2-4'},
+              price: 150,
+              minGroupSize: 2,
+              maxGroupSize: 4,
+            },
+          ],
+        },
+      ],
+      slug: 'both-tour',
+    });
+    render(<TourCard tour={bothTour} />);
+    expect(screen.getByText('$80')).toBeInTheDocument();
+    expect(screen.getByText('$150')).toBeInTheDocument();
+    expect(screen.getByText('priceUnitVehicle')).toBeInTheDocument();
+    expect(screen.getByText('priceUnitPerson')).toBeInTheDocument();
   });
 
   it('renders the duration with translation key', () => {

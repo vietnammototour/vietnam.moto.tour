@@ -4,7 +4,7 @@ import {motion, useTransform} from 'framer-motion';
 import {routes} from '@/routes';
 import {useCardTilt} from '@/hooks/use-card-tilt';
 import type * as VMT from '@/domain';
-import {getMinPrice} from '@/domain';
+import {getMinPriceByType} from '@/domain';
 
 type Props = {
   tour: VMT.Tour;
@@ -13,10 +13,34 @@ type Props = {
 
 export const TourCard = ({tour, interactive = true}: Props) => {
   const {imageUrl, duration, distance, slug} = tour;
-  const price = getMinPrice(tour.pricingGroups);
+  const groupPrice = getMinPriceByType(tour.pricingGroups, 'group-size');
+  const vehiclePrice = getMinPriceByType(tour.pricingGroups, 'vehicle');
   const locale = useLocale();
   const title = tour.title[locale as 'en' | 'vi'] ?? tour.title.vi;
   const t = useTranslations('common');
+
+  const priceChips: {
+    key: string;
+    price: number;
+    unit: string;
+    chipClass: string;
+  }[] = [];
+  if (groupPrice !== null) {
+    priceChips.push({
+      key: 'group',
+      price: groupPrice,
+      unit: t('priceUnitPerson'),
+      chipClass: 'bg-primary/90',
+    });
+  }
+  if (vehiclePrice !== null) {
+    priceChips.push({
+      key: 'vehicle',
+      price: vehiclePrice,
+      unit: t('priceUnitVehicle'),
+      chipClass: 'bg-secondary/90',
+    });
+  }
 
   const stats = [
     {
@@ -67,7 +91,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
       <div className="relative overflow-hidden aspect-[3/2] bg-secondary/10">
         {tour.status && tour.status !== 'PUBLISHED' && (
           <span
-            className={`absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full type-label-sm uppercase tracking-wider text-white ${
+            className={`absolute top-2 left-2 z-20 px-2 py-0.5 rounded-full type-label-sm uppercase tracking-wider text-white ${
               tour.status === 'DRAFT'
                 ? 'bg-amber-500/90'
                 : tour.status === 'FEATURED'
@@ -79,30 +103,44 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           </span>
         )}
         {imageUrl ? (
-          <>
-            <motion.img
-              src={imageUrl}
-              alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              style={interactive ? {x: imageX, y: imageY} : undefined}
-            />
-            <div className="absolute inset-0 bg-overlay/20" />
-          </>
+          <motion.img
+            src={imageUrl}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            style={interactive ? {x: imageX, y: imageY} : undefined}
+          />
         ) : (
           <div className="flex items-center justify-center w-full h-full">
             <i className="fa fa-image text-5xl text-on-surface-tertiary" />
           </div>
         )}
-      </div>
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="type-title-sm text-on-surface mb-2 group-hover:text-primary transition-colors">
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+
+        {priceChips.length > 0 && (
+          <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1">
+            {priceChips.map((chip) => (
+              <div
+                key={chip.key}
+                className={`flex items-baseline gap-1.5 rounded-full backdrop-blur-sm px-2.5 py-1 text-white ${chip.chipClass}`}
+              >
+                <span className="type-label-sm uppercase tracking-wider opacity-90 text-[0.6rem] leading-none">
+                  {chip.unit}
+                </span>
+                <span className="type-title-sm leading-none">
+                  ${chip.price}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <h3 className="absolute inset-x-0 bottom-0 z-10 px-5 pb-4 pt-8 text-center text-2xl font-semibold leading-tight text-white drop-shadow-sm group-hover:text-primary transition-colors">
           {title}
         </h3>
-        <p className="text-on-surface-secondary type-body-sm mb-4">
-          <span className="text-on-surface-accent type-title-sm">${price}</span>{' '}
-          {t('perPerson')}
-        </p>
-        <ul className="grid grid-cols-3 gap-2 mt-auto pt-4 border-t border-border-subtle">
+      </div>
+      <div className="p-5 flex flex-col flex-1">
+        <ul className="grid grid-cols-3 gap-2 mt-auto">
           {stats.map((s, i) => (
             <li
               key={s.key}

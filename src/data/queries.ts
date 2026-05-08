@@ -86,16 +86,22 @@ export async function getActiveDestinationsFromDb(
     type DestRow = (typeof destinations)[number];
     return destinations
       .filter((d: DestRow) => d.tours.length > 0)
-      .map((d: DestRow) => ({
-        ...toDestination(d),
-        tourCount: d.tours.length,
-        hasCar: d.tours.some((t: {transportation: string}) =>
+      .map((d: DestRow) => {
+        const carTourCount = d.tours.filter((t: {transportation: string}) =>
           /car/i.test(t.transportation),
-        ),
-        hasBike: d.tours.some((t: {transportation: string}) =>
+        ).length;
+        const bikeTourCount = d.tours.filter((t: {transportation: string}) =>
           /motorbike/i.test(t.transportation),
-        ),
-      }));
+        ).length;
+        return {
+          ...toDestination(d),
+          tourCount: d.tours.length,
+          hasCar: carTourCount > 0,
+          hasBike: bikeTourCount > 0,
+          carTourCount,
+          bikeTourCount,
+        };
+      });
   } catch (error) {
     console.error('getActiveDestinationsFromDb: DB query failed', error);
     return [];

@@ -27,6 +27,8 @@ const mockDestinations = [
     tourCount: 2,
     hasCar: false,
     hasBike: true,
+    carTourCount: 0,
+    bikeTourCount: 0,
   },
   {
     id: 'dest-2',
@@ -39,6 +41,8 @@ const mockDestinations = [
     tourCount: 1,
     hasCar: true,
     hasBike: true,
+    carTourCount: 0,
+    bikeTourCount: 0,
   },
   {
     id: 'dest-3',
@@ -51,6 +55,8 @@ const mockDestinations = [
     tourCount: 1,
     hasCar: true,
     hasBike: false,
+    carTourCount: 0,
+    bikeTourCount: 0,
   },
   {
     id: 'dest-4',
@@ -63,6 +69,8 @@ const mockDestinations = [
     tourCount: 1,
     hasCar: false,
     hasBike: true,
+    carTourCount: 0,
+    bikeTourCount: 0,
   },
   {
     id: 'dest-5',
@@ -75,6 +83,8 @@ const mockDestinations = [
     tourCount: 1,
     hasCar: false,
     hasBike: true,
+    carTourCount: 0,
+    bikeTourCount: 0,
   },
 ];
 
