@@ -10,7 +10,7 @@ import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
-import {ThemeToggle} from '@/components/ui';
+import {ThemeToggle, TripAdvisorIcon} from '@/components/ui';
 import {LoginModal} from '@/components/Admin/LoginModal';
 
 export const Header = () => {
@@ -45,16 +45,6 @@ export const Header = () => {
     //     {href: '/rental', label: t('car')},
     //   ],
     // },
-    {
-      href: routes.aboutUs.path(),
-      label: t('aboutUs'),
-      active: router.pathname === routes.aboutUs.path(),
-    },
-    {
-      href: routes.contact.path(),
-      label: t('contact'),
-      active: router.pathname === routes.contact.path(),
-    },
     ...(session
       ? [
           {
@@ -72,33 +62,35 @@ export const Header = () => {
       <div className="bg-surface-inverse text-on-surface-inverse type-body-sm hidden lg:block">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-end py-2">
           <div className="flex items-center gap-4">
-            <a
-              href={contactInfo.youtubeLink}
-              aria-label="YouTube"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary-light transition-colors cursor-pointer"
-            >
-              <i className="fab fa-youtube" aria-hidden="true" />
-            </a>
-            <a
-              href={contactInfo.tripadvisorLink}
-              aria-label="TripAdvisor"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary-light transition-colors cursor-pointer"
-            >
-              <i className="fab fa-tripadvisor" aria-hidden="true" />
-            </a>
-            <a
-              href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
-              aria-label="WhatsApp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary-light transition-colors cursor-pointer"
-            >
-              <i className="fab fa-whatsapp" aria-hidden="true" />
-            </a>
+            <div className="flex items-center gap-4 text-xl">
+              <a
+                href={contactInfo.youtubeLink}
+                aria-label="YouTube"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-light transition-colors cursor-pointer"
+              >
+                <i className="fab fa-youtube" aria-hidden="true" />
+              </a>
+              <a
+                href={contactInfo.tripadvisorLink}
+                aria-label="TripAdvisor"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-light transition-colors cursor-pointer"
+              >
+                <TripAdvisorIcon className="h-[0.8em] w-auto" />
+              </a>
+              <a
+                href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
+                aria-label="WhatsApp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-light transition-colors cursor-pointer"
+              >
+                <i className="fab fa-whatsapp" aria-hidden="true" />
+              </a>
+            </div>
             <span className="mx-2 text-on-surface-inverse/30">|</span>
             <ThemeToggle />
           </div>
@@ -226,7 +218,7 @@ export const Header = () => {
           ))}
         </nav>
         <div className="p-4 mt-4">
-          <div className="flex gap-4">
+          <div className="flex gap-4 text-xl">
             <a
               href={contactInfo.youtubeLink}
               aria-label="YouTube"
@@ -243,7 +235,7 @@ export const Header = () => {
               rel="noopener noreferrer"
               className="text-on-surface-secondary hover:text-on-surface-inverse"
             >
-              <i className="fab fa-tripadvisor" aria-hidden="true" />
+              <TripAdvisorIcon className="h-[0.8em] w-auto" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}

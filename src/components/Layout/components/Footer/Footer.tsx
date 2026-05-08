@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {useTranslations} from 'next-intl';
 import {routes} from '@/routes';
 import {getUrl, contactInfo} from '@/utils';
+import {TripAdvisorIcon} from '@/components/ui';
 
 export const Footer = () => {
   const t = useTranslations('footer');
@@ -37,18 +38,6 @@ export const Footer = () => {
               {tNav('rental')}
             </Link>
             */}
-            <Link
-              href={routes.aboutUs.path()}
-              className="hover:text-on-surface-inverse transition-colors cursor-pointer"
-            >
-              {tNav('aboutUs')}
-            </Link>
-            <Link
-              href={routes.contact.path()}
-              className="hover:text-on-surface-inverse transition-colors cursor-pointer"
-            >
-              {tNav('contact')}
-            </Link>
           </nav>
         </div>
       </div>
@@ -84,7 +73,7 @@ export const Footer = () => {
             <p className="type-body-sm leading-none">
               {t('copyright', {year: new Date().getFullYear()})}
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 text-xl">
               <a
                 href={contactInfo.youtubeLink}
                 aria-label="YouTube"
@@ -101,7 +90,7 @@ export const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-primary-light transition-colors cursor-pointer"
               >
-                <i className="fab fa-tripadvisor" aria-hidden="true" />
+                <TripAdvisorIcon className="h-[0.8em] w-auto" />
               </a>
               <a
                 href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}

@@ -1,6 +1,16 @@
 import {render, screen} from '@testing-library/react';
 import {DestinationHero} from './DestinationHero';
 
+jest.mock('@/hooks/use-cursor-spotlight', () => ({
+  useCursorSpotlight: () => ({
+    ref: {current: null},
+    x: 0,
+    y: 0,
+    onMouseMove: () => {},
+    onMouseLeave: () => {},
+  }),
+}));
+
 const dest = {
   id: 'd1',
   slug: 'dalat',
@@ -11,13 +21,15 @@ const dest = {
   isActive: true,
   description: {en: 'Mountain city', vi: 'Thành phố ngàn hoa'},
   highlights: [],
-  tours: [],
+  tours: [{id: 't1'} as never],
 };
 
 describe('DestinationHero', () => {
-  it('renders the destination name', () => {
+  it('renders the destination name as h1', () => {
     render(<DestinationHero destination={dest} locale="en" />);
-    expect(screen.getByRole('heading', {name: 'Da Lat'})).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {level: 1, name: 'Da Lat'}),
+    ).toBeInTheDocument();
   });
 
   it('renders English description when locale is en', () => {
@@ -30,8 +42,21 @@ describe('DestinationHero', () => {
     expect(screen.getByText('Thành phố ngàn hoa')).toBeInTheDocument();
   });
 
-  it('renders hero image', () => {
+  it('renders the breadcrumb home + destinations links', () => {
     render(<DestinationHero destination={dest} locale="en" />);
-    expect(screen.getByAltText('Da Lat')).toBeInTheDocument();
+    expect(screen.getByText('breadcrumbHome')).toBeInTheDocument();
+    expect(screen.getByText('breadcrumbDestinations')).toBeInTheDocument();
+  });
+
+  it('renders the size key for large destinations', () => {
+    render(<DestinationHero destination={dest} locale="en" />);
+    expect(screen.getByText('sizeLarge')).toBeInTheDocument();
+  });
+
+  it('renders the size key for small destinations', () => {
+    render(
+      <DestinationHero destination={{...dest, size: 'small'}} locale="en" />,
+    );
+    expect(screen.getByText('sizeSmall')).toBeInTheDocument();
   });
 });

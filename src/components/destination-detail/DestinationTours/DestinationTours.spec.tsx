@@ -1,5 +1,4 @@
 import {render, screen} from '@testing-library/react';
-import {NextIntlClientProvider} from 'next-intl';
 import {DestinationTours} from './DestinationTours';
 
 jest.mock('@/components/TourCard', () => ({
@@ -8,31 +7,28 @@ jest.mock('@/components/TourCard', () => ({
   ),
 }));
 
-const messages = {
-  destinationDetail: {
-    toursTitle: 'Tours',
-    noTours: 'No tours yet',
-  },
-};
-
-function wrap(ui: React.ReactNode) {
-  return (
-    <NextIntlClientProvider locale="en" messages={messages}>
-      {ui}
-    </NextIntlClientProvider>
-  );
-}
-
 const tour = (id: string) => ({id}) as never;
 
 describe('DestinationTours', () => {
   it('renders a TourCard per tour', () => {
-    render(wrap(<DestinationTours tours={[tour('1'), tour('2')]} />));
+    render(
+      <DestinationTours
+        tours={[tour('1'), tour('2')]}
+        destinationName="Da Lat"
+      />,
+    );
     expect(screen.getAllByTestId('tour-card')).toHaveLength(2);
   });
 
+  it('renders the destination-aware title key', () => {
+    render(<DestinationTours tours={[tour('1')]} destinationName="Da Lat" />);
+    expect(
+      screen.getByText('toursTitle:{"name":"Da Lat"}'),
+    ).toBeInTheDocument();
+  });
+
   it('renders empty state when no tours', () => {
-    render(wrap(<DestinationTours tours={[]} />));
+    render(<DestinationTours tours={[]} destinationName="Da Lat" />);
     expect(screen.getByText('noTours')).toBeInTheDocument();
   });
 });

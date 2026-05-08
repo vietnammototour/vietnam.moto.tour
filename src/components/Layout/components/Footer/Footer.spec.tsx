@@ -13,12 +13,6 @@ describe('Footer', () => {
     render(<Footer />);
     const toursLink = screen.getByText('tours').closest('a');
     expect(toursLink).toHaveAttribute('href', '/tours');
-
-    const aboutLink = screen.getByText('aboutUs').closest('a');
-    expect(aboutLink).toHaveAttribute('href', '/about-us');
-
-    const contactLink = screen.getByText('contact').closest('a');
-    expect(contactLink).toHaveAttribute('href', '/contact');
   });
 
   it('renders YouTube social link', () => {
@@ -32,7 +26,7 @@ describe('Footer', () => {
     render(<Footer />);
     const taLink = screen.getByLabelText('TripAdvisor');
     expect(taLink).toHaveAttribute('href', contactInfo.tripadvisorLink);
-    expect(document.querySelector('.fa-tripadvisor')).toBeInTheDocument();
+    expect(taLink.querySelector('svg')).toBeInTheDocument();
   });
 
   it('renders WhatsApp social link', () => {

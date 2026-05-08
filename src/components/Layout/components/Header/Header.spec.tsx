@@ -39,16 +39,6 @@ describe('Header', () => {
     expect(screen.getAllByText('tours').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders About Us nav link', () => {
-    render(<Header />);
-    expect(screen.getAllByText('aboutUs').length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('renders Contact nav link', () => {
-    render(<Header />);
-    expect(screen.getAllByText('contact').length).toBeGreaterThanOrEqual(1);
-  });
-
   it('renders YouTube social link in top bar', () => {
     render(<Header />);
     const icons = document.querySelectorAll('.fa-youtube');
@@ -57,8 +47,9 @@ describe('Header', () => {
 
   it('renders TripAdvisor social link in top bar', () => {
     render(<Header />);
-    const icons = document.querySelectorAll('.fa-tripadvisor');
-    expect(icons.length).toBeGreaterThanOrEqual(1);
+    const taLinks = screen.getAllByLabelText('TripAdvisor');
+    expect(taLinks.length).toBeGreaterThanOrEqual(1);
+    expect(taLinks[0].querySelector('svg')).toBeInTheDocument();
   });
 
   it('renders WhatsApp social link in top bar', () => {
