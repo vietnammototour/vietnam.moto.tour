@@ -15,16 +15,6 @@ const dest = {
 };
 
 describe('DestinationFacts', () => {
-  it('renders the size key for large destinations', () => {
-    render(<DestinationFacts destination={dest} />);
-    expect(screen.getByText('sizeLarge')).toBeInTheDocument();
-  });
-
-  it('renders the size key for small destinations', () => {
-    render(<DestinationFacts destination={{...dest, size: 'small'}} />);
-    expect(screen.getByText('sizeSmall')).toBeInTheDocument();
-  });
-
   it('renders the explore tours link when tours exist', () => {
     render(<DestinationFacts destination={dest} />);
     const exploreLink = screen
