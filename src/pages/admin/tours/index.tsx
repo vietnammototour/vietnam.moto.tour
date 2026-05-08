@@ -4,8 +4,8 @@ import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes, api} from '@/routes';
+import {Badge} from '@/components/ui';
 import type * as VMT from '@/domain';
-import {getMinPrice} from '@/domain';
 
 type AdminTour = {
   id: string;
@@ -23,21 +23,15 @@ export default function AdminToursList() {
     data: tours,
     loading,
     refetch,
-  } = useAdminFetch<AdminTour[]>('/api/admin/tours');
+  } = useAdminFetch<AdminTour[]>('/api/admin/tours?archived=false');
+  const {data: archivedTours} = useAdminFetch<AdminTour[]>(
+    '/api/admin/tours?archived=true',
+  );
   const {setLoading} = useAdminLoading();
 
   useEffect(() => {
     setLoading(loading);
   }, [loading, setLoading]);
-
-  async function handleDelete(id: string) {
-    if (!confirm('Archive this tour?')) return;
-
-    const {error} = await api.admin.tours.delete(id);
-    if (!error) {
-      refetch();
-    }
-  }
 
   async function handleStatusChange(id: string, status: VMT.TourStatus) {
     const {error} = await api.admin.tours.update(id, {status});
@@ -46,18 +40,31 @@ export default function AdminToursList() {
     }
   }
 
+  const archivedCount = archivedTours?.length ?? 0;
+
   const tourList = tours ?? [];
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="type-headline-sm">Tours</h1>
-        <Link
-          href={routes.admin.tours.new.path()}
-          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
-        >
-          + New Tour
-        </Link>
+        <div className="flex items-center gap-3">
+          {archivedCount > 0 && (
+            <Link
+              href={routes.admin.tours.archive.path()}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg type-label-sm uppercase border border-border text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
+            >
+              <i className="fa fa-archive text-xs" />
+              Archive ({archivedCount})
+            </Link>
+          )}
+          <Link
+            href={routes.admin.tours.new.path()}
+            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
+          >
+            + New Tour
+          </Link>
+        </div>
       </div>
 
       <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
@@ -71,13 +78,10 @@ export default function AdminToursList() {
                 Destination
               </th>
               <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                Price
-              </th>
-              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                Status
+                Pricing Type
               </th>
               <th className="text-right px-4 py-3 type-label-sm text-on-surface-secondary">
-                Actions
+                Status
               </th>
             </tr>
           </thead>
@@ -118,23 +122,39 @@ export default function AdminToursList() {
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {tour.destination.name}
                 </td>
-                <td className="px-4 py-3 type-body-lg text-on-surface">
-                  ${getMinPrice(tour.pricingGroups)}
-                </td>
                 <td className="px-4 py-3">
-                  <StatusPicker
-                    value={tour.status}
-                    onChange={(status) => handleStatusChange(tour.id, status)}
-                  />
+                  <div className="flex items-center gap-1.5">
+                    {(() => {
+                      const types = new Set(
+                        (tour.pricingGroups ?? []).map((g) => g.type),
+                      );
+                      const hasGroup = types.has('group-size');
+                      const hasVehicle = types.has('vehicle');
+                      if (!hasGroup && !hasVehicle) {
+                        return (
+                          <span className="type-body-sm text-on-surface-tertiary">
+                            —
+                          </span>
+                        );
+                      }
+                      return (
+                        <>
+                          {hasGroup && <Badge variant="info">Group</Badge>}
+                          {hasVehicle && (
+                            <Badge variant="success">Vehicle</Badge>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <button
-                    onClick={() => handleDelete(tour.id)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors cursor-pointer"
-                  >
-                    <i className="fa fa-archive text-xs" />
-                    Archive
-                  </button>
+                  <div className="inline-flex">
+                    <StatusPicker
+                      value={tour.status}
+                      onChange={(status) => handleStatusChange(tour.id, status)}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}

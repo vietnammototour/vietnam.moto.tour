@@ -125,6 +125,20 @@ export default async function handler(
   }
 
   if (req.method === 'DELETE') {
+    if (req.query.hard === 'true') {
+      const existing = await prisma.tour.findUnique({
+        where: {id},
+        select: {status: true},
+      });
+      if (!existing) return res.status(404).json({error: 'Tour not found'});
+      if (existing.status !== 'ARCHIVED') {
+        return res
+          .status(409)
+          .json({error: 'Tour must be archived before permanent deletion'});
+      }
+      await prisma.tour.delete({where: {id}});
+      return res.status(204).end();
+    }
     await prisma.tour.update({where: {id}, data: {status: 'ARCHIVED'}});
     return res.status(204).end();
   }

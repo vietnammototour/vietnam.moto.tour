@@ -45,6 +45,7 @@ export const routes = {
     dashboard: {path: () => '/admin'},
     tours: {
       list: {path: () => '/admin/tours'},
+      archive: {path: () => '/admin/tours/archive'},
       new: {
         path: (p?: {tab?: TourTab}) =>
           `/admin/tours/new/${p?.tab ?? 'general'}`,
@@ -58,6 +59,7 @@ export const routes = {
     },
     destinations: {
       list: {path: () => '/admin/destinations'},
+      archive: {path: () => '/admin/destinations/archive'},
       new: {
         path: (p?: {tab?: DestinationTab}) =>
           `/admin/destinations/new/${p?.tab ?? 'general'}`,

@@ -39,6 +39,30 @@ export default async function handler(
   }
 
   if (req.method === 'DELETE') {
+    if (req.query.hard === 'true') {
+      const existing = await prisma.destination.findUnique({
+        where: {id},
+        select: {isActive: true, _count: {select: {tours: true}}},
+      });
+      if (!existing)
+        return res.status(404).json({error: 'Destination not found'});
+      if (existing.isActive) {
+        return res
+          .status(409)
+          .json({
+            error: 'Destination must be archived before permanent deletion',
+          });
+      }
+      if (existing._count.tours > 0) {
+        return res
+          .status(409)
+          .json({
+            error: 'Destination has tours; remove or reassign them first',
+          });
+      }
+      await prisma.destination.delete({where: {id}});
+      return res.status(204).end();
+    }
     await prisma.destination.update({where: {id}, data: {isActive: false}});
     return res.status(204).end();
   }

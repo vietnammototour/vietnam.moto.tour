@@ -18,34 +18,47 @@ export default function AdminDestinationsList() {
     data: destinations,
     loading,
     refetch,
-  } = useAdminFetch<AdminDestination[]>('/api/admin/destinations');
+  } = useAdminFetch<AdminDestination[]>(
+    '/api/admin/destinations?archived=false',
+  );
+  const {data: archivedDestinations} = useAdminFetch<AdminDestination[]>(
+    '/api/admin/destinations?archived=true',
+  );
   const {setLoading} = useAdminLoading();
 
   useEffect(() => {
     setLoading(loading);
   }, [loading, setLoading]);
 
-  async function handleDelete(id: string) {
-    if (!confirm('Deactivate this destination?')) return;
-
-    const {error} = await api.admin.destinations.delete(id);
-    if (!error) {
-      refetch();
-    }
+  async function handleArchive(id: string) {
+    const {error} = await api.admin.destinations.update(id, {isActive: false});
+    if (!error) refetch();
   }
 
   const destList = destinations ?? [];
+  const archivedCount = archivedDestinations?.length ?? 0;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="type-headline-sm">Destinations</h1>
-        <Link
-          href={routes.admin.destinations.new.path()}
-          className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
-        >
-          + New Destination
-        </Link>
+        <div className="flex items-center gap-3">
+          {archivedCount > 0 && (
+            <Link
+              href={routes.admin.destinations.archive.path()}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg type-label-sm uppercase border border-border text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
+            >
+              <i className="fa fa-archive text-xs" />
+              Archive ({archivedCount})
+            </Link>
+          )}
+          <Link
+            href={routes.admin.destinations.new.path()}
+            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
+          >
+            + New Destination
+          </Link>
+        </div>
       </div>
 
       <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
@@ -57,9 +70,6 @@ export default function AdminDestinationsList() {
               </th>
               <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
                 Tours
-              </th>
-              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                Status
               </th>
               <th className="text-right px-4 py-3 type-label-sm text-on-surface-secondary">
                 Actions
@@ -103,24 +113,13 @@ export default function AdminDestinationsList() {
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {dest._count.tours}
                 </td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`type-label-sm px-2 py-0.5 rounded ${
-                      dest.isActive
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                    }`}
-                  >
-                    {dest.isActive ? 'Active' : 'Inactive'}
-                  </span>
-                </td>
                 <td className="px-4 py-3 text-right">
                   <button
-                    onClick={() => handleDelete(dest.id)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors cursor-pointer"
+                    onClick={() => handleArchive(dest.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
                   >
-                    <i className="fa fa-trash text-xs" />
-                    Delete
+                    <i className="fa fa-archive text-xs" />
+                    Archive
                   </button>
                 </td>
               </tr>
