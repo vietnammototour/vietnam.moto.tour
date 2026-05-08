@@ -58,10 +58,15 @@ export function DestinationCTA({heroImage}: Props) {
         >
           <Link
             href={routes.contact.path()}
-            className="inline-flex items-center gap-2 bg-on-primary text-primary type-title-md font-semibold px-9 py-4 rounded-full cursor-pointer hover:scale-105 transition-transform elevation-3"
+            className="group inline-flex items-center gap-2 bg-on-primary text-primary type-title-md font-semibold px-9 py-4 rounded-full cursor-pointer hover:brightness-105 elevation-3 hover:elevation-4 transition-[box-shadow,filter] duration-200"
           >
             {t('button')}
-            <span aria-hidden>→</span>
+            <span
+              aria-hidden
+              className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+            >
+              →
+            </span>
           </Link>
         </motion.div>
       </div>

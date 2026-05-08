@@ -18,7 +18,6 @@ export function DestinationHero({destination, locale}: Props) {
 
   const description = destination.description[locale];
   const tourCount = destination.tours.length;
-  const sizeKey = destination.size === 'large' ? 'sizeLarge' : 'sizeSmall';
 
   return (
     <section className="relative">
@@ -81,10 +80,6 @@ export function DestinationHero({destination, locale}: Props) {
             transition={{delay: 0.55}}
             className="flex flex-wrap items-center gap-x-6 gap-y-3 text-on-surface-inverse/80 type-body-sm"
           >
-            <span className="flex items-center gap-2">
-              <i className="fa fa-map-marker-alt text-[var(--color-primary)]" />
-              {t(sizeKey)}
-            </span>
             <span className="flex items-center gap-2">
               <i className="fa fa-route text-[var(--color-primary)]" />
               {t('toursAvailable', {count: tourCount})}

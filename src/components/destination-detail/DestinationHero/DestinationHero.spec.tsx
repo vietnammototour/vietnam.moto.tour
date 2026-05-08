@@ -47,16 +47,4 @@ describe('DestinationHero', () => {
     expect(screen.getByText('breadcrumbHome')).toBeInTheDocument();
     expect(screen.getByText('breadcrumbDestinations')).toBeInTheDocument();
   });
-
-  it('renders the size key for large destinations', () => {
-    render(<DestinationHero destination={dest} locale="en" />);
-    expect(screen.getByText('sizeLarge')).toBeInTheDocument();
-  });
-
-  it('renders the size key for small destinations', () => {
-    render(
-      <DestinationHero destination={{...dest, size: 'small'}} locale="en" />,
-    );
-    expect(screen.getByText('sizeSmall')).toBeInTheDocument();
-  });
 });

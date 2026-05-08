@@ -55,12 +55,6 @@ export const TourCard = ({tour, interactive = true}: Props) => {
       value: t('kilometersCount', {count: distance}),
       icon: 'fa-road',
     },
-    {
-      key: 'location',
-      label: t('locationLabel'),
-      value: tour.destinationName ?? '',
-      icon: 'fa-map-marker-alt',
-    },
   ];
   const {
     ref,
@@ -135,12 +129,23 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           </div>
         )}
 
-        <h3 className="absolute inset-x-0 bottom-0 z-10 px-5 pb-4 pt-8 text-center text-2xl font-semibold leading-tight text-white drop-shadow-sm group-hover:text-primary transition-colors">
-          {title}
-        </h3>
+        <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-4 pt-8 text-left">
+          <h3 className="type-title-lg font-semibold leading-tight text-white drop-shadow-sm group-hover:text-primary transition-colors">
+            {title}
+          </h3>
+          {tour.destinationName && (
+            <p className="mt-1 flex items-center gap-1.5 type-label-sm uppercase tracking-wider text-white/75">
+              <i
+                className="fa fa-map-marker-alt text-[0.7rem]"
+                aria-hidden="true"
+              />
+              <span className="truncate">{tour.destinationName}</span>
+            </p>
+          )}
+        </div>
       </div>
       <div className="p-5 flex flex-col flex-1">
-        <ul className="grid grid-cols-3 gap-2 mt-auto">
+        <ul className="grid grid-cols-2 gap-2 mt-auto">
           {stats.map((s, i) => (
             <li
               key={s.key}
