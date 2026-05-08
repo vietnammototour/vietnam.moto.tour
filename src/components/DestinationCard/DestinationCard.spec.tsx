@@ -15,10 +15,12 @@ describe('DestinationCard', () => {
     hasBike: true,
   };
 
-  it('renders the destination name as a link to /tours with destination query param', () => {
+  it('renders the destination name as a link to the destination detail page', () => {
     render(<DestinationCard destination={destination} />);
-    const link = screen.getByText('Dalat').closest('a');
-    expect(link).toHaveAttribute('href', '/tours?destination=dest-dalat');
+    expect(screen.getByTestId('destination-card')).toHaveAttribute(
+      'href',
+      '/destinations/dalat',
+    );
   });
 
   it('renders the tour count with tours translation key', () => {
