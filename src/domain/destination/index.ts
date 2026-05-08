@@ -1,4 +1,6 @@
 import type {Destination as PrismaDestination} from '@prisma/client';
+import type {Highlight} from '../highlight';
+import type {Tour} from '../tour';
 
 export type Destination = Omit<
   PrismaDestination,
@@ -20,4 +22,10 @@ export type DestinationWithStats = Destination & {
   tourCount: number;
   hasCar: boolean;
   hasBike: boolean;
+};
+
+export type DestinationDetail = Destination & {
+  description: {en: string; vi: string};
+  highlights: Highlight[];
+  tours: Tour[];
 };

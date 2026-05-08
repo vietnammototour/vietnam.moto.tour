@@ -10,12 +10,12 @@ type Props = {
 
 export function Layout({children}: Props) {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <HrefLang />
       <Header />
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
       <Footer />
       <ScrollToTop />
-    </>
+    </div>
   );
 }

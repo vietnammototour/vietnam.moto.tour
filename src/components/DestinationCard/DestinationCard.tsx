@@ -12,7 +12,7 @@ export const DestinationCard = ({
   destination,
   className,
 }: Props & {className?: string}) => {
-  const {name, imageUrl, tourCount, id, hasCar, hasBike} = destination;
+  const {name, imageUrl, tourCount, slug, hasCar, hasBike} = destination;
   const t = useTranslations('common');
 
   return (
@@ -22,7 +22,7 @@ export const DestinationCard = ({
       className={className ?? 'aspect-[3/2]'}
     >
       <Link
-        href={routes.tours.byDestination.path({destinationId: id})}
+        href={routes.destinations.detail.path({slug})}
         data-testid="destination-card"
         className="group relative rounded-lg overflow-hidden block cursor-pointer elevation-1 hover:elevation-2 transition-all duration-300 w-full h-full"
       >

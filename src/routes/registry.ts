@@ -38,6 +38,9 @@ export const routes = {
         `/tours?destination=${p.destinationId}`,
     },
   },
+  destinations: {
+    detail: {path: (p: {slug: string}) => `/destinations/${p.slug}`},
+  },
   aboutUs: {path: () => '/about-us'},
   contact: {path: () => '/contact'},
 

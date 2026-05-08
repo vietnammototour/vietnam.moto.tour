@@ -14,7 +14,8 @@ export function TourHighlights({highlights, locale}: TourHighlightsProps) {
 
   if (highlights.length === 0) return null;
 
-  const text = (h: VMT.Highlight) => (localeKey === 'en' ? h.textEn : h.textVi);
+  const text = (h: VMT.Highlight) =>
+    localeKey === 'en' ? h.titleEn : h.titleVi;
 
   return (
     <motion.section

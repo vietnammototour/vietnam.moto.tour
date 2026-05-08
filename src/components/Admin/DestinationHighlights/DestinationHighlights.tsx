@@ -16,8 +16,10 @@ import {
 
 type Highlight = {
   id: string;
-  textEn: string;
-  textVi: string;
+  titleEn: string;
+  titleVi: string;
+  descriptionEn: string;
+  descriptionVi: string;
   imageUrl: string | null;
 };
 
@@ -28,12 +30,9 @@ type DestinationHighlightsProps = {
 
 export function DestinationHighlights({
   destinationId,
-  locale,
 }: DestinationHighlightsProps) {
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const textField = locale === 'en' ? 'textEn' : 'textVi';
 
   const {
     register,
@@ -62,7 +61,7 @@ export function DestinationHighlights({
   }, [fetchHighlights]);
 
   async function onSubmitAdd(data: AddHighlightFormData) {
-    const {error} = await submitAddHighlight(data, destinationId, locale);
+    const {error} = await submitAddHighlight(data, destinationId);
     if (!error) {
       reset();
       await fetchHighlights();
@@ -75,9 +74,9 @@ export function DestinationHighlights({
     await fetchHighlights();
   }
 
-  async function handleUpdateText(
+  async function handleUpdateField(
     id: string,
-    field: 'textEn' | 'textVi',
+    field: 'titleEn' | 'titleVi' | 'descriptionEn' | 'descriptionVi',
     value: string,
   ) {
     await api.admin.highlights.update(id, {[field]: value});
@@ -109,7 +108,7 @@ export function DestinationHighlights({
               {h.imageUrl ? (
                 <Image
                   src={h.imageUrl}
-                  alt={h.textEn}
+                  alt={h.titleEn}
                   width={64}
                   height={64}
                   className="rounded object-cover w-16 h-16"
@@ -121,26 +120,34 @@ export function DestinationHighlights({
               )}
             </div>
             <div className="flex-1 min-w-0 space-y-1">
-              <input
-                type="text"
-                value={h[textField]}
-                onBlur={(e) => {
-                  if (e.target.value !== h[textField]) {
-                    handleUpdateText(h.id, textField, e.target.value);
-                  }
-                }}
-                onChange={(e) => {
-                  setHighlights((prev) =>
-                    prev.map((x) =>
-                      x.id === h.id ? {...x, [textField]: e.target.value} : x,
-                    ),
-                  );
-                }}
-                className="w-full px-2 py-1 rounded border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
-                placeholder={
-                  locale === 'en' ? 'English text' : 'Vietnamese text'
-                }
-              />
+              {(
+                [
+                  ['titleEn', 'English title'],
+                  ['titleVi', 'Vietnamese title'],
+                  ['descriptionEn', 'English description'],
+                  ['descriptionVi', 'Vietnamese description'],
+                ] as const
+              ).map(([field, placeholder]) => (
+                <input
+                  key={field}
+                  type="text"
+                  value={h[field]}
+                  placeholder={placeholder}
+                  onBlur={(e) => {
+                    if (e.target.value !== h[field]) {
+                      handleUpdateField(h.id, field, e.target.value);
+                    }
+                  }}
+                  onChange={(e) => {
+                    setHighlights((prev) =>
+                      prev.map((x) =>
+                        x.id === h.id ? {...x, [field]: e.target.value} : x,
+                      ),
+                    );
+                  }}
+                  className="w-full px-2 py-1 rounded border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
+                />
+              ))}
               <HighlightRowImage
                 highlightId={h.id}
                 initialUrl={h.imageUrl}
@@ -164,18 +171,31 @@ export function DestinationHighlights({
         className="p-4 rounded-lg border border-dashed border-border"
       >
         <h3 className="type-title-sm text-on-surface mb-3">Add Highlight</h3>
-        <div className="flex gap-2 mb-3">
-          <div className="flex-1">
-            <TextInput
-              {...register('text')}
-              placeholder={locale === 'en' ? 'English text' : 'Vietnamese text'}
-              error={errors.text?.message}
-            />
-          </div>
-          <Button type="submit" loading={isSubmitting} size="sm">
-            Add
-          </Button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+          <TextInput
+            {...register('titleEn')}
+            placeholder="English title"
+            error={errors.titleEn?.message}
+          />
+          <TextInput
+            {...register('titleVi')}
+            placeholder="Vietnamese title"
+            error={errors.titleVi?.message}
+          />
+          <TextInput
+            {...register('descriptionEn')}
+            placeholder="English description"
+            error={errors.descriptionEn?.message}
+          />
+          <TextInput
+            {...register('descriptionVi')}
+            placeholder="Vietnamese description"
+            error={errors.descriptionVi?.message}
+          />
         </div>
+        <Button type="submit" loading={isSubmitting} size="sm">
+          Add
+        </Button>
       </form>
     </div>
   );

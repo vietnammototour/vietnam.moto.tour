@@ -1,0 +1,1 @@
+export {DestinationHighlights} from './DestinationHighlights';

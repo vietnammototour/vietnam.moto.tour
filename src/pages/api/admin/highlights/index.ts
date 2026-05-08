@@ -20,17 +20,24 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
-    const {destinationId, textEn, textVi, imageUrl} = req.body;
-    if (!destinationId || !textEn) {
-      return res
-        .status(400)
-        .json({error: 'destinationId and textEn are required'});
+    const {
+      destinationId,
+      titleEn,
+      titleVi,
+      descriptionEn,
+      descriptionVi,
+      imageUrl,
+    } = req.body;
+    if (!destinationId) {
+      return res.status(400).json({error: 'destinationId is required'});
     }
     const highlight = await prisma.highlight.create({
       data: {
         destinationId,
-        textEn: textEn ?? '',
-        textVi: textVi ?? '',
+        titleEn: titleEn ?? '',
+        titleVi: titleVi ?? '',
+        descriptionEn: descriptionEn ?? '',
+        descriptionVi: descriptionVi ?? '',
         imageUrl: imageUrl ?? null,
       },
     });

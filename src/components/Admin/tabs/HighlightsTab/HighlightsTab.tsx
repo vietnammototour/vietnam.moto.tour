@@ -139,16 +139,16 @@ export function HighlightsTab({
               {h.imageUrl && (
                 <Image
                   src={h.imageUrl}
-                  alt={h.textEn}
+                  alt={h.titleEn}
                   width={40}
                   height={40}
                   className="rounded object-cover w-10 h-10"
                 />
               )}
               <div className="flex-1 min-w-0">
-                <div className="type-body-sm text-on-surface">{h.textEn}</div>
+                <div className="type-body-sm text-on-surface">{h.titleEn}</div>
                 <div className="type-label-sm text-on-surface-secondary">
-                  {h.textVi}
+                  {h.titleVi}
                 </div>
               </div>
             </label>
