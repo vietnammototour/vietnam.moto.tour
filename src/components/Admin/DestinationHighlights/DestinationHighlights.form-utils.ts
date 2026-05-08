@@ -2,24 +2,31 @@ import * as yup from 'yup';
 import {api} from '@/routes';
 
 export const addHighlightSchema = yup.object({
-  text: yup.string().trim().required('Highlight text is required'),
+  titleEn: yup.string().trim().required('English title is required'),
+  titleVi: yup.string().trim().required('Vietnamese title is required'),
+  descriptionEn: yup.string().trim().default(''),
+  descriptionVi: yup.string().trim().default(''),
 });
 
 export type AddHighlightFormData = yup.InferType<typeof addHighlightSchema>;
 
 export const addHighlightDefaults: AddHighlightFormData = {
-  text: '',
+  titleEn: '',
+  titleVi: '',
+  descriptionEn: '',
+  descriptionVi: '',
 };
 
 export async function submitAddHighlight(
   data: AddHighlightFormData,
   destinationId: string,
-  locale: 'en' | 'vi',
 ): Promise<{error?: string}> {
-  const field = locale === 'en' ? 'textEn' : 'textVi';
   const {error} = await api.admin.highlights.create({
     destinationId,
-    [field]: data.text,
+    titleEn: data.titleEn,
+    titleVi: data.titleVi,
+    descriptionEn: data.descriptionEn,
+    descriptionVi: data.descriptionVi,
   });
   if (error) return {error};
   return {};
