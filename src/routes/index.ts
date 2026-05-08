@@ -280,14 +280,16 @@ export function useNavigate() {
   };
 }
 
-type TabbedRoute = {tabs: readonly TabDescriptor<string>[]};
+type TabbedRoute<K extends string = string> = {
+  tabs: readonly TabDescriptor<K>[];
+};
 
-export function useActiveTab<R extends TabbedRoute>(
-  route: R,
-  fallback: R['tabs'][number]['key'],
-): R['tabs'][number]['key'] {
+export function useActiveTab<K extends string>(
+  route: TabbedRoute<K>,
+  fallback: K,
+): K {
   const router = useRouter();
   const raw = router.query.tab;
   const found = route.tabs.find((t) => t.key === raw);
-  return (found?.key ?? fallback) as R['tabs'][number]['key'];
+  return found?.key ?? fallback;
 }
