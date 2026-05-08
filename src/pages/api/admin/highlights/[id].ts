@@ -12,10 +12,12 @@ export default async function handler(
   const id = req.query.id as string;
 
   if (req.method === 'PUT') {
-    const {textEn, textVi, imageUrl} = req.body;
+    const {titleEn, titleVi, descriptionEn, descriptionVi, imageUrl} = req.body;
     const updateData: Record<string, unknown> = {};
-    if (textEn !== undefined) updateData.textEn = textEn;
-    if (textVi !== undefined) updateData.textVi = textVi;
+    if (titleEn !== undefined) updateData.titleEn = titleEn;
+    if (titleVi !== undefined) updateData.titleVi = titleVi;
+    if (descriptionEn !== undefined) updateData.descriptionEn = descriptionEn;
+    if (descriptionVi !== undefined) updateData.descriptionVi = descriptionVi;
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
 
     const highlight = await prisma.highlight.update({
