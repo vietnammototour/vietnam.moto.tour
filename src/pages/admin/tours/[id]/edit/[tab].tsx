@@ -5,6 +5,7 @@ import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
 import {savedSlot} from '@/lib/image-slot';
+import {isTourTab, type TourTab} from '@/routes';
 import type * as VMT from '@/domain';
 
 type Destination = {
@@ -15,6 +16,9 @@ type Destination = {
 export default function EditTour() {
   const router = useRouter();
   const id = typeof router.query.id === 'string' ? router.query.id : null;
+  const tabParam = router.query.tab;
+  const tab: TourTab =
+    typeof tabParam === 'string' && isTourTab(tabParam) ? tabParam : 'general';
 
   const {
     data: tour,
@@ -86,6 +90,7 @@ export default function EditTour() {
 
   return (
     <TourEditTabs
+      activeTab={tab}
       mode="edit"
       tourId={tour.id as string}
       destinations={destinations}
@@ -99,7 +104,14 @@ export default function EditTour() {
   );
 }
 
-export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+export async function getServerSideProps({
+  locale,
+  params,
+}: GetServerSidePropsContext) {
+  const tab = params?.tab;
+  if (typeof tab !== 'string' || !isTourTab(tab)) {
+    return {notFound: true};
+  }
   const {getMessagesFromDb} = await import('@/data/queries');
   const messages = await getMessagesFromDb(locale ?? 'vi');
   return {props: {messages: messages ?? {}}};

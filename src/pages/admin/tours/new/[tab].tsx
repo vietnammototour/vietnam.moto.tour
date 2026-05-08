@@ -1,9 +1,11 @@
 import {useEffect} from 'react';
 import type {GetServerSidePropsContext} from 'next';
+import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
 import {type ImageSlot} from '@/lib/image-slot';
+import {isTourTab, type TourTab} from '@/routes';
 import type * as VMT from '@/domain';
 
 type Destination = {
@@ -33,6 +35,11 @@ const emptyGeneral = {
 };
 
 export default function NewTour() {
+  const router = useRouter();
+  const tabParam = router.query.tab;
+  const tab: TourTab =
+    typeof tabParam === 'string' && isTourTab(tabParam) ? tabParam : 'general';
+
   const {data: destinations, loading} = useAdminFetch<Destination[]>(
     '/api/admin/destinations',
   );
@@ -46,6 +53,7 @@ export default function NewTour() {
 
   return (
     <TourEditTabs
+      activeTab={tab}
       mode="create"
       tourId={null}
       destinations={destinations}
@@ -59,7 +67,19 @@ export default function NewTour() {
   );
 }
 
-export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+export async function getServerSideProps({
+  locale,
+  params,
+}: GetServerSidePropsContext) {
+  const tab = params?.tab;
+  if (typeof tab !== 'string' || !isTourTab(tab)) {
+    return {notFound: true};
+  }
+  if (tab !== 'general') {
+    return {
+      redirect: {destination: '/admin/tours/new/general', permanent: false},
+    };
+  }
   const {getMessagesFromDb} = await import('@/data/queries');
   const messages = await getMessagesFromDb(locale ?? 'vi');
   return {props: {messages: messages ?? {}}};

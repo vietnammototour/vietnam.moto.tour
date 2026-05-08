@@ -1,12 +1,19 @@
 import {useEffect} from 'react';
+import type {GetServerSidePropsContext} from 'next';
 import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {DestinationEditTabs} from '@/components/Admin/DestinationEditTabs';
+import {isDestinationTab, type DestinationTab} from '@/routes';
 
 export default function EditDestination() {
   const router = useRouter();
   const id = typeof router.query.id === 'string' ? router.query.id : null;
+  const tabParam = router.query.tab;
+  const tab: DestinationTab =
+    typeof tabParam === 'string' && isDestinationTab(tabParam)
+      ? tabParam
+      : 'general';
 
   const {
     data: destination,
@@ -51,9 +58,23 @@ export default function EditDestination() {
 
   return (
     <DestinationEditTabs
+      activeTab={tab}
       mode="edit"
       destinationId={destination.id as string}
       initialData={initialData}
     />
   );
+}
+
+export async function getServerSideProps({
+  locale,
+  params,
+}: GetServerSidePropsContext) {
+  const tab = params?.tab;
+  if (typeof tab !== 'string' || !isDestinationTab(tab)) {
+    return {notFound: true};
+  }
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

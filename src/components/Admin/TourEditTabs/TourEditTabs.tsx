@@ -3,7 +3,7 @@
 import {useState, useCallback} from 'react';
 import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
-import {routes, api, useNavigate} from '@/routes';
+import {routes, api, useNavigate, type TourTab} from '@/routes';
 import {Tabs, TabPanel, Button} from '@/components/ui';
 import {GeneralTab} from '../tabs/GeneralTab';
 import type {GeneralTabData} from '../tabs/GeneralTab';
@@ -14,11 +14,10 @@ import {PerksTab} from '../tabs/PerksTab';
 import {LocalePicker, type Locale} from '../LocalePicker';
 import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
 
-type TabId = 'general' | 'itinerary' | 'pricing' | 'highlights' | 'perks';
-
 type TourEditTabsProps = {
   mode: 'create' | 'edit';
   tourId: string | null;
+  activeTab: TourTab;
   destinations: Array<{id: string; name: string}>;
   initialGeneral: GeneralTabData;
   initialItinerary: VMT.ItineraryDay[];
@@ -31,6 +30,7 @@ type TourEditTabsProps = {
 export function TourEditTabs({
   mode,
   tourId: initialTourId,
+  activeTab,
   destinations,
   initialGeneral,
   initialItinerary,
@@ -41,7 +41,6 @@ export function TourEditTabs({
 }: TourEditTabsProps) {
   const t = useTranslations('admin.tours.tabs');
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabId>('general');
   const [tourId, setTourId] = useState<string | null>(initialTourId);
   const [destinationId, setDestinationId] = useState(
     initialGeneral.destinationId,
@@ -68,7 +67,10 @@ export function TourEditTabs({
       if (isNew && result.data) {
         const newId = String(result.data.id);
         setTourId(newId);
-        navigate.replaceUrl(routes.admin.tours.edit, {id: newId});
+        navigate.replaceUrl(routes.admin.tours.edit, {
+          id: newId,
+          tab: 'general',
+        });
         return newId;
       }
       return tourId!;
@@ -112,7 +114,7 @@ export function TourEditTabs({
     [tourId],
   );
 
-  const isTabDisabled = (tabId: TabId) =>
+  const isTabDisabled = (tabId: TourTab) =>
     tabId !== 'general' && mode === 'create' && !tourId;
 
   const tourName =
@@ -148,31 +150,20 @@ export function TourEditTabs({
       </div>
 
       <Tabs
-        items={[
-          {
-            key: 'general',
-            label: 'General',
-            disabled: isTabDisabled('general'),
-          },
-          {
-            key: 'itinerary',
-            label: 'Itinerary',
-            disabled: isTabDisabled('itinerary'),
-          },
-          {
-            key: 'pricing',
-            label: 'Pricing',
-            disabled: isTabDisabled('pricing'),
-          },
-          {
-            key: 'highlights',
-            label: 'Highlights',
-            disabled: isTabDisabled('highlights'),
-          },
-          {key: 'perks', label: t('perks'), disabled: isTabDisabled('perks')},
-        ]}
+        items={routes.admin.tours.edit.tabs.map((tab) => ({
+          key: tab.key,
+          label: t(tab.key),
+          disabled: isTabDisabled(tab.key),
+        }))}
         activeKey={activeTab}
-        onChange={(key) => setActiveTab(key as TabId)}
+        onChange={(key) => {
+          const next = key as TourTab;
+          if (mode === 'create' && !tourId) {
+            navigate.to(routes.admin.tours.new, {tab: next});
+          } else {
+            navigate.to(routes.admin.tours.edit, {id: tourId!, tab: next});
+          }
+        }}
       >
         <TabPanel tabKey="general">
           <div className="p-5">
