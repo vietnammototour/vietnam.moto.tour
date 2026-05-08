@@ -1,7 +1,8 @@
 'use client';
 
 import {useState, useCallback, useEffect, useRef} from 'react';
-import {routes, api, useNavigate} from '@/routes';
+import {useTranslations} from 'next-intl';
+import {routes, api, useNavigate, type DestinationTab} from '@/routes';
 import {Tabs, TabPanel, Button} from '@/components/ui';
 import {DestinationGeneralForm} from '../DestinationGeneralForm';
 import {HeroImagePreview} from '../HeroImagePreview';
@@ -9,8 +10,6 @@ import {CardImagePreview} from '../CardImagePreview';
 import {DestinationHighlights} from '../DestinationHighlights';
 import {LocalePicker, type Locale} from '../LocalePicker';
 import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
-
-type TabId = 'general' | 'heroImage' | 'cardImage' | 'highlights';
 
 export type DestinationFormData = {
   slug: string;
@@ -27,16 +26,18 @@ export type DestinationFormData = {
 type DestinationEditTabsProps = {
   mode: 'create' | 'edit';
   destinationId: string | null;
+  activeTab: DestinationTab;
   initialData: DestinationFormData;
 };
 
 export function DestinationEditTabs({
   mode,
   destinationId: initialId,
+  activeTab,
   initialData,
 }: DestinationEditTabsProps) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabId>('general');
+  const t = useTranslations('admin.destinations.tabs');
   const [destinationId, setDestinationId] = useState<string | null>(initialId);
   const [locale, setLocale] = useState<Locale>('en');
   const [form, setForm] = useState<DestinationFormData>(initialData);
@@ -46,7 +47,10 @@ export function DestinationEditTabs({
     (id: string) => {
       if (!destinationId) {
         setDestinationId(id);
-        navigate.replaceUrl(routes.admin.destinations.edit, {id});
+        navigate.replaceUrl(routes.admin.destinations.edit, {
+          id,
+          tab: 'general',
+        });
       }
     },
     [destinationId, navigate],
@@ -62,7 +66,7 @@ export function DestinationEditTabs({
     [],
   );
 
-  const isTabDisabled = (tabId: TabId) =>
+  const isTabDisabled = (tabId: DestinationTab) =>
     tabId !== 'general' && mode === 'create' && !destinationId;
 
   const prevSizeRef = useRef(initialData.size);
@@ -108,30 +112,23 @@ export function DestinationEditTabs({
       </div>
 
       <Tabs
-        items={[
-          {
-            key: 'general',
-            label: 'General',
-            disabled: isTabDisabled('general'),
-          },
-          {
-            key: 'heroImage',
-            label: 'Hero Image',
-            disabled: isTabDisabled('heroImage'),
-          },
-          {
-            key: 'cardImage',
-            label: 'Card Image',
-            disabled: isTabDisabled('cardImage'),
-          },
-          {
-            key: 'highlights',
-            label: 'Highlights',
-            disabled: isTabDisabled('highlights'),
-          },
-        ]}
+        items={routes.admin.destinations.edit.tabs.map((tab) => ({
+          key: tab.key,
+          label: t(tab.key),
+          disabled: isTabDisabled(tab.key),
+        }))}
         activeKey={activeTab}
-        onChange={(key) => setActiveTab(key as TabId)}
+        onChange={(key) => {
+          const next = key as DestinationTab;
+          if (mode === 'create' && !destinationId) {
+            navigate.to(routes.admin.destinations.new, {tab: next});
+          } else {
+            navigate.to(routes.admin.destinations.edit, {
+              id: destinationId!,
+              tab: next,
+            });
+          }
+        }}
       >
         <TabPanel tabKey="general">
           <div className="p-5">
