@@ -101,7 +101,12 @@ export const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-primary-light transition-colors cursor-pointer"
               >
-                <i className="fas fa-binoculars" aria-hidden="true" />
+                <img
+                  src="/icons/tripadvisor.png"
+                  alt=""
+                  aria-hidden="true"
+                  className="h-5 w-auto"
+                />
               </a>
               <a
                 href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
