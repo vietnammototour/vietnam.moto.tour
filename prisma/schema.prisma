@@ -78,8 +78,10 @@ model Highlight {
   id            String      @id @default(cuid())
   destinationId String
   destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-  textEn        String
-  textVi        String
+  titleEn       String      @default("")
+  titleVi       String      @default("")
+  descriptionEn String      @default("")
+  descriptionVi String      @default("")
   imageUrl      String?
   createdAt     DateTime    @default(now())
   tours         Tour[]
