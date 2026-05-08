@@ -13,12 +13,6 @@ describe('Footer', () => {
     render(<Footer />);
     const toursLink = screen.getByText('tours').closest('a');
     expect(toursLink).toHaveAttribute('href', '/tours');
-
-    const aboutLink = screen.getByText('aboutUs').closest('a');
-    expect(aboutLink).toHaveAttribute('href', '/about-us');
-
-    const contactLink = screen.getByText('contact').closest('a');
-    expect(contactLink).toHaveAttribute('href', '/contact');
   });
 
   it('renders YouTube social link', () => {

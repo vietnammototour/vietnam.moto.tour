@@ -45,16 +45,6 @@ export const Header = () => {
     //     {href: '/rental', label: t('car')},
     //   ],
     // },
-    {
-      href: routes.aboutUs.path(),
-      label: t('aboutUs'),
-      active: router.pathname === routes.aboutUs.path(),
-    },
-    {
-      href: routes.contact.path(),
-      label: t('contact'),
-      active: router.pathname === routes.contact.path(),
-    },
     ...(session
       ? [
           {

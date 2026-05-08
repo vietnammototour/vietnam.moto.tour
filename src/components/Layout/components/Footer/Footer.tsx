@@ -38,18 +38,6 @@ export const Footer = () => {
               {tNav('rental')}
             </Link>
             */}
-            <Link
-              href={routes.aboutUs.path()}
-              className="hover:text-on-surface-inverse transition-colors cursor-pointer"
-            >
-              {tNav('aboutUs')}
-            </Link>
-            <Link
-              href={routes.contact.path()}
-              className="hover:text-on-surface-inverse transition-colors cursor-pointer"
-            >
-              {tNav('contact')}
-            </Link>
           </nav>
         </div>
       </div>

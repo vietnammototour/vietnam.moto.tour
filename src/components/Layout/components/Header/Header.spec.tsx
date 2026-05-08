@@ -39,16 +39,6 @@ describe('Header', () => {
     expect(screen.getAllByText('tours').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders About Us nav link', () => {
-    render(<Header />);
-    expect(screen.getAllByText('aboutUs').length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('renders Contact nav link', () => {
-    render(<Header />);
-    expect(screen.getAllByText('contact').length).toBeGreaterThanOrEqual(1);
-  });
-
   it('renders YouTube social link in top bar', () => {
     render(<Header />);
     const icons = document.querySelectorAll('.fa-youtube');
