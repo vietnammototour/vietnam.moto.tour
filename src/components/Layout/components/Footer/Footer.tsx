@@ -85,7 +85,7 @@ export const Footer = () => {
             <p className="type-body-sm leading-none">
               {t('copyright', {year: new Date().getFullYear()})}
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 text-xl">
               <a
                 href={contactInfo.youtubeLink}
                 aria-label="YouTube"
