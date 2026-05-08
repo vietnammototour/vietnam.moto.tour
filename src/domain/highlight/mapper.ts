@@ -5,8 +5,10 @@ export function toHighlight(row: PrismaHighlight): Highlight {
   return {
     id: row.id,
     destinationId: row.destinationId,
-    textEn: row.textEn,
-    textVi: row.textVi,
+    titleEn: row.titleEn,
+    titleVi: row.titleVi,
+    descriptionEn: row.descriptionEn,
+    descriptionVi: row.descriptionVi,
     imageUrl: row.imageUrl,
   };
 }
