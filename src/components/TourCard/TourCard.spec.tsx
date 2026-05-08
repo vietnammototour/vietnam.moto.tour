@@ -36,14 +36,16 @@ describe('TourCard', () => {
     expect(screen.getByText('perPerson')).toBeInTheDocument();
   });
 
-  it('renders the duration', () => {
+  it('renders the duration with translation key', () => {
     render(<TourCard tour={tour} />);
-    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText('daysCount:{"count":1}')).toBeInTheDocument();
   });
 
-  it('renders the distance', () => {
+  it('renders the distance with translation key', () => {
     render(<TourCard tour={tour} />);
-    expect(screen.getByText('186')).toBeInTheDocument();
+    expect(
+      screen.getByText('kilometersCount:{"count":186}'),
+    ).toBeInTheDocument();
   });
 
   it('renders the location', () => {

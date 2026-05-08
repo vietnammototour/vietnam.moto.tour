@@ -7,7 +7,7 @@ import type * as VMT from '@/domain';
 import {EditableProvider} from '../../EditableContext';
 import {AdminIntlProvider} from '../../AdminIntlProvider';
 import {TourPricing} from '@/components/TourPricing';
-import {TextInput, NumberInput, Button} from '@/components/ui';
+import {TextInput, NumberInput, Button, Select} from '@/components/ui';
 import {pricingSchema, type PricingFormData} from './PricingTab.form-utils';
 
 type PricingTabProps = {
@@ -160,7 +160,9 @@ export function PricingTab({initialData, locale, onSave}: PricingTabProps) {
               >
                 {/* Group header */}
                 <div className="bg-surface-elevated px-4 py-3 flex items-center gap-3">
-                  <select
+                  <Select
+                    fullWidth={false}
+                    selectSize="sm"
                     value={group.type}
                     onChange={(e) =>
                       setValue(
@@ -169,11 +171,10 @@ export function PricingTab({initialData, locale, onSave}: PricingTabProps) {
                         {shouldDirty: true},
                       )
                     }
-                    className="px-2 py-1.5 rounded-lg border border-border bg-surface text-on-surface type-label-sm cursor-pointer"
                   >
                     <option value="vehicle">Vehicle</option>
                     <option value="group-size">Group Size</option>
-                  </select>
+                  </Select>
                   <TextInput
                     placeholder="Icon (e.g. fa-motorcycle)"
                     className="flex-1 min-w-0"

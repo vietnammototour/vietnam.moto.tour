@@ -5,7 +5,7 @@ import {DndContext, type DragEndEvent} from '@dnd-kit/core';
 import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import {api} from '@/routes';
-import {Button} from '@/components/ui';
+import {Button, Select} from '@/components/ui';
 import type {Locale} from '@/components/Admin/LocalePicker';
 import {PerkChip} from './PerkChip';
 import {PerkDropZone} from './PerkDropZone';
@@ -157,10 +157,10 @@ export function PerksTab({
               onChange={(e) => setSearch(e.target.value)}
               className="px-3 py-2 border border-border rounded bg-surface"
             />
-            <select
+            <Select
+              fullWidth={false}
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="cursor-pointer px-3 py-2 border border-border rounded bg-surface"
             >
               <option value="">{tc('allCategories')}</option>
               {CATEGORIES.map((c) => (
@@ -168,7 +168,7 @@ export function PerksTab({
                   {tPerks(`category.${c}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           {availablePerks.map((p) => (
             <PerkChip key={p.id} perk={p} locale={locale} zone="available" />

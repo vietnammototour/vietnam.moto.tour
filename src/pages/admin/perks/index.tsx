@@ -3,7 +3,7 @@ import type {GetServerSidePropsContext} from 'next';
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
 import {api, routes, useNavigate} from '@/routes';
-import {Button} from '@/components/ui';
+import {Button, Select} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import type * as VMT from '@/domain';
 
@@ -86,10 +86,10 @@ export default function PerksListPage() {
           onChange={(e) => setSearch(e.target.value)}
           className="px-3 py-2 border border-border rounded bg-surface"
         />
-        <select
+        <Select
+          fullWidth={false}
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="cursor-pointer px-3 py-2 border border-border rounded bg-surface"
         >
           <option value="">{tc('allCategories')}</option>
           {CATEGORIES.map((c) => (
@@ -97,7 +97,7 @@ export default function PerksListPage() {
               {t(`category.${c}`)}
             </option>
           ))}
-        </select>
+        </Select>
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"

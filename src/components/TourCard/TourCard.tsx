@@ -17,6 +17,27 @@ export const TourCard = ({tour, interactive = true}: Props) => {
   const locale = useLocale();
   const title = tour.title[locale as 'en' | 'vi'] ?? tour.title.vi;
   const t = useTranslations('common');
+
+  const stats = [
+    {
+      key: 'duration',
+      label: t('durationLabel'),
+      value: t('daysCount', {count: duration}),
+      icon: 'fa-clock',
+    },
+    {
+      key: 'distance',
+      label: t('distanceLabel'),
+      value: t('kilometersCount', {count: distance}),
+      icon: 'fa-road',
+    },
+    {
+      key: 'location',
+      label: t('locationLabel'),
+      value: tour.destinationName ?? '',
+      icon: 'fa-map-marker-alt',
+    },
+  ];
   const {
     ref,
     rotateX,
@@ -81,17 +102,26 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           <span className="text-on-surface-accent type-title-sm">${price}</span>{' '}
           {t('perPerson')}
         </p>
-        <ul className="flex items-center gap-4 type-label-sm font-normal text-on-surface-secondary mt-auto pt-4 border-t border-border-subtle">
-          <li className="flex items-center gap-1">
-            <i className="fa fa-clock text-on-surface-secondary" /> {duration}
-          </li>
-          <li className="flex items-center gap-1">
-            <i className="fa fa-road text-on-surface-secondary" /> {distance}
-          </li>
-          <li className="flex items-center gap-1">
-            <i className="fa fa-map-marker-alt text-on-surface-secondary" />{' '}
-            {tour.destinationName}
-          </li>
+        <ul className="grid grid-cols-3 gap-2 mt-auto pt-4 border-t border-border-subtle">
+          {stats.map((s, i) => (
+            <li
+              key={s.key}
+              className={`flex flex-col gap-1 px-2 ${
+                i > 0 ? 'border-l border-border-subtle' : ''
+              }`}
+            >
+              <span className="type-label-sm uppercase tracking-wider text-on-surface-tertiary text-[0.65rem] leading-none">
+                {s.label}
+              </span>
+              <span className="flex items-center gap-1.5 type-body-sm font-semibold text-on-surface truncate">
+                <i
+                  className={`fa ${s.icon} text-primary/70 text-xs shrink-0`}
+                  aria-hidden="true"
+                />
+                <span className="truncate">{s.value}</span>
+              </span>
+            </li>
+          ))}
         </ul>
       </div>
     </motion.div>
