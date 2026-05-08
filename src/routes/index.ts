@@ -7,6 +7,34 @@ type AdminStats = {
   userCount: number;
 };
 
+type TabDescriptor<K extends string> = {
+  key: K;
+  labelKey: string;
+};
+
+const TOUR_TABS = [
+  {key: 'general', labelKey: 'admin.tours.tabs.general'},
+  {key: 'itinerary', labelKey: 'admin.tours.tabs.itinerary'},
+  {key: 'pricing', labelKey: 'admin.tours.tabs.pricing'},
+  {key: 'highlights', labelKey: 'admin.tours.tabs.highlights'},
+  {key: 'perks', labelKey: 'admin.tours.tabs.perks'},
+] as const satisfies readonly TabDescriptor<string>[];
+
+export type TourTab = (typeof TOUR_TABS)[number]['key'];
+export const isTourTab = (s: unknown): s is TourTab =>
+  typeof s === 'string' && TOUR_TABS.some((t) => t.key === s);
+
+const DESTINATION_TABS = [
+  {key: 'general', labelKey: 'admin.destinations.tabs.general'},
+  {key: 'heroImage', labelKey: 'admin.destinations.tabs.heroImage'},
+  {key: 'cardImage', labelKey: 'admin.destinations.tabs.cardImage'},
+  {key: 'highlights', labelKey: 'admin.destinations.tabs.highlights'},
+] as const satisfies readonly TabDescriptor<string>[];
+
+export type DestinationTab = (typeof DESTINATION_TABS)[number]['key'];
+export const isDestinationTab = (s: unknown): s is DestinationTab =>
+  typeof s === 'string' && DESTINATION_TABS.some((t) => t.key === s);
+
 // ─── Route Registry ───────────────────────────────────────
 
 export const routes = {
@@ -26,14 +54,28 @@ export const routes = {
     dashboard: {path: () => '/admin'},
     tours: {
       list: {path: () => '/admin/tours'},
-      new: {path: () => '/admin/tours/new'},
-      edit: {path: (p: {id: string | number}) => `/admin/tours/${p.id}/edit`},
+      new: {
+        path: (p?: {tab?: TourTab}) =>
+          `/admin/tours/new/${p?.tab ?? 'general'}`,
+        tabs: TOUR_TABS,
+      },
+      edit: {
+        path: (p: {id: string | number; tab?: TourTab}) =>
+          `/admin/tours/${p.id}/edit/${p.tab ?? 'general'}`,
+        tabs: TOUR_TABS,
+      },
     },
     destinations: {
       list: {path: () => '/admin/destinations'},
-      new: {path: () => '/admin/destinations/new'},
+      new: {
+        path: (p?: {tab?: DestinationTab}) =>
+          `/admin/destinations/new/${p?.tab ?? 'general'}`,
+        tabs: DESTINATION_TABS,
+      },
       edit: {
-        path: (p: {id: string | number}) => `/admin/destinations/${p.id}/edit`,
+        path: (p: {id: string | number; tab?: DestinationTab}) =>
+          `/admin/destinations/${p.id}/edit/${p.tab ?? 'general'}`,
+        tabs: DESTINATION_TABS,
       },
     },
     perks: {
@@ -236,4 +278,16 @@ export function useNavigate() {
       window.history.replaceState(null, '', path);
     },
   };
+}
+
+type TabbedRoute = {tabs: readonly TabDescriptor<string>[]};
+
+export function useActiveTab<R extends TabbedRoute>(
+  route: R,
+  fallback: R['tabs'][number]['key'],
+): R['tabs'][number]['key'] {
+  const router = useRouter();
+  const raw = router.query.tab;
+  const found = route.tabs.find((t) => t.key === raw);
+  return (found?.key ?? fallback) as R['tabs'][number]['key'];
 }
