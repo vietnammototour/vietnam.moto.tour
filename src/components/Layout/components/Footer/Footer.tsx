@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {useTranslations} from 'next-intl';
 import {routes} from '@/routes';
 import {getUrl, contactInfo} from '@/utils';
+import {TripAdvisorIcon} from '@/components/ui';
 
 export const Footer = () => {
   const t = useTranslations('footer');
@@ -101,12 +102,7 @@ export const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-primary-light transition-colors cursor-pointer"
               >
-                <img
-                  src="/icons/tripadvisor.png"
-                  alt=""
-                  aria-hidden="true"
-                  className="h-5 w-auto"
-                />
+                <TripAdvisorIcon className="h-[1em] w-auto" />
               </a>
               <a
                 href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}

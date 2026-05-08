@@ -10,7 +10,7 @@ import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
-import {ThemeToggle} from '@/components/ui';
+import {ThemeToggle, TripAdvisorIcon} from '@/components/ui';
 import {LoginModal} from '@/components/Admin/LoginModal';
 
 export const Header = () => {
@@ -88,12 +88,7 @@ export const Header = () => {
               rel="noopener noreferrer"
               className="hover:text-primary-light transition-colors cursor-pointer"
             >
-              <img
-                src="/icons/tripadvisor.png"
-                alt=""
-                aria-hidden="true"
-                className="h-4 w-auto"
-              />
+              <TripAdvisorIcon className="h-[1em] w-auto" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
@@ -248,12 +243,7 @@ export const Header = () => {
               rel="noopener noreferrer"
               className="text-on-surface-secondary hover:text-on-surface-inverse"
             >
-              <img
-                src="/icons/tripadvisor.png"
-                alt=""
-                aria-hidden="true"
-                className="h-5 w-auto"
-              />
+              <TripAdvisorIcon className="h-[1em] w-auto" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}

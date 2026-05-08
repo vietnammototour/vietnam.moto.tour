@@ -57,10 +57,9 @@ describe('Header', () => {
 
   it('renders TripAdvisor social link in top bar', () => {
     render(<Header />);
-    const icons = document.querySelectorAll(
-      'img[src="/icons/tripadvisor.png"]',
-    );
-    expect(icons.length).toBeGreaterThanOrEqual(1);
+    const taLinks = screen.getAllByLabelText('TripAdvisor');
+    expect(taLinks.length).toBeGreaterThanOrEqual(1);
+    expect(taLinks[0].querySelector('svg')).toBeInTheDocument();
   });
 
   it('renders WhatsApp social link in top bar', () => {
