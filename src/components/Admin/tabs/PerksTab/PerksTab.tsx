@@ -61,7 +61,7 @@ export function PerksTab({
   const [error, setError] = useState('');
 
   useEffect(() => {
-    api.admin.perks.list({archived: false}).then(({data}) => {
+    api.admin.perks.list().then(({data}) => {
       if (data) setAllPerks(data);
     });
   }, []);

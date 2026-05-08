@@ -28,7 +28,7 @@ export default async function handler(
   }
 
   if (req.method === 'PUT') {
-    const {labelEn, labelVi, icon, category, archived} = req.body ?? {};
+    const {labelEn, labelVi, icon, category} = req.body ?? {};
     const data: Record<string, unknown> = {};
     if (typeof labelEn === 'string') data.labelEn = labelEn;
     if (typeof labelVi === 'string') data.labelVi = labelVi;
@@ -39,7 +39,6 @@ export default async function handler(
       }
       data.category = category;
     }
-    if (typeof archived === 'boolean') data.archived = archived;
 
     const perk = await prisma.perk.update({where: {id}, data});
     return res.json(perk);
@@ -48,11 +47,9 @@ export default async function handler(
   if (req.method === 'DELETE') {
     const usage = await prisma.tourPerk.count({where: {perkId: id}});
     if (usage > 0) {
-      return res
-        .status(409)
-        .json({
-          error: `Perk is in use by ${usage} tour(s). Archive it instead.`,
-        });
+      return res.status(409).json({
+        error: `Perk is in use by ${usage} tour(s). Remove it from those tours first.`,
+      });
     }
     await prisma.perk.delete({where: {id}});
     return res.status(204).end();

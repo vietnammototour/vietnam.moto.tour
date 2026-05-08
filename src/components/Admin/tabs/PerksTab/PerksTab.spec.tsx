@@ -13,7 +13,6 @@ jest.mock('@/routes', () => ({
               labelVi: 'Xe',
               icon: 'fa-solid fa-motorcycle',
               category: 'TRANSPORT',
-              archived: false,
               updatedAt: new Date(),
             },
             {
@@ -22,7 +21,6 @@ jest.mock('@/routes', () => ({
               labelVi: 'Bữa trưa',
               icon: 'fa-solid fa-utensils',
               category: 'FOOD',
-              archived: false,
               updatedAt: new Date(),
             },
           ],

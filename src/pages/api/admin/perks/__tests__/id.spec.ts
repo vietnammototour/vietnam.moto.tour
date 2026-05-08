@@ -56,7 +56,6 @@ describe('PUT /api/admin/perks/[id]', () => {
           labelVi: 'New',
           icon: 'i',
           category: 'FOOD',
-          archived: true,
         },
       }),
       res,
@@ -68,7 +67,6 @@ describe('PUT /api/admin/perks/[id]', () => {
         labelVi: 'New',
         icon: 'i',
         category: 'FOOD',
-        archived: true,
       },
     });
   });
