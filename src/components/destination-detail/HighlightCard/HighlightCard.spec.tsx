@@ -13,20 +13,25 @@ const baseHighlight = {
 
 describe('HighlightCard', () => {
   it('renders English title and description when locale is en', () => {
-    render(<HighlightCard highlight={baseHighlight} locale="en" />);
+    render(<HighlightCard highlight={baseHighlight} locale="en" index={0} />);
     expect(screen.getByText('Waterfalls')).toBeInTheDocument();
     expect(screen.getByText('Stunning cascades')).toBeInTheDocument();
   });
 
   it('renders Vietnamese title and description when locale is vi', () => {
-    render(<HighlightCard highlight={baseHighlight} locale="vi" />);
+    render(<HighlightCard highlight={baseHighlight} locale="vi" index={0} />);
     expect(screen.getByText('Thác nước')).toBeInTheDocument();
     expect(screen.getByText('Thác hùng vĩ')).toBeInTheDocument();
   });
 
   it('renders image with localized title as alt', () => {
-    render(<HighlightCard highlight={baseHighlight} locale="en" />);
+    render(<HighlightCard highlight={baseHighlight} locale="en" index={0} />);
     expect(screen.getByAltText('Waterfalls')).toBeInTheDocument();
+  });
+
+  it('renders an index label padded to two digits', () => {
+    render(<HighlightCard highlight={baseHighlight} locale="en" index={4} />);
+    expect(screen.getByText('05')).toBeInTheDocument();
   });
 
   it('omits image when imageUrl is null', () => {
@@ -34,6 +39,7 @@ describe('HighlightCard', () => {
       <HighlightCard
         highlight={{...baseHighlight, imageUrl: null}}
         locale="en"
+        index={0}
       />,
     );
     expect(screen.queryByRole('img')).not.toBeInTheDocument();

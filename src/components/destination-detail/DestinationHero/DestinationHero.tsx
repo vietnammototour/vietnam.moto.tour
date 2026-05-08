@@ -1,3 +1,9 @@
+import Link from 'next/link';
+import {motion, useMotionTemplate} from 'framer-motion';
+import {useTranslations} from 'next-intl';
+import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
+import {clipReveal, slideFromLeft} from '@/utils/motion-variants';
+import {routes} from '@/routes';
 import type * as VMT from '@/domain';
 
 type Props = {
@@ -6,26 +12,117 @@ type Props = {
 };
 
 export function DestinationHero({destination, locale}: Props) {
+  const t = useTranslations('destinationDetail');
+  const spotlight = useCursorSpotlight(280, 0.14);
+  const spotlightBg = useMotionTemplate`radial-gradient(280px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.18), transparent)`;
+
   const description = destination.description[locale];
+  const tourCount = destination.tours.length;
+  const sizeKey = destination.size === 'large' ? 'sizeLarge' : 'sizeSmall';
 
   return (
-    <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
-      <img
-        src={destination.heroImage || destination.imageUrl}
-        alt={destination.name}
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-      <div className="absolute inset-0 flex items-end">
-        <div className="container mx-auto px-4 pb-12">
-          <h1 className="type-display-md text-white mb-4">
+    <section className="relative">
+      <div
+        ref={spotlight.ref as React.RefObject<HTMLDivElement>}
+        onMouseMove={spotlight.onMouseMove}
+        onMouseLeave={spotlight.onMouseLeave}
+        className="relative h-[70vh] min-h-[28rem] lg:h-[36rem] overflow-hidden texture-grain-warm"
+      >
+        <motion.div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${destination.heroImage || destination.imageUrl})`,
+          }}
+          initial={{scale: 1.1}}
+          animate={{scale: 1}}
+          transition={{duration: 1.4, ease: [0.22, 1, 0.36, 1]}}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{background: spotlightBg}}
+        />
+
+        <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col justify-end h-full pb-12 lg:pb-16">
+          <motion.span
+            initial={{opacity: 0, y: 12}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.5, delay: 0.1}}
+            className="type-label-sm tracking-[0.3em] uppercase text-on-surface-inverse/70 mb-4"
+          >
+            {t('eyebrow')}
+          </motion.span>
+
+          <motion.h1
+            variants={clipReveal}
+            initial="hidden"
+            animate="visible"
+            className="type-display-md md:type-display-lg text-on-surface-inverse mb-6 max-w-[80%] leading-[0.95]"
+          >
             {destination.name}
-          </h1>
+          </motion.h1>
+
           {description && (
-            <p className="type-body-lg text-white/90 max-w-2xl">
+            <motion.p
+              variants={slideFromLeft}
+              initial="hidden"
+              animate="visible"
+              transition={{delay: 0.4}}
+              className="type-body-lg text-on-surface-inverse/85 max-w-2xl mb-6"
+            >
               {description}
-            </p>
+            </motion.p>
           )}
+
+          <motion.div
+            variants={slideFromLeft}
+            initial="hidden"
+            animate="visible"
+            transition={{delay: 0.55}}
+            className="flex flex-wrap items-center gap-x-6 gap-y-3 text-on-surface-inverse/80 type-body-sm"
+          >
+            <span className="flex items-center gap-2">
+              <i className="fa fa-map-marker-alt text-[var(--color-primary)]" />
+              {t(sizeKey)}
+            </span>
+            <span className="flex items-center gap-2">
+              <i className="fa fa-route text-[var(--color-primary)]" />
+              {t('toursAvailable', {count: tourCount})}
+            </span>
+            <a
+              href="#highlights"
+              className="ml-auto group hidden md:inline-flex items-center gap-2 type-label-md text-on-surface-inverse hover:text-[var(--color-primary-light)] transition-colors cursor-pointer"
+            >
+              {t('exploreCue')}
+              <span className="inline-block transition-transform group-hover:translate-y-0.5">
+                ↓
+              </span>
+            </a>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="bg-surface-alt py-3 border-b border-border-subtle">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <nav className="flex items-center gap-2 type-body-sm text-on-surface-secondary">
+            <Link
+              href={routes.home.path()}
+              className="hover:text-primary transition-colors cursor-pointer"
+            >
+              {t('breadcrumbHome')}
+            </Link>
+            <span>/</span>
+            <Link
+              href={routes.tours.list.path()}
+              className="hover:text-primary transition-colors cursor-pointer"
+            >
+              {t('breadcrumbDestinations')}
+            </Link>
+            <span>/</span>
+            <span className="text-on-surface type-label-lg">
+              {destination.name}
+            </span>
+          </nav>
         </div>
       </div>
     </section>

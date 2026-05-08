@@ -1,28 +1,54 @@
+import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import {TourCard} from '@/components/TourCard';
 
 type Props = {
   tours: VMT.Tour[];
+  destinationName: string;
 };
 
-export function DestinationTours({tours}: Props) {
+export function DestinationTours({tours, destinationName}: Props) {
   const t = useTranslations('destinationDetail');
 
   return (
-    <section className="container mx-auto px-4 py-12">
-      <h2 className="type-headline-md text-on-surface mb-6">
-        {t('toursTitle')}
-      </h2>
-      {tours.length === 0 ? (
-        <p className="type-body-md text-on-surface-secondary">{t('noTours')}</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tours.map((tour) => (
-            <TourCard key={tour.id} tour={tour} />
-          ))}
+    <motion.section
+      id="tours"
+      initial={{opacity: 0, y: 20}}
+      whileInView={{opacity: 1, y: 0}}
+      viewport={{once: true}}
+      transition={{duration: 0.5}}
+      className="bg-surface-alt py-16 lg:py-24 scroll-mt-24"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end justify-between gap-4 mb-10">
+          <div>
+            <span className="type-label-sm tracking-[0.25em] uppercase text-primary mb-2 block">
+              {t('toursEyebrow')}
+            </span>
+            <h2 className="type-headline-lg text-on-surface">
+              {t('toursTitle', {name: destinationName})}
+            </h2>
+          </div>
+          {tours.length > 0 && (
+            <span className="type-label-md text-on-surface-secondary hidden sm:block">
+              {t('toursAvailable', {count: tours.length})}
+            </span>
+          )}
         </div>
-      )}
-    </section>
+
+        {tours.length === 0 ? (
+          <p className="type-body-md text-on-surface-secondary border border-dashed border-border-subtle rounded-xl p-10 text-center bg-surface">
+            {t('noTours')}
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tours.map((tour) => (
+              <TourCard key={tour.id} tour={tour} />
+            ))}
+          </div>
+        )}
+      </div>
+    </motion.section>
   );
 }

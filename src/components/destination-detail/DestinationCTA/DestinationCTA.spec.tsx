@@ -1,22 +1,12 @@
 import {render, screen} from '@testing-library/react';
-import {NextIntlClientProvider} from 'next-intl';
 import {DestinationCTA} from './DestinationCTA';
 
-const messages = {
-  destinationDetail: {
-    cta: {title: 'Plan your trip', button: 'Contact us'},
-  },
-};
-
 describe('DestinationCTA', () => {
-  it('renders title and contact link', () => {
-    render(
-      <NextIntlClientProvider locale="en" messages={messages}>
-        <DestinationCTA />
-      </NextIntlClientProvider>,
-    );
+  it('renders title, subtitle and contact link', () => {
+    render(<DestinationCTA />);
     expect(screen.getByText('title')).toBeInTheDocument();
-    const link = screen.getByRole('link', {name: 'button'});
+    expect(screen.getByText('subtitle')).toBeInTheDocument();
+    const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/contact');
   });
 });
