@@ -3,7 +3,13 @@
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useTranslations} from 'next-intl';
-import {Button, FormField, TextInput, IconPicker} from '@/components/ui';
+import {
+  Button,
+  FormField,
+  TextInput,
+  IconPicker,
+  Select,
+} from '@/components/ui';
 import {
   perkFormSchema,
   perkFormDefaults,
@@ -52,23 +58,18 @@ export function PerkForm({mode, initialData, onSubmit}: PerkFormProps) {
         error={errors.labelVi?.message}
       />
 
-      <FormField
+      <Select
+        id="category"
         label={tc('form.category')}
-        htmlFor="category"
         error={errors.category?.message}
+        {...register('category')}
       >
-        <select
-          id="category"
-          {...register('category')}
-          className="cursor-pointer w-full px-3 py-2 border rounded"
-        >
-          {PERK_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {t(`category.${c}`)}
-            </option>
-          ))}
-        </select>
-      </FormField>
+        {PERK_CATEGORIES.map((c) => (
+          <option key={c} value={c}>
+            {t(`category.${c}`)}
+          </option>
+        ))}
+      </Select>
 
       <FormField
         label={tc('form.icon')}

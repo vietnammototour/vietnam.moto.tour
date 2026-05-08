@@ -365,32 +365,32 @@ export default function Home({tours, destinations, isAdmin}: HomeProps) {
               <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
                 {[
                   {
-                    icon: 'icon-travel-map',
+                    icon: 'fas fa-user-tie',
                     label: t('localExperts'),
                     accent: 'primary',
                   },
                   {
-                    icon: 'icon-place',
+                    icon: 'fas fa-route',
                     label: t('hiddenRoutes'),
                     accent: 'secondary',
                   },
                   {
-                    icon: 'icon-flag',
+                    icon: 'fas fa-medal',
                     label: t('yearsOnRoad'),
                     accent: 'primary',
                   },
                   {
-                    icon: 'icon-clock',
+                    icon: 'fas fa-calendar-alt',
                     label: t('dayAndMultiDay'),
                     accent: 'secondary',
                   },
                   {
-                    icon: 'icon-user',
+                    icon: 'fas fa-users',
                     label: t('smallGroups'),
                     accent: 'primary',
                   },
                   {
-                    icon: 'icon-cashback',
+                    icon: 'fas fa-hand-holding-usd',
                     label: t('allInclusive'),
                     accent: 'secondary',
                   },

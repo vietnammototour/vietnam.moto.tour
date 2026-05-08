@@ -35,7 +35,7 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
     {
       href: routes.admin.perks.list.path(),
       label: 'Perks',
-      icon: 'fa-circle-check',
+      icon: 'fa-check-circle',
     },
     {
       href: routes.admin.translations.path(),
@@ -70,13 +70,15 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg type-label-sm transition-colors cursor-pointer ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[0.9375rem] transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-primary/10 text-primary'
                     : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'
                 }`}
               >
-                <i className={`fas ${item.icon} w-5 text-center`} />
+                <i
+                  className={`fas ${item.icon} w-6 text-center text-[0.9375rem]`}
+                />
                 {item.label}
               </Link>
             );

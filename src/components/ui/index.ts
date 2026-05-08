@@ -2,6 +2,7 @@ export {FormField} from './FormField';
 export {Button} from './Button';
 export {Badge} from './Badge';
 export {TextInput} from './TextInput';
+export {Select} from './Select';
 export {Textarea} from './Textarea';
 export {NumberInput} from './NumberInput';
 export {SegmentedControl} from './SegmentedControl';

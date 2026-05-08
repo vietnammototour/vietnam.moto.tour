@@ -6,7 +6,13 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {ImageUploadField} from '../../ImageUploadField';
 import {StatusPicker} from '../../StatusPicker';
 import {TourPreviewPanel} from '../../TourPreviewPanel';
-import {TextInput, Textarea, NumberInput, Button} from '@/components/ui';
+import {
+  TextInput,
+  Textarea,
+  NumberInput,
+  Button,
+  Select,
+} from '@/components/ui';
 import {flushImageSlots} from '@/lib/submit-with-images';
 import {
   generalTabSchema,
@@ -106,24 +112,19 @@ export function GeneralTab({
               {...register('slug')}
               error={errors.slug?.message}
             />
-            <div>
-              <label className="block type-label-sm text-on-surface-secondary mb-1">
-                Destination
-              </label>
-              <select
-                {...register('destinationId', {
-                  onChange: (e) => onDestinationChange?.(e.target.value),
-                })}
-                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-              >
-                <option value="">Select...</option>
-                {destinations.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="Destination"
+              {...register('destinationId', {
+                onChange: (e) => onDestinationChange?.(e.target.value),
+              })}
+            >
+              <option value="">Select...</option>
+              {destinations.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
+            </Select>
           </div>
 
           <TextInput
