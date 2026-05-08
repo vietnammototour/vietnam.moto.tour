@@ -32,7 +32,7 @@ describe('Footer', () => {
     render(<Footer />);
     const taLink = screen.getByLabelText('TripAdvisor');
     expect(taLink).toHaveAttribute('href', contactInfo.tripadvisorLink);
-    expect(document.querySelector('.fa-tripadvisor')).toBeInTheDocument();
+    expect(document.querySelector('.fa-binoculars')).toBeInTheDocument();
   });
 
   it('renders WhatsApp social link', () => {

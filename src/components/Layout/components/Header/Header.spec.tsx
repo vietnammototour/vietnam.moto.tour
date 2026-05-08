@@ -57,7 +57,7 @@ describe('Header', () => {
 
   it('renders TripAdvisor social link in top bar', () => {
     render(<Header />);
-    const icons = document.querySelectorAll('.fa-tripadvisor');
+    const icons = document.querySelectorAll('.fa-binoculars');
     expect(icons.length).toBeGreaterThanOrEqual(1);
   });
 

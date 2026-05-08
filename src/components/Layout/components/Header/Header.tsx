@@ -88,7 +88,7 @@ export const Header = () => {
               rel="noopener noreferrer"
               className="hover:text-primary-light transition-colors cursor-pointer"
             >
-              <i className="fab fa-tripadvisor" aria-hidden="true" />
+              <i className="fas fa-binoculars" aria-hidden="true" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
@@ -243,7 +243,7 @@ export const Header = () => {
               rel="noopener noreferrer"
               className="text-on-surface-secondary hover:text-on-surface-inverse"
             >
-              <i className="fab fa-tripadvisor" aria-hidden="true" />
+              <i className="fas fa-binoculars" aria-hidden="true" />
             </a>
             <a
               href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
