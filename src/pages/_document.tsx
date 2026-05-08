@@ -27,11 +27,6 @@ export default function Document() {
           rel="manifest"
           href={getUrl('assets/images/favicons/site.webmanifest')}
         />
-
-        <link
-          rel="stylesheet"
-          href={getUrl('assets/vendors/fontawesome/css/all.min.css')}
-        />
       </Head>
       <body>
         <script

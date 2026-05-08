@@ -9,6 +9,7 @@ import {routes} from '@/routes';
 import {ThemeProvider} from '@/components/ThemeProvider';
 import {Layout} from '@/components/Layout';
 import {AdminLayout} from '@/components/Admin/AdminLayout';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@/styles/globals.css';
 
 const dmSans = DM_Sans({
