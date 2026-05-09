@@ -19,6 +19,8 @@
     "test:e2e:update-snapshots": "npx playwright test --update-snapshots",
     "db:seed": "npx tsx prisma/seed.ts",
     "db:seed-admin": "npx tsx prisma/seed-admin.ts",
+    "db:seed-home-gallery": "npx tsx prisma/seed-home-gallery.ts",
+    "db:seed-image-collection-translations": "npx tsx prisma/seed-image-collection-translations.ts",
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
     "migrate:uploads": "npx tsx scripts/migrate-uploads.ts",
