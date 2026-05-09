@@ -17,6 +17,7 @@ import {
 import {useTranslations} from 'next-intl';
 import type {ImageCollection, CollectionImage} from '@/domain';
 import {api} from '@/routes';
+import {transcodeImage} from '@/lib/image-transcode';
 import {SortableImageCard} from './SortableImageCard';
 import {AddImageButton} from './AddImageButton';
 
@@ -83,8 +84,34 @@ export function ImageCollectionEditor({collection}: Props) {
     altTimers.current.set(id, timer);
   }
 
+  async function toWebpBlob(file: File): Promise<Blob | null> {
+    try {
+      const out = await transcodeImage(file, 'card');
+      return out.blob;
+    } catch (err) {
+      const code =
+        err && typeof err === 'object' && 'code' in err
+          ? (err as {code: string}).code
+          : null;
+      if (code === 'unsupported_format') {
+        setError('Use JPEG, PNG, WebP, or GIF');
+      } else if (code === 'too_large') {
+        setError('Image must be under 25MB');
+      } else if (code === 'decode_failed') {
+        setError('Could not decode this image');
+      } else if (code === 'encode_failed') {
+        setError('Could not produce WebP output');
+      } else {
+        setError('Image processing failed');
+      }
+      return null;
+    }
+  }
+
   async function handleAdd(file: File) {
     if (images.length >= MAX) return;
+    const blob = await toWebpBlob(file);
+    if (!blob) return;
     const created = await api.admin.imageCollections.images.add(
       collection.id,
       {},
@@ -97,7 +124,7 @@ export function ImageCollectionEditor({collection}: Props) {
       entityType: 'collectionImage',
       entityId: created.data.id,
       imageType: 'card',
-      blob: file,
+      blob,
     });
     if (!upload.data) {
       setError(upload.error ?? 'upload failed');
@@ -110,11 +137,13 @@ export function ImageCollectionEditor({collection}: Props) {
   }
 
   async function handleReplace(id: string, file: File) {
+    const blob = await toWebpBlob(file);
+    if (!blob) return;
     const upload = await api.admin.upload.create({
       entityType: 'collectionImage',
       entityId: id,
       imageType: 'card',
-      blob: file,
+      blob,
     });
     if (!upload.data) {
       setError(upload.error ?? 'replace failed');
