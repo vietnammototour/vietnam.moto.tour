@@ -29,13 +29,7 @@ type GalleryImage = {id: string; url: string; altEn: string; altVi: string};
 
 type HomeProps = {
   tours: VMT.Tour[];
-  destinations: (VMT.Destination & {
-    tourCount: number;
-    hasCar: boolean;
-    hasBike: boolean;
-    carTourCount: number;
-    bikeTourCount: number;
-  })[];
+  destinations: VMT.DestinationWithStats[];
   isAdmin: boolean;
   gallery: {images: GalleryImage[]} | null;
   locale: string;
