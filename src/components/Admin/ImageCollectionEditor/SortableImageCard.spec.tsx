@@ -5,7 +5,7 @@ import {SortableImageCard} from './SortableImageCard';
 // Override the global next-intl mock so NextIntlClientProvider actually resolves
 // message keys using the messages fixture passed to the provider.
 jest.mock('next-intl', () => {
-  const React = require('react');
+  const React = require('react') as typeof import('react');
   const MessagesContext = React.createContext<Record<string, unknown>>({});
   function NextIntlClientProvider({
     children,
