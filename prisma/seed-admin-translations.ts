@@ -65,6 +65,39 @@ const entries: Entry[] = [
     valueVi: 'Điểm nổi bật',
   },
 
+  // Tour edit tabs
+  {
+    namespace: 'admin.tours.tabs',
+    key: 'general',
+    valueEn: 'General',
+    valueVi: 'Chung',
+  },
+  {namespace: 'admin.tours.tabs', key: 'card', valueEn: 'Card', valueVi: 'Thẻ'},
+  {
+    namespace: 'admin.tours.tabs',
+    key: 'itinerary',
+    valueEn: 'Itinerary',
+    valueVi: 'Lịch trình',
+  },
+  {
+    namespace: 'admin.tours.tabs',
+    key: 'pricing',
+    valueEn: 'Pricing',
+    valueVi: 'Giá',
+  },
+  {
+    namespace: 'admin.tours.tabs',
+    key: 'highlights',
+    valueEn: 'Highlights',
+    valueVi: 'Điểm nổi bật',
+  },
+  {
+    namespace: 'admin.tours.tabs',
+    key: 'perks',
+    valueEn: 'Perks',
+    valueVi: 'Tiện ích',
+  },
+
   // Image collections
   {
     namespace: 'admin.imageCollections',
