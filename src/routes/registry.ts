@@ -77,6 +77,11 @@ export const routes = {
     perks: {
       list: {path: () => '/admin/perks'},
     },
+    imageCollections: {
+      list: {path: () => '/admin/image-collections'},
+      new: {path: () => '/admin/image-collections/new'},
+      edit: {path: (p: {id: string}) => `/admin/image-collections/${p.id}`},
+    },
     translations: {path: () => '/admin/translations'},
     users: {path: () => '/admin/users'},
   },
