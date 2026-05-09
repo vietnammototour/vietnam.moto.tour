@@ -3,7 +3,7 @@
 import {useState, useCallback, useEffect, useRef} from 'react';
 import {useTranslations} from 'next-intl';
 import {routes, api, useNavigate, type DestinationTab} from '@/routes';
-import {Tabs, TabPanel, Button} from '@/components/ui';
+import {Tabs, TabPanel} from '@/components/ui';
 import {DestinationGeneralForm} from '../DestinationGeneralForm';
 import {HeroImagePreview} from '../HeroImagePreview';
 import {CardImagePreview} from '../CardImagePreview';
@@ -102,12 +102,6 @@ export function DestinationEditTabs({
         </div>
         <div className="flex items-center gap-3 shrink-0">
           <LocalePicker value={locale} onChange={setLocale} />
-          <Button
-            variant="secondary"
-            onClick={() => navigate.to(routes.admin.destinations.list)}
-          >
-            Back to Destinations
-          </Button>
         </div>
       </div>
 

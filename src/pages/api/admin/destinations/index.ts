@@ -20,7 +20,7 @@ export default async function handler(
     const destinations = await prisma.destination.findMany({
       where,
       orderBy: {createdAt: 'desc'},
-      include: {_count: {select: {tours: true}}},
+      include: {_count: {select: {tours: true, highlights: true}}},
     });
     return res.json(destinations);
   }
