@@ -11,6 +11,7 @@ import type * as VMT from '@/domain';
 type Destination = {
   id: string;
   name: string;
+  heroImage: string;
 };
 
 const emptyGeneral = {
