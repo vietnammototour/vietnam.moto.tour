@@ -41,7 +41,9 @@ export default function DestinationDetailPage({destination}: Props) {
               </div>
 
               <DestinationHighlights
-                highlights={destination.highlights}
+                slug={destination.slug}
+                initialHighlights={destination.highlights}
+                total={destination.highlightsTotal}
                 locale={locale}
               />
             </div>

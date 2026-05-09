@@ -21,6 +21,7 @@ const dest = {
   isActive: true,
   description: {en: 'Mountain city', vi: 'Thành phố ngàn hoa'},
   highlights: [],
+  highlightsTotal: 0,
   tours: [{id: 't1'} as never],
 };
 

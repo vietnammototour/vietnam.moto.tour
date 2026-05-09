@@ -11,6 +11,7 @@ const dest = {
   isActive: true,
   description: {en: '', vi: ''},
   highlights: [],
+  highlightsTotal: 0,
   tours: [{id: 't1'} as never, {id: 't2'} as never],
 };
 

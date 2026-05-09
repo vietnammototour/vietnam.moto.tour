@@ -33,6 +33,17 @@ async function request<T>(
 }
 
 export const api = {
+  destinations: {
+    highlights: (slug: string, params: {skip: number; take: number}) => {
+      const qs = new URLSearchParams({
+        skip: String(params.skip),
+        take: String(params.take),
+      });
+      return request<{items: VMT.Highlight[]; total: number}>(
+        `/api/destinations/${encodeURIComponent(slug)}/highlights?${qs.toString()}`,
+      );
+    },
+  },
   admin: {
     tours: {
       list: (params?: {archived?: boolean}) => {

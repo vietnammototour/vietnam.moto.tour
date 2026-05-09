@@ -122,6 +122,24 @@ const entries: Entry[] = [
     valueEn: 'No highlights yet',
     valueVi: 'Chưa có điểm nổi bật',
   },
+  {
+    namespace: 'destinationDetail',
+    key: 'showMoreHighlights',
+    valueEn: 'Show more {count}',
+    valueVi: 'Xem thêm {count}',
+  },
+  {
+    namespace: 'destinationDetail',
+    key: 'highlightsLoading',
+    valueEn: 'Loading…',
+    valueVi: 'Đang tải…',
+  },
+  {
+    namespace: 'destinationDetail',
+    key: 'highlightsLoadError',
+    valueEn: 'Could not load more highlights. Try again.',
+    valueVi: 'Không thể tải thêm điểm nổi bật. Vui lòng thử lại.',
+  },
 
   // Tours section
   {
