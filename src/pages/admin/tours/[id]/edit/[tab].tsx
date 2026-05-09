@@ -6,7 +6,6 @@ import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
 import {savedSlot} from '@/lib/image-slot';
 import {isTourTab, type TourTab} from '@/routes';
-import type * as VMT from '@/domain';
 
 type Destination = {
   id: string;
@@ -71,7 +70,6 @@ export default function EditTour() {
     title: tour.title as string,
     titleVi: (tour.titleVi as string) ?? '',
     titleEn: (tour.titleEn as string) ?? '',
-    imageCard: savedSlot(tour.imageUrl as string | null),
     duration: (tour.duration as number) ?? 1,
     distance: (tour.distance as number) ?? 0,
     descriptionVi: (tour.descriptionVi as string) ?? '',
@@ -79,15 +77,9 @@ export default function EditTour() {
     transportation: (tour.transportation as string) ?? '',
     hotel: (tour.hotel as string) ?? '',
     guided: (tour.guided as string) ?? '',
-    images: (tour.images as string[]) ?? [],
-    paymentDetails: (tour.paymentDetails as {en: string; vi: string}) ?? {
-      en: '',
-      vi: '',
-    },
-    notes: (tour.notes as Array<{en: string; vi: string}>) ?? [],
-    mealsInfo: (tour.mealsInfo as {en: string; vi: string}) ?? {en: '', vi: ''},
-    status: (tour.status as VMT.TourStatus) ?? 'DRAFT',
   };
+
+  const initialCard = {imageCard: savedSlot(tour.imageUrl as string | null)};
 
   return (
     <TourEditTabs
@@ -96,6 +88,7 @@ export default function EditTour() {
       tourId={tour.id as string}
       destinations={destinations}
       initialGeneral={initialGeneral}
+      initialCard={initialCard}
       initialItinerary={(tour.itinerary as never) ?? []}
       initialPricingGroups={(tour.pricingGroups as never) ?? []}
       initialHighlightIds={highlights.map((h) => h.id)}
