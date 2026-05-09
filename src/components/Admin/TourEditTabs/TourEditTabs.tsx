@@ -4,7 +4,7 @@ import {useState, useCallback} from 'react';
 import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import {routes, api, useNavigate, type TourTab} from '@/routes';
-import {Tabs, TabPanel, Button} from '@/components/ui';
+import {Tabs, TabPanel} from '@/components/ui';
 import {GeneralTab} from '../tabs/GeneralTab';
 import type {GeneralTabData} from '../tabs/GeneralTab';
 import {ItineraryTab} from '../tabs/ItineraryTab';
@@ -140,12 +140,6 @@ export function TourEditTabs({
         </div>
         <div className="flex items-center gap-3 shrink-0">
           <LocalePicker value={locale} onChange={setLocale} />
-          <Button
-            variant="secondary"
-            onClick={() => navigate.to(routes.admin.tours.list)}
-          >
-            Back to Tours
-          </Button>
         </div>
       </div>
 
