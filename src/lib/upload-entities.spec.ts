@@ -7,7 +7,12 @@ import {
 
 describe('upload entities', () => {
   it('exposes entity type allowlist', () => {
-    expect(ENTITY_TYPES).toEqual(['tour', 'destination', 'highlight']);
+    expect(ENTITY_TYPES).toEqual([
+      'tour',
+      'destination',
+      'highlight',
+      'collectionImage',
+    ]);
   });
 
   it('exposes image type allowlist', () => {
@@ -31,6 +36,11 @@ describe('upload entities', () => {
     expect(isValidCombination('highlight', 'hero')).toBe(false);
   });
 
+  it('allows collectionImage:card only', () => {
+    expect(isValidCombination('collectionImage', 'card')).toBe(true);
+    expect(isValidCombination('collectionImage', 'hero')).toBe(false);
+  });
+
   it('maps to Prisma model + field', () => {
     expect(getDbField('tour', 'card')).toEqual({
       model: 'tour',
@@ -47,6 +57,10 @@ describe('upload entities', () => {
     expect(getDbField('highlight', 'card')).toEqual({
       model: 'highlight',
       field: 'imageUrl',
+    });
+    expect(getDbField('collectionImage', 'card')).toEqual({
+      model: 'collectionImage',
+      field: 'url',
     });
   });
 });

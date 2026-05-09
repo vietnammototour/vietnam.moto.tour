@@ -175,3 +175,8 @@ export async function getMessagesFromDb(
     return {};
   }
 }
+
+export {
+  getImageCollection,
+  listImageCollections,
+} from './queries/image-collections';

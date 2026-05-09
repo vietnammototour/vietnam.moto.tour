@@ -127,6 +127,52 @@ export const api = {
       delete: (id: string) =>
         request<void>(`/api/admin/perks/${id}`, {method: 'DELETE'}),
     },
+    imageCollections: {
+      list: () =>
+        request<
+          Array<{id: string; key: string; label: string; imageCount: number}>
+        >('/api/admin/image-collections'),
+      get: (id: string) =>
+        request<VMT.ImageCollection>(`/api/admin/image-collections/${id}`),
+      create: (data: {key: string; label: string}) =>
+        request<{id: string; key: string; label: string}>(
+          '/api/admin/image-collections',
+          {method: 'POST', body: JSON.stringify(data)},
+        ),
+      update: (id: string, data: {label: string}) =>
+        request<{id: string; key: string; label: string}>(
+          `/api/admin/image-collections/${id}`,
+          {method: 'PATCH', body: JSON.stringify(data)},
+        ),
+      delete: (id: string) =>
+        request<void>(`/api/admin/image-collections/${id}`, {method: 'DELETE'}),
+      images: {
+        add: (collectionId: string, data: {altEn?: string; altVi?: string}) =>
+          request<VMT.CollectionImage>(
+            `/api/admin/image-collections/${collectionId}/images`,
+            {method: 'POST', body: JSON.stringify(data)},
+          ),
+        update: (
+          collectionId: string,
+          imageId: string,
+          data: {altEn?: string; altVi?: string},
+        ) =>
+          request<VMT.CollectionImage>(
+            `/api/admin/image-collections/${collectionId}/images/${imageId}`,
+            {method: 'PATCH', body: JSON.stringify(data)},
+          ),
+        delete: (collectionId: string, imageId: string) =>
+          request<void>(
+            `/api/admin/image-collections/${collectionId}/images/${imageId}`,
+            {method: 'DELETE'},
+          ),
+        reorder: (collectionId: string, ids: string[]) =>
+          request<void>(
+            `/api/admin/image-collections/${collectionId}/images/reorder`,
+            {method: 'PATCH', body: JSON.stringify({ids})},
+          ),
+      },
+    },
     users: {
       list: () => request<VMT.User[]>('/api/admin/users'),
       create: (data: Record<string, unknown>) =>

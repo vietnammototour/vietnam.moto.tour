@@ -25,13 +25,7 @@ import {contactInfo} from '@/utils';
 import type * as VMT from '@/domain';
 import {getUrl} from '@/utils';
 
-const galleryImageUrls = [
-  getUrl('assets/images/gallery/gallery-one-img-1.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-2.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-3.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-4.jpeg'),
-  getUrl('assets/images/gallery/gallery-one-img-5.jpeg'),
-];
+type GalleryImage = {id: string; url: string; altEn: string; altVi: string};
 
 type HomeProps = {
   tours: VMT.Tour[];
@@ -43,9 +37,17 @@ type HomeProps = {
     bikeTourCount: number;
   })[];
   isAdmin: boolean;
+  gallery: {images: GalleryImage[]} | null;
+  locale: string;
 };
 
-export default function Home({tours, destinations, isAdmin}: HomeProps) {
+export default function Home({
+  tours,
+  destinations,
+  isAdmin,
+  gallery,
+  locale,
+}: HomeProps) {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const t = useTranslations('home');
@@ -54,17 +56,11 @@ export default function Home({tours, destinations, isAdmin}: HomeProps) {
   const spotlight = useCursorSpotlight(200, 0.15);
   const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.15), transparent)`;
 
-  const galleryAltKeys = [
-    'galleryAlt1',
-    'galleryAlt2',
-    'galleryAlt3',
-    'galleryAlt4',
-    'galleryAlt5',
-  ] as const;
-  const galleryImages = galleryImageUrls.map((src, i) => ({
-    src,
-    alt: t(galleryAltKeys[i]),
-  }));
+  const galleryImages =
+    gallery?.images.map((img) => ({
+      src: img.url,
+      alt: locale === 'vi' ? img.altVi : img.altEn,
+    })) ?? [];
 
   useEffect(() => {
     if (bannerVideoRef.current) {
@@ -427,20 +423,22 @@ export default function Home({tours, destinations, isAdmin}: HomeProps) {
       />
 
       {/* Gallery */}
-      <section className="py-16 lg:py-24 bg-surface-alt">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {galleryImages.map(({src, alt}, index) => (
-              <GalleryItem
-                key={index}
-                imageSrc={src}
-                alt={alt}
-                delay={(index + 1) * 100}
-              />
-            ))}
+      {galleryImages.length > 0 && (
+        <section className="py-16 lg:py-24 bg-surface-alt">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {galleryImages.map(({src, alt}, index) => (
+                <GalleryItem
+                  key={index}
+                  imageSrc={src}
+                  alt={alt}
+                  delay={(index + 1) * 100}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }
@@ -450,15 +448,20 @@ export async function getServerSideProps({
   res,
   locale,
 }: GetServerSidePropsContext) {
-  const {getAllTours, getActiveDestinationsFromDb, getMessagesFromDb} =
-    await import('@/data/queries');
+  const {
+    getAllTours,
+    getActiveDestinationsFromDb,
+    getMessagesFromDb,
+    getImageCollection,
+  } = await import('@/data/queries');
   const session = await getServerSession(req, res, authOptions);
   const isAdmin = session?.user?.role === 'ADMIN';
 
-  const [tours, destinations, dbMessages] = await Promise.all([
+  const [tours, destinations, dbMessages, gallery] = await Promise.all([
     getAllTours(isAdmin),
     getActiveDestinationsFromDb(isAdmin),
     getMessagesFromDb(locale ?? 'vi'),
+    getImageCollection('home-gallery'),
   ]);
 
   return {
@@ -467,6 +470,8 @@ export async function getServerSideProps({
       destinations,
       isAdmin,
       messages: dbMessages,
+      gallery,
+      locale: locale ?? 'vi',
     },
   };
 }
