@@ -85,19 +85,22 @@ export async function getActiveDestinationsFromDb(
     return destinations
       .filter((d: DestRow) => d.tours.length > 0)
       .map((d: DestRow) => {
-        const carTourCount = d.tours.filter((t: {transportation: string}) =>
-          /car/i.test(t.transportation),
-        ).length;
-        const bikeTourCount = d.tours.filter((t: {transportation: string}) =>
-          /motorbike/i.test(t.transportation),
-        ).length;
+        let carOnlyCount = 0;
+        let bikeOnlyCount = 0;
+        let bikeAndCarCount = 0;
+        for (const tour of d.tours as {transportation: string}[]) {
+          const hasCar = /car/i.test(tour.transportation);
+          const hasBike = /motorbike/i.test(tour.transportation);
+          if (hasCar && hasBike) bikeAndCarCount += 1;
+          else if (hasCar) carOnlyCount += 1;
+          else if (hasBike) bikeOnlyCount += 1;
+        }
         return {
           ...toDestination(d),
           tourCount: d.tours.length,
-          hasCar: carTourCount > 0,
-          hasBike: bikeTourCount > 0,
-          carTourCount,
-          bikeTourCount,
+          carOnlyCount,
+          bikeOnlyCount,
+          bikeAndCarCount,
         };
       });
   } catch (error) {

@@ -10,23 +10,51 @@ describe('DestinationCard', () => {
       id: 'dest-dalat',
       slug: 'dalat',
     }),
-    tourCount: 5,
-    hasCar: true,
-    hasBike: true,
-    carTourCount: 2,
-    bikeTourCount: 3,
+    tourCount: 6,
+    carOnlyCount: 2,
+    bikeOnlyCount: 3,
+    bikeAndCarCount: 1,
   };
 
-  it('renders bike tour count with motorcycle icon', () => {
+  it('renders car-only chip with count and tours text', () => {
     render(<DestinationCard destination={destination} />);
-    expect(document.querySelector('.fa-motorcycle')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('2 car tours:{"count":2}'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('2 tours:{"count":2}')).toBeInTheDocument();
   });
 
-  it('renders car tour count with car icon', () => {
+  it('renders bike-only chip with count and tours text', () => {
     render(<DestinationCard destination={destination} />);
-    expect(document.querySelector('.fa-car')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('3 motorbike tours:{"count":3}'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('3 tours:{"count":3}')).toBeInTheDocument();
+  });
+
+  it('renders bike-and-car chip with count and tours text', () => {
+    render(<DestinationCard destination={destination} />);
+    expect(
+      screen.getByLabelText('1 motorbike/car tours:{"count":1}'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('1 tours:{"count":1}')).toBeInTheDocument();
+  });
+
+  it('hides chips for zero counts', () => {
+    render(
+      <DestinationCard
+        destination={{
+          ...destination,
+          carOnlyCount: 0,
+          bikeAndCarCount: 0,
+        }}
+      />,
+    );
+    expect(screen.queryByLabelText(/^\d+ car /)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/motorbike\/car/)).not.toBeInTheDocument();
+    expect(
+      screen.getByLabelText('3 motorbike tours:{"count":3}'),
+    ).toBeInTheDocument();
   });
 
   it('renders the destination name as a link to the destination detail page', () => {
@@ -35,11 +63,6 @@ describe('DestinationCard', () => {
       'href',
       '/destinations/dalat',
     );
-  });
-
-  it('renders the tour count with tours translation key', () => {
-    render(<DestinationCard destination={destination} />);
-    expect(screen.getByText('5 tours:{"count":5}')).toBeInTheDocument();
   });
 
   it('renders the image with correct src and alt', () => {

@@ -12,9 +12,45 @@ export const DestinationCard = ({
   destination,
   className,
 }: Props & {className?: string}) => {
-  const {name, imageUrl, tourCount, slug, carTourCount, bikeTourCount} =
+  const {name, imageUrl, slug, carOnlyCount, bikeOnlyCount, bikeAndCarCount} =
     destination;
   const t = useTranslations('common');
+
+  const chips: {
+    key: string;
+    icon: React.ReactNode;
+    count: number;
+    ariaLabel: string;
+    colorClass: string;
+  }[] = [
+    {
+      key: 'car',
+      icon: <i className="fa fa-car text-xs" aria-hidden="true" />,
+      count: carOnlyCount,
+      ariaLabel: `${carOnlyCount} ${t('car')} ${t('tours', {count: carOnlyCount})}`,
+      colorClass: 'bg-sky-500/95 text-white',
+    },
+    {
+      key: 'bike',
+      icon: <i className="fa fa-motorcycle text-xs" aria-hidden="true" />,
+      count: bikeOnlyCount,
+      ariaLabel: `${bikeOnlyCount} ${t('motorbike')} ${t('tours', {count: bikeOnlyCount})}`,
+      colorClass: 'bg-emerald-500/95 text-white',
+    },
+    {
+      key: 'bike-car',
+      icon: (
+        <span className="inline-flex items-center gap-0.5">
+          <i className="fa fa-motorcycle text-xs" aria-hidden="true" />
+          <span aria-hidden="true">/</span>
+          <i className="fa fa-car text-xs" aria-hidden="true" />
+        </span>
+      ),
+      count: bikeAndCarCount,
+      ariaLabel: `${bikeAndCarCount} ${t('motorbike')}/${t('car')} ${t('tours', {count: bikeAndCarCount})}`,
+      colorClass: 'bg-fuchsia-500/95 text-white',
+    },
+  ].filter((c) => c.count > 0);
 
   return (
     <motion.div
@@ -37,36 +73,19 @@ export const DestinationCard = ({
           <h2 className="type-title-lg text-white mb-1 group-hover:text-primary-light transition-colors">
             {name}
           </h2>
-          <div className="flex items-center gap-2">
-            <span className="inline-block bg-primary/90 text-white type-label-sm uppercase px-3 py-1 rounded-full">
-              {tourCount} {t('tours', {count: tourCount})}
-            </span>
-            <div className="flex items-center gap-1.5">
-              {bikeTourCount > 0 && (
-                <span
-                  className="inline-flex items-center gap-1 h-7 px-2 rounded-full bg-white/20 backdrop-blur-sm text-white"
-                  title={t('tours', {count: bikeTourCount})}
-                  aria-label={`${bikeTourCount} ${t('motorbike')}`}
-                >
-                  <i className="fa fa-motorcycle text-xs" aria-hidden="true" />
-                  <span className="type-label-sm leading-none tabular-nums">
-                    {bikeTourCount}
-                  </span>
+          <div className="flex items-center flex-wrap gap-1.5">
+            {chips.map((chip) => (
+              <span
+                key={chip.key}
+                className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full type-label-sm uppercase ${chip.colorClass}`}
+                aria-label={chip.ariaLabel}
+              >
+                {chip.icon}
+                <span className="leading-none tabular-nums">
+                  {chip.count} {t('tours', {count: chip.count})}
                 </span>
-              )}
-              {carTourCount > 0 && (
-                <span
-                  className="inline-flex items-center gap-1 h-7 px-2 rounded-full bg-white/20 backdrop-blur-sm text-white"
-                  title={t('tours', {count: carTourCount})}
-                  aria-label={`${carTourCount} ${t('car')}`}
-                >
-                  <i className="fa fa-car text-xs" aria-hidden="true" />
-                  <span className="type-label-sm leading-none tabular-nums">
-                    {carTourCount}
-                  </span>
-                </span>
-              )}
-            </div>
+              </span>
+            ))}
           </div>
         </div>
       </Link>

@@ -20,10 +20,9 @@ export type Destination = Omit<
 
 export type DestinationWithStats = Destination & {
   tourCount: number;
-  hasCar: boolean;
-  hasBike: boolean;
-  carTourCount: number;
-  bikeTourCount: number;
+  carOnlyCount: number;
+  bikeOnlyCount: number;
+  bikeAndCarCount: number;
 };
 
 export type DestinationDetail = Destination & {

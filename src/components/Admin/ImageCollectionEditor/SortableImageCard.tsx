@@ -70,7 +70,7 @@ export function SortableImageCard({
       <input
         ref={fileRef}
         type="file"
-        accept="image/webp"
+        accept="image/jpeg,image/png,image/webp,image/gif"
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
