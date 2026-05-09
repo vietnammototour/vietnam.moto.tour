@@ -21,6 +21,7 @@
     "db:seed-admin": "npx tsx prisma/seed-admin.ts",
     "db:seed-home-gallery": "npx tsx prisma/seed-home-gallery.ts",
     "db:seed-image-collection-translations": "npx tsx prisma/seed-image-collection-translations.ts",
+    "db:seed-admin-translations": "npx tsx prisma/seed-admin-translations.ts",
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
     "migrate:uploads": "npx tsx scripts/migrate-uploads.ts",
