@@ -1,19 +1,14 @@
 'use client';
 
-import {useState} from 'react';
-import {useForm, FormProvider} from 'react-hook-form';
+import {useEffect, useRef, useState, useCallback} from 'react';
+import {useForm, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {ImageUploadField} from '../../ImageUploadField';
-import {StatusPicker} from '../../StatusPicker';
-import {TourPreviewPanel} from '../../TourPreviewPanel';
-import {
-  TextInput,
-  Textarea,
-  NumberInput,
-  Button,
-  Select,
-} from '@/components/ui';
-import {flushImageSlots} from '@/lib/submit-with-images';
+import type * as VMT from '@/domain';
+import {EditableProvider} from '../../EditableContext';
+import {AdminIntlProvider} from '../../AdminIntlProvider';
+import {TourHero} from '@/components/TourHero';
+import {TourDescription} from '@/components/tour-detail/TourDescription';
+import {Button, Select, TextInput} from '@/components/ui';
 import {
   generalTabSchema,
   type GeneralTabFormData,
@@ -23,12 +18,15 @@ export type {GeneralTabFormData as GeneralTabData};
 
 type GeneralTabProps = {
   initialData: GeneralTabFormData;
-  destinations: Array<{id: string; name: string}>;
+  destinations: Array<{id: string; name: string; heroImage: string}>;
   tourId: string | null;
   locale: 'en' | 'vi';
-  destinationName: string;
+  externalSlug?: string;
+  onSlugChange?: (slug: string) => void;
+  onTitleChange?: (title: string) => void;
   onDestinationChange?: (destinationId: string) => void;
-  onSave: (data: Omit<GeneralTabFormData, 'imageCard'>) => Promise<string>;
+  onDirtyChange?: (dirty: boolean) => void;
+  onSave: (data: GeneralTabFormData) => Promise<string>;
 };
 
 export function GeneralTab({
@@ -36,163 +34,186 @@ export function GeneralTab({
   destinations,
   tourId,
   locale,
-  destinationName,
+  externalSlug,
+  onSlugChange,
+  onTitleChange,
   onDestinationChange,
+  onDirtyChange,
   onSave,
 }: GeneralTabProps) {
   const [submitError, setSubmitError] = useState('');
 
-  const methods = useForm<GeneralTabFormData>({
-    resolver: yupResolver(generalTabSchema),
-    defaultValues: initialData,
-    shouldFocusError: true,
-  });
-
   const {
-    register,
     handleSubmit,
     setValue,
-    watch,
+    getValues,
     control,
-    formState: {errors, isSubmitting, isDirty},
+    formState: {isSubmitting, isDirty},
     reset,
-  } = methods;
+  } = useForm<GeneralTabFormData>({
+    resolver: yupResolver(generalTabSchema),
+    defaultValues: initialData,
+  });
 
-  const status = watch('status');
-  const descriptionField = locale === 'en' ? 'descriptionEn' : 'descriptionVi';
-  const descriptionLabel = `Description (${locale.toUpperCase()})`;
+  const values = useWatch({control}) as GeneralTabFormData;
+
+  const lastSlug = useRef(initialData.slug);
+  const lastTitle = useRef(initialData.title);
+  useEffect(() => {
+    if (values.slug !== lastSlug.current) {
+      lastSlug.current = values.slug;
+      onSlugChange?.(values.slug);
+    }
+    if (values.title !== lastTitle.current) {
+      lastTitle.current = values.title;
+      onTitleChange?.(values.title);
+    }
+  }, [values.slug, values.title, onSlugChange, onTitleChange]);
+
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty, onDirtyChange]);
+
+  useEffect(() => {
+    if (externalSlug !== undefined && externalSlug !== getValues('slug')) {
+      setValue('slug', externalSlug, {shouldDirty: true});
+      lastSlug.current = externalSlug;
+    }
+  }, [externalSlug, setValue, getValues]);
+
+  const handleFieldChange = useCallback(
+    (path: string, value: string | number) => {
+      let rhfPath: keyof GeneralTabFormData | null = null;
+      if (path === 'description.en') rhfPath = 'descriptionEn';
+      else if (path === 'description.vi') rhfPath = 'descriptionVi';
+      else if (
+        path === 'title' ||
+        path === 'duration' ||
+        path === 'distance' ||
+        path === 'transportation' ||
+        path === 'hotel' ||
+        path === 'guided'
+      ) {
+        rhfPath = path as keyof GeneralTabFormData;
+      }
+      if (!rhfPath) return;
+      setValue(rhfPath as never, value as never, {shouldDirty: true});
+    },
+    [setValue],
+  );
 
   async function onSubmit(data: GeneralTabFormData) {
     setSubmitError('');
     try {
-      const {imageCard, ...textFields} = data;
-      const id = await onSave(textFields);
-      const {errors: imgErrors, updated} = await flushImageSlots({
-        entityType: 'tour',
-        entityId: id,
-        slots: {card: imageCard},
-      });
-      if (imgErrors.card) throw new Error(imgErrors.card);
-      reset({
-        ...data,
-        imageCard: updated.card ?? imageCard,
-      });
+      await onSave(data);
+      reset(data);
     } catch (err: unknown) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save');
     }
   }
 
+  const destination = destinations.find((d) => d.id === values.destinationId);
+  const heroImage = destination?.heroImage ?? '';
+  const destinationName = destination?.name ?? '';
+
+  const previewTour: VMT.Tour = {
+    id: tourId ?? 'preview',
+    slug: values.slug,
+    destinationId: values.destinationId,
+    destinationName,
+    destinationHeroImage: heroImage,
+    title: {
+      en: locale === 'en' ? values.title : (values.titleEn ?? values.title),
+      vi: locale === 'vi' ? values.title : (values.titleVi ?? values.title),
+    },
+    description: {en: values.descriptionEn, vi: values.descriptionVi},
+    imageUrl: '',
+    images: [],
+    duration: values.duration,
+    distance: values.distance,
+    transportation: values.transportation,
+    hotel: values.hotel,
+    guided: values.guided,
+    itinerary: [],
+    pricingGroups: [],
+    paymentDetails: {en: '', vi: ''},
+    notes: [],
+    mealsInfo: {en: '', vi: ''},
+    status: 'PUBLISHED',
+    highlights: [],
+    included: [],
+    excluded: [],
+  };
+
+  const destinationSelector = (
+    <Select
+      aria-label="Destination"
+      value={values.destinationId}
+      onChange={(e) => {
+        const id = (e.target as HTMLSelectElement).value;
+        setValue('destinationId', id, {shouldDirty: true});
+        onDestinationChange?.(id);
+      }}
+      className="bg-surface-elevated/90 backdrop-blur"
+    >
+      <option value="">Select destination...</option>
+      {destinations.map((d) => (
+        <option key={d.id} value={d.id}>
+          {d.name}
+        </option>
+      ))}
+    </Select>
+  );
+
   return (
-    <FormProvider {...methods}>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-6 lg:col-span-2"
-        >
-          <div className="flex items-center justify-between">
-            <h2 className="type-title-lg text-on-surface">General Info</h2>
-            <StatusPicker
-              value={status}
-              onChange={(s) => {
-                setValue('status', s, {shouldDirty: true});
-              }}
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+      <AdminIntlProvider locale={locale}>
+        <EditableProvider locale={locale} onFieldChange={handleFieldChange}>
+          <TourHero tour={previewTour} destinationSlot={destinationSelector} />
+
+          <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8">
+            <TourDescription
+              description={previewTour.description}
+              locale={locale}
             />
-          </div>
 
-          {submitError && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-sm">
-              {submitError}
-            </div>
-          )}
-
-          {/* Basic fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <TextInput
-              label="Slug"
-              {...register('slug')}
-              error={errors.slug?.message}
-            />
-            <Select
-              label="Destination"
-              {...register('destinationId', {
-                onChange: (e) => onDestinationChange?.(e.target.value),
-              })}
-            >
-              <option value="">Select...</option>
-              {destinations.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </Select>
-          </div>
-
-          <TextInput
-            label="Title"
-            {...register('title')}
-            error={errors.title?.message}
-          />
-
-          <Textarea
-            key={descriptionField}
-            label={descriptionLabel}
-            {...register(descriptionField)}
-          />
-
-          {/* Numeric fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              {key: 'duration' as const, label: 'Duration (days)'},
-              {key: 'distance' as const, label: 'Distance (km)'},
-            ].map(({key, label}) => (
-              <NumberInput
-                key={key}
-                label={label}
-                {...register(key, {valueAsNumber: true})}
-                min={0}
-                error={errors[key]?.message}
+            <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+              <TextInput
+                label="Hotel"
+                value={values.hotel}
+                onChange={(e) =>
+                  setValue('hotel', e.target.value, {shouldDirty: true})
+                }
               />
-            ))}
+              <TextInput
+                label="Guided"
+                value={values.guided}
+                onChange={(e) =>
+                  setValue('guided', e.target.value, {shouldDirty: true})
+                }
+              />
+            </section>
           </div>
+        </EditableProvider>
+      </AdminIntlProvider>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              {key: 'transportation' as const, label: 'Transportation'},
-              {key: 'hotel' as const, label: 'Hotel'},
-              {key: 'guided' as const, label: 'Guided'},
-            ].map(({key, label}) => (
-              <TextInput key={key} label={label} {...register(key)} />
-            ))}
-          </div>
-
-          {/* Image */}
-          <ImageUploadField name="imageCard" preset="card" label="Card Image" />
-
-          {/* Submit */}
-          <div className="flex gap-4 pt-4">
-            <Button
-              type="submit"
-              disabled={isSubmitting || !isDirty}
-              loading={isSubmitting}
-              size="lg"
-            >
-              Save General
-            </Button>
-          </div>
-
-          {isDirty && (
-            <p className="type-label-sm text-amber-500">Unsaved changes</p>
-          )}
-        </form>
-
-        <aside className="lg:col-span-1">
-          <TourPreviewPanel
-            control={control}
-            locale={locale}
-            destinationName={destinationName}
-          />
-        </aside>
+      <div className="border-t border-border bg-surface-elevated p-4 flex items-center justify-between gap-3 sticky bottom-0">
+        {submitError ? (
+          <span className="type-label-sm text-red-500">{submitError}</span>
+        ) : isDirty ? (
+          <span className="type-label-sm text-amber-500">Unsaved changes</span>
+        ) : (
+          <span />
+        )}
+        <Button
+          type="submit"
+          disabled={isSubmitting || !isDirty}
+          loading={isSubmitting}
+          size="lg"
+        >
+          Save General
+        </Button>
       </div>
-    </FormProvider>
+    </form>
   );
 }

@@ -4,13 +4,13 @@ import {useRouter} from 'next/router';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
-import {type ImageSlot} from '@/lib/image-slot';
+import {emptySlot} from '@/lib/image-slot';
 import {isTourTab, type TourTab} from '@/routes';
-import type * as VMT from '@/domain';
 
 type Destination = {
   id: string;
   name: string;
+  heroImage: string;
 };
 
 const emptyGeneral = {
@@ -19,7 +19,6 @@ const emptyGeneral = {
   title: '',
   titleVi: '',
   titleEn: '',
-  imageCard: {kind: 'empty'} as ImageSlot,
   duration: 1,
   distance: 0,
   descriptionVi: '',
@@ -27,11 +26,6 @@ const emptyGeneral = {
   transportation: '',
   hotel: '',
   guided: '',
-  images: [] as string[],
-  paymentDetails: {en: '', vi: ''},
-  notes: [] as Array<{en: string; vi: string}>,
-  mealsInfo: {en: '', vi: ''},
-  status: 'DRAFT' as VMT.TourStatus,
 };
 
 export default function NewTour() {
@@ -58,6 +52,7 @@ export default function NewTour() {
       tourId={null}
       destinations={destinations}
       initialGeneral={emptyGeneral}
+      initialCard={{imageCard: emptySlot}}
       initialItinerary={[]}
       initialPricingGroups={[]}
       initialHighlightIds={[]}

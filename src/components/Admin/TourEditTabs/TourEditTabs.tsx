@@ -7,6 +7,7 @@ import {routes, api, useNavigate, type TourTab} from '@/routes';
 import {Tabs, TabPanel} from '@/components/ui';
 import {GeneralTab} from '../tabs/GeneralTab';
 import type {GeneralTabData} from '../tabs/GeneralTab';
+import {CardTab, type CardTabFormData} from '../tabs/CardTab';
 import {ItineraryTab} from '../tabs/ItineraryTab';
 import {PricingTab} from '../tabs/PricingTab';
 import {HighlightsTab} from '../tabs/HighlightsTab';
@@ -18,8 +19,9 @@ type TourEditTabsProps = {
   mode: 'create' | 'edit';
   tourId: string | null;
   activeTab: TourTab;
-  destinations: Array<{id: string; name: string}>;
+  destinations: Array<{id: string; name: string; heroImage: string}>;
   initialGeneral: GeneralTabData;
+  initialCard: CardTabFormData;
   initialItinerary: VMT.ItineraryDay[];
   initialPricingGroups: VMT.PricingGroup[];
   initialHighlightIds: string[];
@@ -33,6 +35,7 @@ export function TourEditTabs({
   activeTab,
   destinations,
   initialGeneral,
+  initialCard,
   initialItinerary,
   initialPricingGroups,
   initialHighlightIds,
@@ -47,11 +50,13 @@ export function TourEditTabs({
   );
   const [locale, setLocale] = useState<Locale>('en');
 
-  const destinationName =
-    destinations.find((d) => d.id === destinationId)?.name ?? '';
+  const [slug, setSlug] = useState(initialGeneral.slug);
+  const [title, setTitle] = useState(initialGeneral.title);
+  const [pendingSlug, setPendingSlug] = useState<string | undefined>(undefined);
+  const [generalDirty, setGeneralDirty] = useState(false);
 
   const handleGeneralSave = useCallback(
-    async (data: Omit<GeneralTabData, 'imageCard'>): Promise<string> => {
+    async (data: GeneralTabData): Promise<string> => {
       const isNew = mode === 'create' && !tourId;
       const result = isNew
         ? await api.admin.tours.create(
@@ -117,13 +122,34 @@ export function TourEditTabs({
   const isTabDisabled = (tabId: TourTab) =>
     tabId !== 'general' && mode === 'create' && !tourId;
 
-  const tourName =
-    initialGeneral.title ||
-    initialGeneral.titleEn ||
-    initialGeneral.titleVi ||
-    '';
-  const currentLabel =
-    mode === 'create' ? 'New tour' : tourName || 'Untitled tour';
+  const tourLabel = (mode === 'create' ? 'New tour' : title) || 'Untitled tour';
+
+  const dest = destinations.find((d) => d.id === destinationId);
+  const cardPreviewTour: VMT.Tour = {
+    id: tourId ?? 'preview',
+    slug,
+    destinationId,
+    destinationName: dest?.name ?? '',
+    destinationHeroImage: dest?.heroImage ?? '',
+    title: {en: title, vi: title},
+    description: {en: '', vi: ''},
+    imageUrl: '',
+    images: [],
+    duration: initialGeneral.duration,
+    distance: initialGeneral.distance,
+    transportation: initialGeneral.transportation,
+    hotel: initialGeneral.hotel,
+    guided: initialGeneral.guided,
+    itinerary: [],
+    pricingGroups: [],
+    paymentDetails: {en: '', vi: ''},
+    notes: [],
+    mealsInfo: {en: '', vi: ''},
+    status: 'PUBLISHED',
+    highlights: [],
+    included: [],
+    excluded: [],
+  };
 
   return (
     <div className="h-full flex flex-col min-h-0">
@@ -133,12 +159,26 @@ export function TourEditTabs({
             items={[
               {label: 'Admin', href: routes.admin.dashboard.path()},
               {label: 'Tours', href: routes.admin.tours.list.path()},
-              {label: currentLabel},
+              {
+                label: slug || 'new',
+                editable: {
+                  fieldLabel: 'Slug',
+                  onCommit: (next) => {
+                    setSlug(next);
+                    setPendingSlug(next);
+                  },
+                },
+              },
             ]}
           />
-          <h1 className="type-headline-sm truncate">{currentLabel}</h1>
+          <h1 className="type-headline-sm truncate">{tourLabel}</h1>
         </div>
         <div className="flex items-center gap-3 shrink-0">
+          {generalDirty && (
+            <span className="type-label-sm text-amber-500">
+              Unsaved changes
+            </span>
+          )}
           <LocalePicker value={locale} onChange={setLocale} />
         </div>
       </div>
@@ -160,17 +200,29 @@ export function TourEditTabs({
         }}
       >
         <TabPanel tabKey="general">
-          <div className="p-5">
-            <GeneralTab
-              initialData={initialGeneral}
-              destinations={destinations}
-              tourId={tourId}
-              locale={locale}
-              destinationName={destinationName}
-              onDestinationChange={setDestinationId}
-              onSave={handleGeneralSave}
-            />
-          </div>
+          <GeneralTab
+            initialData={initialGeneral}
+            destinations={destinations}
+            tourId={tourId}
+            locale={locale}
+            externalSlug={pendingSlug}
+            onSlugChange={(s) => {
+              setSlug(s);
+              setPendingSlug(undefined);
+            }}
+            onTitleChange={setTitle}
+            onDestinationChange={setDestinationId}
+            onDirtyChange={setGeneralDirty}
+            onSave={handleGeneralSave}
+          />
+        </TabPanel>
+        <TabPanel tabKey="card">
+          <CardTab
+            tourId={tourId}
+            locale={locale}
+            initialData={initialCard}
+            previewTour={cardPreviewTour}
+          />
         </TabPanel>
         <TabPanel tabKey="itinerary">
           <ItineraryTab
