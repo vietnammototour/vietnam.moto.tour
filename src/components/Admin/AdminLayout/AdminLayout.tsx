@@ -38,6 +38,11 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
       icon: 'fa-check-circle',
     },
     {
+      href: routes.admin.imageCollections.list.path(),
+      label: 'Image collections',
+      icon: 'fa-images',
+    },
+    {
       href: routes.admin.translations.path(),
       label: 'Translations',
       icon: 'fa-language',
