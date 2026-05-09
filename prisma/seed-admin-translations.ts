@@ -223,6 +223,14 @@ const entries: Entry[] = [
     valueEn: 'About this tour',
     valueVi: 'Về tour này',
   },
+
+  // Common
+  {
+    namespace: 'common',
+    key: 'save',
+    valueEn: 'Save',
+    valueVi: 'Lưu',
+  },
 ];
 
 async function main(): Promise<void> {
