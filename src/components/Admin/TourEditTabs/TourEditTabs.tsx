@@ -18,7 +18,7 @@ type TourEditTabsProps = {
   mode: 'create' | 'edit';
   tourId: string | null;
   activeTab: TourTab;
-  destinations: Array<{id: string; name: string}>;
+  destinations: Array<{id: string; name: string; heroImage: string}>;
   initialGeneral: GeneralTabData;
   initialItinerary: VMT.ItineraryDay[];
   initialPricingGroups: VMT.PricingGroup[];
