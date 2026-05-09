@@ -1,8 +1,13 @@
 import Link from 'next/link';
+import {useState, useEffect, useRef} from 'react';
 
 export type BreadcrumbItem = {
   label: string;
   href?: string;
+  editable?: {
+    fieldLabel: string;
+    onCommit: (value: string) => void;
+  };
 };
 
 type Props = {
@@ -31,6 +36,12 @@ export function AdminBreadcrumbs({items}: Props) {
               >
                 {item.label}
               </Link>
+            ) : isLast && item.editable ? (
+              <EditableSegment
+                label={item.label}
+                fieldLabel={item.editable.fieldLabel}
+                onCommit={item.editable.onCommit}
+              />
             ) : (
               <span
                 className={
@@ -47,5 +58,80 @@ export function AdminBreadcrumbs({items}: Props) {
         );
       })}
     </nav>
+  );
+}
+
+function EditableSegment({
+  label,
+  fieldLabel,
+  onCommit,
+}: {
+  label: string;
+  fieldLabel: string;
+  onCommit: (v: string) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(label);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const cancelledRef = useRef(false);
+
+  useEffect(() => {
+    if (editing) inputRef.current?.focus();
+  }, [editing]);
+
+  if (!editing) {
+    return (
+      <span className="inline-flex items-center gap-1">
+        <span
+          className="text-on-surface type-label-lg font-medium"
+          aria-current="page"
+        >
+          {label}
+        </span>
+        <button
+          type="button"
+          aria-label={`Edit ${fieldLabel}`}
+          onClick={() => {
+            cancelledRef.current = false;
+            setDraft(label);
+            setEditing(true);
+          }}
+          className="text-on-surface-secondary hover:text-primary cursor-pointer"
+        >
+          <i className="fa fa-pencil" aria-hidden />
+        </button>
+      </span>
+    );
+  }
+
+  return (
+    <input
+      ref={inputRef}
+      aria-label={fieldLabel}
+      value={draft}
+      onChange={(e) => setDraft(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          onCommit(draft);
+          setEditing(false);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          cancelledRef.current = true;
+          setDraft(label);
+          setEditing(false);
+        }
+      }}
+      onBlur={() => {
+        if (cancelledRef.current) {
+          cancelledRef.current = false;
+          setEditing(false);
+          return;
+        }
+        if (draft !== label) onCommit(draft);
+        setEditing(false);
+      }}
+      className="text-on-surface type-label-lg font-medium bg-surface-elevated border border-dashed border-primary/40 focus:border-primary rounded px-1 outline-none cursor-text"
+    />
   );
 }
