@@ -5,6 +5,7 @@ export type TabDescriptor<K extends string> = {
 
 const TOUR_TABS = [
   {key: 'general', labelKey: 'admin.tours.tabs.general'},
+  {key: 'card', labelKey: 'admin.tours.tabs.card'},
   {key: 'itinerary', labelKey: 'admin.tours.tabs.itinerary'},
   {key: 'pricing', labelKey: 'admin.tours.tabs.pricing'},
   {key: 'highlights', labelKey: 'admin.tours.tabs.highlights'},
