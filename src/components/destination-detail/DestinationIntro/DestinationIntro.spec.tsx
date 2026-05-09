@@ -11,6 +11,7 @@ const dest = {
   isActive: true,
   description: {en: 'Mountain city in Vietnam.', vi: 'Thành phố ngàn hoa.'},
   highlights: [],
+  highlightsTotal: 0,
   tours: [],
 };
 

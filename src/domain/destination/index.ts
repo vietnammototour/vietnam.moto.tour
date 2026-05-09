@@ -28,5 +28,8 @@ export type DestinationWithStats = Destination & {
 export type DestinationDetail = Destination & {
   description: {en: string; vi: string};
   highlights: Highlight[];
+  highlightsTotal: number;
   tours: Tour[];
 };
+
+export const HIGHLIGHTS_PAGE_SIZE = 6;

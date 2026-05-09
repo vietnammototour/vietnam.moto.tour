@@ -6,7 +6,13 @@
  * It pulls in the Prisma client which depends on Node.js-only modules (pg, tls).
  */
 import {prisma} from '@/lib/prisma';
-import type {Tour, DestinationWithStats, DestinationDetail} from '@/domain';
+import type {
+  Tour,
+  DestinationWithStats,
+  DestinationDetail,
+  Highlight,
+} from '@/domain';
+import {HIGHLIGHTS_PAGE_SIZE} from '@/domain';
 import {toTour} from '@/domain/tour/mapper';
 import {toDestination} from '@/domain/destination/mapper';
 import {toHighlight} from '@/domain/highlight/mapper';
@@ -120,7 +126,11 @@ export async function getDestinationBySlug(
     const row = await prisma.destination.findUnique({
       where: {slug},
       include: {
-        highlights: {orderBy: {createdAt: 'asc'}},
+        highlights: {
+          orderBy: {createdAt: 'asc'},
+          take: HIGHLIGHTS_PAGE_SIZE,
+        },
+        _count: {select: {highlights: true}},
         tours: {
           where: tourFilter,
           include: {
@@ -138,10 +148,38 @@ export async function getDestinationBySlug(
       ...toDestination(row),
       description: {en: row.descriptionEn, vi: row.descriptionVi},
       highlights: row.highlights.map(toHighlight),
+      highlightsTotal: row._count.highlights,
       tours: row.tours.map(toTour),
     };
   } catch (error) {
     console.error('getDestinationBySlug: DB query failed', error);
+    return undefined;
+  }
+}
+
+export async function getDestinationHighlightsPage(
+  slug: string,
+  skip: number,
+  take: number,
+): Promise<{items: Highlight[]; total: number} | undefined> {
+  try {
+    const destination = await prisma.destination.findUnique({
+      where: {slug},
+      select: {id: true, isActive: true},
+    });
+    if (!destination || !destination.isActive) return undefined;
+    const [rows, total] = await Promise.all([
+      prisma.highlight.findMany({
+        where: {destinationId: destination.id},
+        orderBy: {createdAt: 'asc'},
+        skip,
+        take,
+      }),
+      prisma.highlight.count({where: {destinationId: destination.id}}),
+    ]);
+    return {items: rows.map(toHighlight), total};
+  } catch (error) {
+    console.error('getDestinationHighlightsPage: DB query failed', error);
     return undefined;
   }
 }

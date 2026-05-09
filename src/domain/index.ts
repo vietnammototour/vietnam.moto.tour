@@ -8,6 +8,7 @@ export type {
   DestinationWithStats,
   DestinationDetail,
 } from './destination';
+export {HIGHLIGHTS_PAGE_SIZE} from './destination';
 export type {Highlight} from './highlight';
 export type {User, Role} from './user';
 export type {Translation} from './translation';
