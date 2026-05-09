@@ -13,6 +13,7 @@ jest.mock('@/data/queries', () => ({
   getAllTours: jest.fn().mockResolvedValue([]),
   getActiveDestinationsFromDb: jest.fn().mockResolvedValue([]),
   getMessagesFromDb: jest.fn().mockResolvedValue(null),
+  getImageCollection: jest.fn().mockResolvedValue(null),
 }));
 
 const mockDestinations = [
@@ -90,44 +91,100 @@ const mockDestinations = [
 
 describe('Home page', () => {
   it('renders hero section with title and subtitle translation keys', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByText('heroTitle')).toBeInTheDocument();
     expect(screen.getByText('heroSubtitle')).toBeInTheDocument();
   });
 
   it('renders destinations section heading', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByText('destinationLists')).toBeInTheDocument();
     expect(screen.getByText('goExoticPlaces')).toBeInTheDocument();
   });
 
   it('renders about section heading', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByText('getToKnowUs')).toBeInTheDocument();
     expect(screen.getByText('planYourTrip')).toBeInTheDocument();
   });
 
   it('renders about section bullet points', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByText('bulletMotorbike')).toBeInTheDocument();
     expect(screen.getByText('bulletFriendly')).toBeInTheDocument();
     expect(screen.getByText('bulletExperience')).toBeInTheDocument();
   });
 
   it('renders popular tours section heading', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByText('featuredTours')).toBeInTheDocument();
     expect(screen.getByText('mostPopularTours')).toBeInTheDocument();
   });
 
   it('renders video/CTA section', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByText('readyToTravel')).toBeInTheDocument();
     expect(screen.getByText('videoSectionHeading')).toBeInTheDocument();
   });
 
   it('renders value proposition cards', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByText('localExperts')).toBeInTheDocument();
     expect(screen.getByText('hiddenRoutes')).toBeInTheDocument();
     expect(screen.getByText('yearsOnRoad')).toBeInTheDocument();
@@ -137,18 +194,50 @@ describe('Home page', () => {
   });
 
   it('renders play video button', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     expect(screen.getByLabelText('Play video')).toBeInTheDocument();
   });
 
   it('renders gallery images', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    const gallery = {
+      images: Array.from({length: 5}).map((_, i) => ({
+        id: `img-${i}`,
+        url: `/uploads/x${i}.webp`,
+        altEn: `alt en ${i}`,
+        altVi: `alt vi ${i}`,
+      })),
+    };
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={gallery}
+        locale="en"
+      />,
+    );
     const galleryButtons = screen.getAllByRole('button');
     expect(galleryButtons.length).toBeGreaterThanOrEqual(6);
   });
 
   it('renders book with us CTA', () => {
-    render(<Home tours={[]} destinations={mockDestinations} isAdmin={false} />);
+    render(
+      <Home
+        tours={[]}
+        destinations={mockDestinations}
+        isAdmin={false}
+        gallery={null}
+        locale="en"
+      />,
+    );
     const ctaElements = screen.getAllByText('bookWithUsNow');
     expect(ctaElements.length).toBeGreaterThanOrEqual(1);
   });
