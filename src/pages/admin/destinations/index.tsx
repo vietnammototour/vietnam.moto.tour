@@ -10,7 +10,8 @@ type AdminDestination = {
   slug: string;
   isActive: boolean;
   imageUrl: string | null;
-  _count: {tours: number};
+  size: string;
+  _count: {tours: number; highlights: number};
 };
 
 export default function AdminDestinationsList() {
@@ -71,9 +72,13 @@ export default function AdminDestinationsList() {
               <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
                 Tours
               </th>
-              <th className="text-right px-4 py-3 type-label-sm text-on-surface-secondary">
-                Actions
+              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
+                Highlights
               </th>
+              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
+                Size
+              </th>
+              <th className="text-right px-4 py-3 type-label-sm text-on-surface-secondary" />
             </tr>
           </thead>
           <tbody>
@@ -112,6 +117,12 @@ export default function AdminDestinationsList() {
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
                   {dest._count.tours}
+                </td>
+                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
+                  {dest._count.highlights}
+                </td>
+                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
+                  {dest.size}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
