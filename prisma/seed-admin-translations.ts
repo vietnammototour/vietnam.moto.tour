@@ -215,6 +215,14 @@ const entries: Entry[] = [
     valueEn: 'Could not load more highlights. Try again.',
     valueVi: 'Không thể tải thêm điểm nổi bật. Vui lòng thử lại.',
   },
+
+  // Tour detail
+  {
+    namespace: 'tourDetail',
+    key: 'aboutThisTour',
+    valueEn: 'About this tour',
+    valueVi: 'Về tour này',
+  },
 ];
 
 async function main(): Promise<void> {
