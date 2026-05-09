@@ -72,7 +72,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
   const cardInner = (
     <motion.div
       ref={interactive ? (ref as React.RefObject<HTMLDivElement>) : undefined}
-      className="group bg-surface-elevated rounded-lg elevation-1 hover:elevation-2 transition-shadow overflow-hidden h-full flex flex-col"
+      className="group bg-surface-elevated rounded-lg border border-border elevation-2 hover:elevation-4 transition-shadow overflow-hidden h-full flex flex-col"
       style={
         interactive
           ? {rotateX, rotateY, scale, transformPerspective: 1000}
@@ -129,43 +129,47 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           </div>
         )}
 
-        <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-4 pt-8 text-left">
-          <h3 className="type-title-lg font-semibold leading-tight text-white drop-shadow-sm group-hover:text-primary transition-colors">
-            {title}
-          </h3>
-          {tour.destinationName && (
-            <p className="mt-1 flex items-center gap-1.5 type-label-sm uppercase tracking-wider text-white/75">
-              <i
-                className="fa fa-map-marker-alt text-[0.7rem]"
-                aria-hidden="true"
-              />
-              <span className="truncate">{tour.destinationName}</span>
-            </p>
-          )}
+        <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-4 pt-8">
+          <ul className="grid grid-cols-2 gap-2">
+            {stats.map((s, i) => (
+              <li
+                key={s.key}
+                className={`flex flex-col gap-1 px-2 ${
+                  i > 0 ? 'border-l border-white/20 items-end text-right' : ''
+                }`}
+              >
+                <span className="type-label-sm uppercase tracking-wider text-white/70 text-[0.65rem] leading-none">
+                  {s.label}
+                </span>
+                <span
+                  className={`flex items-center gap-1.5 type-body-sm font-semibold text-white truncate ${
+                    i > 0 ? 'flex-row-reverse' : ''
+                  }`}
+                >
+                  <i
+                    className={`fa ${s.icon} text-primary text-xs shrink-0`}
+                    aria-hidden="true"
+                  />
+                  <span className="truncate">{s.value}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
       <div className="p-5 flex flex-col flex-1">
-        <ul className="grid grid-cols-2 gap-2 mt-auto">
-          {stats.map((s, i) => (
-            <li
-              key={s.key}
-              className={`flex flex-col gap-1 px-2 ${
-                i > 0 ? 'border-l border-border-subtle' : ''
-              }`}
-            >
-              <span className="type-label-sm uppercase tracking-wider text-on-surface-tertiary text-[0.65rem] leading-none">
-                {s.label}
-              </span>
-              <span className="flex items-center gap-1.5 type-body-sm font-semibold text-on-surface truncate">
-                <i
-                  className={`fa ${s.icon} text-primary/70 text-xs shrink-0`}
-                  aria-hidden="true"
-                />
-                <span className="truncate">{s.value}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+        <h3 className="type-title-lg font-semibold leading-tight text-on-surface group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+        {tour.destinationName && (
+          <p className="mt-1 flex items-center gap-1.5 type-label-sm uppercase tracking-wider text-on-surface-secondary">
+            <i
+              className="fa fa-map-marker-alt text-[0.7rem]"
+              aria-hidden="true"
+            />
+            <span className="truncate">{tour.destinationName}</span>
+          </p>
+        )}
       </div>
     </motion.div>
   );

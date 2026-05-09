@@ -28,7 +28,7 @@ export function DestinationCTA({heroImage}: Props) {
           whileInView={{opacity: 1, y: 0}}
           viewport={{once: true}}
           transition={{duration: 0.5}}
-          className="type-label-sm tracking-[0.3em] uppercase text-on-primary/75 mb-4 block"
+          className="type-label-sm tracking-[0.3em] uppercase text-white/75 mb-4 block"
         >
           {t('eyebrow')}
         </motion.span>
@@ -37,7 +37,7 @@ export function DestinationCTA({heroImage}: Props) {
           whileInView={{opacity: 1, y: 0}}
           viewport={{once: true}}
           transition={{duration: 0.6, delay: 0.1}}
-          className="type-display-sm md:type-display-md text-on-primary mb-5 leading-tight"
+          className="type-display-sm md:type-display-md text-white mb-5 leading-tight"
         >
           {t('title')}
         </motion.h2>
@@ -46,7 +46,7 @@ export function DestinationCTA({heroImage}: Props) {
           whileInView={{opacity: 1, y: 0}}
           viewport={{once: true}}
           transition={{duration: 0.6, delay: 0.2}}
-          className="type-body-lg text-on-primary/85 mb-10 max-w-xl mx-auto"
+          className="type-body-lg text-white/85 mb-10 max-w-xl mx-auto"
         >
           {t('subtitle')}
         </motion.p>
@@ -58,7 +58,7 @@ export function DestinationCTA({heroImage}: Props) {
         >
           <Link
             href={routes.contact.path()}
-            className="group inline-flex items-center gap-2 bg-on-primary text-primary type-title-md font-semibold px-9 py-4 rounded-full cursor-pointer hover:brightness-105 elevation-3 hover:elevation-4 transition-[box-shadow,filter] duration-200"
+            className="group inline-flex items-center gap-2 bg-white text-primary type-title-md font-semibold px-9 py-4 rounded-full cursor-pointer hover:brightness-105 elevation-3 hover:elevation-4 transition-[box-shadow,filter] duration-200"
           >
             {t('button')}
             <span

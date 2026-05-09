@@ -85,7 +85,15 @@ export function DestinationHero({destination, locale}: Props) {
               {t('toursAvailable', {count: tourCount})}
             </span>
             <a
-              href="#highlights"
+              href="#tours"
+              onClick={(e) => {
+                e.preventDefault();
+                const target = document.getElementById('tours');
+                if (!target) return;
+                const top = target.getBoundingClientRect().top + window.scrollY;
+                window.scrollTo({top, behavior: 'smooth'});
+                history.replaceState(null, '', '#tours');
+              }}
               className="ml-auto group hidden md:inline-flex items-center gap-2 type-label-md text-on-surface-inverse hover:text-[var(--color-primary-light)] transition-colors cursor-pointer"
             >
               {t('exploreCue')}

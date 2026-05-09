@@ -5,6 +5,11 @@ const nextConfig = {
     locales: ["vi", "en"],
     defaultLocale: "vi",
   },
+  async rewrites() {
+    return [
+      {source: "/uploads/:path*", destination: "/api/uploads/:path*"},
+    ];
+  },
 };
 
 export default nextConfig;
