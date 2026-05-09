@@ -1,4 +1,9 @@
-export const ENTITY_TYPES = ['tour', 'destination', 'highlight'] as const;
+export const ENTITY_TYPES = [
+  'tour',
+  'destination',
+  'highlight',
+  'collectionImage',
+] as const;
 export const IMAGE_TYPES = ['card', 'hero'] as const;
 
 export type EntityType = (typeof ENTITY_TYPES)[number];
@@ -8,6 +13,7 @@ const VALID: Record<EntityType, readonly ImageType[]> = {
   tour: ['card'],
   destination: ['card', 'hero'],
   highlight: ['card'],
+  collectionImage: ['card'],
 };
 
 export function isValidEntityType(s: string): s is EntityType {
@@ -25,11 +31,17 @@ export function isValidCombination(
   return VALID[entity].includes(image);
 }
 
-type DbField = {model: 'tour' | 'destination' | 'highlight'; field: string};
+type DbField = {
+  model: 'tour' | 'destination' | 'highlight' | 'collectionImage';
+  field: string;
+};
 
 export function getDbField(entity: EntityType, image: ImageType): DbField {
   if (entity === 'destination' && image === 'hero') {
     return {model: 'destination', field: 'heroImage'};
+  }
+  if (entity === 'collectionImage') {
+    return {model: 'collectionImage', field: 'url'};
   }
   return {model: entity, field: 'imageUrl'};
 }

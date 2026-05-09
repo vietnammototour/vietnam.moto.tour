@@ -1,4 +1,5 @@
 import {prisma} from '@/lib/prisma';
+import {Prisma} from '@prisma/client';
 import {toImageCollection} from '@/domain/image-collection/mapper';
 import type {ImageCollection} from '@/domain';
 
@@ -19,7 +20,10 @@ export async function listImageCollections(): Promise<
     orderBy: {label: 'asc'},
     include: {_count: {select: {images: true}}},
   });
-  return rows.map((r) => ({
+  type Row = Prisma.ImageCollectionGetPayload<{
+    include: {_count: {select: {images: true}}};
+  }>;
+  return rows.map((r: Row) => ({
     id: r.id,
     key: r.key,
     label: r.label,
