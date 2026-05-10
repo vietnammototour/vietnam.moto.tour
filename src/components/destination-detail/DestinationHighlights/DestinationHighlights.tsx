@@ -54,10 +54,7 @@ export function DestinationHighlights({
     >
       <div className="flex items-end justify-between gap-4 mb-8">
         <div>
-          <span className="type-label-sm tracking-[0.25em] uppercase text-primary mb-2 block">
-            {t('highlightsEyebrow')}
-          </span>
-          <h2 className="type-headline-md text-on-surface">
+          <h2 className="type-headline-lg text-on-surface">
             {t('highlightsTitle')}
           </h2>
         </div>
@@ -74,7 +71,7 @@ export function DestinationHighlights({
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {highlights.map((h, i) => (
               <HighlightCard
                 key={h.id}

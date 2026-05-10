@@ -23,18 +23,10 @@ export function DestinationTours({tours, destinationName}: Props) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between gap-4 mb-10">
           <div>
-            <span className="type-label-sm tracking-[0.25em] uppercase text-primary mb-2 block">
-              {t('toursEyebrow')}
-            </span>
             <h2 className="type-headline-lg text-on-surface">
               {t('toursTitle', {name: destinationName})}
             </h2>
           </div>
-          {tours.length > 0 && (
-            <span className="type-label-md text-on-surface-secondary hidden sm:block">
-              {t('toursAvailable', {count: tours.length})}
-            </span>
-          )}
         </div>
 
         {tours.length === 0 ? (

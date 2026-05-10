@@ -1,1 +1,0 @@
-export {DestinationFacts} from './DestinationFacts';

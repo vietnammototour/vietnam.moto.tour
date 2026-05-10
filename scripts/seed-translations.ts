@@ -60,8 +60,8 @@ const rows: Row[] = [
   {
     namespace: 'destinationDetail',
     key: 'toursTitle',
-    valueEn: 'Tours in this destination',
-    valueVi: 'Tour tại điểm đến này',
+    valueEn: 'Available tours',
+    valueVi: 'Tour có sẵn',
   },
   {
     namespace: 'destinationDetail',

@@ -7,7 +7,6 @@ import type * as VMT from '@/domain';
 import {DestinationHero} from '@/components/destination-detail/DestinationHero';
 import {DestinationIntro} from '@/components/destination-detail/DestinationIntro';
 import {DestinationHighlights} from '@/components/destination-detail/DestinationHighlights';
-import {DestinationFacts} from '@/components/destination-detail/DestinationFacts';
 import {DestinationTours} from '@/components/destination-detail/DestinationTours';
 import {DestinationCTA} from '@/components/destination-detail/DestinationCTA';
 
@@ -32,28 +31,13 @@ export default function DestinationDetailPage({destination}: Props) {
 
       <article className="py-12 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="lg:flex lg:gap-12">
-            <div className="lg:w-2/3">
-              <DestinationIntro destination={destination} locale={locale} />
-
-              <div className="lg:hidden mb-12">
-                <DestinationFacts destination={destination} />
-              </div>
-
-              <DestinationHighlights
-                slug={destination.slug}
-                initialHighlights={destination.highlights}
-                total={destination.highlightsTotal}
-                locale={locale}
-              />
-            </div>
-
-            <aside className="hidden lg:block lg:w-1/3">
-              <div className="sticky top-24">
-                <DestinationFacts destination={destination} />
-              </div>
-            </aside>
-          </div>
+          <DestinationIntro destination={destination} locale={locale} />
+          <DestinationHighlights
+            slug={destination.slug}
+            initialHighlights={destination.highlights}
+            total={destination.highlightsTotal}
+            locale={locale}
+          />
         </div>
       </article>
 
