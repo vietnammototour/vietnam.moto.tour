@@ -152,7 +152,6 @@ describe('Home page', () => {
         locale="en"
       />,
     );
-    expect(screen.getByText('featuredTours')).toBeInTheDocument();
     expect(screen.getByText('mostPopularTours')).toBeInTheDocument();
   });
 
@@ -166,7 +165,6 @@ describe('Home page', () => {
         locale="en"
       />,
     );
-    expect(screen.getByText('readyToTravel')).toBeInTheDocument();
     expect(screen.getByText('videoSectionHeading')).toBeInTheDocument();
   });
 

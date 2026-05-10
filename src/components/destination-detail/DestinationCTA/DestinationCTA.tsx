@@ -23,15 +23,6 @@ export function DestinationCTA({heroImage}: Props) {
       <div className="absolute inset-0 texture-grain-warm opacity-60" />
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
-        <motion.span
-          initial={{opacity: 0, y: 12}}
-          whileInView={{opacity: 1, y: 0}}
-          viewport={{once: true}}
-          transition={{duration: 0.5}}
-          className="type-label-sm tracking-[0.3em] uppercase text-white/75 mb-4 block"
-        >
-          {t('eyebrow')}
-        </motion.span>
         <motion.h2
           initial={{opacity: 0, y: 20}}
           whileInView={{opacity: 1, y: 0}}
