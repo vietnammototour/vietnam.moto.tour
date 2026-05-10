@@ -85,7 +85,7 @@ export default async function handler(
       const allRequested = [...new Set([...includedIds, ...excludedIds])];
       if (allRequested.length > 0) {
         const validPerks = await prisma.perk.findMany({
-          where: {id: {in: allRequested}, archived: false},
+          where: {id: {in: allRequested}},
           select: {id: true},
         });
         const validSet = new Set(validPerks.map((p: {id: string}) => p.id));
