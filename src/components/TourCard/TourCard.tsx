@@ -23,14 +23,14 @@ export const TourCard = ({tour, interactive = true}: Props) => {
     key: string;
     price: number;
     unit: string;
-    chipClass: string;
+    textClass: string;
   }[] = [];
   if (groupPrice !== null) {
     priceChips.push({
       key: 'group',
       price: groupPrice,
       unit: t('priceUnitPerson'),
-      chipClass: 'bg-primary/90',
+      textClass: 'text-primary',
     });
   }
   if (vehiclePrice !== null) {
@@ -38,20 +38,18 @@ export const TourCard = ({tour, interactive = true}: Props) => {
       key: 'vehicle',
       price: vehiclePrice,
       unit: t('priceUnitVehicle'),
-      chipClass: 'bg-secondary/90',
+      textClass: 'text-secondary',
     });
   }
 
   const stats = [
     {
       key: 'duration',
-      label: t('durationLabel'),
       value: t('daysCount', {count: duration}),
       icon: 'fa-clock',
     },
     {
       key: 'distance',
-      label: t('distanceLabel'),
       value: t('kilometersCount', {count: distance}),
       icon: 'fa-road',
     },
@@ -105,42 +103,28 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full">
-            <i className="fa fa-image text-5xl text-on-surface-tertiary" />
+            <svg
+              className="w-14 h-14 text-on-surface-tertiary"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+            </svg>
           </div>
         )}
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
-
-        {priceChips.length > 0 && (
-          <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1">
-            {priceChips.map((chip) => (
-              <div
-                key={chip.key}
-                className={`flex items-baseline gap-1.5 rounded-full backdrop-blur-sm px-2.5 py-1 text-white ${chip.chipClass}`}
-              >
-                <span className="type-label-sm uppercase tracking-wider opacity-90 text-[0.6rem] leading-none">
-                  {chip.unit}
-                </span>
-                <span className="type-title-sm leading-none">
-                  ${chip.price}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
 
         <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-4 pt-8">
           <ul className="grid grid-cols-2 gap-2">
             {stats.map((s, i) => (
               <li
                 key={s.key}
-                className={`flex flex-col gap-1 px-2 ${
-                  i > 0 ? 'border-l border-white/20 items-end text-right' : ''
+                className={`flex px-2 ${
+                  i > 0 ? 'border-l border-white/20 justify-end text-right' : ''
                 }`}
               >
-                <span className="type-label-sm uppercase tracking-wider text-white/70 text-[0.65rem] leading-none">
-                  {s.label}
-                </span>
                 <span
                   className={`flex items-center gap-1.5 type-body-sm font-semibold text-white truncate ${
                     i > 0 ? 'flex-row-reverse' : ''
@@ -157,18 +141,37 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           </ul>
         </div>
       </div>
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="type-title-lg font-semibold leading-tight text-on-surface group-hover:text-primary transition-colors">
-          {title}
-        </h3>
-        {tour.destinationName && (
-          <p className="mt-1 flex items-center gap-1.5 type-label-sm uppercase tracking-wider text-on-surface-secondary">
-            <i
-              className="fa fa-map-marker-alt text-[0.7rem]"
-              aria-hidden="true"
-            />
-            <span className="truncate">{tour.destinationName}</span>
-          </p>
+      <div className="p-5 flex items-end gap-4 flex-1">
+        <div className="flex flex-col min-w-0 flex-1">
+          <h3 className="type-title-lg font-semibold leading-tight text-on-surface group-hover:text-primary transition-colors truncate">
+            {title}
+          </h3>
+          {tour.destinationName && (
+            <p className="mt-2 flex items-center gap-1.5 type-label-sm uppercase tracking-wider text-on-surface-secondary">
+              <i
+                className="fa fa-map-marker-alt text-[0.7rem]"
+                aria-hidden="true"
+              />
+              <span className="truncate">{tour.destinationName}</span>
+            </p>
+          )}
+        </div>
+        {priceChips.length > 0 && (
+          <div className="flex flex-col items-end gap-1 shrink-0">
+            {priceChips.map((chip) => (
+              <div
+                key={chip.key}
+                className={`flex items-baseline gap-1.5 ${chip.textClass}`}
+              >
+                <span className="type-label-sm uppercase tracking-wider text-[0.6rem] leading-none opacity-80">
+                  {chip.unit}
+                </span>
+                <span className="type-title-sm font-semibold leading-none">
+                  ${chip.price}
+                </span>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </motion.div>
