@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {routes, useNavigate} from '@/routes';
@@ -17,6 +17,7 @@ type DestinationGeneralFormProps = {
   locale: Locale;
   mode: 'create' | 'edit';
   destinationId: string | null;
+  externalSlug?: string;
   onSaved?: (id: string) => void;
 };
 
@@ -25,6 +26,7 @@ export function DestinationGeneralForm({
   locale,
   mode,
   destinationId,
+  externalSlug,
   onSaved,
 }: DestinationGeneralFormProps) {
   const navigate = useNavigate();
@@ -33,6 +35,8 @@ export function DestinationGeneralForm({
   const {
     register,
     handleSubmit,
+    setValue,
+    getValues,
     formState: {errors, isSubmitting},
     reset,
   } = useForm<DestinationFormData>({
@@ -40,6 +44,12 @@ export function DestinationGeneralForm({
     defaultValues: initialData,
     shouldFocusError: true,
   });
+
+  useEffect(() => {
+    if (externalSlug !== undefined && externalSlug !== getValues('slug')) {
+      setValue('slug', externalSlug, {shouldDirty: true});
+    }
+  }, [externalSlug, setValue, getValues]);
 
   const nameField = locale === 'en' ? 'nameEn' : 'nameVi';
   const descField = locale === 'en' ? 'descriptionEn' : 'descriptionVi';
@@ -71,18 +81,11 @@ export function DestinationGeneralForm({
       )}
 
       <div className="max-w-2xl space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <TextInput
-            label="Slug"
-            {...register('slug')}
-            error={errors.slug?.message}
-          />
-          <TextInput
-            label={`Name (${locale.toUpperCase()})`}
-            {...register(nameField)}
-            error={errors[nameField]?.message}
-          />
-        </div>
+        <TextInput
+          label={`Name (${locale.toUpperCase()})`}
+          {...register(nameField)}
+          error={errors[nameField]?.message}
+        />
 
         <Textarea
           label={`Description (${locale.toUpperCase()})`}

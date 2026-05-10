@@ -42,6 +42,7 @@ export function DestinationEditTabs({
   const [locale, setLocale] = useState<Locale>('en');
   const [form, setForm] = useState<DestinationFormData>(initialData);
   const [imgVersion, setImgVersion] = useState(0);
+  const [pendingSlug, setPendingSlug] = useState<string | undefined>(undefined);
 
   const handleSaved = useCallback(
     (id: string) => {
@@ -95,7 +96,16 @@ export function DestinationEditTabs({
                 label: 'Destinations',
                 href: routes.admin.destinations.list.path(),
               },
-              {label: currentLabel},
+              {
+                label: form.slug || 'new',
+                editable: {
+                  fieldLabel: 'Slug',
+                  onCommit: (next) => {
+                    updateForm('slug', next);
+                    setPendingSlug(next);
+                  },
+                },
+              },
             ]}
           />
           <h1 className="type-headline-sm truncate">{currentLabel}</h1>
@@ -131,7 +141,11 @@ export function DestinationEditTabs({
               locale={locale}
               mode={mode}
               destinationId={destinationId}
-              onSaved={handleSaved}
+              externalSlug={pendingSlug}
+              onSaved={(id) => {
+                setPendingSlug(undefined);
+                handleSaved(id);
+              }}
             />
           </div>
         </TabPanel>
