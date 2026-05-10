@@ -1,7 +1,6 @@
 'use client';
 
 import {useState, useEffect, useCallback} from 'react';
-import Image from 'next/image';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {HighlightRowImage} from './HighlightRowImage';
@@ -30,7 +29,10 @@ type DestinationHighlightsProps = {
 
 export function DestinationHighlights({
   destinationId,
+  locale,
 }: DestinationHighlightsProps) {
+  const titleField = locale === 'en' ? 'titleEn' : 'titleVi';
+  const descField = locale === 'en' ? 'descriptionEn' : 'descriptionVi';
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +63,7 @@ export function DestinationHighlights({
   }, [fetchHighlights]);
 
   async function onSubmitAdd(data: AddHighlightFormData) {
-    const {error} = await submitAddHighlight(data, destinationId);
+    const {error} = await submitAddHighlight(data, destinationId, locale);
     if (!error) {
       reset();
       await fetchHighlights();
@@ -93,39 +95,22 @@ export function DestinationHighlights({
 
   return (
     <div>
-      <h2 className="type-title-lg text-on-surface mb-4">
-        Destination Highlights
-      </h2>
-
-      {/* Existing highlights — inline editing stays as-is */}
-      <div className="space-y-3 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
         {highlights.map((h) => (
           <div
             key={h.id}
-            className="flex items-start gap-3 p-3 rounded-lg border border-border bg-surface-elevated"
+            className="flex flex-col gap-3 p-3 rounded-lg border border-border bg-surface-elevated"
           >
-            <div className="w-16 h-16 shrink-0">
-              {h.imageUrl ? (
-                <Image
-                  src={h.imageUrl}
-                  alt={h.titleEn}
-                  width={64}
-                  height={64}
-                  className="rounded object-cover w-16 h-16"
-                />
-              ) : (
-                <div className="w-16 h-16 rounded bg-surface-alt flex items-center justify-center type-label-sm text-on-surface-secondary">
-                  No img
-                </div>
-              )}
-            </div>
-            <div className="flex-1 min-w-0 space-y-1">
+            <HighlightRowImage
+              highlightId={h.id}
+              initialUrl={h.imageUrl}
+              onSaved={fetchHighlights}
+            />
+            <div className="space-y-1">
               {(
                 [
-                  ['titleEn', 'English title'],
-                  ['titleVi', 'Vietnamese title'],
-                  ['descriptionEn', 'English description'],
-                  ['descriptionVi', 'Vietnamese description'],
+                  [titleField, 'Title'],
+                  [descField, 'Description'],
                 ] as const
               ).map(([field, placeholder]) => (
                 <input
@@ -148,55 +133,41 @@ export function DestinationHighlights({
                   className="w-full px-2 py-1 rounded border border-border bg-surface text-on-surface type-body-sm cursor-pointer"
                 />
               ))}
-              <HighlightRowImage
-                highlightId={h.id}
-                initialUrl={h.imageUrl}
-                onSaved={fetchHighlights}
-              />
             </div>
-            <Button
-              variant="danger"
-              size="sm"
+            <button
+              type="button"
               onClick={() => handleDelete(h.id)}
+              className="self-end type-body-md text-red-500 hover:underline cursor-pointer"
             >
               Delete
-            </Button>
+            </button>
           </div>
         ))}
-      </div>
 
-      {/* Add new — migrated to RHF */}
-      <form
-        onSubmit={handleSubmit(onSubmitAdd)}
-        className="p-4 rounded-lg border border-dashed border-border"
-      >
-        <h3 className="type-title-sm text-on-surface mb-3">Add Highlight</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-          <TextInput
-            {...register('titleEn')}
-            placeholder="English title"
-            error={errors.titleEn?.message}
-          />
-          <TextInput
-            {...register('titleVi')}
-            placeholder="Vietnamese title"
-            error={errors.titleVi?.message}
-          />
-          <TextInput
-            {...register('descriptionEn')}
-            placeholder="English description"
-            error={errors.descriptionEn?.message}
-          />
-          <TextInput
-            {...register('descriptionVi')}
-            placeholder="Vietnamese description"
-            error={errors.descriptionVi?.message}
-          />
-        </div>
-        <Button type="submit" loading={isSubmitting} size="sm">
-          Add
-        </Button>
-      </form>
+        <form
+          onSubmit={handleSubmit(onSubmitAdd)}
+          className="flex flex-col gap-3 p-3 rounded-lg border border-dashed border-border bg-surface-elevated/50"
+        >
+          <div className="h-[12.5rem] rounded-lg border-2 border-dashed border-border flex items-center justify-center type-body-sm text-on-surface-secondary">
+            Add highlight
+          </div>
+          <div className="space-y-1">
+            <TextInput
+              {...register('title')}
+              placeholder="Title"
+              error={errors.title?.message}
+            />
+            <TextInput
+              {...register('description')}
+              placeholder="Description"
+              error={errors.description?.message}
+            />
+          </div>
+          <Button type="submit" loading={isSubmitting} size="sm">
+            Add
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ type ImageUploadProps = {
   preset: ImagePreset;
   label?: string;
   error?: string;
+  heightClass?: string;
 };
 
 export function ImageUpload({
@@ -19,6 +20,7 @@ export function ImageUpload({
   preset,
   label,
   error,
+  heightClass = 'h-40',
 }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -85,7 +87,9 @@ export function ImageUpload({
           {label}
         </label>
       )}
-      <div className="relative group border-2 border-dashed border-border rounded-lg overflow-hidden h-40">
+      <div
+        className={`relative group border-2 border-dashed border-border rounded-lg overflow-hidden ${heightClass}`}
+      >
         {displayUrl ? (
           <>
             <img

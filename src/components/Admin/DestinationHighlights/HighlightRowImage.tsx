@@ -37,6 +37,7 @@ export function HighlightRowImage({highlightId, initialUrl, onSaved}: Props) {
       onChange={handleChange}
       preset="card"
       error={error ?? undefined}
+      heightClass="h-[12.5rem]"
     />
   );
 }

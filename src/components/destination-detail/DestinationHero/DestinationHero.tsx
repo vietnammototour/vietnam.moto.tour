@@ -17,7 +17,6 @@ export function DestinationHero({destination, locale}: Props) {
   const spotlightBg = useMotionTemplate`radial-gradient(280px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.18), transparent)`;
 
   const description = destination.description[locale];
-  const tourCount = destination.tours.length;
 
   return (
     <section className="relative">
@@ -72,36 +71,6 @@ export function DestinationHero({destination, locale}: Props) {
               {description}
             </motion.p>
           )}
-
-          <motion.div
-            variants={slideFromLeft}
-            initial="hidden"
-            animate="visible"
-            transition={{delay: 0.55}}
-            className="flex flex-wrap items-center gap-x-6 gap-y-3 text-on-surface-inverse/80 type-body-sm"
-          >
-            <span className="flex items-center gap-2">
-              <i className="fa fa-route text-[var(--color-primary)]" />
-              {t('toursAvailable', {count: tourCount})}
-            </span>
-            <a
-              href="#tours"
-              onClick={(e) => {
-                e.preventDefault();
-                const target = document.getElementById('tours');
-                if (!target) return;
-                const top = target.getBoundingClientRect().top + window.scrollY;
-                window.scrollTo({top, behavior: 'smooth'});
-                history.replaceState(null, '', '#tours');
-              }}
-              className="ml-auto group hidden md:inline-flex items-center gap-2 type-label-md text-on-surface-inverse hover:text-[var(--color-primary-light)] transition-colors cursor-pointer"
-            >
-              {t('exploreCue')}
-              <span className="inline-block transition-transform group-hover:translate-y-0.5">
-                ↓
-              </span>
-            </a>
-          </motion.div>
         </div>
       </div>
 

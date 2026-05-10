@@ -131,7 +131,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
                   }`}
                 >
                   <i
-                    className={`fa ${s.icon} text-primary text-xs shrink-0`}
+                    className={`fa ${s.icon} text-on-surface-secondary text-xs shrink-0`}
                     aria-hidden="true"
                   />
                   <span className="truncate">{s.value}</span>
