@@ -64,6 +64,8 @@ describe('PUT /api/admin/tours/[id] perks handling', () => {
         {tourId: 't1', perkId: 'c', bucket: 'EXCLUDED'},
       ],
     });
+    const findManyCall = (prisma.perk.findMany as jest.Mock).mock.calls[0][0];
+    expect(findManyCall.where).not.toHaveProperty('archived');
   });
 
   it('rejects when same perk appears in both buckets', async () => {
