@@ -29,7 +29,7 @@ export function DestinationHero({destination, locale}: Props) {
         <motion.div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${destination.heroImage || destination.imageUrl})`,
+            backgroundImage: `url(${destination.heroImage})`,
           }}
           initial={{scale: 1.1}}
           animate={{scale: 1}}

@@ -300,10 +300,7 @@ export default function Home({
             viewport={{once: true}}
             variants={fadeInUp}
           >
-            <span className="type-label-sm uppercase text-on-surface-accent">
-              {t('featuredTours')}
-            </span>
-            <h2 className="type-headline-sm lg:type-headline-lg mt-2">
+            <h2 className="type-headline-sm lg:type-headline-lg">
               {t('mostPopularTours')}
             </h2>
           </motion.div>
@@ -331,9 +328,6 @@ export default function Home({
                 >
                   <i className="fa fa-play ml-1" />
                 </button>
-                <p className="type-label-lg uppercase text-primary-light mb-2">
-                  {t('readyToTravel')}
-                </p>
                 <h2 className="type-headline-sm lg:type-headline-lg text-white drop-shadow-lg">
                   {t('videoSectionHeading')}
                 </h2>
