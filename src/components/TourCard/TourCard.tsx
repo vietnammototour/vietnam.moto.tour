@@ -121,8 +121,10 @@ export const TourCard = ({tour, interactive = true}: Props) => {
             {stats.map((s, i) => (
               <li
                 key={s.key}
-                className={`flex px-2 ${
-                  i > 0 ? 'border-l border-white/20 justify-end text-right' : ''
+                className={`flex ${
+                  i > 0
+                    ? 'border-l border-white/20 justify-end text-right pl-2'
+                    : ''
                 }`}
               >
                 <span
