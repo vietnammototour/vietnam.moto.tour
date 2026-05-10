@@ -41,6 +41,16 @@ if (!(global as any).OffscreenCanvas) {
   (global as any).OffscreenCanvas = FakeOffscreenCanvas;
 }
 
+if (typeof (global as any).fetch === 'undefined') {
+  (global as any).fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({}),
+    }),
+  );
+}
+
 if (!(globalThis.crypto as any)?.subtle) {
   const {webcrypto} = require('crypto');
   Object.defineProperty(globalThis, 'crypto', {value: webcrypto});

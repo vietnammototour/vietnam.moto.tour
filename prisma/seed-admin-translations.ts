@@ -231,6 +231,50 @@ const entries: Entry[] = [
     valueEn: 'Save',
     valueVi: 'Lưu',
   },
+
+  // admin.tours.perksTab — Perks tab on tour edit page
+  {
+    namespace: 'admin.tours.perksTab',
+    key: 'available',
+    valueEn: 'Available perks',
+    valueVi: 'Tiện ích khả dụng',
+  },
+  {
+    namespace: 'admin.tours.perksTab',
+    key: 'included',
+    valueEn: 'Included',
+    valueVi: 'Bao gồm',
+  },
+  {
+    namespace: 'admin.tours.perksTab',
+    key: 'excluded',
+    valueEn: 'Excluded',
+    valueVi: 'Không bao gồm',
+  },
+  {
+    namespace: 'admin.tours.perksTab',
+    key: 'save',
+    valueEn: 'Save perks',
+    valueVi: 'Lưu tiện ích',
+  },
+  {
+    namespace: 'admin.tours.perksTab',
+    key: 'saveGeneralFirst',
+    valueEn: 'Save the General tab before assigning perks',
+    valueVi: 'Lưu tab Chung trước khi gán tiện ích',
+  },
+  {
+    namespace: 'admin.tours.perksTab',
+    key: 'saveFailed',
+    valueEn: 'Failed to save perks',
+    valueVi: 'Lưu tiện ích thất bại',
+  },
+  {
+    namespace: 'admin.tours.perksTab',
+    key: 'noneAvailable',
+    valueEn: 'No perks match your filters',
+    valueVi: 'Không có tiện ích phù hợp',
+  },
 ];
 
 async function main(): Promise<void> {
