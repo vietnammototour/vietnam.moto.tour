@@ -65,7 +65,14 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
           <div className="lg:flex lg:gap-10">
             {/* Main content */}
             <div className="lg:w-2/3">
-              <TourDescription description={tour.description} locale={locale} />
+              <TourDescription
+                description={tour.description}
+                locale={locale}
+                imageUrl={tour.imageUrl}
+                imageAlt={
+                  tour.title[locale as 'en' | 'vi'] ?? tour.title.vi ?? ''
+                }
+              />
               <TourHighlights highlights={tour.highlights} locale={locale} />
 
               {/* On mobile: pricing + details between highlights and itinerary */}
