@@ -11,20 +11,14 @@ export default async function handler(
 
   if (req.method === 'GET') {
     const archivedParam = req.query.archived;
-    const where =
+    const filters =
       archivedParam === 'true'
-        ? {status: 'ARCHIVED' as const}
+        ? {archived: true}
         : archivedParam === 'false'
-          ? {status: {not: 'ARCHIVED' as const}}
-          : undefined;
-    const tours = await prisma.tour.findMany({
-      where,
-      orderBy: {createdAt: 'desc'},
-      include: {
-        destination: {select: {name: true}},
-        highlights: true,
-      },
-    });
+          ? {archived: false}
+          : {};
+    const {getToursForAdmin} = await import('@/data/queries');
+    const tours = await getToursForAdmin(filters);
     return res.json(tours);
   }
 

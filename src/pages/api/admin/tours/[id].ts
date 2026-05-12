@@ -12,10 +12,8 @@ export default async function handler(
   const id = req.query.id as string;
 
   if (req.method === 'GET') {
-    const tour = await prisma.tour.findUnique({
-      where: {id},
-      include: {highlights: true, perks: {include: {perk: true}}},
-    });
+    const {getTourByIdForAdmin} = await import('@/data/queries');
+    const tour = await getTourByIdForAdmin(id);
     if (!tour) return res.status(404).json({error: 'Tour not found'});
     return res.json(tour);
   }
