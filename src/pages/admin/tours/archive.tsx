@@ -1,8 +1,17 @@
 import {useEffect} from 'react';
 import Link from 'next/link';
-import {useAdminFetch} from '@/hooks/useAdminFetch';
+import type {GetServerSideProps} from 'next';
+import {dehydrate} from '@tanstack/react-query';
+import {getQueryClient} from '@/lib/queryClient';
+import {
+  useTours,
+  useUpdateTour,
+  useDeleteTourHard,
+} from '@/queries/admin/tours';
+import {tourKeys} from '@/queries/admin/tours.keys';
+import {fetchToursServer} from '@/queries/fetchers/admin/tours.server';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
-import {routes, api} from '@/routes';
+import {routes} from '@/routes';
 import type * as VMT from '@/domain';
 import {getMinPrice} from '@/domain';
 
@@ -18,30 +27,26 @@ type AdminTour = {
 };
 
 export default function AdminToursArchive() {
-  const {
-    data: tours,
-    loading,
-    refetch,
-  } = useAdminFetch<AdminTour[]>('/api/admin/tours?archived=true');
+  const {data: tours, isLoading} = useTours({archived: true});
+  const restore = useUpdateTour();
+  const hardDelete = useDeleteTourHard();
   const {setLoading} = useAdminLoading();
 
   useEffect(() => {
-    setLoading(loading);
-  }, [loading, setLoading]);
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
 
-  async function handleRestore(id: string) {
-    const {error} = await api.admin.tours.update(id, {status: 'DRAFT'});
-    if (!error) refetch();
+  function handleRestore(id: string) {
+    restore.mutate({id, input: {status: 'DRAFT'}});
   }
 
-  async function handleHardDelete(id: string) {
+  function handleHardDelete(id: string) {
     if (!confirm('Permanently delete this tour? This cannot be undone.'))
       return;
-    const {error} = await api.admin.tours.delete(id, {hard: true});
-    if (!error) refetch();
+    hardDelete.mutate({id});
   }
 
-  const tourList = tours ?? [];
+  const tourList = (tours ?? []) as unknown as AdminTour[];
 
   return (
     <div>
@@ -139,3 +144,12 @@ export default function AdminToursArchive() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: tourKeys.list({archived: true}),
+    queryFn: () => fetchToursServer({archived: true}),
+  });
+  return {props: {dehydratedState: dehydrate(queryClient)}};
+};
