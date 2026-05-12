@@ -1,8 +1,13 @@
 import {useEffect} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useRouter} from 'next/router';
+import {dehydrate} from '@tanstack/react-query';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
+import {useTour} from '@/queries/admin/tours';
+import {tourKeys} from '@/queries/admin/tours.keys';
+import {fetchTourServer} from '@/queries/fetchers/admin/tours.server';
+import {getQueryClient} from '@/lib/queryClient';
 import {TourEditTabs} from '@/components/Admin/TourEditTabs';
 import {savedSlot} from '@/lib/image-slot';
 import {isTourTab, type TourTab} from '@/routes';
@@ -22,11 +27,9 @@ export default function EditTour() {
 
   const {
     data: tour,
-    loading: tourLoading,
+    isLoading: tourLoading,
     error: tourError,
-  } = useAdminFetch<Record<string, unknown>>(
-    id ? `/api/admin/tours/${id}` : null,
-  );
+  } = useTour(id ?? undefined);
   const {data: destinations, loading: destLoading} = useAdminFetch<
     Destination[]
   >('/api/admin/destinations');
@@ -53,10 +56,13 @@ export default function EditTour() {
     return null;
   }
 
-  const highlights = (tour.highlights as Array<{id: string}>) ?? [];
+  const tourRecord = tour as unknown as Record<string, unknown>;
+  const highlights = (tourRecord.highlights as Array<{id: string}>) ?? [];
   const tourPerks =
-    (tour.perks as Array<{perkId: string; bucket: 'INCLUDED' | 'EXCLUDED'}>) ??
-    [];
+    (tourRecord.perks as Array<{
+      perkId: string;
+      bucket: 'INCLUDED' | 'EXCLUDED';
+    }>) ?? [];
   const initialIncludedPerkIds = tourPerks
     .filter((tp) => tp.bucket === 'INCLUDED')
     .map((tp) => tp.perkId);
@@ -65,32 +71,34 @@ export default function EditTour() {
     .map((tp) => tp.perkId);
 
   const initialGeneral = {
-    slug: tour.slug as string,
-    destinationId: tour.destinationId as string,
-    title: tour.title as string,
-    titleVi: (tour.titleVi as string) ?? '',
-    titleEn: (tour.titleEn as string) ?? '',
-    duration: (tour.duration as number) ?? 1,
-    distance: (tour.distance as number) ?? 0,
-    descriptionVi: (tour.descriptionVi as string) ?? '',
-    descriptionEn: (tour.descriptionEn as string) ?? '',
-    transportation: (tour.transportation as string) ?? '',
-    hotel: (tour.hotel as string) ?? '',
-    guided: (tour.guided as string) ?? '',
+    slug: tourRecord.slug as string,
+    destinationId: tourRecord.destinationId as string,
+    title: tourRecord.title as string,
+    titleVi: (tourRecord.titleVi as string) ?? '',
+    titleEn: (tourRecord.titleEn as string) ?? '',
+    duration: (tourRecord.duration as number) ?? 1,
+    distance: (tourRecord.distance as number) ?? 0,
+    descriptionVi: (tourRecord.descriptionVi as string) ?? '',
+    descriptionEn: (tourRecord.descriptionEn as string) ?? '',
+    transportation: (tourRecord.transportation as string) ?? '',
+    hotel: (tourRecord.hotel as string) ?? '',
+    guided: (tourRecord.guided as string) ?? '',
   };
 
-  const initialCard = {imageCard: savedSlot(tour.imageUrl as string | null)};
+  const initialCard = {
+    imageCard: savedSlot(tourRecord.imageUrl as string | null),
+  };
 
   return (
     <TourEditTabs
       activeTab={tab}
       mode="edit"
-      tourId={tour.id as string}
+      tourId={tourRecord.id as string}
       destinations={destinations}
       initialGeneral={initialGeneral}
       initialCard={initialCard}
-      initialItinerary={(tour.itinerary as never) ?? []}
-      initialPricingGroups={(tour.pricingGroups as never) ?? []}
+      initialItinerary={(tourRecord.itinerary as never) ?? []}
+      initialPricingGroups={(tourRecord.pricingGroups as never) ?? []}
       initialHighlightIds={highlights.map((h) => h.id)}
       initialIncludedPerkIds={initialIncludedPerkIds}
       initialExcludedPerkIds={initialExcludedPerkIds}
@@ -103,10 +111,25 @@ export async function getServerSideProps({
   params,
 }: GetServerSidePropsContext) {
   const tab = params?.tab;
+  const id = params?.id;
   if (typeof tab !== 'string' || !isTourTab(tab)) {
     return {notFound: true};
   }
   const {getMessagesFromDb} = await import('@/data/queries');
   const messages = await getMessagesFromDb(locale ?? 'vi');
-  return {props: {messages: messages ?? {}}};
+
+  const queryClient = getQueryClient();
+  if (typeof id === 'string') {
+    await queryClient.prefetchQuery({
+      queryKey: tourKeys.detail(id),
+      queryFn: () => fetchTourServer(id),
+    });
+  }
+
+  return {
+    props: {
+      messages: messages ?? {},
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 }
