@@ -6,6 +6,7 @@
  * It pulls in the Prisma client which depends on Node.js-only modules (pg, tls).
  */
 import {prisma} from '@/lib/prisma';
+import type {TourStatus} from '@prisma/client';
 import type {
   Tour,
   DestinationWithStats,
@@ -221,3 +222,32 @@ export {
   getImageCollection,
   listImageCollections,
 } from './queries/image-collections';
+
+export type AdminTourFilters = {archived?: boolean};
+
+export async function getToursForAdmin(filters: AdminTourFilters = {}) {
+  const where =
+    filters.archived === true
+      ? {status: 'ARCHIVED' as TourStatus}
+      : filters.archived === false
+        ? {status: {not: 'ARCHIVED' as TourStatus}}
+        : undefined;
+  return prisma.tour.findMany({
+    where,
+    orderBy: {createdAt: 'desc'},
+    include: {
+      destination: {select: {name: true}},
+      highlights: true,
+    },
+  });
+}
+
+export async function getTourByIdForAdmin(id: string) {
+  return prisma.tour.findUnique({
+    where: {id},
+    include: {
+      highlights: true,
+      perks: {include: {perk: true}},
+    },
+  });
+}

@@ -3,7 +3,8 @@
 import {useState, useCallback} from 'react';
 import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
-import {routes, api, useNavigate, type TourTab} from '@/routes';
+import {routes, useNavigate, type TourTab} from '@/routes';
+import {useCreateTour, useUpdateTour} from '@/queries/admin/tours';
 import {Tabs, TabPanel} from '@/components/ui';
 import {GeneralTab} from '../tabs/GeneralTab';
 import type {GeneralTabData} from '../tabs/GeneralTab';
@@ -49,6 +50,8 @@ export function TourEditTabs({
     initialGeneral.destinationId,
   );
   const [locale, setLocale] = useState<Locale>('en');
+  const createTour = useCreateTour();
+  const updateTour = useUpdateTour();
 
   const [slug, setSlug] = useState(initialGeneral.slug);
   const [title, setTitle] = useState(initialGeneral.title);
@@ -58,19 +61,13 @@ export function TourEditTabs({
   const handleGeneralSave = useCallback(
     async (data: GeneralTabData): Promise<string> => {
       const isNew = mode === 'create' && !tourId;
+      const payload = data as unknown as Record<string, unknown>;
       const result = isNew
-        ? await api.admin.tours.create(
-            data as unknown as Record<string, unknown>,
-          )
-        : await api.admin.tours.update(
-            tourId!,
-            data as unknown as Record<string, unknown>,
-          );
+        ? await createTour.mutateAsync(payload)
+        : await updateTour.mutateAsync({id: tourId!, input: payload});
 
-      if (result.error) throw new Error(result.error);
-
-      if (isNew && result.data) {
-        const newId = String(result.data.id);
+      if (isNew && result) {
+        const newId = String((result as {id: string}).id);
         setTourId(newId);
         navigate.replaceUrl(routes.admin.tours.edit, {
           id: newId,
@@ -80,43 +77,39 @@ export function TourEditTabs({
       }
       return tourId!;
     },
-    [mode, tourId, navigate],
+    [mode, tourId, navigate, createTour, updateTour],
   );
 
   const handleItinerarySave = useCallback(
     async (itinerary: VMT.ItineraryDay[]) => {
       if (!tourId) throw new Error('Save General tab first');
-      const {error} = await api.admin.tours.update(tourId, {itinerary});
-      if (error) throw new Error(error);
+      await updateTour.mutateAsync({id: tourId, input: {itinerary}});
     },
-    [tourId],
+    [tourId, updateTour],
   );
 
   const handlePricingSave = useCallback(
     async (pricingGroups: VMT.PricingGroup[]) => {
       if (!tourId) throw new Error('Save General tab first');
-      const {error} = await api.admin.tours.update(tourId, {pricingGroups});
-      if (error) throw new Error(error);
+      await updateTour.mutateAsync({id: tourId, input: {pricingGroups}});
     },
-    [tourId],
+    [tourId, updateTour],
   );
 
   const handleHighlightsSave = useCallback(
     async (highlightIds: string[]) => {
       if (!tourId) throw new Error('Save General tab first');
-      const {error} = await api.admin.tours.update(tourId, {highlightIds});
-      if (error) throw new Error(error);
+      await updateTour.mutateAsync({id: tourId, input: {highlightIds}});
     },
-    [tourId],
+    [tourId, updateTour],
   );
 
   const handlePerksSave = useCallback(
     async (data: {includedPerkIds: string[]; excludedPerkIds: string[]}) => {
       if (!tourId) throw new Error('Save General tab first');
-      const {error} = await api.admin.tours.update(tourId, data);
-      if (error) throw new Error(error);
+      await updateTour.mutateAsync({id: tourId, input: data});
     },
-    [tourId],
+    [tourId, updateTour],
   );
 
   const isTabDisabled = (tabId: TourTab) =>

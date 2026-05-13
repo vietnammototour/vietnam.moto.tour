@@ -9,6 +9,9 @@ import {routes} from '@/routes';
 import {ThemeProvider} from '@/components/ThemeProvider';
 import {Layout} from '@/components/Layout';
 import {AdminLayout} from '@/components/Admin/AdminLayout';
+import {QueryClientProvider, HydrationBoundary} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import {getQueryClient} from '@/lib/queryClient';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@/styles/globals.css';
 
@@ -40,6 +43,7 @@ export default function App({
   Component,
   pageProps: {session, ...pageProps},
 }: AppProps) {
+  const queryClient = getQueryClient();
   const router = useRouter();
   const isAdmin = routes.isAdmin(router.pathname);
   const locale = router.locale ?? 'vi';
@@ -86,17 +90,24 @@ export default function App({
   );
 
   return (
-    <SessionProvider session={session}>
-      <ThemeProvider>
-        <NextIntlClientProvider
-          locale={locale}
-          messages={messages}
-          timeZone="Asia/Ho_Chi_Minh"
-          onError={handleIntlError}
-        >
-          {content}
-        </NextIntlClientProvider>
-      </ThemeProvider>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <HydrationBoundary state={pageProps.dehydratedState}>
+        <SessionProvider session={session}>
+          <ThemeProvider>
+            <NextIntlClientProvider
+              locale={locale}
+              messages={messages}
+              timeZone="Asia/Ho_Chi_Minh"
+              onError={handleIntlError}
+            >
+              {content}
+            </NextIntlClientProvider>
+          </ThemeProvider>
+        </SessionProvider>
+        {process.env.NODE_ENV === 'development' && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
+      </HydrationBoundary>
+    </QueryClientProvider>
   );
 }
