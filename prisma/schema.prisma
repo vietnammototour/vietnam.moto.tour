@@ -13,18 +13,36 @@ enum TourStatus {
   FEATURED
 }
 
-enum Role {
-  ADMIN
+model User {
+  id           String           @id @default(uuid())
+  email        String?          @unique
+  passwordHash String?
+  name         String
+  bioVi        String           @default("")
+  bioEn        String           @default("")
+  birthDate    DateTime?
+  imageId      String?
+  image        CollectionImage? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  orgRoleId    String
+  orgRole      OrgRole          @relation(fields: [orgRoleId], references: [id], onDelete: Restrict)
+  isCoreTeam   Boolean          @default(false)
+  allowAuth    Boolean          @default(true)
+  teamOrder    Int              @default(0)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([isCoreTeam, teamOrder])
+  @@index([orgRoleId])
 }
 
-model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  passwordHash String
-  name         String
-  role         Role     @default(ADMIN)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+model OrgRole {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  labelVi   String   @default("")
+  labelEn   String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  users     User[]
 }
 
 model Tour {
@@ -152,6 +170,7 @@ model CollectionImage {
   altVi        String          @default("")
   order        Int             @default(0)
   createdAt    DateTime        @default(now())
+  users        User[]
 
   @@index([collectionId, order])
 }
