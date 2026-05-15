@@ -54,6 +54,12 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  const adminRole = await prisma.orgRole.upsert({
+    where: {key: 'admin'},
+    update: {labelVi: 'Quản trị', labelEn: 'Admin', order: 0},
+    create: {key: 'admin', labelVi: 'Quản trị', labelEn: 'Admin', order: 0},
+  });
+
   // Check for duplicate email
   const existing = await prisma.user.findUnique({
     where: {email},
@@ -74,7 +80,9 @@ async function main(): Promise<void> {
       email,
       passwordHash,
       name,
-      role: 'ADMIN',
+      orgRoleId: adminRole.id,
+      allowAuth: true,
+      isCoreTeam: false,
     },
   });
 
@@ -82,7 +90,6 @@ async function main(): Promise<void> {
   console.log(`  ID:    ${user.id}`);
   console.log(`  Email: ${user.email}`);
   console.log(`  Name:  ${user.name}`);
-  console.log(`  Role:  ${user.role}`);
 }
 
 main()
