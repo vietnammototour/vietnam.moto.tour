@@ -4,26 +4,29 @@ import type {
   CollectionImage as PrismaCollectionImage,
 } from '@prisma/client';
 import {toOrgRole} from '../org-role/mapper';
-import type {UserAdmin} from './index';
+import type {TeamMember} from './index';
 
 type PrismaUserWithRelations = PrismaUser & {
   orgRole: PrismaOrgRole;
   image: PrismaCollectionImage | null;
 };
 
-export function toUserAdmin(row: PrismaUserWithRelations): UserAdmin {
+function ageFromBirthDate(d: Date | null): number | null {
+  if (!d) return null;
+  const ms = Date.now() - d.getTime();
+  const years = ms / (365.25 * 24 * 3600 * 1000);
+  return Math.max(0, Math.floor(years));
+}
+
+export function toTeamMember(row: PrismaUserWithRelations): TeamMember {
   return {
     id: row.id,
     name: row.name,
-    email: row.email,
     bioVi: row.bioVi,
     bioEn: row.bioEn,
-    birthDate: row.birthDate ? row.birthDate.toISOString() : null,
-    imageId: row.imageId,
-    isCoreTeam: row.isCoreTeam,
-    allowAuth: row.allowAuth,
+    age: ageFromBirthDate(row.birthDate),
     teamOrder: row.teamOrder,
-    orgRole: toOrgRole(row.orgRole),
+    role: toOrgRole(row.orgRole),
     photo: row.image
       ? {url: row.image.url, altVi: row.image.altVi, altEn: row.image.altEn}
       : null,
