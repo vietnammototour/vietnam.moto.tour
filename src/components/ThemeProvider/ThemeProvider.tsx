@@ -2,10 +2,18 @@
 
 import {useCallback, useEffect, useState, type ReactNode} from 'react';
 import {ThemeContext, type Theme} from './context';
-import {getInitialTheme, setThemeCookie} from './utils';
+import {readThemeCookie, setThemeCookie} from './utils';
 
 export function ThemeProvider({children}: {children: ReactNode}) {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = useState<Theme>('light');
+
+  useEffect(() => {
+    const stored = readThemeCookie();
+    if (stored !== theme) setTheme(stored);
+    document.documentElement.setAttribute('data-theme', stored);
+    // run once on mount to sync state with cookie set pre-hydration
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
