@@ -1,141 +1,163 @@
-# About Us Redesign + Staff Management Implementation Plan
+# About Us Redesign + Team via User Model — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the generic `/about-us` page with a Bold-Dark editorial design driven by an admin-managed staff roster, with `OrgRole` and `StaffMember` Prisma models, an image-picker bound to a reusable `ImageCollection`, and bilingual content sourced from the existing `Translation` table.
+**Goal:** Replace the generic `/about-us` page with a Bold-Dark editorial design driven by the existing `User` model. Add `OrgRole` as a first-class entity (replacing the `Role` enum), and admin pages to manage roles and the expanded user profile (bio, photo, birthDate, isCoreTeam, allowAuth, teamOrder).
 
-**Architecture:** Two new Prisma models (`OrgRole`, `StaffMember`) plus a reused `ImageCollection(key="staff")` for photos. Public page is SSG with 60s ISR, reading from `prisma.staffMember.findMany` joined with role + photo. Admin CRUD pages mirror the existing tours/destinations patterns; admin forms follow the `*.form-utils.ts` convention. Translations live under namespace `about.*` in the `Translation` table.
+**Architecture:** A single atomic SQL migration creates `OrgRole`, extends `User` with team + auth-gate fields, backfills the existing admin row, and drops the old `Role` enum. `/about-us` is SSG with 60s ISR reading `prisma.user.findMany({where:{isCoreTeam:true}, ...}).map(toTeamMember)`. NextAuth's `authorize` callback gains an `allowAuth` check; `requireAdmin` is updated to check `orgRole.key==='admin' && allowAuth`. Admin `/users` splits into list / new / edit pages; new `/admin/roles` CRUD page is added.
 
-**Tech Stack:** Next.js 16 Pages Router, Prisma 5, React 19, Tailwind 4, next-intl 4, Yup, react-hook-form, Jest + RTL.
+**Tech Stack:** Next.js 16 Pages Router, Prisma 5, React 19, Tailwind 4, next-intl 4, NextAuth 4, Yup, react-hook-form, Jest + RTL.
 
-**Spec:** `docs/superpowers/specs/2026-05-15-about-us-redesign-design.md`
-
----
-
-## File Manifest
-
-**Create:**
-
-- `prisma/migrations/<timestamp>_add_staff_and_org_role/migration.sql` (auto-generated)
-- `prisma/seed-about-translations.ts`
-- `prisma/seed-staff.ts`
-- `src/domain/staff/index.ts`
-- `src/domain/staff/mapper.ts`
-- `src/domain/org-role/index.ts`
-- `src/domain/org-role/mapper.ts`
-- `src/components/about/AboutHero/{AboutHero.tsx,PolaroidStack.tsx,AboutHero.spec.tsx,index.ts}`
-- `src/components/about/AboutStory/{AboutStory.tsx,AboutStory.spec.tsx,index.ts}`
-- `src/components/about/AboutValueProps/{AboutValueProps.tsx,AboutValueProps.spec.tsx,index.ts}`
-- `src/components/about/AboutTeamGrid/{AboutTeamGrid.tsx,StaffCard.tsx,AboutTeamGrid.spec.tsx,StaffCard.spec.tsx,index.ts}`
-- `src/components/about/AboutCta/{AboutCta.tsx,AboutCta.spec.tsx,index.ts}`
-- `src/components/about/index.ts`
-- `src/components/Admin/RoleForm/{RoleForm.tsx,RoleForm.form-utils.ts,RoleForm.spec.tsx,index.ts}`
-- `src/components/Admin/StaffForm/{StaffForm.tsx,StaffForm.form-utils.ts,StaffForm.spec.tsx,StaffImagePicker.tsx,index.ts}`
-- `src/pages/admin/roles/{index.tsx,new.tsx,[id].tsx}`
-- `src/pages/admin/staff/{index.tsx,new.tsx,[id].tsx}`
-- `src/pages/api/admin/roles/{index.ts,[id].ts}`
-- `src/pages/api/admin/staff/{index.ts,[id].ts}`
-
-**Modify:**
-
-- `prisma/schema.prisma` — add `OrgRole`, `StaffMember`, reverse relation on `CollectionImage`
-- `src/domain/index.ts` — re-export new types
-- `src/data/queries.ts` — add `getStaffForPublic`
-- `src/routes/registry.ts` — add `routes.admin.roles.*` and `routes.admin.staff.*`
-- `src/routes/api.ts` — add `api.admin.roles.*` and `api.admin.staff.*`
-- `src/pages/about-us.tsx` — full rewrite
-- `src/components/Admin/AdminLayout/AdminLayout.tsx` — add nav entries
-- `package.json` — add `db:seed-about-translations` + `db:seed-staff` scripts
-- `src/messages/{vi,en}.json` — add `admin.roles.*` and `admin.staff.*` UI strings
+**Spec:** `docs/superpowers/specs/2026-05-15-about-us-redesign-design.md` (rev. 2).
 
 ---
 
-## Conventions To Follow
+## Conventions (apply everywhere)
 
-- **No `interface` keyword** — use `type Foo = { ... }` everywhere.
+- **No `interface` keyword** — use `type`.
 - **One component per file.** Hooks/utilities/types in sibling files in the same folder.
-- **Component declaration:** `export function Name(props: Props) { ... }`. No `React.FC`, no return-type annotations.
-- **Co-locate forms:** every page/component with a form has a sibling `*.form-utils.ts` exporting Yup schema + types + defaults + submit handler.
-- **No raw JSX strings.** All user-visible strings flow through `useTranslations()`; static keys live in `src/messages/{vi,en}.json` or the `Translation` table (namespace `about.*` for public page text, `admin.roles.*`/`admin.staff.*` for admin UI strings).
+- **Components:** `export function Name(props: Props) { ... }` — no `React.FC`, no return-type annotation.
+- **Forms:** co-located `*.form-utils.ts` exporting Yup schema + types + defaults + submit handler.
+- **No raw JSX strings.** All user-visible strings via `useTranslations()`, stored either in `src/messages/{vi,en}.json` (admin UI) or in the `Translation` table under namespace `about.*` (public page).
 - **No inline styles**, Tailwind utilities only.
 - **`cursor-pointer`** on every clickable element.
-- **No styling assertions in tests** (no `toHaveClass`, `toHaveStyle`).
-- **Tests use Jest + RTL** with `render`, `screen`, `userEvent`.
-- **Commit format:** Conventional Commits with `Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>` trailer.
-- **All admin API routes wrap in `requireAdmin(req, res)`** before processing.
-- **Domain mappers** strip `createdAt/updatedAt` and convert `Date` to plain types so results serialize through `getStaticProps`.
+- **No styling assertions** in tests.
+- **Admin API routes wrapped in `requireAdmin(req, res)`.**
+- **Domain mappers** strip `createdAt/updatedAt/passwordHash` and convert `Date` to ISO strings.
+- **Commit format:** Conventional Commits + `Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>` trailer.
 
 ---
 
-## Task 1: Prisma schema — add `OrgRole` and `StaffMember`
+## Task 1: Prisma schema — `OrgRole` + `User` refactor + migration
 
 **Files:**
 
 - Modify: `prisma/schema.prisma`
+- Create: `prisma/migrations/<timestamp>_team_user_refactor/migration.sql`
 
-- [ ] **Step 1: Edit `prisma/schema.prisma`** — add the two new models and the reverse relation on `CollectionImage`. Append to the end of the file:
+- [ ] **Step 1: Edit `prisma/schema.prisma`** — append `OrgRole` model, rewrite `User`, add reverse relation on `CollectionImage`, drop `Role` enum.
+
+Delete the entire `enum Role { ADMIN }` block.
+
+Replace the existing `User` model with:
+
+```prisma
+model User {
+  id           String           @id @default(uuid())
+  email        String?          @unique
+  passwordHash String?
+  name         String
+  bioVi        String           @default("")
+  bioEn        String           @default("")
+  birthDate    DateTime?
+  imageId      String?
+  image        CollectionImage? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  orgRoleId    String
+  orgRole      OrgRole          @relation(fields: [orgRoleId], references: [id], onDelete: Restrict)
+  isCoreTeam   Boolean          @default(false)
+  allowAuth    Boolean          @default(true)
+  teamOrder    Int              @default(0)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([isCoreTeam, teamOrder])
+  @@index([orgRoleId])
+}
+```
+
+Append new model:
 
 ```prisma
 model OrgRole {
-  id        String        @id @default(cuid())
-  key       String        @unique
-  labelVi   String        @default("")
-  labelEn   String        @default("")
-  order     Int           @default(0)
-  createdAt DateTime      @default(now())
-  staff     StaffMember[]
-}
-
-model StaffMember {
-  id        String           @id @default(cuid())
-  name      String
-  bioVi     String           @default("")
-  bioEn     String           @default("")
-  roleId    String
-  role      OrgRole          @relation(fields: [roleId], references: [id], onDelete: Restrict)
-  imageId   String?
-  image     CollectionImage? @relation(fields: [imageId], references: [id], onDelete: SetNull)
-  order     Int              @default(0)
-  active    Boolean          @default(true)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-
-  @@index([roleId])
-  @@index([active, order])
+  id        String   @id @default(cuid())
+  key       String   @unique
+  labelVi   String   @default("")
+  labelEn   String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  users     User[]
 }
 ```
 
-- [ ] **Step 2: Add reverse relation on `CollectionImage`** — find the existing `CollectionImage` model in `prisma/schema.prisma` and add a `staff StaffMember[]` line before the closing brace:
+In the existing `CollectionImage` model, add the back-relation `users User[]` before the `@@index` line.
 
-```prisma
-model CollectionImage {
-  id           String          @id @default(cuid())
-  collectionId String
-  collection   ImageCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  url          String?
-  altEn        String          @default("")
-  altVi        String          @default("")
-  order        Int             @default(0)
-  createdAt    DateTime        @default(now())
-  staff        StaffMember[]
+- [ ] **Step 2: Generate the migration as a stub** (no data yet)
 
-  @@index([collectionId, order])
-}
+Run: `pnpm prisma migrate dev --create-only --name team_user_refactor`
+Expected: a `migration.sql` is created in `prisma/migrations/<timestamp>_team_user_refactor/`.
+
+- [ ] **Step 3: Overwrite the generated `migration.sql`** with the explicit ordered version below:
+
+```sql
+-- 1. Create OrgRole
+CREATE TABLE "OrgRole" (
+    "id" TEXT NOT NULL,
+    "key" TEXT NOT NULL,
+    "labelVi" TEXT NOT NULL DEFAULT '',
+    "labelEn" TEXT NOT NULL DEFAULT '',
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "OrgRole_pkey" PRIMARY KEY ("id")
+);
+CREATE UNIQUE INDEX "OrgRole_key_key" ON "OrgRole"("key");
+
+-- 2. Seed admin role so existing admin users can be backfilled.
+INSERT INTO "OrgRole" ("id", "key", "labelVi", "labelEn", "order")
+VALUES ('seed_admin_role_id', 'admin', 'Quản trị', 'Admin', 0);
+
+-- 3. Add User.orgRoleId nullable
+ALTER TABLE "User" ADD COLUMN "orgRoleId" TEXT;
+
+-- 4. Backfill existing admin users
+UPDATE "User" SET "orgRoleId" = 'seed_admin_role_id' WHERE "role" = 'ADMIN';
+
+-- 5. Enforce NOT NULL + FK
+ALTER TABLE "User" ALTER COLUMN "orgRoleId" SET NOT NULL;
+ALTER TABLE "User" ADD CONSTRAINT "User_orgRoleId_fkey"
+  FOREIGN KEY ("orgRoleId") REFERENCES "OrgRole"("id")
+  ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- 6. Drop old Role enum column and type
+ALTER TABLE "User" DROP COLUMN "role";
+DROP TYPE "Role";
+
+-- 7. Relax auth-field nullability
+ALTER TABLE "User" ALTER COLUMN "email" DROP NOT NULL;
+ALTER TABLE "User" ALTER COLUMN "passwordHash" DROP NOT NULL;
+
+-- 8. New team / profile columns
+ALTER TABLE "User" ADD COLUMN "bioVi" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "User" ADD COLUMN "bioEn" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "User" ADD COLUMN "birthDate" TIMESTAMP(3);
+ALTER TABLE "User" ADD COLUMN "imageId" TEXT;
+ALTER TABLE "User" ADD COLUMN "isCoreTeam" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "User" ADD COLUMN "allowAuth" BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE "User" ADD COLUMN "teamOrder" INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE "User" ADD CONSTRAINT "User_imageId_fkey"
+  FOREIGN KEY ("imageId") REFERENCES "CollectionImage"("id")
+  ON DELETE SET NULL ON UPDATE CASCADE;
+
+CREATE INDEX "User_isCoreTeam_teamOrder_idx" ON "User"("isCoreTeam","teamOrder");
+CREATE INDEX "User_orgRoleId_idx" ON "User"("orgRoleId");
 ```
 
-- [ ] **Step 3: Generate the migration**
+- [ ] **Step 4: Apply the migration**
 
-Run: `pnpm prisma migrate dev --name add_staff_and_org_role`
-Expected: migration applied successfully; new Prisma Client generated.
+Run: `pnpm prisma migrate dev`
+Expected: applies cleanly; new Prisma Client generated.
 
-- [ ] **Step 4: Verify the migration SQL** — open the newly created file under `prisma/migrations/<timestamp>_add_staff_and_org_role/migration.sql`. Confirm it creates `OrgRole` and `StaffMember` tables, adds the FK on `CollectionImage` relation, and creates the indexes.
+- [ ] **Step 5: Spot-check in Prisma Studio**
 
-- [ ] **Step 5: Commit**
+Run: `pnpm prisma studio`
+Confirm `User` row has `orgRoleId='seed_admin_role_id'`, `allowAuth=true`, `isCoreTeam=false`, blank bios.
+
+- [ ] **Step 6: Commit**
 
 ```bash
 git add prisma/schema.prisma prisma/migrations/
 git commit -m "$(cat <<'EOF'
-feat(prisma): add OrgRole and StaffMember models
+feat(prisma): refactor User to use OrgRole, drop Role enum, add team fields
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -144,17 +166,16 @@ EOF
 
 ---
 
-## Task 2: Domain types for `OrgRole` and `StaffMember`
+## Task 2: Domain types — `OrgRole`, `TeamMember`, `UserAdmin` + mappers
 
 **Files:**
 
-- Create: `src/domain/org-role/index.ts`
-- Create: `src/domain/org-role/mapper.ts`
-- Create: `src/domain/staff/index.ts`
-- Create: `src/domain/staff/mapper.ts`
+- Create: `src/domain/org-role/{index.ts,mapper.ts}`
+- Create: `src/domain/team-member/{index.ts,mapper.ts}`
+- Modify: `src/domain/user/{index.ts,mapper.ts}` (create if absent)
 - Modify: `src/domain/index.ts`
 
-- [ ] **Step 1: Create `src/domain/org-role/index.ts`**
+- [ ] **Step 1: `src/domain/org-role/index.ts`**
 
 ```ts
 import type {OrgRole as PrismaOrgRole} from '@prisma/client';
@@ -162,7 +183,7 @@ import type {OrgRole as PrismaOrgRole} from '@prisma/client';
 export type OrgRole = Omit<PrismaOrgRole, 'createdAt'>;
 ```
 
-- [ ] **Step 2: Create `src/domain/org-role/mapper.ts`**
+- [ ] **Step 2: `src/domain/org-role/mapper.ts`**
 
 ```ts
 import type {OrgRole as PrismaOrgRole} from '@prisma/client';
@@ -179,90 +200,152 @@ export function toOrgRole(row: PrismaOrgRole): OrgRole {
 }
 ```
 
-- [ ] **Step 3: Create `src/domain/staff/index.ts`**
+- [ ] **Step 3: `src/domain/team-member/index.ts`**
 
 ```ts
 import type {OrgRole} from '../org-role';
 
-export type StaffImage = {
+export type TeamPhoto = {
   url: string | null;
   altVi: string;
   altEn: string;
 };
 
-export type StaffPublic = {
+export type TeamMember = {
   id: string;
   name: string;
   bioVi: string;
   bioEn: string;
-  order: number;
+  age: number | null;
+  teamOrder: number;
   role: OrgRole;
-  image: StaffImage | null;
-};
-
-export type StaffAdmin = StaffPublic & {
-  active: boolean;
+  photo: TeamPhoto | null;
 };
 ```
 
-- [ ] **Step 4: Create `src/domain/staff/mapper.ts`**
+- [ ] **Step 4: `src/domain/team-member/mapper.ts`**
 
 ```ts
 import type {
-  StaffMember as PrismaStaffMember,
+  User as PrismaUser,
   OrgRole as PrismaOrgRole,
   CollectionImage as PrismaCollectionImage,
 } from '@prisma/client';
 import {toOrgRole} from '../org-role/mapper';
-import type {StaffAdmin, StaffPublic} from './index';
+import type {TeamMember} from './index';
 
-type PrismaStaffWithRelations = PrismaStaffMember & {
-  role: PrismaOrgRole;
+type PrismaUserWithRelations = PrismaUser & {
+  orgRole: PrismaOrgRole;
   image: PrismaCollectionImage | null;
 };
 
-export function toStaffPublic(row: PrismaStaffWithRelations): StaffPublic {
+function ageFromBirthDate(d: Date | null): number | null {
+  if (!d) return null;
+  const ms = Date.now() - d.getTime();
+  const years = ms / (365.25 * 24 * 3600 * 1000);
+  return Math.max(0, Math.floor(years));
+}
+
+export function toTeamMember(row: PrismaUserWithRelations): TeamMember {
   return {
     id: row.id,
     name: row.name,
     bioVi: row.bioVi,
     bioEn: row.bioEn,
-    order: row.order,
-    role: toOrgRole(row.role),
-    image: row.image
+    age: ageFromBirthDate(row.birthDate),
+    teamOrder: row.teamOrder,
+    role: toOrgRole(row.orgRole),
+    photo: row.image
       ? {url: row.image.url, altVi: row.image.altVi, altEn: row.image.altEn}
       : null,
   };
 }
+```
 
-export function toStaffAdmin(row: PrismaStaffWithRelations): StaffAdmin {
+- [ ] **Step 5: Update / create `src/domain/user/index.ts`**
+
+```ts
+import type {OrgRole} from '../org-role';
+import type {TeamPhoto} from '../team-member';
+
+export type UserAdmin = {
+  id: string;
+  name: string;
+  email: string | null;
+  bioVi: string;
+  bioEn: string;
+  birthDate: string | null;
+  imageId: string | null;
+  isCoreTeam: boolean;
+  allowAuth: boolean;
+  teamOrder: number;
+  orgRole: OrgRole;
+  photo: TeamPhoto | null;
+};
+```
+
+- [ ] **Step 6: Create / rewrite `src/domain/user/mapper.ts`**
+
+```ts
+import type {
+  User as PrismaUser,
+  OrgRole as PrismaOrgRole,
+  CollectionImage as PrismaCollectionImage,
+} from '@prisma/client';
+import {toOrgRole} from '../org-role/mapper';
+import type {UserAdmin} from './index';
+
+type PrismaUserWithRelations = PrismaUser & {
+  orgRole: PrismaOrgRole;
+  image: PrismaCollectionImage | null;
+};
+
+export function toUserAdmin(row: PrismaUserWithRelations): UserAdmin {
   return {
-    ...toStaffPublic(row),
-    active: row.active,
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    bioVi: row.bioVi,
+    bioEn: row.bioEn,
+    birthDate: row.birthDate ? row.birthDate.toISOString() : null,
+    imageId: row.imageId,
+    isCoreTeam: row.isCoreTeam,
+    allowAuth: row.allowAuth,
+    teamOrder: row.teamOrder,
+    orgRole: toOrgRole(row.orgRole),
+    photo: row.image
+      ? {url: row.image.url, altVi: row.image.altVi, altEn: row.image.altEn}
+      : null,
   };
 }
 ```
 
-- [ ] **Step 5: Re-export from `src/domain/index.ts`** — add these two lines at the end:
+- [ ] **Step 7: Update `src/domain/index.ts`** — drop any `Role` enum re-export, replace old `User` export, add new exports:
 
 ```ts
 export type {OrgRole} from './org-role';
-export type {StaffPublic, StaffAdmin, StaffImage} from './staff';
+export type {TeamMember, TeamPhoto} from './team-member';
+export type {UserAdmin} from './user';
 ```
 
-- [ ] **Step 6: Type-check**
+Remove any line exporting `Role` (the enum). If a `User` type was exported from there, replace with `UserAdmin`.
 
-Run: `pnpm build`
-Expected: build succeeds (or fails on unrelated parts — confirm types/domain compiles cleanly).
+- [ ] **Step 8: Find existing callers of `user.role` and adjust**
 
-If build is heavy, an alternative quick check: `pnpm exec tsc --noEmit`.
+Run: `grep -rn "user\.role\b\|from '@/domain'.*\bUser\b" src/`
+Replace `user.role` with `user.orgRole.key` (or `labelEn`/`labelVi` if used for display). For now keep changes minimal — substantive UI updates happen in later tasks.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 9: Type-check**
+
+Run: `pnpm exec tsc --noEmit`
+Expected: clean (or only minor unrelated noise).
+
+- [ ] **Step 10: Commit**
 
 ```bash
-git add src/domain/
+git add src/domain/ src/
 git commit -m "$(cat <<'EOF'
-feat(domain): add OrgRole and Staff types + mappers
+feat(domain): OrgRole + TeamMember + UserAdmin types and mappers
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -271,54 +354,167 @@ EOF
 
 ---
 
-## Task 3: Seed the `about.*` translation namespace
+## Task 3: Update `seed-admin.ts` + create `seed-team.ts`
+
+**Files:**
+
+- Modify: `prisma/seed-admin.ts`
+- Create: `prisma/seed-team.ts`
+- Modify: `package.json`
+
+- [ ] **Step 1: Patch `prisma/seed-admin.ts`** — before the existing user-upsert call, upsert the `admin` `OrgRole`:
+
+```ts
+const adminRole = await prisma.orgRole.upsert({
+  where: {key: 'admin'},
+  update: {labelVi: 'Quản trị', labelEn: 'Admin', order: 0},
+  create: {key: 'admin', labelVi: 'Quản trị', labelEn: 'Admin', order: 0},
+});
+```
+
+In the user upsert data block, replace `role: 'ADMIN'` (or any reference) with:
+
+```ts
+orgRoleId: adminRole.id,
+allowAuth: true,
+isCoreTeam: false,
+```
+
+- [ ] **Step 2: Create `prisma/seed-team.ts`** with the same env-loading boilerplate as the existing seeds, plus this body (after `const prisma = new PrismaClient({adapter});`):
+
+```ts
+type RoleSeed = {key: string; labelVi: string; labelEn: string; order: number};
+
+const ROLES: RoleSeed[] = [
+  {key: 'admin', labelVi: 'Quản trị', labelEn: 'Admin', order: 0},
+  {key: 'founder', labelVi: 'Người sáng lập', labelEn: 'Founder', order: 1},
+  {
+    key: 'tour_guide',
+    labelVi: 'Hướng dẫn viên',
+    labelEn: 'Tour Guide',
+    order: 2,
+  },
+  {
+    key: 'tour_guide_mechanic',
+    labelVi: 'Hướng dẫn viên & Kỹ sư',
+    labelEn: 'Tour Guide & Mechanic',
+    order: 3,
+  },
+  {
+    key: 'driver_support',
+    labelVi: 'Tài xế hỗ trợ',
+    labelEn: 'Driver Support',
+    order: 4,
+  },
+];
+
+type StaffSeed = {name: string; roleKey: string; teamOrder: number};
+
+const STAFF: StaffSeed[] = [
+  {name: 'Thomas', roleKey: 'founder', teamOrder: 0},
+  {name: 'Tino', roleKey: 'tour_guide', teamOrder: 1},
+  {name: 'Chan', roleKey: 'tour_guide_mechanic', teamOrder: 2},
+  {name: 'Hai', roleKey: 'tour_guide', teamOrder: 3},
+  {name: 'Phi', roleKey: 'driver_support', teamOrder: 4},
+];
+
+async function main() {
+  await prisma.imageCollection.upsert({
+    where: {key: 'team'},
+    update: {label: 'Team Photos'},
+    create: {key: 'team', label: 'Team Photos'},
+  });
+
+  const roleByKey = new Map<string, {id: string}>();
+  for (const role of ROLES) {
+    const row = await prisma.orgRole.upsert({
+      where: {key: role.key},
+      update: {labelVi: role.labelVi, labelEn: role.labelEn, order: role.order},
+      create: role,
+    });
+    roleByKey.set(role.key, {id: row.id});
+  }
+
+  for (const s of STAFF) {
+    const role = roleByKey.get(s.roleKey);
+    if (!role) throw new Error(`Missing role ${s.roleKey}`);
+    const existing = await prisma.user.findFirst({
+      where: {name: s.name, allowAuth: false},
+    });
+    if (existing) {
+      await prisma.user.update({
+        where: {id: existing.id},
+        data: {orgRoleId: role.id, teamOrder: s.teamOrder, isCoreTeam: true},
+      });
+    } else {
+      await prisma.user.create({
+        data: {
+          name: s.name,
+          email: null,
+          passwordHash: null,
+          orgRoleId: role.id,
+          teamOrder: s.teamOrder,
+          isCoreTeam: true,
+          allowAuth: false,
+        },
+      });
+    }
+  }
+
+  console.log(`Seeded ${ROLES.length} roles and ${STAFF.length} staff users.`);
+}
+
+main()
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  })
+  .finally(() => prisma.$disconnect());
+```
+
+(Use the same env-loading prologue as `prisma/seed-image-collection-translations.ts` — copy it verbatim.)
+
+- [ ] **Step 3: Add to `package.json` scripts**
+
+```json
+"db:seed-team": "npx tsx prisma/seed-team.ts",
+```
+
+- [ ] **Step 4: Run seeds**
+
+Run: `pnpm db:seed-admin`
+Expected: admin user has `orgRoleId` set, `allowAuth=true`, `isCoreTeam=false`.
+
+Run: `pnpm db:seed-team`
+Expected: `Seeded 5 roles and 5 staff users.`
+
+Run: `pnpm db:seed-team` again
+Expected: same output, no duplicates.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add prisma/seed-admin.ts prisma/seed-team.ts package.json
+git commit -m "$(cat <<'EOF'
+feat(seed): seed OrgRole + staff Users; update admin seed for new schema
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+EOF
+)"
+```
+
+---
+
+## Task 4: Seed `about.*` translation namespace
 
 **Files:**
 
 - Create: `prisma/seed-about-translations.ts`
 - Modify: `package.json`
 
-- [ ] **Step 1: Create `prisma/seed-about-translations.ts`** — mirror the structure of `prisma/seed-admin-translations.ts`:
+- [ ] **Step 1: Create `prisma/seed-about-translations.ts`** — same env-loading prologue, then prisma init, then the entries:
 
 ```ts
-import {PrismaClient} from '@prisma/client';
-import {PrismaPg} from '@prisma/adapter-pg';
-import * as fs from 'fs';
-import * as path from 'path';
-
-if (!process.env.DATABASE_URL) {
-  const envPath = path.join(__dirname, '..', '.env');
-  if (fs.existsSync(envPath)) {
-    const envContent = fs.readFileSync(envPath, 'utf-8');
-    for (const line of envContent.split('\n')) {
-      const trimmed = line.trim();
-      if (trimmed && !trimmed.startsWith('#')) {
-        const eqIndex = trimmed.indexOf('=');
-        if (eqIndex > 0) {
-          const key = trimmed.substring(0, eqIndex);
-          let value = trimmed.substring(eqIndex + 1);
-          if (
-            (value.startsWith('"') && value.endsWith('"')) ||
-            (value.startsWith("'") && value.endsWith("'"))
-          ) {
-            value = value.slice(1, -1);
-          }
-          process.env[key] = value;
-        }
-      }
-    }
-  }
-}
-
-if (!process.env.DATABASE_URL) {
-  console.error('ERROR: DATABASE_URL environment variable is required.');
-  process.exit(1);
-}
-
-const dbUrl = process.env.DATABASE_URL.split('?')[0];
-const adapter = new PrismaPg(dbUrl);
-const prisma = new PrismaClient({adapter});
-
 type Entry = {namespace: string; key: string; valueVi: string; valueEn: string};
 
 const ENTRIES: Entry[] = [
@@ -430,6 +626,7 @@ const ENTRIES: Entry[] = [
     valueVi: 'Những người sẽ đồng hành cùng bạn trên từng cây số.',
     valueEn: 'The people who will ride beside you, every kilometer of the way.',
   },
+  {namespace: 'about', key: 'team.ageSuffix', valueVi: 'tuổi', valueEn: 'yo'},
   {
     namespace: 'about',
     key: 'cta.headline',
@@ -467,9 +664,7 @@ const ENTRIES: Entry[] = [
 async function main() {
   for (const entry of ENTRIES) {
     await prisma.translation.upsert({
-      where: {
-        namespace_key: {namespace: entry.namespace, key: entry.key},
-      },
+      where: {namespace_key: {namespace: entry.namespace, key: entry.key}},
       update: {valueVi: entry.valueVi, valueEn: entry.valueEn},
       create: entry,
     });
@@ -485,24 +680,16 @@ main()
   .finally(() => prisma.$disconnect());
 ```
 
-- [ ] **Step 2: Add the npm script** — edit `package.json`, append to the `scripts` block after `db:seed-admin-translations`:
+- [ ] **Step 2: Add npm script**
 
 ```json
 "db:seed-about-translations": "npx tsx prisma/seed-about-translations.ts",
 ```
 
-- [ ] **Step 3: Run the seed**
-
-Run: `pnpm db:seed-about-translations`
-Expected output: `Seeded 22 about.* translations.`
-
-- [ ] **Step 4: Verify in DB** — run a quick check via the existing `/admin/translations` page (start dev with `pnpm dev`, log in, filter namespace `about`), or via Prisma:
-
-Run: `pnpm prisma studio` (optional, manual)
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Run + commit**
 
 ```bash
+pnpm db:seed-about-translations
 git add prisma/seed-about-translations.ts package.json
 git commit -m "$(cat <<'EOF'
 feat(seed): seed about.* translation namespace
@@ -514,215 +701,44 @@ EOF
 
 ---
 
-## Task 4: Seed `OrgRole` and `StaffMember` baselines
-
-**Files:**
-
-- Create: `prisma/seed-staff.ts`
-- Modify: `package.json`
-
-- [ ] **Step 1: Create `prisma/seed-staff.ts`**
-
-```ts
-import {PrismaClient} from '@prisma/client';
-import {PrismaPg} from '@prisma/adapter-pg';
-import * as fs from 'fs';
-import * as path from 'path';
-
-if (!process.env.DATABASE_URL) {
-  const envPath = path.join(__dirname, '..', '.env');
-  if (fs.existsSync(envPath)) {
-    const envContent = fs.readFileSync(envPath, 'utf-8');
-    for (const line of envContent.split('\n')) {
-      const trimmed = line.trim();
-      if (trimmed && !trimmed.startsWith('#')) {
-        const eqIndex = trimmed.indexOf('=');
-        if (eqIndex > 0) {
-          const key = trimmed.substring(0, eqIndex);
-          let value = trimmed.substring(eqIndex + 1);
-          if (
-            (value.startsWith('"') && value.endsWith('"')) ||
-            (value.startsWith("'") && value.endsWith("'"))
-          ) {
-            value = value.slice(1, -1);
-          }
-          process.env[key] = value;
-        }
-      }
-    }
-  }
-}
-
-if (!process.env.DATABASE_URL) {
-  console.error('ERROR: DATABASE_URL environment variable is required.');
-  process.exit(1);
-}
-
-const dbUrl = process.env.DATABASE_URL.split('?')[0];
-const adapter = new PrismaPg(dbUrl);
-const prisma = new PrismaClient({adapter});
-
-type RoleSeed = {key: string; labelVi: string; labelEn: string; order: number};
-type StaffSeed = {name: string; roleKey: string; order: number};
-
-const ROLES: RoleSeed[] = [
-  {key: 'founder', labelVi: 'Người sáng lập', labelEn: 'Founder', order: 0},
-  {
-    key: 'tour_guide',
-    labelVi: 'Hướng dẫn viên',
-    labelEn: 'Tour Guide',
-    order: 1,
-  },
-  {
-    key: 'tour_guide_mechanic',
-    labelVi: 'Hướng dẫn viên & Kỹ sư',
-    labelEn: 'Tour Guide & Mechanic',
-    order: 2,
-  },
-  {
-    key: 'driver_support',
-    labelVi: 'Tài xế hỗ trợ',
-    labelEn: 'Driver Support',
-    order: 3,
-  },
-];
-
-const STAFF: StaffSeed[] = [
-  {name: 'Thomas', roleKey: 'founder', order: 0},
-  {name: 'Tino', roleKey: 'tour_guide', order: 1},
-  {name: 'Chan', roleKey: 'tour_guide_mechanic', order: 2},
-  {name: 'Hai', roleKey: 'tour_guide', order: 3},
-  {name: 'Phi', roleKey: 'driver_support', order: 4},
-];
-
-async function main() {
-  // Ensure the staff image collection exists.
-  await prisma.imageCollection.upsert({
-    where: {key: 'staff'},
-    update: {label: 'Staff Photos'},
-    create: {key: 'staff', label: 'Staff Photos'},
-  });
-
-  // Roles
-  const roleByKey = new Map<string, {id: string}>();
-  for (const role of ROLES) {
-    const row = await prisma.orgRole.upsert({
-      where: {key: role.key},
-      update: {
-        labelVi: role.labelVi,
-        labelEn: role.labelEn,
-        order: role.order,
-      },
-      create: role,
-    });
-    roleByKey.set(role.key, {id: row.id});
-  }
-
-  // Staff — keyed by name; idempotent via findFirst-then-upsert pattern since
-  // StaffMember has no unique field other than id.
-  for (const s of STAFF) {
-    const role = roleByKey.get(s.roleKey);
-    if (!role) throw new Error(`Missing role ${s.roleKey}`);
-    const existing = await prisma.staffMember.findFirst({
-      where: {name: s.name},
-    });
-    if (existing) {
-      await prisma.staffMember.update({
-        where: {id: existing.id},
-        data: {roleId: role.id, order: s.order},
-      });
-    } else {
-      await prisma.staffMember.create({
-        data: {name: s.name, roleId: role.id, order: s.order, active: true},
-      });
-    }
-  }
-
-  console.log(
-    `Seeded ${ROLES.length} org roles and ${STAFF.length} staff members.`,
-  );
-}
-
-main()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
-```
-
-- [ ] **Step 2: Add the npm script** — edit `package.json`, append after `db:seed-about-translations`:
-
-```json
-"db:seed-staff": "npx tsx prisma/seed-staff.ts",
-```
-
-- [ ] **Step 3: Run the seed**
-
-Run: `pnpm db:seed-staff`
-Expected output: `Seeded 4 org roles and 5 staff members.`
-
-- [ ] **Step 4: Run again to confirm idempotency**
-
-Run: `pnpm db:seed-staff`
-Expected: same output, no duplicate rows. Spot-check via Prisma Studio if desired.
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add prisma/seed-staff.ts package.json
-git commit -m "$(cat <<'EOF'
-feat(seed): seed OrgRole + StaffMember baseline data
-
-Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
-EOF
-)"
-```
-
----
-
-## Task 5: `getStaffForPublic` query + mapper integration
+## Task 5: `getTeamForPublic` query
 
 **Files:**
 
 - Modify: `src/data/queries.ts`
 
-- [ ] **Step 1: Add the import** — at the top of `src/data/queries.ts`, alongside existing imports:
+- [ ] **Step 1: Add imports near the top of the file**
 
 ```ts
-import type {StaffPublic} from '@/domain';
-import {toStaffPublic} from '@/domain/staff/mapper';
+import type {TeamMember} from '@/domain';
+import {toTeamMember} from '@/domain/team-member/mapper';
 ```
 
-- [ ] **Step 2: Append the new query** — at the end of `src/data/queries.ts`:
+- [ ] **Step 2: Append the query at the end of the file**
 
 ```ts
-export async function getStaffForPublic(): Promise<StaffPublic[]> {
+export async function getTeamForPublic(): Promise<TeamMember[]> {
   try {
-    const rows = await prisma.staffMember.findMany({
-      where: {active: true},
-      orderBy: {order: 'asc'},
-      include: {role: true, image: true},
+    const rows = await prisma.user.findMany({
+      where: {isCoreTeam: true},
+      orderBy: {teamOrder: 'asc'},
+      include: {orgRole: true, image: true},
     });
-    return rows.map(toStaffPublic);
+    return rows.map(toTeamMember);
   } catch (error) {
-    console.error('getStaffForPublic: DB query failed', error);
+    console.error('getTeamForPublic: DB query failed', error);
     return [];
   }
 }
 ```
 
-- [ ] **Step 3: Type-check**
-
-Run: `pnpm exec tsc --noEmit`
-Expected: no errors related to the new code.
-
-- [ ] **Step 4: Commit**
+- [ ] **Step 3: Type-check + commit**
 
 ```bash
+pnpm exec tsc --noEmit
 git add src/data/queries.ts
 git commit -m "$(cat <<'EOF'
-feat(queries): add getStaffForPublic
+feat(queries): add getTeamForPublic
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -731,138 +747,122 @@ EOF
 
 ---
 
-## Task 6: `StaffCard` component (TDD)
+## Task 6: NextAuth `allowAuth` check + `requireAdmin` update
 
 **Files:**
 
-- Create: `src/components/about/AboutTeamGrid/StaffCard.tsx`
-- Create: `src/components/about/AboutTeamGrid/StaffCard.spec.tsx`
+- Modify: `src/lib/auth.ts` (or the existing NextAuth config location — find via `grep -rn "CredentialsProvider" src/`)
+- Modify: `src/lib/admin-auth.ts`
+- Modify: NextAuth type augmentation file (look for `next-auth.d.ts` via `grep -rn "next-auth" src/types src/`)
 
-- [ ] **Step 1: Write the failing test** — `src/components/about/AboutTeamGrid/StaffCard.spec.tsx`:
+- [ ] **Step 1: Locate the NextAuth config**
 
-```tsx
-import {render, screen} from '@testing-library/react';
-import {NextIntlClientProvider} from 'next-intl';
-import {StaffCard} from './StaffCard';
-import type {StaffPublic} from '@/domain';
+Run: `grep -rn "CredentialsProvider\|authorize" src/lib src/pages/api/auth`
 
-const staff: StaffPublic = {
-  id: '1',
-  name: 'Thomas',
-  bioVi: 'Người sáng lập từ năm 2009.',
-  bioEn: 'Founder since 2009.',
-  order: 0,
-  role: {
-    id: 'r1',
-    key: 'founder',
-    labelVi: 'Người sáng lập',
-    labelEn: 'Founder',
-    order: 0,
-  },
-  image: {url: '/uploads/thomas.jpg', altVi: 'Thomas', altEn: 'Thomas'},
-};
+- [ ] **Step 2: Update `authorize` callback** — inside the function, after the bcrypt compare, before the return:
 
-function renderWithLocale(locale: 'vi' | 'en', s: StaffPublic = staff) {
-  return render(
-    <NextIntlClientProvider locale={locale} messages={{}}>
-      <StaffCard staff={s} locale={locale} />
-    </NextIntlClientProvider>,
-  );
-}
-
-describe('StaffCard', () => {
-  it('renders name, role, and bio in English locale', () => {
-    renderWithLocale('en');
-    expect(screen.getByText('Thomas')).toBeInTheDocument();
-    expect(screen.getByText('Founder')).toBeInTheDocument();
-    expect(screen.getByText('Founder since 2009.')).toBeInTheDocument();
-  });
-
-  it('renders role and bio in Vietnamese locale', () => {
-    renderWithLocale('vi');
-    expect(screen.getByText('Người sáng lập')).toBeInTheDocument();
-    expect(screen.getByText('Người sáng lập từ năm 2009.')).toBeInTheDocument();
-  });
-
-  it('renders an img with the photo url and alt', () => {
-    renderWithLocale('en');
-    const img = screen.getByRole('img', {name: 'Thomas'}) as HTMLImageElement;
-    expect(img.src).toContain('/uploads/thomas.jpg');
-  });
-
-  it('renders a placeholder when image is null', () => {
-    renderWithLocale('en', {...staff, image: null});
-    expect(screen.queryByRole('img')).not.toBeInTheDocument();
-    expect(screen.getByTestId('staff-card-placeholder')).toBeInTheDocument();
-  });
-});
+```ts
+if (!user.allowAuth) return null;
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+Replace the returned user with `id`, `email`, `name`, and `orgRoleKey`:
 
-Run: `pnpm test src/components/about/AboutTeamGrid/StaffCard.spec.tsx`
-Expected: FAIL — `Cannot find module './StaffCard'`.
-
-- [ ] **Step 3: Implement `StaffCard.tsx`**
-
-```tsx
-import type {StaffPublic} from '@/domain';
-
-type StaffCardProps = {
-  staff: StaffPublic;
-  locale: 'vi' | 'en';
+```ts
+return {
+  id: user.id,
+  email: user.email,
+  name: user.name,
+  orgRoleKey: user.orgRole?.key ?? null,
 };
+```
 
-export function StaffCard({staff, locale}: StaffCardProps) {
-  const roleLabel = locale === 'vi' ? staff.role.labelVi : staff.role.labelEn;
-  const bio = locale === 'vi' ? staff.bioVi : staff.bioEn;
-  const alt = locale === 'vi' ? staff.image?.altVi : staff.image?.altEn;
+Make sure the `prisma.user.findUnique` call inside `authorize` has `include: {orgRole: true}`. Remove any reference to the old `user.role`.
 
-  return (
-    <article className="group relative overflow-hidden bg-secondary">
-      <div className="aspect-[3/4] w-full bg-surface-alt">
-        {staff.image?.url ? (
-          <img
-            src={staff.image.url}
-            alt={alt ?? staff.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div
-            data-testid="staff-card-placeholder"
-            className="flex h-full w-full items-center justify-center text-white/40"
-          >
-            {staff.name}
-          </div>
-        )}
-      </div>
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
-        <p className="type-label-sm uppercase tracking-widest text-primary">
-          {roleLabel}
-        </p>
-        <h3 className="type-headline-sm font-extrabold uppercase tracking-tight">
-          {staff.name}
-        </h3>
-        <p className="mt-2 max-h-0 overflow-hidden text-sm text-white/80 transition-[max-height] duration-500 group-hover:max-h-40">
-          {bio}
-        </p>
-      </div>
-    </article>
-  );
+- [ ] **Step 3: Update `jwt` + `session` callbacks**
+
+```ts
+async jwt({token, user}) {
+  if (user) token.orgRoleKey = (user as {orgRoleKey?: string}).orgRoleKey ?? null;
+  return token;
+},
+async session({session, token}) {
+  session.user = {
+    ...session.user,
+    id: token.sub as string,
+    orgRoleKey: (token.orgRoleKey as string | null) ?? null,
+  };
+  return session;
+},
+```
+
+- [ ] **Step 4: Augment the type-declaration file** — add `orgRoleKey: string | null` on both `Session.user` and `JWT`:
+
+```ts
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      orgRoleKey: string | null;
+    };
+  }
+}
+declare module 'next-auth/jwt' {
+  interface JWT {
+    orgRoleKey?: string | null;
+  }
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+(Adjust the file path / declaration to match the existing augmentation style. CLAUDE.md says no `interface` — this is the one allowed exception because `next-auth` uses module-augmentation interfaces. Match the style of the existing declaration file.)
 
-Run: `pnpm test src/components/about/AboutTeamGrid/StaffCard.spec.tsx`
-Expected: 4 passing tests.
+- [ ] **Step 5: Update `src/lib/admin-auth.ts`** — replace `requireAdmin` with the version below (preserve any extra logic from the existing impl):
 
-- [ ] **Step 5: Commit**
+```ts
+import {getServerSession} from 'next-auth/next';
+import {authOptions} from './auth';
+import {prisma} from './prisma';
+import type {NextApiRequest, NextApiResponse} from 'next';
+
+export async function requireAdmin(
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<boolean> {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session?.user?.id) {
+    res.status(401).json({error: 'Unauthenticated'});
+    return false;
+  }
+  if (session.user.orgRoleKey !== 'admin') {
+    res.status(403).json({error: 'Forbidden'});
+    return false;
+  }
+  const user = await prisma.user.findUnique({
+    where: {id: session.user.id},
+    select: {allowAuth: true},
+  });
+  if (!user?.allowAuth) {
+    res.status(403).json({error: 'Forbidden'});
+    return false;
+  }
+  return true;
+}
+```
+
+- [ ] **Step 6: Run tests + smoke**
+
+Run: `pnpm test`
+If any existing auth tests reference `Role` enum, update them to compare `orgRoleKey === 'admin'`.
+
+Then: `pnpm dev` — sign in as the admin → expect success. Flip `allowAuth=false` via Prisma Studio → sign out → sign in → expect rejection. Flip back.
+
+- [ ] **Step 7: Commit**
 
 ```bash
-git add src/components/about/AboutTeamGrid/
+git add src/lib/auth.ts src/lib/admin-auth.ts src/types
 git commit -m "$(cat <<'EOF'
-feat(about): add StaffCard component
+feat(auth): enforce allowAuth + admin orgRoleKey check
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -871,21 +871,20 @@ EOF
 
 ---
 
-## Task 7: `AboutTeamGrid` component (TDD)
+## Task 7: `TeamMemberCard` (TDD)
 
 **Files:**
 
-- Create: `src/components/about/AboutTeamGrid/AboutTeamGrid.tsx`
-- Create: `src/components/about/AboutTeamGrid/AboutTeamGrid.spec.tsx`
-- Create: `src/components/about/AboutTeamGrid/index.ts`
+- Create: `src/components/about/AboutTeamGrid/TeamMemberCard.tsx`
+- Create: `src/components/about/AboutTeamGrid/TeamMemberCard.spec.tsx`
 
-- [ ] **Step 1: Write the failing test** — `src/components/about/AboutTeamGrid/AboutTeamGrid.spec.tsx`:
+- [ ] **Step 1: Write the failing test**
 
 ```tsx
 import {render, screen} from '@testing-library/react';
 import {NextIntlClientProvider} from 'next-intl';
-import {AboutTeamGrid} from './AboutTeamGrid';
-import type {StaffPublic} from '@/domain';
+import {TeamMemberCard} from './TeamMemberCard';
+import type {TeamMember} from '@/domain';
 
 const role = {
   id: 'r1',
@@ -895,69 +894,223 @@ const role = {
   order: 0,
 };
 
-const staff: StaffPublic[] = [
+const member: TeamMember = {
+  id: '1',
+  name: 'Thomas',
+  bioVi: 'Người sáng lập từ 2009.',
+  bioEn: 'Founder since 2009.',
+  age: 42,
+  teamOrder: 0,
+  role,
+  photo: {url: '/uploads/t.jpg', altVi: 'T', altEn: 'T'},
+};
+
+const messages = {about: {team: {ageSuffix: 'yo'}}};
+
+function renderCard(locale: 'vi' | 'en', m: TeamMember = member) {
+  return render(
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <TeamMemberCard member={m} locale={locale} />
+    </NextIntlClientProvider>,
+  );
+}
+
+describe('TeamMemberCard', () => {
+  it('renders name, role, bio, and age (en)', () => {
+    renderCard('en');
+    expect(screen.getByText('Thomas')).toBeInTheDocument();
+    expect(screen.getByText('Founder')).toBeInTheDocument();
+    expect(screen.getByText('Founder since 2009.')).toBeInTheDocument();
+    expect(screen.getByText('42 yo')).toBeInTheDocument();
+  });
+
+  it('renders role + bio in Vietnamese', () => {
+    renderCard('vi');
+    expect(screen.getByText('Người sáng lập')).toBeInTheDocument();
+    expect(screen.getByText('Người sáng lập từ 2009.')).toBeInTheDocument();
+  });
+
+  it('renders img with photo url + alt', () => {
+    renderCard('en');
+    const img = screen.getByRole('img', {name: 'T'}) as HTMLImageElement;
+    expect(img.src).toContain('/uploads/t.jpg');
+  });
+
+  it('renders placeholder when photo is null', () => {
+    renderCard('en', {...member, photo: null});
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(screen.getByTestId('team-card-placeholder')).toBeInTheDocument();
+  });
+
+  it('omits age when null', () => {
+    renderCard('en', {...member, age: null});
+    expect(screen.queryByText(/\byo\b/)).not.toBeInTheDocument();
+  });
+});
+```
+
+- [ ] **Step 2: Run failing**
+
+Run: `pnpm test src/components/about/AboutTeamGrid/TeamMemberCard.spec.tsx`
+
+- [ ] **Step 3: Implement `TeamMemberCard.tsx`**
+
+```tsx
+import {useTranslations} from 'next-intl';
+import type {TeamMember} from '@/domain';
+
+type TeamMemberCardProps = {
+  member: TeamMember;
+  locale: 'vi' | 'en';
+};
+
+export function TeamMemberCard({member, locale}: TeamMemberCardProps) {
+  const t = useTranslations('about.team');
+  const roleLabel = locale === 'vi' ? member.role.labelVi : member.role.labelEn;
+  const bio = locale === 'vi' ? member.bioVi : member.bioEn;
+  const alt = locale === 'vi' ? member.photo?.altVi : member.photo?.altEn;
+  const ageText = member.age != null ? `${member.age} ${t('ageSuffix')}` : null;
+
+  return (
+    <article className="group relative overflow-hidden bg-secondary">
+      <div className="aspect-[3/4] w-full bg-surface-alt">
+        {member.photo?.url ? (
+          <img
+            src={member.photo.url}
+            alt={alt ?? member.name}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div
+            data-testid="team-card-placeholder"
+            className="flex h-full w-full items-center justify-center text-white/40"
+          >
+            {member.name}
+          </div>
+        )}
+      </div>
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
+        <p className="type-label-sm uppercase tracking-widest text-primary">
+          {roleLabel}
+        </p>
+        <h3 className="type-headline-sm font-extrabold uppercase tracking-tight">
+          {member.name}
+        </h3>
+        {ageText ? (
+          <p className="mt-1 text-xs text-white/60">{ageText}</p>
+        ) : null}
+        <p className="mt-2 max-h-0 overflow-hidden text-sm text-white/80 transition-[max-height] duration-500 group-hover:max-h-40">
+          {bio}
+        </p>
+      </div>
+    </article>
+  );
+}
+```
+
+- [ ] **Step 4: Test + commit**
+
+```bash
+pnpm test src/components/about/AboutTeamGrid/TeamMemberCard.spec.tsx
+git add src/components/about/AboutTeamGrid/
+git commit -m "$(cat <<'EOF'
+feat(about): add TeamMemberCard
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+EOF
+)"
+```
+
+---
+
+## Task 8: `AboutTeamGrid` (TDD)
+
+**Files:**
+
+- Create: `src/components/about/AboutTeamGrid/{AboutTeamGrid.tsx,AboutTeamGrid.spec.tsx,index.ts}`
+
+- [ ] **Step 1: Failing test**
+
+```tsx
+import {render, screen} from '@testing-library/react';
+import {NextIntlClientProvider} from 'next-intl';
+import {AboutTeamGrid} from './AboutTeamGrid';
+import type {TeamMember} from '@/domain';
+
+const role = {
+  id: 'r1',
+  key: 'founder',
+  labelVi: 'Người sáng lập',
+  labelEn: 'Founder',
+  order: 0,
+};
+const team: TeamMember[] = [
   {
     id: '1',
     name: 'Thomas',
     bioVi: 'a',
     bioEn: 'a',
-    order: 0,
+    age: null,
+    teamOrder: 0,
     role,
-    image: null,
+    photo: null,
   },
-  {id: '2', name: 'Hai', bioVi: 'b', bioEn: 'b', order: 1, role, image: null},
+  {
+    id: '2',
+    name: 'Hai',
+    bioVi: 'b',
+    bioEn: 'b',
+    age: null,
+    teamOrder: 1,
+    role,
+    photo: null,
+  },
 ];
-
 const messages = {
-  about: {team: {heading: 'The Crew', subhead: 'Sub'}},
+  about: {team: {heading: 'The Crew', subhead: 'Sub', ageSuffix: 'yo'}},
 };
 
-function renderGrid(items: StaffPublic[]) {
+function renderGrid(items: TeamMember[]) {
   return render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <AboutTeamGrid staff={items} locale="en" />
+      <AboutTeamGrid team={items} locale="en" />
     </NextIntlClientProvider>,
   );
 }
 
 describe('AboutTeamGrid', () => {
-  it('renders the section heading and subhead from translations', () => {
-    renderGrid(staff);
+  it('renders heading + subhead', () => {
+    renderGrid(team);
     expect(screen.getByText('The Crew')).toBeInTheDocument();
     expect(screen.getByText('Sub')).toBeInTheDocument();
   });
 
-  it('renders one card per staff member', () => {
-    renderGrid(staff);
+  it('renders one card per member', () => {
+    renderGrid(team);
     expect(screen.getByText('Thomas')).toBeInTheDocument();
     expect(screen.getByText('Hai')).toBeInTheDocument();
   });
 
-  it('renders an empty-state message when staff list is empty', () => {
+  it('renders empty-state', () => {
     renderGrid([]);
-    expect(screen.getByTestId('staff-empty')).toBeInTheDocument();
+    expect(screen.getByTestId('team-empty')).toBeInTheDocument();
   });
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `pnpm test src/components/about/AboutTeamGrid/AboutTeamGrid.spec.tsx`
-Expected: FAIL — module not found.
-
-- [ ] **Step 3: Implement `AboutTeamGrid.tsx`**
+- [ ] **Step 2: Implement `AboutTeamGrid.tsx`**
 
 ```tsx
 import {useTranslations} from 'next-intl';
-import type {StaffPublic} from '@/domain';
-import {StaffCard} from './StaffCard';
+import type {TeamMember} from '@/domain';
+import {TeamMemberCard} from './TeamMemberCard';
 
 type AboutTeamGridProps = {
-  staff: StaffPublic[];
+  team: TeamMember[];
   locale: 'vi' | 'en';
 };
 
-export function AboutTeamGrid({staff, locale}: AboutTeamGridProps) {
+export function AboutTeamGrid({team, locale}: AboutTeamGridProps) {
   const t = useTranslations('about.team');
 
   return (
@@ -976,15 +1129,15 @@ export function AboutTeamGrid({staff, locale}: AboutTeamGridProps) {
           </h2>
           <p className="mt-3 max-w-xl text-white/70">{t('subhead')}</p>
         </header>
-        {staff.length === 0 ? (
-          <p data-testid="staff-empty" className="text-center text-white/60">
+        {team.length === 0 ? (
+          <p data-testid="team-empty" className="text-center text-white/60">
             —
           </p>
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {staff.map((s) => (
-              <li key={s.id}>
-                <StaffCard staff={s} locale={locale} />
+            {team.map((m) => (
+              <li key={m.id}>
+                <TeamMemberCard member={m} locale={locale} />
               </li>
             ))}
           </ul>
@@ -995,24 +1148,20 @@ export function AboutTeamGrid({staff, locale}: AboutTeamGridProps) {
 }
 ```
 
-- [ ] **Step 4: Create `index.ts`**
+- [ ] **Step 3: `index.ts`**
 
 ```ts
 export {AboutTeamGrid} from './AboutTeamGrid';
-export {StaffCard} from './StaffCard';
+export {TeamMemberCard} from './TeamMemberCard';
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
-
-Run: `pnpm test src/components/about/AboutTeamGrid/`
-Expected: all passing.
-
-- [ ] **Step 6: Commit**
+- [ ] **Step 4: Test + commit**
 
 ```bash
+pnpm test src/components/about/AboutTeamGrid/
 git add src/components/about/AboutTeamGrid/
 git commit -m "$(cat <<'EOF'
-feat(about): add AboutTeamGrid component
+feat(about): add AboutTeamGrid
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1021,74 +1170,52 @@ EOF
 
 ---
 
-## Task 8: `AboutHero` + `PolaroidStack` (TDD)
+## Task 9: `AboutHero` + `PolaroidStack` (TDD)
 
 **Files:**
 
-- Create: `src/components/about/AboutHero/AboutHero.tsx`
-- Create: `src/components/about/AboutHero/PolaroidStack.tsx`
-- Create: `src/components/about/AboutHero/AboutHero.spec.tsx`
-- Create: `src/components/about/AboutHero/index.ts`
+- Create: `src/components/about/AboutHero/{AboutHero.tsx,PolaroidStack.tsx,AboutHero.spec.tsx,index.ts}`
 
-- [ ] **Step 1: Write the failing test** — `AboutHero.spec.tsx`:
+- [ ] **Step 1: Failing test**
 
 ```tsx
 import {render, screen} from '@testing-library/react';
 import {NextIntlClientProvider} from 'next-intl';
 import {AboutHero} from './AboutHero';
-import type {StaffPublic} from '@/domain';
+import type {TeamMember} from '@/domain';
 
 const role = {
   id: 'r1',
   key: 'founder',
-  labelVi: 'Người sáng lập',
+  labelVi: 'NSL',
   labelEn: 'Founder',
   order: 0,
 };
+const make = (id: string, name: string): TeamMember => ({
+  id,
+  name,
+  bioVi: '',
+  bioEn: '',
+  age: null,
+  teamOrder: 0,
+  role,
+  photo: {url: `/uploads/${id}.jpg`, altVi: name, altEn: name},
+});
 
-const featured: StaffPublic[] = [
-  {
-    id: '1',
-    name: 'Thomas',
-    bioVi: '',
-    bioEn: '',
-    order: 0,
-    role,
-    image: {url: '/uploads/t.jpg', altVi: 'T', altEn: 'T'},
-  },
-  {
-    id: '2',
-    name: 'Hai',
-    bioVi: '',
-    bioEn: '',
-    order: 1,
-    role,
-    image: {url: '/uploads/h.jpg', altVi: 'H', altEn: 'H'},
-  },
-  {
-    id: '3',
-    name: 'Chan',
-    bioVi: '',
-    bioEn: '',
-    order: 2,
-    role,
-    image: {url: '/uploads/c.jpg', altVi: 'C', altEn: 'C'},
-  },
-];
-
+const featured = [make('1', 'Thomas'), make('2', 'Hai'), make('3', 'Chan')];
 const messages = {
   about: {
     hero: {
       eyebrow: 'About',
       headline: 'Riding the real Vietnam.',
-      lead: 'Lead paragraph.',
+      lead: 'Lead.',
       ctaMeetTeam: 'Meet the team',
     },
   },
 };
 
 describe('AboutHero', () => {
-  it('renders eyebrow, headline, lead, and CTA from translations', () => {
+  it('renders text + CTA', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <AboutHero featured={featured} locale="en" />
@@ -1096,14 +1223,14 @@ describe('AboutHero', () => {
     );
     expect(screen.getByText('About')).toBeInTheDocument();
     expect(screen.getByText('Riding the real Vietnam.')).toBeInTheDocument();
-    expect(screen.getByText('Lead paragraph.')).toBeInTheDocument();
+    expect(screen.getByText('Lead.')).toBeInTheDocument();
     expect(screen.getByRole('link', {name: /Meet the team/i})).toHaveAttribute(
       'href',
       '#team',
     );
   });
 
-  it('renders three polaroids from the featured staff', () => {
+  it('renders three polaroids', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <AboutHero featured={featured} locale="en" />
@@ -1116,46 +1243,41 @@ describe('AboutHero', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `pnpm test src/components/about/AboutHero/AboutHero.spec.tsx`
-Expected: module not found.
-
-- [ ] **Step 3: Implement `PolaroidStack.tsx`**
+- [ ] **Step 2: Implement `PolaroidStack.tsx`**
 
 ```tsx
-import type {StaffPublic} from '@/domain';
+import type {TeamMember} from '@/domain';
 
 type PolaroidStackProps = {
-  featured: StaffPublic[];
+  featured: TeamMember[];
   locale: 'vi' | 'en';
 };
 
 export function PolaroidStack({featured, locale}: PolaroidStackProps) {
   return (
     <div className="relative h-[28rem] w-full">
-      {featured.slice(0, 3).map((s, i) => {
+      {featured.slice(0, 3).map((m, i) => {
         const rotation = ['-rotate-6', 'rotate-2', '-rotate-3'][i] ?? '';
         const offset =
           ['left-0 top-0', 'left-1/4 top-8', 'left-1/2 top-4'][i] ?? '';
-        const alt = locale === 'vi' ? s.image?.altVi : s.image?.altEn;
-        const role = locale === 'vi' ? s.role.labelVi : s.role.labelEn;
+        const alt = locale === 'vi' ? m.photo?.altVi : m.photo?.altEn;
+        const role = locale === 'vi' ? m.role.labelVi : m.role.labelEn;
         return (
           <figure
-            key={s.id}
+            key={m.id}
             className={`absolute ${offset} ${rotation} w-48 transform shadow-2xl`}
           >
             <div className="aspect-[3/4] w-full bg-surface-alt">
-              {s.image?.url ? (
+              {m.photo?.url ? (
                 <img
-                  src={s.image.url}
-                  alt={alt ?? s.name}
+                  src={m.photo.url}
+                  alt={alt ?? m.name}
                   className="h-full w-full object-cover"
                 />
               ) : null}
             </div>
             <figcaption className="bg-white px-3 py-2 text-xs">
-              <span className="block font-semibold">{s.name}</span>
+              <span className="block font-semibold">{m.name}</span>
               <span className="text-on-surface-secondary">{role}</span>
             </figcaption>
           </figure>
@@ -1166,16 +1288,16 @@ export function PolaroidStack({featured, locale}: PolaroidStackProps) {
 }
 ```
 
-- [ ] **Step 4: Implement `AboutHero.tsx`**
+- [ ] **Step 3: Implement `AboutHero.tsx`**
 
 ```tsx
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
-import type {StaffPublic} from '@/domain';
+import type {TeamMember} from '@/domain';
 import {PolaroidStack} from './PolaroidStack';
 
 type AboutHeroProps = {
-  featured: StaffPublic[];
+  featured: TeamMember[];
   locale: 'vi' | 'en';
 };
 
@@ -1209,24 +1331,20 @@ export function AboutHero({featured, locale}: AboutHeroProps) {
 }
 ```
 
-- [ ] **Step 5: Create `index.ts`**
+- [ ] **Step 4: `index.ts`**
 
 ```ts
 export {AboutHero} from './AboutHero';
 export {PolaroidStack} from './PolaroidStack';
 ```
 
-- [ ] **Step 6: Run the test to verify it passes**
-
-Run: `pnpm test src/components/about/AboutHero/`
-Expected: passing.
-
-- [ ] **Step 7: Commit**
+- [ ] **Step 5: Test + commit**
 
 ```bash
+pnpm test src/components/about/AboutHero/
 git add src/components/about/AboutHero/
 git commit -m "$(cat <<'EOF'
-feat(about): add AboutHero with PolaroidStack
+feat(about): add AboutHero + PolaroidStack
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1235,15 +1353,13 @@ EOF
 
 ---
 
-## Task 9: `AboutStory` (TDD)
+## Task 10: `AboutStory` (TDD)
 
 **Files:**
 
-- Create: `src/components/about/AboutStory/AboutStory.tsx`
-- Create: `src/components/about/AboutStory/AboutStory.spec.tsx`
-- Create: `src/components/about/AboutStory/index.ts`
+- Create: `src/components/about/AboutStory/{AboutStory.tsx,AboutStory.spec.tsx,index.ts}`
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Test**
 
 ```tsx
 import {render, screen} from '@testing-library/react';
@@ -1251,16 +1367,11 @@ import {NextIntlClientProvider} from 'next-intl';
 import {AboutStory} from './AboutStory';
 
 const messages = {
-  about: {
-    story: {
-      pullQuote: '100% locally owned.',
-      body: 'Paragraph one.\n\nParagraph two.',
-    },
-  },
+  about: {story: {pullQuote: '100% locally owned.', body: 'One.\n\nTwo.'}},
 };
 
 describe('AboutStory', () => {
-  it('renders the pull quote', () => {
+  it('renders pull quote', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <AboutStory />
@@ -1269,24 +1380,19 @@ describe('AboutStory', () => {
     expect(screen.getByText('100% locally owned.')).toBeInTheDocument();
   });
 
-  it('renders each \\n\\n-separated paragraph as its own <p>', () => {
+  it('renders paragraphs', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <AboutStory />
       </NextIntlClientProvider>,
     );
-    expect(screen.getByText('Paragraph one.')).toBeInTheDocument();
-    expect(screen.getByText('Paragraph two.')).toBeInTheDocument();
+    expect(screen.getByText('One.')).toBeInTheDocument();
+    expect(screen.getByText('Two.')).toBeInTheDocument();
   });
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `pnpm test src/components/about/AboutStory/AboutStory.spec.tsx`
-Expected: module not found.
-
-- [ ] **Step 3: Implement `AboutStory.tsx`**
+- [ ] **Step 2: Implement**
 
 ```tsx
 import {useTranslations} from 'next-intl';
@@ -1314,23 +1420,17 @@ export function AboutStory() {
 }
 ```
 
-- [ ] **Step 4: Create `index.ts`**
+- [ ] **Step 3: `index.ts` + commit**
 
 ```ts
 export {AboutStory} from './AboutStory';
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
-
-Run: `pnpm test src/components/about/AboutStory/`
-Expected: passing.
-
-- [ ] **Step 6: Commit**
-
 ```bash
+pnpm test src/components/about/AboutStory/
 git add src/components/about/AboutStory/
 git commit -m "$(cat <<'EOF'
-feat(about): add AboutStory section
+feat(about): add AboutStory
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1339,15 +1439,13 @@ EOF
 
 ---
 
-## Task 10: `AboutValueProps` (TDD)
+## Task 11: `AboutValueProps` (TDD)
 
 **Files:**
 
-- Create: `src/components/about/AboutValueProps/AboutValueProps.tsx`
-- Create: `src/components/about/AboutValueProps/AboutValueProps.spec.tsx`
-- Create: `src/components/about/AboutValueProps/index.ts`
+- Create: `src/components/about/AboutValueProps/{AboutValueProps.tsx,AboutValueProps.spec.tsx,index.ts}`
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Test**
 
 ```tsx
 import {render, screen} from '@testing-library/react';
@@ -1357,47 +1455,44 @@ import {AboutValueProps} from './AboutValueProps';
 const messages = {
   about: {
     valueProps: {
-      '01': {title: 'Locally Owned', body: 'L body'},
-      '02': {title: 'Off the Beaten Track', body: 'O body'},
-      '03': {title: 'All Rider Levels', body: 'A body'},
-      '04': {title: 'Local Knowledge', body: 'K body'},
+      '01': {title: 'Locally Owned', body: 'L'},
+      '02': {title: 'Off the Beaten Track', body: 'O'},
+      '03': {title: 'All Rider Levels', body: 'A'},
+      '04': {title: 'Local Knowledge', body: 'K'},
     },
   },
 };
 
 describe('AboutValueProps', () => {
-  it('renders all four value props', () => {
+  it('renders 4 cells', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <AboutValueProps />
       </NextIntlClientProvider>,
     );
-    expect(screen.getByText('Locally Owned')).toBeInTheDocument();
-    expect(screen.getByText('Off the Beaten Track')).toBeInTheDocument();
-    expect(screen.getByText('All Rider Levels')).toBeInTheDocument();
-    expect(screen.getByText('Local Knowledge')).toBeInTheDocument();
-    expect(screen.getByText('K body')).toBeInTheDocument();
+    [
+      'Locally Owned',
+      'Off the Beaten Track',
+      'All Rider Levels',
+      'Local Knowledge',
+      'K',
+    ].forEach((s) => expect(screen.getByText(s)).toBeInTheDocument());
   });
 
-  it('renders numerals 01–04', () => {
+  it('renders numerals 01-04', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <AboutValueProps />
       </NextIntlClientProvider>,
     );
-    for (const n of ['01', '02', '03', '04']) {
-      expect(screen.getByText(n)).toBeInTheDocument();
-    }
+    ['01', '02', '03', '04'].forEach((s) =>
+      expect(screen.getByText(s)).toBeInTheDocument(),
+    );
   });
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `pnpm test src/components/about/AboutValueProps/AboutValueProps.spec.tsx`
-Expected: module not found.
-
-- [ ] **Step 3: Implement `AboutValueProps.tsx`**
+- [ ] **Step 2: Implement + index + commit**
 
 ```tsx
 import {useTranslations} from 'next-intl';
@@ -1429,23 +1524,15 @@ export function AboutValueProps() {
 }
 ```
 
-- [ ] **Step 4: Create `index.ts`**
-
 ```ts
 export {AboutValueProps} from './AboutValueProps';
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
-
-Run: `pnpm test src/components/about/AboutValueProps/`
-Expected: passing.
-
-- [ ] **Step 6: Commit**
-
 ```bash
+pnpm test src/components/about/AboutValueProps/
 git add src/components/about/AboutValueProps/
 git commit -m "$(cat <<'EOF'
-feat(about): add AboutValueProps section
+feat(about): add AboutValueProps
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1454,15 +1541,13 @@ EOF
 
 ---
 
-## Task 11: `AboutCta` (TDD)
+## Task 12: `AboutCta` (TDD)
 
 **Files:**
 
-- Create: `src/components/about/AboutCta/AboutCta.tsx`
-- Create: `src/components/about/AboutCta/AboutCta.spec.tsx`
-- Create: `src/components/about/AboutCta/index.ts`
+- Create: `src/components/about/AboutCta/{AboutCta.tsx,AboutCta.spec.tsx,index.ts}`
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Test**
 
 ```tsx
 import {render, screen} from '@testing-library/react';
@@ -1480,7 +1565,7 @@ const messages = {
 };
 
 describe('AboutCta', () => {
-  it('renders headline, subhead, and button linking to /contact', () => {
+  it('renders content + contact link', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <AboutCta />
@@ -1488,18 +1573,15 @@ describe('AboutCta', () => {
     );
     expect(screen.getByText('Ready to ride?')).toBeInTheDocument();
     expect(screen.getByText('Tell us.')).toBeInTheDocument();
-    const link = screen.getByRole('link', {name: /plan your tour/i});
-    expect(link).toHaveAttribute('href', '/contact');
+    expect(screen.getByRole('link', {name: /plan your tour/i})).toHaveAttribute(
+      'href',
+      '/contact',
+    );
   });
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `pnpm test src/components/about/AboutCta/AboutCta.spec.tsx`
-Expected: module not found.
-
-- [ ] **Step 3: Implement `AboutCta.tsx`**
+- [ ] **Step 2: Implement + index + commit**
 
 ```tsx
 import Link from 'next/link';
@@ -1530,23 +1612,15 @@ export function AboutCta() {
 }
 ```
 
-- [ ] **Step 4: Create `index.ts`**
-
 ```ts
 export {AboutCta} from './AboutCta';
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
-
-Run: `pnpm test src/components/about/AboutCta/`
-Expected: passing.
-
-- [ ] **Step 6: Commit**
-
 ```bash
+pnpm test src/components/about/AboutCta/
 git add src/components/about/AboutCta/
 git commit -m "$(cat <<'EOF'
-feat(about): add AboutCta section
+feat(about): add AboutCta
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1555,14 +1629,14 @@ EOF
 
 ---
 
-## Task 12: Compose `/about-us` page
+## Task 13: Compose `/about-us` page
 
 **Files:**
 
 - Create: `src/components/about/index.ts`
-- Modify: `src/pages/about-us.tsx` (full rewrite)
+- Modify: `src/pages/about-us.tsx`
 
-- [ ] **Step 1: Create the barrel `src/components/about/index.ts`**
+- [ ] **Step 1: Barrel index**
 
 ```ts
 export {AboutHero} from './AboutHero';
@@ -1572,13 +1646,13 @@ export {AboutTeamGrid} from './AboutTeamGrid';
 export {AboutCta} from './AboutCta';
 ```
 
-- [ ] **Step 2: Replace `src/pages/about-us.tsx` entirely**
+- [ ] **Step 2: Replace `src/pages/about-us.tsx`**
 
 ```tsx
 import Head from 'next/head';
 import {useTranslations} from 'next-intl';
 import type {GetStaticPropsContext} from 'next';
-import type {StaffPublic} from '@/domain';
+import type {TeamMember} from '@/domain';
 import {
   AboutHero,
   AboutStory,
@@ -1588,11 +1662,11 @@ import {
 } from '@/components/about';
 
 type AboutUsProps = {
-  staff: StaffPublic[];
+  team: TeamMember[];
   locale: 'vi' | 'en';
 };
 
-export default function AboutUs({staff, locale}: AboutUsProps) {
+export default function AboutUs({team, locale}: AboutUsProps) {
   const tMeta = useTranslations('about.meta');
 
   return (
@@ -1601,46 +1675,35 @@ export default function AboutUs({staff, locale}: AboutUsProps) {
         <title>{tMeta('title')}</title>
         <meta name="description" content={tMeta('description')} />
       </Head>
-      <AboutHero featured={staff.slice(0, 3)} locale={locale} />
+      <AboutHero featured={team.slice(0, 3)} locale={locale} />
       <AboutStory />
       <AboutValueProps />
-      <AboutTeamGrid staff={staff} locale={locale} />
+      <AboutTeamGrid team={team} locale={locale} />
       <AboutCta />
     </>
   );
 }
 
 export async function getStaticProps({locale}: GetStaticPropsContext) {
-  const {getMessagesFromDb, getStaffForPublic} = await import('@/data/queries');
+  const {getMessagesFromDb, getTeamForPublic} = await import('@/data/queries');
   const resolvedLocale = (locale ?? 'vi') as 'vi' | 'en';
-  const [messages, staff] = await Promise.all([
+  const [messages, team] = await Promise.all([
     getMessagesFromDb(resolvedLocale),
-    getStaffForPublic(),
+    getTeamForPublic(),
   ]);
-
-  return {
-    props: {messages, staff, locale: resolvedLocale},
-    revalidate: 60,
-  };
+  return {props: {messages, team, locale: resolvedLocale}, revalidate: 60};
 }
 ```
 
-- [ ] **Step 3: Type-check**
-
-Run: `pnpm exec tsc --noEmit`
-Expected: no errors.
-
-- [ ] **Step 4: Smoke-test in dev**
-
-Run: `pnpm dev`
-Open: http://localhost:3000/about-us — confirm hero / story / value props / team grid / CTA all render with seeded content.
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Type-check + smoke + commit**
 
 ```bash
+pnpm exec tsc --noEmit
+pnpm dev
+# Visit /about-us → confirm sections render with placeholder team cards.
 git add src/components/about/index.ts src/pages/about-us.tsx
 git commit -m "$(cat <<'EOF'
-feat(about): rewrite /about-us with new layout
+feat(about): rewrite /about-us using User-backed team
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1649,31 +1712,47 @@ EOF
 
 ---
 
-## Task 13: Routes registry + API builders
+## Task 14: Routes registry + API builders
 
 **Files:**
 
 - Modify: `src/routes/registry.ts`
 - Modify: `src/routes/api.ts`
 
-- [ ] **Step 1: Add admin routes** — in `src/routes/registry.ts`, inside the `admin:` block (after `users:`):
+- [ ] **Step 1: Replace `routes.admin.users` and add `routes.admin.roles`** — inside `routes.admin`, find the existing `users: {path: () => '/admin/users'}` (or similar) and replace, then add `roles`:
 
 ```ts
+    users: {
+      list: {path: () => '/admin/users'},
+      new: {path: () => '/admin/users/new'},
+      edit: {path: (p: {id: string}) => `/admin/users/${p.id}`},
+    },
     roles: {
       list: {path: () => '/admin/roles'},
       new: {path: () => '/admin/roles/new'},
       edit: {path: (p: {id: string}) => `/admin/roles/${p.id}`},
     },
-    staff: {
-      list: {path: () => '/admin/staff'},
-      new: {path: () => '/admin/staff/new'},
-      edit: {path: (p: {id: string}) => `/admin/staff/${p.id}`},
-    },
 ```
 
-- [ ] **Step 2: Add api builders** — in `src/routes/api.ts`, inside `api.admin = { ... }` (after the existing admin entries):
+- [ ] **Step 2: Extend `api.admin.users` and add `api.admin.roles`** — in `src/routes/api.ts`:
 
 ```ts
+    users: {
+      list: () => request<VMT.UserAdmin[]>('/api/admin/users'),
+      get: (id: string) => request<VMT.UserAdmin>(`/api/admin/users/${id}`),
+      create: (data: Record<string, unknown>) =>
+        request<VMT.UserAdmin>('/api/admin/users', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        }),
+      update: (id: string, data: Record<string, unknown>) =>
+        request<VMT.UserAdmin>(`/api/admin/users/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(data),
+        }),
+      delete: (id: string) =>
+        request<void>(`/api/admin/users/${id}`, {method: 'DELETE'}),
+    },
     roles: {
       list: () => request<VMT.OrgRole[]>('/api/admin/roles'),
       get: (id: string) => request<VMT.OrgRole>(`/api/admin/roles/${id}`),
@@ -1690,35 +1769,17 @@ EOF
       delete: (id: string) =>
         request<void>(`/api/admin/roles/${id}`, {method: 'DELETE'}),
     },
-    staff: {
-      list: () => request<VMT.StaffAdmin[]>('/api/admin/staff'),
-      get: (id: string) => request<VMT.StaffAdmin>(`/api/admin/staff/${id}`),
-      create: (data: Record<string, unknown>) =>
-        request<VMT.StaffAdmin>('/api/admin/staff', {
-          method: 'POST',
-          body: JSON.stringify(data),
-        }),
-      update: (id: string, data: Record<string, unknown>) =>
-        request<VMT.StaffAdmin>(`/api/admin/staff/${id}`, {
-          method: 'PUT',
-          body: JSON.stringify(data),
-        }),
-      delete: (id: string) =>
-        request<void>(`/api/admin/staff/${id}`, {method: 'DELETE'}),
-    },
 ```
 
-- [ ] **Step 3: Type-check**
+(Replace any existing `users` block entirely.)
 
-Run: `pnpm exec tsc --noEmit`
-Expected: no errors.
-
-- [ ] **Step 4: Commit**
+- [ ] **Step 3: Type-check + commit**
 
 ```bash
-git add src/routes/registry.ts src/routes/api.ts
+pnpm exec tsc --noEmit
+git add src/routes/
 git commit -m "$(cat <<'EOF'
-feat(routes): add admin roles + staff routes and api builders
+feat(routes): add admin roles, extend users routes/api
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1727,13 +1788,13 @@ EOF
 
 ---
 
-## Task 14: API handler — `roles/index.ts` (GET list, POST create)
+## Task 15: API — `roles/index.ts`
 
 **Files:**
 
 - Create: `src/pages/api/admin/roles/index.ts`
 
-- [ ] **Step 1: Implement the handler**
+- [ ] **Step 1: Implement**
 
 ```ts
 import type {NextApiRequest, NextApiResponse} from 'next';
@@ -1760,12 +1821,10 @@ export default async function handler(
     if (typeof key !== 'string' || !KEY_REGEX.test(key)) {
       return res.status(400).json({error: 'key must be lowercase snake_case'});
     }
-    if (typeof labelVi !== 'string' || labelVi.length === 0) {
-      return res.status(400).json({error: 'labelVi is required'});
-    }
-    if (typeof labelEn !== 'string' || labelEn.length === 0) {
-      return res.status(400).json({error: 'labelEn is required'});
-    }
+    if (typeof labelVi !== 'string')
+      return res.status(400).json({error: 'labelVi must be a string'});
+    if (typeof labelEn !== 'string')
+      return res.status(400).json({error: 'labelEn must be a string'});
     const existing = await prisma.orgRole.findUnique({where: {key}});
     if (existing) return res.status(409).json({error: 'key already in use'});
     const row = await prisma.orgRole.create({
@@ -1784,15 +1843,7 @@ export default async function handler(
 }
 ```
 
-- [ ] **Step 2: Smoke-test via curl while `pnpm dev` is running** (optional). Log in via the admin UI to obtain a session cookie. Then:
-
-```bash
-curl -s http://localhost:3000/api/admin/roles -H "Cookie: <session-cookie>"
-```
-
-Expected: JSON array containing the 4 seeded roles.
-
-- [ ] **Step 3: Commit**
+- [ ] **Step 2: Commit**
 
 ```bash
 git add src/pages/api/admin/roles/index.ts
@@ -1806,13 +1857,13 @@ EOF
 
 ---
 
-## Task 15: API handler — `roles/[id].ts` (GET, PUT, DELETE)
+## Task 16: API — `roles/[id].ts`
 
 **Files:**
 
 - Create: `src/pages/api/admin/roles/[id].ts`
 
-- [ ] **Step 1: Implement the handler**
+- [ ] **Step 1: Implement**
 
 ```ts
 import type {NextApiRequest, NextApiResponse} from 'next';
@@ -1840,9 +1891,8 @@ export default async function handler(
     const {labelVi, labelEn, order, key} = req.body ?? {};
     if (typeof key === 'string') {
       const current = await prisma.orgRole.findUnique({where: {id}});
-      if (current && current.key !== key) {
+      if (current && current.key !== key)
         return res.status(400).json({error: 'key is immutable'});
-      }
     }
     if (labelVi !== undefined && typeof labelVi !== 'string') {
       return res.status(400).json({error: 'labelVi must be a string'});
@@ -1866,7 +1916,7 @@ export default async function handler(
   }
 
   if (req.method === 'DELETE') {
-    const inUse = await prisma.staffMember.count({where: {roleId: id}});
+    const inUse = await prisma.user.count({where: {orgRoleId: id}});
     if (inUse > 0) return res.status(409).json({error: 'Role in use'});
     try {
       await prisma.orgRole.delete({where: {id}});
@@ -1895,19 +1945,20 @@ EOF
 
 ---
 
-## Task 16: API handler — `staff/index.ts` (GET list, POST create)
+## Task 17: API — extend `users/index.ts`
 
 **Files:**
 
-- Create: `src/pages/api/admin/staff/index.ts`
+- Modify: `src/pages/api/admin/users/index.ts`
 
-- [ ] **Step 1: Implement the handler**
+- [ ] **Step 1: Replace with full new handler**
 
 ```ts
 import type {NextApiRequest, NextApiResponse} from 'next';
+import bcrypt from 'bcryptjs';
 import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
-import {toStaffAdmin} from '@/domain/staff/mapper';
+import {toUserAdmin} from '@/domain/user/mapper';
 
 export default async function handler(
   req: NextApiRequest,
@@ -1917,23 +1968,48 @@ export default async function handler(
   if (!isAuthed) return;
 
   if (req.method === 'GET') {
-    const rows = await prisma.staffMember.findMany({
-      orderBy: {order: 'asc'},
-      include: {role: true, image: true},
+    const rows = await prisma.user.findMany({
+      orderBy: [{isCoreTeam: 'desc'}, {teamOrder: 'asc'}, {name: 'asc'}],
+      include: {orgRole: true, image: true},
     });
-    return res.json(rows.map(toStaffAdmin));
+    return res.json(rows.map(toUserAdmin));
   }
 
   if (req.method === 'POST') {
-    const {name, roleId, bioVi, bioEn, imageId, order, active} = req.body ?? {};
+    const {
+      name,
+      email,
+      password,
+      orgRoleId,
+      bioVi,
+      bioEn,
+      birthDate,
+      imageId,
+      isCoreTeam,
+      allowAuth,
+      teamOrder,
+    } = req.body ?? {};
+
     if (typeof name !== 'string' || name.length === 0) {
       return res.status(400).json({error: 'name is required'});
     }
-    if (typeof roleId !== 'string' || roleId.length === 0) {
-      return res.status(400).json({error: 'roleId is required'});
+    if (typeof orgRoleId !== 'string' || orgRoleId.length === 0) {
+      return res.status(400).json({error: 'orgRoleId is required'});
     }
-    const role = await prisma.orgRole.findUnique({where: {id: roleId}});
-    if (!role) return res.status(400).json({error: 'roleId not found'});
+    const role = await prisma.orgRole.findUnique({where: {id: orgRoleId}});
+    if (!role) return res.status(400).json({error: 'orgRoleId not found'});
+
+    const authOn = allowAuth === true || allowAuth === undefined;
+    if (authOn && (typeof email !== 'string' || email.length === 0)) {
+      return res
+        .status(400)
+        .json({error: 'email is required when allowAuth=true'});
+    }
+    if (authOn && (typeof password !== 'string' || password.length < 8)) {
+      return res
+        .status(400)
+        .json({error: 'password (>=8 chars) is required when allowAuth=true'});
+    }
     if (imageId != null && typeof imageId !== 'string') {
       return res.status(400).json({error: 'imageId must be a string or null'});
     }
@@ -1943,19 +2019,29 @@ export default async function handler(
       });
       if (!img) return res.status(400).json({error: 'imageId not found'});
     }
-    const row = await prisma.staffMember.create({
-      data: {
-        name,
-        roleId,
-        bioVi: typeof bioVi === 'string' ? bioVi : '',
-        bioEn: typeof bioEn === 'string' ? bioEn : '',
-        imageId: imageId ?? null,
-        order: typeof order === 'number' ? order : 0,
-        active: typeof active === 'boolean' ? active : true,
-      },
-      include: {role: true, image: true},
+
+    const data = {
+      name,
+      email: typeof email === 'string' && email.length > 0 ? email : null,
+      passwordHash: authOn ? await bcrypt.hash(password, 10) : null,
+      orgRoleId,
+      bioVi: typeof bioVi === 'string' ? bioVi : '',
+      bioEn: typeof bioEn === 'string' ? bioEn : '',
+      birthDate:
+        typeof birthDate === 'string' && birthDate.length > 0
+          ? new Date(birthDate)
+          : null,
+      imageId: imageId ?? null,
+      isCoreTeam: isCoreTeam === true,
+      allowAuth: authOn,
+      teamOrder: typeof teamOrder === 'number' ? teamOrder : 0,
+    };
+
+    const row = await prisma.user.create({
+      data,
+      include: {orgRole: true, image: true},
     });
-    return res.status(201).json(toStaffAdmin(row));
+    return res.status(201).json(toUserAdmin(row));
   }
 
   res.setHeader('Allow', 'GET, POST');
@@ -1963,12 +2049,14 @@ export default async function handler(
 }
 ```
 
+(Verify `bcryptjs` is already a project dependency — if a different bcrypt library is used, swap the import.)
+
 - [ ] **Step 2: Commit**
 
 ```bash
-git add src/pages/api/admin/staff/index.ts
+git add src/pages/api/admin/users/index.ts
 git commit -m "$(cat <<'EOF'
-feat(api): add admin staff list + create endpoint
+feat(api): extend users list+create for new schema
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1977,19 +2065,22 @@ EOF
 
 ---
 
-## Task 17: API handler — `staff/[id].ts` (GET, PUT, DELETE)
+## Task 18: API — `users/[id].ts` (GET, PUT, DELETE)
 
 **Files:**
 
-- Create: `src/pages/api/admin/staff/[id].ts`
+- Modify or Create: `src/pages/api/admin/users/[id].ts`
 
-- [ ] **Step 1: Implement the handler**
+- [ ] **Step 1: Implement**
 
 ```ts
 import type {NextApiRequest, NextApiResponse} from 'next';
+import bcrypt from 'bcryptjs';
+import {getServerSession} from 'next-auth/next';
+import {authOptions} from '@/lib/auth';
 import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
-import {toStaffAdmin} from '@/domain/staff/mapper';
+import {toUserAdmin} from '@/domain/user/mapper';
 
 export default async function handler(
   req: NextApiRequest,
@@ -2002,75 +2093,113 @@ export default async function handler(
   if (!id) return res.status(400).json({error: 'id required'});
 
   if (req.method === 'GET') {
-    const row = await prisma.staffMember.findUnique({
+    const row = await prisma.user.findUnique({
       where: {id},
-      include: {role: true, image: true},
+      include: {orgRole: true, image: true},
     });
     if (!row) return res.status(404).json({error: 'Not found'});
-    return res.json(toStaffAdmin(row));
+    return res.json(toUserAdmin(row));
   }
 
   if (req.method === 'PUT') {
-    const {name, roleId, bioVi, bioEn, imageId, order, active} = req.body ?? {};
-    const data: Record<string, unknown> = {};
-    if (name !== undefined) {
-      if (typeof name !== 'string' || name.length === 0) {
-        return res.status(400).json({error: 'name must be a non-empty string'});
+    const body = req.body ?? {};
+    const current = await prisma.user.findUnique({where: {id}});
+    if (!current) return res.status(404).json({error: 'Not found'});
+
+    const next: Record<string, unknown> = {};
+
+    if (body.name !== undefined) {
+      if (typeof body.name !== 'string' || body.name.length === 0) {
+        return res.status(400).json({error: 'name must be non-empty'});
       }
-      data.name = name;
+      next.name = body.name;
     }
-    if (roleId !== undefined) {
-      if (typeof roleId !== 'string' || roleId.length === 0) {
-        return res.status(400).json({error: 'roleId required'});
+    if (body.email !== undefined) {
+      if (body.email !== null && typeof body.email !== 'string') {
+        return res.status(400).json({error: 'email must be a string or null'});
       }
-      const role = await prisma.orgRole.findUnique({where: {id: roleId}});
-      if (!role) return res.status(400).json({error: 'roleId not found'});
-      data.roleId = roleId;
+      next.email = body.email === '' ? null : body.email;
     }
-    if (bioVi !== undefined) {
-      if (typeof bioVi !== 'string') {
-        return res.status(400).json({error: 'bioVi must be a string'});
-      }
-      data.bioVi = bioVi;
+    if (body.orgRoleId !== undefined) {
+      if (typeof body.orgRoleId !== 'string')
+        return res.status(400).json({error: 'orgRoleId required'});
+      const role = await prisma.orgRole.findUnique({
+        where: {id: body.orgRoleId},
+      });
+      if (!role) return res.status(400).json({error: 'orgRoleId not found'});
+      next.orgRoleId = body.orgRoleId;
     }
-    if (bioEn !== undefined) {
-      if (typeof bioEn !== 'string') {
-        return res.status(400).json({error: 'bioEn must be a string'});
-      }
-      data.bioEn = bioEn;
+    if (body.bioVi !== undefined)
+      next.bioVi = typeof body.bioVi === 'string' ? body.bioVi : '';
+    if (body.bioEn !== undefined)
+      next.bioEn = typeof body.bioEn === 'string' ? body.bioEn : '';
+    if (body.birthDate !== undefined) {
+      next.birthDate =
+        typeof body.birthDate === 'string' && body.birthDate.length > 0
+          ? new Date(body.birthDate)
+          : null;
     }
-    if (imageId !== undefined) {
-      if (imageId !== null && typeof imageId !== 'string') {
+    if (body.imageId !== undefined) {
+      if (body.imageId !== null && typeof body.imageId !== 'string') {
         return res
           .status(400)
           .json({error: 'imageId must be a string or null'});
       }
-      if (imageId) {
+      if (body.imageId) {
         const img = await prisma.collectionImage.findUnique({
-          where: {id: imageId},
+          where: {id: body.imageId},
         });
         if (!img) return res.status(400).json({error: 'imageId not found'});
       }
-      data.imageId = imageId;
+      next.imageId = body.imageId;
     }
-    if (typeof order === 'number') data.order = order;
-    if (typeof active === 'boolean') data.active = active;
+    if (body.isCoreTeam !== undefined)
+      next.isCoreTeam = body.isCoreTeam === true;
+    if (body.teamOrder !== undefined && typeof body.teamOrder === 'number') {
+      next.teamOrder = body.teamOrder;
+    }
+    if (body.allowAuth !== undefined) next.allowAuth = body.allowAuth === true;
+
+    if (body.password !== undefined && body.password !== '') {
+      if (typeof body.password !== 'string' || body.password.length < 8) {
+        return res
+          .status(400)
+          .json({error: 'password must be at least 8 characters'});
+      }
+      next.passwordHash = await bcrypt.hash(body.password, 10);
+    }
+
+    const futureAllowAuth =
+      typeof next.allowAuth === 'boolean' ? next.allowAuth : current.allowAuth;
+    const futureEmail =
+      'email' in next ? (next.email as string | null) : current.email;
+    const futureHasPassword =
+      'passwordHash' in next ? !!next.passwordHash : !!current.passwordHash;
+    if (futureAllowAuth && (!futureEmail || !futureHasPassword)) {
+      return res.status(400).json({
+        error: 'allowAuth=true requires email and password',
+      });
+    }
 
     try {
-      const row = await prisma.staffMember.update({
+      const row = await prisma.user.update({
         where: {id},
-        data,
-        include: {role: true, image: true},
+        data: next,
+        include: {orgRole: true, image: true},
       });
-      return res.json(toStaffAdmin(row));
+      return res.json(toUserAdmin(row));
     } catch {
       return res.status(404).json({error: 'Not found'});
     }
   }
 
   if (req.method === 'DELETE') {
+    const session = await getServerSession(req, res, authOptions);
+    if (session?.user?.id === id) {
+      return res.status(400).json({error: 'Cannot delete current user'});
+    }
     try {
-      await prisma.staffMember.delete({where: {id}});
+      await prisma.user.delete({where: {id}});
       return res.status(204).end();
     } catch {
       return res.status(404).json({error: 'Not found'});
@@ -2085,9 +2214,9 @@ export default async function handler(
 - [ ] **Step 2: Commit**
 
 ```bash
-git add src/pages/api/admin/staff/[id].ts
+git add src/pages/api/admin/users/[id].ts
 git commit -m "$(cat <<'EOF'
-feat(api): add admin staff read/update/delete endpoint
+feat(api): users get/update + rebuild delete with self-block
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -2096,16 +2225,14 @@ EOF
 
 ---
 
-## Task 18: `RoleForm` component + form-utils (TDD)
+## Task 19: `RoleForm` + form-utils (TDD)
 
 **Files:**
 
-- Create: `src/components/Admin/RoleForm/RoleForm.form-utils.ts`
-- Create: `src/components/Admin/RoleForm/RoleForm.tsx`
-- Create: `src/components/Admin/RoleForm/RoleForm.spec.tsx`
-- Create: `src/components/Admin/RoleForm/index.ts`
+- Create: `src/components/Admin/RoleForm/{RoleForm.tsx,RoleForm.form-utils.ts,RoleForm.spec.tsx,index.ts}`
+- Modify: `src/messages/{vi,en}.json`
 
-- [ ] **Step 1: Write the failing test** — `RoleForm.spec.tsx`:
+- [ ] **Step 1: Failing test** — `RoleForm.spec.tsx`:
 
 ```tsx
 import {render, screen} from '@testing-library/react';
@@ -2141,15 +2268,10 @@ function setup(props: Partial<React.ComponentProps<typeof RoleForm>> = {}) {
 }
 
 describe('RoleForm', () => {
-  it('disables the key field when mode=edit', () => {
+  it('disables key on edit', () => {
     setup({
       mode: 'edit',
-      defaults: {
-        key: 'founder',
-        labelVi: 'X',
-        labelEn: 'Y',
-        order: 0,
-      },
+      defaults: {key: 'founder', labelVi: 'X', labelEn: 'Y', order: 0},
     });
     expect(screen.getByLabelText('Key')).toBeDisabled();
   });
@@ -2170,9 +2292,9 @@ describe('RoleForm', () => {
     );
   });
 
-  it('shows an error when key is not snake_case', async () => {
+  it('errors on invalid key', async () => {
     setup();
-    await userEvent.type(screen.getByLabelText('Key'), 'Invalid Key!');
+    await userEvent.type(screen.getByLabelText('Key'), 'Invalid!');
     await userEvent.type(screen.getByLabelText('Label (VI)'), 'X');
     await userEvent.type(screen.getByLabelText('Label (EN)'), 'Y');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
@@ -2183,12 +2305,7 @@ describe('RoleForm', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `pnpm test src/components/Admin/RoleForm/RoleForm.spec.tsx`
-Expected: module not found.
-
-- [ ] **Step 3: Implement `RoleForm.form-utils.ts`**
+- [ ] **Step 2: Implement `RoleForm.form-utils.ts`**
 
 ```ts
 import * as yup from 'yup';
@@ -2222,7 +2339,7 @@ export function buildRoleSchema(t: (k: string) => string) {
 }
 ```
 
-- [ ] **Step 4: Implement `RoleForm.tsx`**
+- [ ] **Step 3: Implement `RoleForm.tsx`**
 
 ```tsx
 import {useForm} from 'react-hook-form';
@@ -2274,19 +2391,14 @@ export function RoleForm({mode, defaults, onSubmit}: RoleFormProps) {
 }
 ```
 
-- [ ] **Step 5: Create `index.ts`**
+- [ ] **Step 4: `index.ts`**
 
 ```ts
 export {RoleForm} from './RoleForm';
 export type {RoleFormValues} from './RoleForm.form-utils';
 ```
 
-- [ ] **Step 6: Run the test to verify it passes**
-
-Run: `pnpm test src/components/Admin/RoleForm/`
-Expected: passing.
-
-- [ ] **Step 7: Add UI translations** — open `src/messages/en.json`, add under top-level `admin`:
+- [ ] **Step 5: Add UI translations to `src/messages/en.json`** (under `admin`):
 
 ```json
     "roles": {
@@ -2301,7 +2413,7 @@ Expected: passing.
       "delete": "Delete",
       "deleteConfirm": "Delete role \"{label}\"?",
       "deleteInUse": "Role is in use and cannot be deleted",
-      "staffCount": "Staff using role",
+      "usersCount": "Users with role",
       "validation": {
         "keyFormat": "key must be lowercase snake_case",
         "labelViRequired": "Vietnamese label required",
@@ -2310,14 +2422,15 @@ Expected: passing.
     },
 ```
 
-In `src/messages/vi.json`, mirror with Vietnamese translations (use the same JSON shape, translate user-facing strings).
+Mirror in `src/messages/vi.json` (Vietnamese translations of user-facing strings).
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 6: Test + commit**
 
 ```bash
+pnpm test src/components/Admin/RoleForm/
 git add src/components/Admin/RoleForm/ src/messages/
 git commit -m "$(cat <<'EOF'
-feat(admin): add RoleForm component + i18n strings
+feat(admin): add RoleForm + i18n strings
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -2326,29 +2439,24 @@ EOF
 
 ---
 
-## Task 19: Admin `/admin/roles` list + new + edit pages
+## Task 20: `/admin/roles` list / new / edit pages
 
 **Files:**
 
-- Create: `src/pages/admin/roles/index.tsx`
-- Create: `src/pages/admin/roles/new.tsx`
-- Create: `src/pages/admin/roles/[id].tsx`
+- Create: `src/pages/admin/roles/{index.tsx,new.tsx,[id].tsx}`
 
-- [ ] **Step 1: Implement `src/pages/admin/roles/index.tsx`**
+- [ ] **Step 1: `index.tsx`**
 
 ```tsx
 import {useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
-import {Button} from '@/components/ui';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import type * as VMT from '@/domain';
 
 export default function RolesListPage() {
   const t = useTranslations('admin.roles');
-  const router = useRouter();
   const {setLoading: setAdminLoading} = useAdminLoading();
   const [roles, setRoles] = useState<VMT.OrgRole[]>([]);
   const [loading, setLoading] = useState(true);
@@ -2410,9 +2518,9 @@ export default function RolesListPage() {
                   Edit
                 </Link>
                 <button
+                  type="button"
                   onClick={() => handleDelete(r)}
                   className="text-error hover:underline cursor-pointer"
-                  type="button"
                 >
                   {t('delete')}
                 </button>
@@ -2426,7 +2534,7 @@ export default function RolesListPage() {
 }
 ```
 
-- [ ] **Step 2: Implement `src/pages/admin/roles/new.tsx`**
+- [ ] **Step 2: `new.tsx`**
 
 ```tsx
 import {useRouter} from 'next/router';
@@ -2451,7 +2559,7 @@ export default function NewRolePage() {
 }
 ```
 
-- [ ] **Step 3: Implement `src/pages/admin/roles/[id].tsx`**
+- [ ] **Step 3: `[id].tsx`**
 
 ```tsx
 import {useEffect, useState} from 'react';
@@ -2489,17 +2597,12 @@ export default function EditRolePage() {
 }
 ```
 
-- [ ] **Step 4: Smoke-test**
-
-Run: `pnpm dev`
-Visit /admin/roles, /admin/roles/new, /admin/roles/<id>. Create a test role; edit; delete (expect 409 if assigned).
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Smoke + commit**
 
 ```bash
 git add src/pages/admin/roles/
 git commit -m "$(cat <<'EOF'
-feat(admin): add roles list, new, and edit pages
+feat(admin): add /admin/roles list, new, and edit pages
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -2508,27 +2611,26 @@ EOF
 
 ---
 
-## Task 20: `StaffImagePicker` component (TDD)
+## Task 21: `TeamPhotoPicker` (TDD)
 
 **Files:**
 
-- Create: `src/components/Admin/StaffForm/StaffImagePicker.tsx`
-- Create: `src/components/Admin/StaffForm/StaffImagePicker.spec.tsx`
+- Create: `src/components/Admin/UserForm/{TeamPhotoPicker.tsx,TeamPhotoPicker.spec.tsx}`
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Failing test**
 
 ```tsx
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {NextIntlClientProvider} from 'next-intl';
-import {StaffImagePicker} from './StaffImagePicker';
+import {TeamPhotoPicker} from './TeamPhotoPicker';
 
 const messages = {
   admin: {
-    staff: {
+    users: {
       pickImage: 'Select photo',
       removeImage: 'Remove',
-      modalTitle: 'Choose a staff photo',
+      modalTitle: 'Choose a team photo',
     },
   },
 };
@@ -2542,29 +2644,29 @@ function setup(value: string | null = null) {
   const onChange = jest.fn();
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <StaffImagePicker images={images} value={value} onChange={onChange} />
+      <TeamPhotoPicker images={images} value={value} onChange={onChange} />
     </NextIntlClientProvider>,
   );
   return {onChange};
 }
 
-describe('StaffImagePicker', () => {
-  it('opens a modal of images when the button is clicked', async () => {
+describe('TeamPhotoPicker', () => {
+  it('opens modal', async () => {
     setup();
     await userEvent.click(screen.getByRole('button', {name: 'Select photo'}));
-    expect(screen.getByText('Choose a staff photo')).toBeInTheDocument();
+    expect(screen.getByText('Choose a team photo')).toBeInTheDocument();
     expect(screen.getAllByRole('img')).toHaveLength(2);
   });
 
-  it('calls onChange with the selected id and closes the modal', async () => {
+  it('selects and closes', async () => {
     const {onChange} = setup();
     await userEvent.click(screen.getByRole('button', {name: 'Select photo'}));
     await userEvent.click(screen.getByRole('img', {name: 'A'}));
     expect(onChange).toHaveBeenCalledWith('i1');
-    expect(screen.queryByText('Choose a staff photo')).not.toBeInTheDocument();
+    expect(screen.queryByText('Choose a team photo')).not.toBeInTheDocument();
   });
 
-  it('shows a remove button when a value is set', async () => {
+  it('removes selection', async () => {
     const {onChange} = setup('i1');
     await userEvent.click(screen.getByRole('button', {name: 'Remove'}));
     expect(onChange).toHaveBeenCalledWith(null);
@@ -2572,12 +2674,7 @@ describe('StaffImagePicker', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `pnpm test src/components/Admin/StaffForm/StaffImagePicker.spec.tsx`
-Expected: module not found.
-
-- [ ] **Step 3: Implement `StaffImagePicker.tsx`**
+- [ ] **Step 2: Implement**
 
 ```tsx
 import {useState} from 'react';
@@ -2590,18 +2687,18 @@ type PickableImage = Pick<
   'id' | 'url' | 'altVi' | 'altEn'
 >;
 
-type StaffImagePickerProps = {
+type TeamPhotoPickerProps = {
   images: PickableImage[];
   value: string | null;
   onChange: (id: string | null) => void;
 };
 
-export function StaffImagePicker({
+export function TeamPhotoPicker({
   images,
   value,
   onChange,
-}: StaffImagePickerProps) {
-  const t = useTranslations('admin.staff');
+}: TeamPhotoPickerProps) {
+  const t = useTranslations('admin.users');
   const [open, setOpen] = useState(false);
   const selected = images.find((i) => i.id === value);
 
@@ -2660,46 +2757,13 @@ export function StaffImagePicker({
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
-
-Run: `pnpm test src/components/Admin/StaffForm/StaffImagePicker.spec.tsx`
-Expected: passing.
-
-- [ ] **Step 5: Add UI translations** — append under `admin` in `src/messages/en.json`:
-
-```json
-    "staff": {
-      "title": "Staff",
-      "new": "New staff member",
-      "edit": "Edit staff member",
-      "nameLabel": "Name",
-      "roleLabel": "Role",
-      "bioViLabel": "Bio (VI)",
-      "bioEnLabel": "Bio (EN)",
-      "orderLabel": "Order",
-      "activeLabel": "Active",
-      "save": "Save",
-      "delete": "Delete",
-      "deleteConfirm": "Delete \"{name}\"?",
-      "pickImage": "Select photo",
-      "removeImage": "Remove",
-      "modalTitle": "Choose a staff photo",
-      "imageCollectionMissing": "Create the 'staff' image collection first.",
-      "validation": {
-        "nameRequired": "Name required",
-        "roleRequired": "Role required"
-      }
-    },
-```
-
-Mirror in `src/messages/vi.json`.
-
-- [ ] **Step 6: Commit**
+- [ ] **Step 3: Test + commit**
 
 ```bash
-git add src/components/Admin/StaffForm/ src/messages/
+pnpm test src/components/Admin/UserForm/TeamPhotoPicker.spec.tsx
+git add src/components/Admin/UserForm/
 git commit -m "$(cat <<'EOF'
-feat(admin): add StaffImagePicker + staff i18n strings
+feat(admin): add TeamPhotoPicker
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -2708,77 +2772,119 @@ EOF
 
 ---
 
-## Task 21: `StaffForm` component + form-utils (TDD)
+## Task 22: `UserForm` + form-utils (TDD)
 
 **Files:**
 
-- Create: `src/components/Admin/StaffForm/StaffForm.form-utils.ts`
-- Create: `src/components/Admin/StaffForm/StaffForm.tsx`
-- Create: `src/components/Admin/StaffForm/StaffForm.spec.tsx`
-- Create: `src/components/Admin/StaffForm/index.ts`
+- Create: `src/components/Admin/UserForm/{UserForm.tsx,UserForm.form-utils.ts,UserForm.spec.tsx,index.ts}`
+- Modify: `src/messages/{vi,en}.json` (extend `admin.users.*`)
 
-- [ ] **Step 1: Implement `StaffForm.form-utils.ts`**
+- [ ] **Step 1: form-utils**
 
 ```ts
 import * as yup from 'yup';
 
-export type StaffFormValues = {
+export type UserFormValues = {
   name: string;
-  roleId: string;
+  email: string;
+  password: string;
+  orgRoleId: string;
   bioVi: string;
   bioEn: string;
+  birthDate: string;
   imageId: string | null;
-  order: number;
-  active: boolean;
+  isCoreTeam: boolean;
+  allowAuth: boolean;
+  teamOrder: number;
 };
 
-export const staffFormDefaults: StaffFormValues = {
+export const userFormDefaults: UserFormValues = {
   name: '',
-  roleId: '',
+  email: '',
+  password: '',
+  orgRoleId: '',
   bioVi: '',
   bioEn: '',
+  birthDate: '',
   imageId: null,
-  order: 0,
-  active: true,
+  isCoreTeam: false,
+  allowAuth: true,
+  teamOrder: 0,
 };
 
-export function buildStaffSchema(t: (k: string) => string) {
+export function buildUserSchema(
+  t: (k: string) => string,
+  mode: 'create' | 'edit',
+) {
   return yup.object({
     name: yup.string().required(t('validation.nameRequired')),
-    roleId: yup.string().required(t('validation.roleRequired')),
+    email: yup.string().when('allowAuth', {
+      is: true,
+      then: (s) =>
+        s
+          .required(t('validation.emailRequired'))
+          .email(t('validation.emailFormat')),
+      otherwise: (s) => s.defined(),
+    }),
+    password: yup.string().when('allowAuth', {
+      is: true,
+      then: (s) =>
+        mode === 'create'
+          ? s
+              .required(t('validation.passwordRequired'))
+              .min(8, t('validation.passwordShort'))
+          : s
+              .defined()
+              .test(
+                'opt-min',
+                t('validation.passwordShort'),
+                (v) => !v || v.length >= 8,
+              ),
+      otherwise: (s) => s.defined(),
+    }),
+    orgRoleId: yup.string().required(t('validation.roleRequired')),
     bioVi: yup.string().defined(),
     bioEn: yup.string().defined(),
+    birthDate: yup.string().defined(),
     imageId: yup.string().nullable().defined(),
-    order: yup.number().integer().min(0).default(0),
-    active: yup.boolean().default(true),
+    isCoreTeam: yup.boolean().default(false),
+    allowAuth: yup.boolean().default(true),
+    teamOrder: yup.number().integer().min(0).default(0),
   });
 }
 ```
 
-- [ ] **Step 2: Write the failing test** — `StaffForm.spec.tsx`:
+- [ ] **Step 2: Failing test**
 
 ```tsx
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {NextIntlClientProvider} from 'next-intl';
-import {StaffForm} from './StaffForm';
+import {UserForm} from './UserForm';
 
 const messages = {
   admin: {
-    staff: {
-      title: 'Staff',
+    users: {
       nameLabel: 'Name',
+      emailLabel: 'Email',
+      passwordLabel: 'Password',
       roleLabel: 'Role',
       bioViLabel: 'Bio (VI)',
       bioEnLabel: 'Bio (EN)',
+      birthDateLabel: 'Birth date',
       orderLabel: 'Order',
-      activeLabel: 'Active',
+      isCoreTeamLabel: 'Core team',
+      allowAuthLabel: 'Allow sign-in',
       save: 'Save',
       pickImage: 'Select photo',
       removeImage: 'Remove',
-      modalTitle: 'Choose a staff photo',
+      modalTitle: 'Choose a team photo',
       validation: {
         nameRequired: 'Name required',
+        emailRequired: 'Email required',
+        emailFormat: 'Email format invalid',
+        passwordRequired: 'Password required',
+        passwordShort: 'Password too short',
         roleRequired: 'Role required',
       },
     },
@@ -2786,12 +2892,13 @@ const messages = {
 };
 
 const roles = [
+  {id: 'r1', key: 'admin', labelVi: 'Quản trị', labelEn: 'Admin', order: 0},
   {
-    id: 'r1',
+    id: 'r2',
     key: 'founder',
     labelVi: 'Người sáng lập',
     labelEn: 'Founder',
-    order: 0,
+    order: 1,
   },
 ];
 
@@ -2799,43 +2906,64 @@ function setup() {
   const onSubmit = jest.fn();
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <StaffForm mode="create" roles={roles} images={[]} onSubmit={onSubmit} />
+      <UserForm mode="create" roles={roles} images={[]} onSubmit={onSubmit} />
     </NextIntlClientProvider>,
   );
   return {onSubmit};
 }
 
-describe('StaffForm', () => {
-  it('populates the role select with provided roles', () => {
+describe('UserForm', () => {
+  it('populates role select', () => {
     setup();
+    expect(screen.getByRole('option', {name: 'Admin'})).toBeInTheDocument();
     expect(screen.getByRole('option', {name: 'Founder'})).toBeInTheDocument();
   });
 
-  it('submits with valid input', async () => {
+  it('submits valid data', async () => {
     const {onSubmit} = setup();
-    await userEvent.type(screen.getByLabelText('Name'), 'Thomas');
+    await userEvent.type(screen.getByLabelText('Name'), 'Alice');
+    await userEvent.type(screen.getByLabelText('Email'), 'a@b.com');
+    await userEvent.type(screen.getByLabelText('Password'), 'longpass1');
     await userEvent.selectOptions(screen.getByLabelText('Role'), 'r1');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(onSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({name: 'Thomas', roleId: 'r1'}),
+      expect.objectContaining({
+        name: 'Alice',
+        email: 'a@b.com',
+        password: 'longpass1',
+        orgRoleId: 'r1',
+      }),
     );
   });
 
-  it('shows error when name is empty', async () => {
+  it('errors when password too short', async () => {
     setup();
+    await userEvent.type(screen.getByLabelText('Name'), 'A');
+    await userEvent.type(screen.getByLabelText('Email'), 'a@b.com');
+    await userEvent.type(screen.getByLabelText('Password'), 'short');
     await userEvent.selectOptions(screen.getByLabelText('Role'), 'r1');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
-    expect(await screen.findByText('Name required')).toBeInTheDocument();
+    expect(await screen.findByText('Password too short')).toBeInTheDocument();
+  });
+
+  it('allows empty auth fields when allowAuth=false', async () => {
+    const {onSubmit} = setup();
+    await userEvent.click(screen.getByLabelText('Allow sign-in'));
+    await userEvent.type(screen.getByLabelText('Name'), 'Thomas');
+    await userEvent.selectOptions(screen.getByLabelText('Role'), 'r2');
+    await userEvent.click(screen.getByRole('button', {name: 'Save'}));
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Thomas',
+        allowAuth: false,
+        orgRoleId: 'r2',
+      }),
+    );
   });
 });
 ```
 
-- [ ] **Step 3: Run the test to verify it fails**
-
-Run: `pnpm test src/components/Admin/StaffForm/StaffForm.spec.tsx`
-Expected: module not found.
-
-- [ ] **Step 4: Implement `StaffForm.tsx`**
+- [ ] **Step 3: Implement `UserForm.tsx`**
 
 ```tsx
 import {useForm, Controller} from 'react-hook-form';
@@ -2848,12 +2976,12 @@ import {
   NumberInput,
   FormField,
 } from '@/components/ui';
-import {StaffImagePicker} from './StaffImagePicker';
+import {TeamPhotoPicker} from './TeamPhotoPicker';
 import {
-  buildStaffSchema,
-  staffFormDefaults,
-  type StaffFormValues,
-} from './StaffForm.form-utils';
+  buildUserSchema,
+  userFormDefaults,
+  type UserFormValues,
+} from './UserForm.form-utils';
 import type * as VMT from '@/domain';
 
 type PickableImage = Pick<
@@ -2861,30 +2989,30 @@ type PickableImage = Pick<
   'id' | 'url' | 'altVi' | 'altEn'
 >;
 
-type StaffFormProps = {
+type UserFormProps = {
   mode: 'create' | 'edit';
   roles: VMT.OrgRole[];
   images: PickableImage[];
-  defaults?: StaffFormValues;
-  onSubmit: (data: StaffFormValues) => void;
+  defaults?: UserFormValues;
+  onSubmit: (data: UserFormValues) => void;
 };
 
-export function StaffForm({
+export function UserForm({
   mode,
   roles,
   images,
   defaults,
   onSubmit,
-}: StaffFormProps) {
-  const t = useTranslations('admin.staff');
+}: UserFormProps) {
+  const t = useTranslations('admin.users');
   const {
     register,
     handleSubmit,
     control,
     formState: {errors, isSubmitting},
-  } = useForm<StaffFormValues>({
-    resolver: yupResolver(buildStaffSchema(t)),
-    defaultValues: defaults ?? staffFormDefaults,
+  } = useForm<UserFormValues>({
+    resolver: yupResolver(buildUserSchema(t, mode)),
+    defaultValues: defaults ?? userFormDefaults,
   });
 
   return (
@@ -2892,9 +3020,15 @@ export function StaffForm({
       <FormField label={t('nameLabel')} error={errors.name?.message}>
         <TextInput {...register('name')} />
       </FormField>
-      <FormField label={t('roleLabel')} error={errors.roleId?.message}>
+      <FormField label={t('emailLabel')} error={errors.email?.message}>
+        <TextInput type="email" {...register('email')} />
+      </FormField>
+      <FormField label={t('passwordLabel')} error={errors.password?.message}>
+        <TextInput type="password" {...register('password')} />
+      </FormField>
+      <FormField label={t('roleLabel')} error={errors.orgRoleId?.message}>
         <select
-          {...register('roleId')}
+          {...register('orgRoleId')}
           className="bg-surface-elevated border border-border rounded-lg p-2 cursor-pointer"
         >
           <option value="">—</option>
@@ -2911,14 +3045,21 @@ export function StaffForm({
       <FormField label={t('bioEnLabel')} error={errors.bioEn?.message}>
         <Textarea {...register('bioEn')} rows={4} />
       </FormField>
-      <FormField label={t('orderLabel')} error={errors.order?.message}>
-        <NumberInput {...register('order', {valueAsNumber: true})} />
+      <FormField label={t('birthDateLabel')} error={errors.birthDate?.message}>
+        <input
+          type="date"
+          {...register('birthDate')}
+          className="bg-surface-elevated border border-border rounded-lg p-2 cursor-pointer"
+        />
+      </FormField>
+      <FormField label={t('orderLabel')} error={errors.teamOrder?.message}>
+        <NumberInput {...register('teamOrder', {valueAsNumber: true})} />
       </FormField>
       <Controller
         control={control}
         name="imageId"
         render={({field}) => (
-          <StaffImagePicker
+          <TeamPhotoPicker
             images={images}
             value={field.value}
             onChange={field.onChange}
@@ -2928,10 +3069,18 @@ export function StaffForm({
       <label className="flex items-center gap-2 cursor-pointer">
         <input
           type="checkbox"
-          {...register('active')}
+          {...register('isCoreTeam')}
           className="cursor-pointer"
         />
-        {t('activeLabel')}
+        {t('isCoreTeamLabel')}
+      </label>
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          {...register('allowAuth')}
+          className="cursor-pointer"
+        />
+        {t('allowAuthLabel')}
       </label>
       <Button type="submit" disabled={isSubmitting}>
         {t('save')}
@@ -2941,25 +3090,58 @@ export function StaffForm({
 }
 ```
 
-- [ ] **Step 5: Create `index.ts`**
+- [ ] **Step 4: `index.ts`**
 
 ```ts
-export {StaffForm} from './StaffForm';
-export {StaffImagePicker} from './StaffImagePicker';
-export type {StaffFormValues} from './StaffForm.form-utils';
+export {UserForm} from './UserForm';
+export {TeamPhotoPicker} from './TeamPhotoPicker';
+export type {UserFormValues} from './UserForm.form-utils';
 ```
 
-- [ ] **Step 6: Run the test to verify it passes**
+- [ ] **Step 5: Extend `admin.users` in `src/messages/en.json`** — replace the existing `users` block with:
 
-Run: `pnpm test src/components/Admin/StaffForm/`
-Expected: passing.
+```json
+    "users": {
+      "title": "Users",
+      "new": "New user",
+      "edit": "Edit user",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "passwordHelp": "Leave blank to keep current password.",
+      "roleLabel": "Role",
+      "bioViLabel": "Bio (VI)",
+      "bioEnLabel": "Bio (EN)",
+      "birthDateLabel": "Birth date",
+      "orderLabel": "Team order",
+      "isCoreTeamLabel": "Show on About page",
+      "allowAuthLabel": "Allow sign-in",
+      "save": "Save",
+      "delete": "Delete",
+      "deleteConfirm": "Delete user \"{name}\"?",
+      "pickImage": "Select photo",
+      "removeImage": "Remove",
+      "modalTitle": "Choose a team photo",
+      "validation": {
+        "nameRequired": "Name required",
+        "emailRequired": "Email required",
+        "emailFormat": "Email must be a valid address",
+        "passwordRequired": "Password required",
+        "passwordShort": "Password must be at least 8 characters",
+        "roleRequired": "Role required"
+      }
+    },
+```
 
-- [ ] **Step 7: Commit**
+Mirror in `src/messages/vi.json`.
+
+- [ ] **Step 6: Test + commit**
 
 ```bash
-git add src/components/Admin/StaffForm/
+pnpm test src/components/Admin/UserForm/
+git add src/components/Admin/UserForm/ src/messages/
 git commit -m "$(cat <<'EOF'
-feat(admin): add StaffForm component
+feat(admin): add UserForm + extend users i18n strings
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -2968,33 +3150,41 @@ EOF
 
 ---
 
-## Task 22: Admin `/admin/staff` list + new + edit pages
+## Task 23: Rewrite `/admin/users` as list / new / edit pages
 
 **Files:**
 
-- Create: `src/pages/admin/staff/index.tsx`
-- Create: `src/pages/admin/staff/new.tsx`
-- Create: `src/pages/admin/staff/[id].tsx`
+- Delete: `src/pages/admin/users.tsx`
+- Create: `src/pages/admin/users/{index.tsx,new.tsx,[id].tsx}`
+- Delete (if unused): `src/lib/users-form-utils.ts`
 
-- [ ] **Step 1: Implement `src/pages/admin/staff/index.tsx`**
+- [ ] **Step 1: Delete the old single-file page**
+
+```bash
+git rm src/pages/admin/users.tsx
+```
+
+- [ ] **Step 2: Create `src/pages/admin/users/index.tsx`**
 
 ```tsx
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
+import {useSession} from 'next-auth/react';
 import {useTranslations} from 'next-intl';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import type * as VMT from '@/domain';
 
-export default function StaffListPage() {
-  const t = useTranslations('admin.staff');
+export default function UsersListPage() {
+  const t = useTranslations('admin.users');
+  const {data: session} = useSession();
   const {setLoading: setAdminLoading} = useAdminLoading();
-  const [staff, setStaff] = useState<VMT.StaffAdmin[]>([]);
+  const [users, setUsers] = useState<VMT.UserAdmin[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.admin.staff.list().then(({data}) => {
-      if (data) setStaff(data);
+    api.admin.users.list().then(({data}) => {
+      if (data) setUsers(data);
       setLoading(false);
     });
   }, []);
@@ -3003,14 +3193,14 @@ export default function StaffListPage() {
     setAdminLoading(loading);
   }, [loading, setAdminLoading]);
 
-  async function handleDelete(s: VMT.StaffAdmin) {
-    if (!confirm(t('deleteConfirm', {name: s.name}))) return;
-    const {error} = await api.admin.staff.delete(s.id);
+  async function handleDelete(u: VMT.UserAdmin) {
+    if (!confirm(t('deleteConfirm', {name: u.name}))) return;
+    const {error} = await api.admin.users.delete(u.id);
     if (error) {
       alert(error);
       return;
     }
-    setStaff((prev) => prev.filter((x) => x.id !== s.id));
+    setUsers((prev) => prev.filter((x) => x.id !== u.id));
   }
 
   return (
@@ -3018,7 +3208,7 @@ export default function StaffListPage() {
       <header className="flex items-center justify-between">
         <h1 className="type-headline-sm">{t('title')}</h1>
         <Link
-          href={routes.admin.staff.new.path()}
+          href={routes.admin.users.new.path()}
           className="bg-primary text-white px-4 py-2 rounded-lg cursor-pointer"
         >
           {t('new')}
@@ -3030,19 +3220,21 @@ export default function StaffListPage() {
             <th className="p-3">{t('orderLabel')}</th>
             <th className="p-3" />
             <th className="p-3">{t('nameLabel')}</th>
+            <th className="p-3">{t('emailLabel')}</th>
             <th className="p-3">{t('roleLabel')}</th>
-            <th className="p-3">{t('activeLabel')}</th>
+            <th className="p-3">{t('isCoreTeamLabel')}</th>
+            <th className="p-3">{t('allowAuthLabel')}</th>
             <th className="p-3" />
           </tr>
         </thead>
         <tbody>
-          {staff.map((s) => (
-            <tr key={s.id} className="border-t border-border">
-              <td className="p-3">{s.order}</td>
+          {users.map((u) => (
+            <tr key={u.id} className="border-t border-border">
+              <td className="p-3">{u.teamOrder}</td>
               <td className="p-3">
-                {s.image?.url ? (
+                {u.photo?.url ? (
                   <img
-                    src={s.image.url}
+                    src={u.photo.url}
                     alt=""
                     className="h-12 w-12 object-cover rounded"
                   />
@@ -3050,23 +3242,29 @@ export default function StaffListPage() {
                   <div className="h-12 w-12 bg-surface-alt rounded" />
                 )}
               </td>
-              <td className="p-3 font-medium">{s.name}</td>
-              <td className="p-3">{s.role.labelEn}</td>
-              <td className="p-3">{s.active ? '✓' : '—'}</td>
+              <td className="p-3 font-medium">{u.name}</td>
+              <td className="p-3 text-on-surface-secondary">
+                {u.email ?? '—'}
+              </td>
+              <td className="p-3">{u.orgRole.labelEn}</td>
+              <td className="p-3">{u.isCoreTeam ? '✓' : '—'}</td>
+              <td className="p-3">{u.allowAuth ? '✓' : '—'}</td>
               <td className="p-3 flex gap-2">
                 <Link
-                  href={routes.admin.staff.edit.path({id: s.id})}
+                  href={routes.admin.users.edit.path({id: u.id})}
                   className="text-primary hover:underline cursor-pointer"
                 >
                   Edit
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(s)}
-                  className="text-error hover:underline cursor-pointer"
-                >
-                  {t('delete')}
-                </button>
+                {session?.user.id !== u.id && (
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(u)}
+                    className="text-error hover:underline cursor-pointer"
+                  >
+                    {t('delete')}
+                  </button>
+                )}
               </td>
             </tr>
           ))}
@@ -3077,132 +3275,142 @@ export default function StaffListPage() {
 }
 ```
 
-- [ ] **Step 2: Implement `src/pages/admin/staff/new.tsx`**
+- [ ] **Step 3: Helper inline in `new.tsx` and `[id].tsx`** — fetches the `team` collection's images. Verify the existing `/api/admin/image-collections` endpoint shape during implementation; this code handles both shapes (list with nested images, or list-then-detail):
+
+(See snippets in Step 4 and Step 5 below.)
+
+- [ ] **Step 4: `new.tsx`**
 
 ```tsx
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {StaffForm, type StaffFormValues} from '@/components/Admin/StaffForm';
+import {UserForm, type UserFormValues} from '@/components/Admin/UserForm';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
 
-type StaffImage = {
-  id: string;
-  url: string | null;
-  altVi: string;
-  altEn: string;
-};
+type TeamImage = {id: string; url: string | null; altVi: string; altEn: string};
 
-export default function NewStaffPage() {
+export default function NewUserPage() {
   const router = useRouter();
   const [roles, setRoles] = useState<VMT.OrgRole[]>([]);
-  const [images, setImages] = useState<StaffImage[]>([]);
+  const [images, setImages] = useState<TeamImage[]>([]);
 
   useEffect(() => {
     api.admin.roles.list().then(({data}) => {
       if (data) setRoles(data);
     });
-    // Pull images from the 'staff' image collection.
-    fetch('/api/admin/image-collections?key=staff')
+    fetch('/api/admin/image-collections?key=team')
       .then((r) => r.json())
-      .then((collections) => {
+      .then(async (collections) => {
         const found = Array.isArray(collections)
-          ? collections.find((c: {key: string}) => c.key === 'staff')
+          ? collections.find((c: {key: string}) => c.key === 'team')
           : null;
-        if (found?.images) setImages(found.images);
+        if (!found) return;
+        if (Array.isArray(found.images)) {
+          setImages(found.images);
+        } else {
+          const detail = await fetch(
+            `/api/admin/image-collections/${found.id}`,
+          ).then((r) => r.json());
+          if (Array.isArray(detail.images)) setImages(detail.images);
+        }
       });
   }, []);
 
-  async function onSubmit(values: StaffFormValues) {
-    const {error} = await api.admin.staff.create(
-      values as unknown as Record<string, unknown>,
-    );
+  async function onSubmit(values: UserFormValues) {
+    const payload: Record<string, unknown> = {
+      ...values,
+      birthDate: values.birthDate || null,
+    };
+    const {error} = await api.admin.users.create(payload);
     if (error) {
       alert(error);
       return;
     }
-    router.push(routes.admin.staff.list.path());
+    router.push(routes.admin.users.list.path());
   }
 
   return (
-    <StaffForm
-      mode="create"
-      roles={roles}
-      images={images}
-      onSubmit={onSubmit}
-    />
+    <UserForm mode="create" roles={roles} images={images} onSubmit={onSubmit} />
   );
 }
 ```
 
-> **Note on the image collection fetch:** the call above assumes the existing image-collections list endpoint returns an array including images. Verify the exact shape in `src/pages/api/admin/image-collections/index.ts` during implementation and adjust the parsing accordingly. If the existing endpoint returns only collections without nested images, a follow-up GET per-collection-id (e.g., `/api/admin/image-collections/<id>`) is the right move — wire that instead.
-
-- [ ] **Step 3: Implement `src/pages/admin/staff/[id].tsx`**
+- [ ] **Step 5: `[id].tsx`**
 
 ```tsx
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {StaffForm, type StaffFormValues} from '@/components/Admin/StaffForm';
+import {UserForm, type UserFormValues} from '@/components/Admin/UserForm';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
 
-type StaffImage = {
-  id: string;
-  url: string | null;
-  altVi: string;
-  altEn: string;
-};
+type TeamImage = {id: string; url: string | null; altVi: string; altEn: string};
 
-export default function EditStaffPage() {
+export default function EditUserPage() {
   const router = useRouter();
   const id = typeof router.query.id === 'string' ? router.query.id : '';
-  const [staff, setStaff] = useState<VMT.StaffAdmin | null>(null);
+  const [user, setUser] = useState<VMT.UserAdmin | null>(null);
   const [roles, setRoles] = useState<VMT.OrgRole[]>([]);
-  const [images, setImages] = useState<StaffImage[]>([]);
+  const [images, setImages] = useState<TeamImage[]>([]);
 
   useEffect(() => {
     if (!id) return;
-    api.admin.staff.get(id).then(({data}) => {
-      if (data) setStaff(data);
+    api.admin.users.get(id).then(({data}) => {
+      if (data) setUser(data);
     });
     api.admin.roles.list().then(({data}) => {
       if (data) setRoles(data);
     });
-    fetch('/api/admin/image-collections?key=staff')
+    fetch('/api/admin/image-collections?key=team')
       .then((r) => r.json())
-      .then((collections) => {
+      .then(async (collections) => {
         const found = Array.isArray(collections)
-          ? collections.find((c: {key: string}) => c.key === 'staff')
+          ? collections.find((c: {key: string}) => c.key === 'team')
           : null;
-        if (found?.images) setImages(found.images);
+        if (!found) return;
+        if (Array.isArray(found.images)) {
+          setImages(found.images);
+        } else {
+          const detail = await fetch(
+            `/api/admin/image-collections/${found.id}`,
+          ).then((r) => r.json());
+          if (Array.isArray(detail.images)) setImages(detail.images);
+        }
       });
   }, [id]);
 
-  async function onSubmit(values: StaffFormValues) {
-    const {error} = await api.admin.staff.update(
-      id,
-      values as unknown as Record<string, unknown>,
-    );
+  async function onSubmit(values: UserFormValues) {
+    const payload: Record<string, unknown> = {
+      ...values,
+      birthDate: values.birthDate || null,
+    };
+    if (!values.password) delete payload.password;
+    const {error} = await api.admin.users.update(id, payload);
     if (error) {
       alert(error);
       return;
     }
-    router.push(routes.admin.staff.list.path());
+    router.push(routes.admin.users.list.path());
   }
 
-  if (!staff) return null;
-  const defaults: StaffFormValues = {
-    name: staff.name,
-    roleId: staff.role.id,
-    bioVi: staff.bioVi,
-    bioEn: staff.bioEn,
-    imageId: staff.image ? null : null, // staff.image carries only display props, not id; admin must repick
-    order: staff.order,
-    active: staff.active,
+  if (!user) return null;
+  const defaults: UserFormValues = {
+    name: user.name,
+    email: user.email ?? '',
+    password: '',
+    orgRoleId: user.orgRole.id,
+    bioVi: user.bioVi,
+    bioEn: user.bioEn,
+    birthDate: user.birthDate ? user.birthDate.slice(0, 10) : '',
+    imageId: user.imageId,
+    isCoreTeam: user.isCoreTeam,
+    allowAuth: user.allowAuth,
+    teamOrder: user.teamOrder,
   };
 
   return (
-    <StaffForm
+    <UserForm
       mode="edit"
       defaults={defaults}
       roles={roles}
@@ -3213,54 +3421,19 @@ export default function EditStaffPage() {
 }
 ```
 
-> **Note on `imageId`:** the public `StaffPublic` shape we re-used for admin doesn't carry the `CollectionImage.id`. Before this task ships, extend `StaffAdmin` (or add an admin-specific shape) to include `imageId: string | null` and surface it from `/api/admin/staff/:id`. The mapper change is one line. Make this adjustment now — Step 4 below.
+- [ ] **Step 6: Remove legacy `users-form-utils` if unused**
 
-- [ ] **Step 4: Extend `StaffAdmin` to include `imageId`** — edit `src/domain/staff/index.ts`:
+Run: `grep -rn 'users-form-utils' src/`
+If no references remain: `git rm src/lib/users-form-utils.ts`. Otherwise leave it.
 
-```ts
-export type StaffAdmin = StaffPublic & {
-  active: boolean;
-  imageId: string | null;
-};
-```
-
-Edit `src/domain/staff/mapper.ts` `toStaffAdmin`:
-
-```ts
-export function toStaffAdmin(row: PrismaStaffWithRelations): StaffAdmin {
-  return {
-    ...toStaffPublic(row),
-    active: row.active,
-    imageId: row.imageId,
-  };
-}
-```
-
-Now update `EditStaffPage` defaults:
-
-```ts
-const defaults: StaffFormValues = {
-  name: staff.name,
-  roleId: staff.role.id,
-  bioVi: staff.bioVi,
-  bioEn: staff.bioEn,
-  imageId: staff.imageId,
-  order: staff.order,
-  active: staff.active,
-};
-```
-
-- [ ] **Step 5: Type-check + smoke**
-
-Run: `pnpm exec tsc --noEmit`
-Then `pnpm dev` and walk through /admin/staff create → edit → delete flows.
-
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Smoke + commit**
 
 ```bash
-git add src/domain/staff/ src/pages/admin/staff/
+pnpm dev
+# Walk through admin /users list → /users/new → /users/[id].
+git add src/pages/admin/users src/lib
 git commit -m "$(cat <<'EOF'
-feat(admin): add staff list, new, and edit pages
+feat(admin): rewrite /admin/users as list/new/edit pages
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -3269,18 +3442,18 @@ EOF
 
 ---
 
-## Task 23: Admin sidebar nav entries
+## Task 24: Admin sidebar nav — add Roles
 
 **Files:**
 
 - Modify: `src/components/Admin/AdminLayout/AdminLayout.tsx`
 
-- [ ] **Step 1: Add nav entries** — open `src/components/Admin/AdminLayout/AdminLayout.tsx` and locate the navigation array (containing existing entries with `routes.admin.tours.list.path()`, etc.). Add these two entries right after the "Destinations" entry and before "Perks":
+- [ ] **Step 1: Replace the existing Users entry + add Roles** — find the existing `routes.admin.users.path()` entry (if it still uses the flat form). The registry change in Task 14 made it `routes.admin.users.list.path()`. Add a Roles entry:
 
 ```ts
     {
-      href: routes.admin.staff.list.path(),
-      label: 'Staff',
+      href: routes.admin.users.list.path(),
+      label: 'Users',
       icon: 'fa-users',
     },
     {
@@ -3290,19 +3463,14 @@ EOF
     },
 ```
 
-(Verify the surrounding object shape matches the existing entries when applying — copy the field names exactly.)
-
-- [ ] **Step 2: Smoke-test**
-
-Run: `pnpm dev`
-Log in to /admin. Confirm "Staff" and "Roles" appear in the sidebar and the active-state highlighting works when navigating to /admin/staff and /admin/roles.
-
-- [ ] **Step 3: Commit**
+- [ ] **Step 2: Smoke + commit**
 
 ```bash
-git add src/components/Admin/AdminLayout/AdminLayout.tsx
+pnpm dev
+# Confirm Users + Roles in admin sidebar.
+git add src/components/Admin/AdminLayout/
 git commit -m "$(cat <<'EOF'
-feat(admin): add Staff and Roles sidebar nav entries
+feat(admin): add Roles sidebar entry; align Users to new route shape
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -3311,40 +3479,39 @@ EOF
 
 ---
 
-## Task 24: End-to-end verification
+## Task 25: End-to-end verification
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Run the full test suite**
+- [ ] **Step 1: Test suite**
 
 Run: `pnpm test`
-Expected: all tests pass, including the new about-page and admin form specs.
+Expected: all pass.
 
-- [ ] **Step 2: Run the full build**
+- [ ] **Step 2: Build**
 
 Run: `pnpm build`
-Expected: succeeds with no TypeScript errors.
+Expected: succeeds.
 
-- [ ] **Step 3: Run lint**
+- [ ] **Step 3: Lint**
 
 Run: `pnpm lint`
 Expected: succeeds.
 
-- [ ] **Step 4: Manual end-to-end check**
+- [ ] **Step 4: Manual flow**
 
 Run: `pnpm dev`
 
-Walk through the flow:
+1. Open `/about-us` (no photos yet) — verify hero, story, value props, team grid (5 placeholder cards), CTA. Switch locale (vi/en) → check translations.
+2. Sign in to `/admin`. Confirm `Users` + `Roles` nav entries.
+3. Open `/admin/image-collections` → upload 5 portraits from `src/raw/*.JPG` into the `team` collection.
+4. Open `/admin/users` → edit each seeded staff user → attach photo → fill bios → set birth date → save.
+5. Reload `/about-us` (en + vi) → confirm all 5 cards render with photos, names, role labels, bios, ages.
+6. Open `/admin/roles` → create a fresh role (e.g., `social_media_manager`) → assign to a new user via `/admin/users/new` with `allowAuth=true` + valid password → sign in as that user → expect success. Flip `allowAuth=false` via admin → sign out + try sign-in → expect failure → flip back.
+7. Try to delete a role in use → expect inline error message.
+8. Try to delete the currently signed-in user → expect 400.
 
-1. Visit http://localhost:3000/about-us — confirm hero, story, value props, team grid, CTA all render. Switch locale via the URL — confirm Vietnamese strings load.
-2. Log in to /admin. Confirm "Staff" and "Roles" appear in the sidebar.
-3. Visit /admin/image-collections, find the "Staff Photos" collection (key=staff). Upload the 5 portraits from `src/raw/*.JPG` into that collection.
-4. Visit /admin/staff. Edit each seeded staff member, attach a photo via the image picker, fill in bios. Save.
-5. Reload /about-us — confirm portraits and bios now render in the team grid.
-6. Visit /admin/roles. Try to delete the "founder" role — expect a 409 error message ("Role is in use").
-7. Create a fresh test role; assign it to a new staff member; delete the staff member; delete the role — confirm full CRUD round-trip.
-
-- [ ] **Step 5: If any regressions or visual issues, fix them and commit before moving on. Otherwise, the implementation is complete.**
+- [ ] **Step 5: Fix any regressions and commit follow-ups. Otherwise, implementation is complete.**
 
 ---
 
@@ -3353,20 +3520,21 @@ Walk through the flow:
 After completing all tasks:
 
 1. **Spec coverage:**
-   - Public page hero / story / value props / team grid / CTA — Tasks 8-12 ✓
-   - Bold Dark visual treatment — applied via Tailwind classes in each component ✓
-   - OrgRole + StaffMember Prisma models — Task 1 ✓
-   - `ImageCollection(key="staff")` reuse — Task 4 (seed) + Task 20 (picker) ✓
-   - Translation namespace `about.*` — Task 3 ✓
-   - Admin /admin/roles CRUD — Tasks 14, 15, 18, 19 ✓
-   - Admin /admin/staff CRUD — Tasks 16, 17, 20, 21, 22 ✓
-   - Image picker bound to staff collection — Task 20 + 22 ✓
-   - Routes registry + api builders — Task 13 ✓
-   - Admin nav entries — Task 23 ✓
-   - Seed scripts for roles/staff + translations — Tasks 3, 4 ✓
-   - Tests with no styling assertions — every spec uses text-content/role queries ✓
-   - 60s ISR + locale messages — Task 12 ✓
+   - Public hero / story / value props / team grid / CTA — Tasks 7–13 ✓
+   - Bold Dark visual treatment — Tailwind classes in each component ✓
+   - OrgRole model + Role enum replacement + extended User — Task 1 ✓
+   - Domain types + mappers — Task 2 ✓
+   - Seeds (about translations, roles, staff users) — Tasks 3, 4 ✓
+   - `getTeamForPublic` query — Task 5 ✓
+   - NextAuth `allowAuth` gate + `requireAdmin` admin-key check — Task 6 ✓
+   - Routes registry + api builders — Task 14 ✓
+   - Admin /roles CRUD — Tasks 15, 16, 19, 20 ✓
+   - Admin /users CRUD with new fields — Tasks 17, 18, 21, 22, 23 ✓
+   - Image picker for the `team` collection — Task 21 ✓
+   - Admin nav entries — Task 24 ✓
+   - End-to-end verification — Task 25 ✓
+   - No styling assertions in tests — every test uses text/role queries ✓
 
-2. **Type consistency:** `StaffPublic` / `StaffAdmin` / `OrgRole` / `RoleFormValues` / `StaffFormValues` names are used identically across tasks.
+2. **Type consistency:** `TeamMember`, `UserAdmin`, `OrgRole`, `UserFormValues`, `RoleFormValues` names used identically across tasks.
 
-3. **Future work:** drag-to-reorder, role-based auth scope, social links — deferred per spec.
+3. **Out of scope:** drag-reorder, fine-grained auth scopes beyond `admin`, social links, testimonials — deferred per spec.
