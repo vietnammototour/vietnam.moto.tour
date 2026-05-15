@@ -47,7 +47,16 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
       label: 'Translations',
       icon: 'fa-language',
     },
-    {href: routes.admin.users.path(), label: 'Users', icon: 'fa-users'},
+    {
+      href: routes.admin.users.list.path(),
+      label: 'Users',
+      icon: 'fa-users',
+    },
+    {
+      href: routes.admin.roles.list.path(),
+      label: 'Roles',
+      icon: 'fa-user-shield',
+    },
   ];
 
   return (

@@ -34,30 +34,43 @@ export function buildUserSchema(
 ) {
   return yup.object({
     name: yup.string().required(t('validation.nameRequired')),
-    email: yup.string().when('allowAuth', {
-      is: true,
-      then: (s) =>
-        s
-          .required(t('validation.emailRequired'))
-          .email(t('validation.emailFormat')),
-      otherwise: (s) => s.defined(),
-    }),
-    password: yup.string().when('allowAuth', {
-      is: true,
-      then: (s) =>
-        mode === 'create'
-          ? s
-              .required(t('validation.passwordRequired'))
-              .min(8, t('validation.passwordShort'))
-          : s
-              .defined()
-              .test(
-                'opt-min',
-                t('validation.passwordShort'),
-                (v) => !v || v.length >= 8,
-              ),
-      otherwise: (s) => s.defined(),
-    }),
+    email: yup
+      .string()
+      .default('')
+      .test(
+        'email-required-when-auth',
+        t('validation.emailRequired'),
+        function (v) {
+          if (!this.parent.allowAuth) return true;
+          return !!v && v.length > 0;
+        },
+      )
+      .test(
+        'email-format-when-auth',
+        t('validation.emailFormat'),
+        function (v) {
+          if (!this.parent.allowAuth) return true;
+          if (!v) return true;
+          return yup.string().email().isValidSync(v);
+        },
+      ),
+    password: yup
+      .string()
+      .default('')
+      .test(
+        'password-required',
+        t('validation.passwordRequired'),
+        function (v) {
+          if (!this.parent.allowAuth) return true;
+          if (mode !== 'create') return true;
+          return !!v && v.length > 0;
+        },
+      )
+      .test('password-min', t('validation.passwordShort'), function (v) {
+        if (!this.parent.allowAuth) return true;
+        if (!v) return mode !== 'create';
+        return v.length >= 8;
+      }),
     orgRoleId: yup.string().required(t('validation.roleRequired')),
     bioVi: yup.string().defined(),
     bioEn: yup.string().defined(),
