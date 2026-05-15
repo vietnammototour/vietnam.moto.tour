@@ -25,10 +25,9 @@ export function TeamMemberCard({member, locale}: TeamMemberCardProps) {
         ) : (
           <div
             data-testid="team-card-placeholder"
+            aria-hidden="true"
             className="flex h-full w-full items-center justify-center text-white/40"
-          >
-            {member.name}
-          </div>
+          />
         )}
       </div>
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
