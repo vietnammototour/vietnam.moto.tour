@@ -62,7 +62,7 @@ export async function getServerSideProps({
   const {getDestinationBySlug, getMessagesFromDb} =
     await import('@/data/queries');
   const session = await getServerSession(req, res, authOptions);
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isAdmin = session?.user?.orgRoleKey === 'admin';
 
   const [destination, messages] = await Promise.all([
     getDestinationBySlug(slug, isAdmin),

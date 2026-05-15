@@ -429,7 +429,7 @@ export async function getServerSideProps({
     getImageCollection,
   } = await import('@/data/queries');
   const session = await getServerSession(req, res, authOptions);
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isAdmin = session?.user?.orgRoleKey === 'admin';
 
   const [tours, destinations, dbMessages, gallery] = await Promise.all([
     getAllTours(isAdmin),
