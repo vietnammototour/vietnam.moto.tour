@@ -1,0 +1,1 @@
+export {AboutValueProps} from './AboutValueProps';
