@@ -84,7 +84,16 @@ export const routes = {
       edit: {path: (p: {id: string}) => `/admin/image-collections/${p.id}`},
     },
     translations: {path: () => '/admin/translations'},
-    users: {path: () => '/admin/users'},
+    users: {
+      list: {path: () => '/admin/users'},
+      new: {path: () => '/admin/users/new'},
+      edit: {path: (p: {id: string}) => `/admin/users/${p.id}`},
+    },
+    roles: {
+      list: {path: () => '/admin/roles'},
+      new: {path: () => '/admin/roles/new'},
+      edit: {path: (p: {id: string}) => `/admin/roles/${p.id}`},
+    },
   },
 
   isAdmin: (pathname: string) => pathname.startsWith('/admin'),
