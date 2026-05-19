@@ -23,6 +23,7 @@ export default function ThemeToggle() {
         style={{
           backgroundColor: isDark ? '#F59E0B' : '#D6D3D1',
         }}
+        suppressHydrationWarning
       >
         {/* Sun icon (left side) */}
         <motion.span
@@ -59,6 +60,7 @@ export default function ThemeToggle() {
           animate={{x: isDark ? 20 : 0}}
           transition={{type: 'spring', stiffness: 500, damping: 30}}
           aria-hidden
+          suppressHydrationWarning
         />
       </button>
     </div>
