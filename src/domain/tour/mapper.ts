@@ -57,7 +57,10 @@ export function toTour(row: PrismaTourWithRelations): Tour {
     paymentDetails: row.paymentDetails as unknown as LocalizedText,
     notes: row.notes as unknown as LocalizedText[],
     mealsInfo: row.mealsInfo as unknown as LocalizedText,
-    destinationName: row.destination.name,
+    destinationName: {
+      vi: row.destination.nameVi,
+      en: row.destination.nameEn,
+    },
     destinationHeroImage: row.destination.heroImage ?? '',
     highlights: row.highlights.map(toHighlight),
     included,

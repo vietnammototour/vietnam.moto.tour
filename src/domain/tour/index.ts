@@ -37,7 +37,7 @@ export type Tour = Omit<
   paymentDetails: LocalizedText;
   notes: LocalizedText[];
   mealsInfo: LocalizedText;
-  destinationName: string;
+  destinationName: LocalizedText;
   destinationHeroImage: string;
   highlights: Highlight[];
   included: Perk[];
