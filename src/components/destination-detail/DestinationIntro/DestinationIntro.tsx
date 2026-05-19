@@ -25,7 +25,7 @@ export function DestinationIntro({destination, locale}: Props) {
         {t('aboutEyebrow')}
       </span>
       <h2 className="type-headline-md text-on-surface mb-6">
-        {t('aboutTitle', {name: destination.name})}
+        {t('aboutTitle', {name: destination.name[locale]})}
       </h2>
       <p className="type-body-lg text-on-surface-secondary leading-relaxed first-letter:type-display-sm first-letter:font-semibold first-letter:text-primary first-letter:float-left first-letter:mr-3 first-letter:leading-none first-letter:mt-1">
         {description}

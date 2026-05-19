@@ -23,7 +23,7 @@ export default function DestinationDetailPage({destination}: Props) {
   return (
     <>
       <Head>
-        <title>{destination.name}</title>
+        <title>{destination.name[locale]}</title>
         <meta name="description" content={metaDescription} />
       </Head>
 

@@ -16,7 +16,7 @@ function renderTab(props: Partial<React.ComponentProps<typeof CardTab>> = {}) {
           id: 't1',
           slug: 'mui-ne',
           destinationId: 'd1',
-          destinationName: 'Mui Ne',
+          destinationName: {en: 'Mui Ne', vi: 'Mui Ne'},
           destinationHeroImage: '',
           title: {en: 'Mui Ne', vi: 'Mui Ne'},
           description: {en: '', vi: ''},

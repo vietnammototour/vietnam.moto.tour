@@ -24,7 +24,6 @@ export default async function handler(
       where: {id},
       data: {
         slug: data.slug,
-        name: data.name,
         nameVi: data.nameVi,
         nameEn: data.nameEn,
         imageUrl: data.imageUrl,
@@ -47,18 +46,14 @@ export default async function handler(
       if (!existing)
         return res.status(404).json({error: 'Destination not found'});
       if (existing.isActive) {
-        return res
-          .status(409)
-          .json({
-            error: 'Destination must be archived before permanent deletion',
-          });
+        return res.status(409).json({
+          error: 'Destination must be archived before permanent deletion',
+        });
       }
       if (existing._count.tours > 0) {
-        return res
-          .status(409)
-          .json({
-            error: 'Destination has tours; remove or reassign them first',
-          });
+        return res.status(409).json({
+          error: 'Destination has tours; remove or reassign them first',
+        });
       }
       await prisma.destination.delete({where: {id}});
       return res.status(204).end();

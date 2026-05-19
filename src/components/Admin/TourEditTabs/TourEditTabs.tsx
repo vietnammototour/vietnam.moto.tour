@@ -54,7 +54,10 @@ export function TourEditTabs({
   const updateTour = useUpdateTour();
 
   const [slug, setSlug] = useState(initialGeneral.slug);
-  const [title, setTitle] = useState(initialGeneral.title);
+  const [title, setTitle] = useState({
+    en: initialGeneral.titleEn,
+    vi: initialGeneral.titleVi,
+  });
   const [pendingSlug, setPendingSlug] = useState<string | undefined>(undefined);
   const [generalDirty, setGeneralDirty] = useState(false);
 
@@ -115,16 +118,18 @@ export function TourEditTabs({
   const isTabDisabled = (tabId: TourTab) =>
     tabId !== 'general' && mode === 'create' && !tourId;
 
-  const tourLabel = (mode === 'create' ? 'New tour' : title) || 'Untitled tour';
+  const tourLabel =
+    (mode === 'create' ? 'New tour' : title[locale] || title.en || title.vi) ||
+    'Untitled tour';
 
   const dest = destinations.find((d) => d.id === destinationId);
   const cardPreviewTour: VMT.Tour = {
     id: tourId ?? 'preview',
     slug,
     destinationId,
-    destinationName: dest?.name ?? '',
+    destinationName: {en: dest?.name ?? '', vi: dest?.name ?? ''},
     destinationHeroImage: dest?.heroImage ?? '',
-    title: {en: title, vi: title},
+    title,
     description: {en: '', vi: ''},
     imageUrl: '',
     images: [],
@@ -203,7 +208,9 @@ export function TourEditTabs({
               setSlug(s);
               setPendingSlug(undefined);
             }}
-            onTitleChange={setTitle}
+            onTitleChange={(activeTitle) =>
+              setTitle((prev) => ({...prev, [locale]: activeTitle}))
+            }
             onDestinationChange={setDestinationId}
             onDirtyChange={setGeneralDirty}
             onSave={handleGeneralSave}

@@ -14,7 +14,7 @@ jest.mock('@/hooks/use-cursor-spotlight', () => ({
 const dest = {
   id: 'd1',
   slug: 'dalat',
-  name: 'Da Lat',
+  name: {en: 'Da Lat', vi: 'Đà Lạt'},
   imageUrl: '/img/dalat.jpg',
   heroImage: '/img/dalat-hero.jpg',
   size: 'large' as const,

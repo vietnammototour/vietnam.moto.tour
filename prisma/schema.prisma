@@ -50,7 +50,6 @@ model Tour {
   slug           String      @unique
   destinationId  String
   destination    Destination @relation(fields: [destinationId], references: [id])
-  title          String
   titleVi        String      @default("")
   titleEn        String      @default("")
   imageUrl       String?
@@ -77,7 +76,6 @@ model Tour {
 model Destination {
   id            String   @id @default(uuid())
   slug          String   @unique
-  name          String
   nameVi        String   @default("")
   nameEn        String   @default("")
   imageUrl      String?

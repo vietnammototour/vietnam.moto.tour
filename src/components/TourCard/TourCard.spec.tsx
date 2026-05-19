@@ -15,7 +15,7 @@ describe('TourCard', () => {
     duration: 1,
     distance: 186,
     destinationId: 'dest-1',
-    destinationName: 'Dalat',
+    destinationName: {en: 'Dalat', vi: 'Dalat'},
     imageUrl: '/dalat.jpg',
     slug: 'da-lat-tour',
   });

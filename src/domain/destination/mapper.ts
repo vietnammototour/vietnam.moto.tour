@@ -5,7 +5,7 @@ export function toDestination(row: PrismaDestination): Destination {
   return {
     id: row.id,
     slug: row.slug,
-    name: row.name,
+    name: {vi: row.nameVi, en: row.nameEn},
     imageUrl: row.imageUrl ?? '',
     heroImage: row.heroImage ?? '',
     size: row.size === 'large' ? 'large' : 'small',

@@ -63,7 +63,12 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
             <input
               aria-label="Title"
               value={tour.title[localeKey] ?? ''}
-              onChange={(e) => ctx!.onFieldChange('title', e.target.value)}
+              onChange={(e) =>
+                ctx!.onFieldChange(
+                  localeKey === 'en' ? 'title.en' : 'title.vi',
+                  e.target.value,
+                )
+              }
               className={`type-display-sm md:type-display-lg ${inputBaseClasses} mb-3 max-w-[70%] w-full`}
             />
           ) : (
@@ -83,7 +88,7 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface-inverse/80 type-body-sm">
                   <span className="flex items-center gap-1.5">
                     <i className="fa fa-map-marker-alt" />{' '}
-                    {tour.destinationName}
+                    {tour.destinationName[localeKey]}
                   </span>
                   <label className="flex items-center gap-1.5">
                     <i className="fa fa-clock" />
@@ -136,7 +141,7 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
                 >
                   <span className="flex items-center gap-1.5">
                     <i className="fa fa-map-marker-alt" />{' '}
-                    {tour.destinationName}
+                    {tour.destinationName[localeKey]}
                   </span>
                   <span className="flex items-center gap-1.5">
                     <i className="fa fa-clock" /> {tour.duration} {t('days')}

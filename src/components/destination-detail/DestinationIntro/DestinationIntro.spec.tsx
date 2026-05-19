@@ -4,7 +4,7 @@ import {DestinationIntro} from './DestinationIntro';
 const dest = {
   id: 'd1',
   slug: 'dalat',
-  name: 'Da Lat',
+  name: {en: 'Da Lat', vi: 'Đà Lạt'},
   imageUrl: '',
   heroImage: '',
   size: 'large' as const,

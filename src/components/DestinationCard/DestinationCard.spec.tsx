@@ -5,7 +5,7 @@ import {buildDestination} from '@/test-utils/factories';
 describe('DestinationCard', () => {
   const destination = {
     ...buildDestination({
-      name: 'Dalat',
+      name: {en: 'Dalat', vi: 'Dalat'},
       imageUrl: '/dalat.jpg',
       id: 'dest-dalat',
       slug: 'dalat',

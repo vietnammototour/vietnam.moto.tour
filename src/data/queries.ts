@@ -238,7 +238,7 @@ export async function getToursForAdmin(filters: AdminTourFilters = {}) {
     where,
     orderBy: {createdAt: 'desc'},
     include: {
-      destination: {select: {name: true}},
+      destination: {select: {nameVi: true, nameEn: true}},
       highlights: true,
     },
   });

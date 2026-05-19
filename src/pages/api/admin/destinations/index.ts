@@ -30,7 +30,6 @@ export default async function handler(
     const destination = await prisma.destination.create({
       data: {
         slug: data.slug,
-        name: data.name,
         nameVi: data.nameVi ?? '',
         nameEn: data.nameEn ?? '',
         imageUrl: data.imageUrl ?? '',

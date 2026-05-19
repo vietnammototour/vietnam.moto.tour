@@ -1,6 +1,7 @@
 import type {Destination as PrismaDestination} from '@prisma/client';
 import type {Highlight} from '../highlight';
 import type {Tour} from '../tour';
+import type {LocalizedText} from '../shared/localized-text';
 
 export type Destination = Omit<
   PrismaDestination,
@@ -13,6 +14,7 @@ export type Destination = Omit<
   | 'imageUrl'
   | 'heroImage'
 > & {
+  name: LocalizedText;
   size: 'small' | 'large';
   imageUrl: string;
   heroImage: string;

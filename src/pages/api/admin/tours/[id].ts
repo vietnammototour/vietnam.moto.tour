@@ -24,7 +24,6 @@ export default async function handler(
     const fields = [
       'slug',
       'destinationId',
-      'title',
       'titleVi',
       'titleEn',
       'imageUrl',

@@ -28,7 +28,6 @@ export default async function handler(
       data: {
         slug: data.slug,
         destinationId: data.destinationId,
-        title: data.title,
         titleVi: data.titleVi ?? '',
         titleEn: data.titleEn ?? '',
         imageUrl: data.imageUrl ?? '',

@@ -46,7 +46,6 @@ export default function EditDestination() {
 
   const initialData = {
     slug: destination.slug as string,
-    name: destination.name as string,
     nameVi: (destination.nameVi as string) ?? '',
     nameEn: (destination.nameEn as string) ?? '',
     imageUrl: (destination.imageUrl as string) ?? '',

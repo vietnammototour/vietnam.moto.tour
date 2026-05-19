@@ -3,9 +3,8 @@ import {api} from '@/routes';
 
 export const destinationSchema = yup.object({
   slug: yup.string().required('Slug is required'),
-  name: yup.string().defined(),
-  nameVi: yup.string().defined(),
-  nameEn: yup.string().defined(),
+  nameVi: yup.string().required('Vietnamese name is required'),
+  nameEn: yup.string().required('English name is required'),
   imageUrl: yup.string().defined(),
   heroImage: yup.string().defined(),
   descriptionVi: yup.string().defined(),
@@ -17,7 +16,6 @@ export type DestinationFormData = yup.InferType<typeof destinationSchema>;
 
 export const destinationDefaults: DestinationFormData = {
   slug: '',
-  name: '',
   nameVi: '',
   nameEn: '',
   imageUrl: '',
