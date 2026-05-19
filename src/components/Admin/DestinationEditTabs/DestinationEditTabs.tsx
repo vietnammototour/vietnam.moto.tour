@@ -13,7 +13,6 @@ import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
 
 export type DestinationFormData = {
   slug: string;
-  name: string;
   nameVi: string;
   nameEn: string;
   imageUrl: string;
@@ -81,7 +80,7 @@ export function DestinationEditTabs({
 
   const currentName = locale === 'en' ? form.nameEn : form.nameVi;
 
-  const destName = form.name || form.nameEn || form.nameVi || '';
+  const destName = form.nameEn || form.nameVi || '';
   const currentLabel =
     mode === 'create' ? 'New destination' : destName || 'Untitled destination';
 
@@ -156,7 +155,7 @@ export function DestinationEditTabs({
               heroImage={
                 form.heroImage ? `${form.heroImage}?v=${imgVersion}` : ''
               }
-              destinationName={currentName || form.name}
+              destinationName={currentName || destName}
               onImageChange={(url) => {
                 updateForm('heroImage', url);
                 setImgVersion((v) => v + 1);

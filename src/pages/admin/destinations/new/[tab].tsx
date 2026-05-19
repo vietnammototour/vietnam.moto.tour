@@ -5,7 +5,6 @@ import {isDestinationTab, type DestinationTab} from '@/routes';
 
 const emptyData = {
   slug: '',
-  name: '',
   nameVi: '',
   nameEn: '',
   imageUrl: '',
