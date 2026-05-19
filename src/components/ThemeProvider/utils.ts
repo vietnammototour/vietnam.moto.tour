@@ -1,6 +1,6 @@
 import {type Theme} from './context';
 
-export function getInitialTheme(): Theme {
+export function readThemeCookie(): Theme {
   if (typeof document === 'undefined') return 'light';
   const match = document.cookie.match(/(?:^|; )NEXT_THEME=(\w+)/);
   return match?.[1] === 'dark' ? 'dark' : 'light';

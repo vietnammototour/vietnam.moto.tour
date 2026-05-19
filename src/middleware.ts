@@ -5,7 +5,7 @@ import type {NextRequest} from 'next/server';
 export async function middleware(request: NextRequest) {
   const token = await getToken({req: request});
 
-  if (!token || token.role !== 'ADMIN') {
+  if (!token || token.orgRoleKey !== 'admin') {
     const url = new URL('/', request.url);
     return NextResponse.redirect(url);
   }

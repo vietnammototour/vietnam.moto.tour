@@ -181,7 +181,7 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext) {
   const {getTourBySlug, getMessagesFromDb} = await import('@/data/queries');
   const session = await getServerSession(req, res, authOptions);
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isAdmin = session?.user?.orgRoleKey === 'admin';
 
   const slug = params?.slug as string;
   const [tour, dbMessages] = await Promise.all([

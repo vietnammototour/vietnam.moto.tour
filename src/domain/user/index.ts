@@ -1,10 +1,17 @@
-import type {User as PrismaUser, Role as PrismaRole} from '@prisma/client';
+import type {OrgRole} from '../org-role';
+import type {TeamPhoto} from '../team-member';
 
-export type Role = PrismaRole;
-
-export type User = Omit<
-  PrismaUser,
-  'passwordHash' | 'updatedAt' | 'createdAt'
-> & {
-  createdAt: string;
+export type UserAdmin = {
+  id: string;
+  name: string;
+  email: string | null;
+  bioVi: string;
+  bioEn: string;
+  birthDate: string | null;
+  imageId: string | null;
+  isCoreTeam: boolean;
+  allowAuth: boolean;
+  teamOrder: number;
+  orgRole: OrgRole;
+  photo: TeamPhoto | null;
 };

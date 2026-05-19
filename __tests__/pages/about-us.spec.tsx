@@ -1,66 +1,42 @@
 import {render, screen} from '@/test-utils/render';
 import AboutUs, {getStaticProps} from '@/pages/about-us';
+import type {TeamMember} from '@/domain';
 
 jest.mock('@/data/queries', () => ({
   getMessagesFromDb: jest.fn().mockResolvedValue(null),
+  getTeamForPublic: jest.fn().mockResolvedValue([]),
 }));
+
+const team: TeamMember[] = [];
 
 describe('AboutUs page', () => {
   it('renders meta title translation key', () => {
-    render(<AboutUs />);
-    expect(document.title).toBe('aboutTitle');
+    render(<AboutUs team={team} locale="en" />);
+    expect(document.title).toBe('title');
   });
 
-  it('renders page header with title', () => {
-    render(<AboutUs />);
-    expect(screen.getByText('title')).toBeInTheDocument();
+  it('renders meta description', () => {
+    render(<AboutUs team={team} locale="en" />);
+    const meta = document.querySelector('meta[name="description"]');
+    expect(meta?.getAttribute('content')).toBe('description');
   });
 
-  it('renders breadcrumbs', () => {
-    render(<AboutUs />);
-    expect(screen.getByText('breadcrumbHome')).toBeInTheDocument();
-    expect(screen.getByText('breadcrumbPages')).toBeInTheDocument();
-    expect(screen.getByText('breadcrumbAbout')).toBeInTheDocument();
-  });
-
-  it('renders about section heading keys', () => {
-    render(<AboutUs />);
-    expect(screen.getByText('learnAboutUs')).toBeInTheDocument();
-    expect(screen.getByText('dareToExplore')).toBeInTheDocument();
-    expect(screen.getByText('perfectPlace')).toBeInTheDocument();
-  });
-
-  it('renders progress bars with labels', () => {
-    render(<AboutUs />);
-    expect(screen.getByText('bestServices')).toBeInTheDocument();
-    expect(screen.getByText('tourAgents')).toBeInTheDocument();
-    expect(screen.getByText('77%')).toBeInTheDocument();
-    expect(screen.getByText('38%')).toBeInTheDocument();
-  });
-
-  it('renders CTA section', () => {
-    render(<AboutUs />);
-    expect(screen.getByText('readyForTour')).toBeInTheDocument();
-    expect(screen.getByText('bookTourNow')).toBeInTheDocument();
-  });
-
-  it('renders stats section', () => {
-    render(<AboutUs />);
-    expect(screen.getByText('870+')).toBeInTheDocument();
-    expect(screen.getByText('totalTours')).toBeInTheDocument();
-    expect(screen.getByText('480+')).toBeInTheDocument();
-    expect(screen.getByText('happyRiders')).toBeInTheDocument();
-  });
-
-  it('renders play video button', () => {
-    render(<AboutUs />);
-    expect(screen.getByLabelText('Play video')).toBeInTheDocument();
+  it('renders the team empty-state when team is empty', () => {
+    render(<AboutUs team={team} locale="en" />);
+    expect(screen.getByTestId('team-empty')).toBeInTheDocument();
   });
 });
 
 describe('AboutUs getStaticProps', () => {
-  it('returns messages for vi locale', async () => {
+  it('returns messages, team, and locale for vi locale', async () => {
     const result = await getStaticProps({locale: 'vi'} as never);
     expect(result).toHaveProperty('props.messages');
+    expect(result).toHaveProperty('props.team');
+    expect((result as {props: {locale: string}}).props.locale).toBe('vi');
+  });
+
+  it('defaults to vi locale when undefined', async () => {
+    const result = await getStaticProps({} as never);
+    expect((result as {props: {locale: string}}).props.locale).toBe('vi');
   });
 });

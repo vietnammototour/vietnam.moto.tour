@@ -12,11 +12,13 @@ import type {
   DestinationWithStats,
   DestinationDetail,
   Highlight,
+  TeamMember,
 } from '@/domain';
 import {HIGHLIGHTS_PAGE_SIZE} from '@/domain';
 import {toTour} from '@/domain/tour/mapper';
 import {toDestination} from '@/domain/destination/mapper';
 import {toHighlight} from '@/domain/highlight/mapper';
+import {toTeamMember} from '@/domain/team-member/mapper';
 
 export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   try {
@@ -250,4 +252,18 @@ export async function getTourByIdForAdmin(id: string) {
       perks: {include: {perk: true}},
     },
   });
+}
+
+export async function getTeamForPublic(): Promise<TeamMember[]> {
+  try {
+    const rows = await prisma.user.findMany({
+      where: {isCoreTeam: true},
+      orderBy: {teamOrder: 'asc'},
+      include: {orgRole: true, image: true},
+    });
+    return rows.map(toTeamMember);
+  } catch (error) {
+    console.error('getTeamForPublic: DB query failed', error);
+    return [];
+  }
 }

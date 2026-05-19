@@ -185,14 +185,36 @@ export const api = {
       },
     },
     users: {
-      list: () => request<VMT.User[]>('/api/admin/users'),
+      list: () => request<VMT.UserAdmin[]>('/api/admin/users'),
+      get: (id: string) => request<VMT.UserAdmin>(`/api/admin/users/${id}`),
       create: (data: Record<string, unknown>) =>
-        request<VMT.User>('/api/admin/users', {
+        request<VMT.UserAdmin>('/api/admin/users', {
           method: 'POST',
+          body: JSON.stringify(data),
+        }),
+      update: (id: string, data: Record<string, unknown>) =>
+        request<VMT.UserAdmin>(`/api/admin/users/${id}`, {
+          method: 'PUT',
           body: JSON.stringify(data),
         }),
       delete: (id: string) =>
         request<void>(`/api/admin/users/${id}`, {method: 'DELETE'}),
+    },
+    roles: {
+      list: () => request<VMT.OrgRole[]>('/api/admin/roles'),
+      get: (id: string) => request<VMT.OrgRole>(`/api/admin/roles/${id}`),
+      create: (data: Record<string, unknown>) =>
+        request<VMT.OrgRole>('/api/admin/roles', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        }),
+      update: (id: string, data: Record<string, unknown>) =>
+        request<VMT.OrgRole>(`/api/admin/roles/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(data),
+        }),
+      delete: (id: string) =>
+        request<void>(`/api/admin/roles/${id}`, {method: 'DELETE'}),
     },
     translations: {
       list: () => request<VMT.Translation[]>('/api/admin/translations'),
