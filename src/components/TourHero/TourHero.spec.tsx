@@ -63,11 +63,11 @@ describe('TourHero editable mode', () => {
     expect(titleInput).toHaveValue('Title EN');
   });
 
-  it('emits onFieldChange("title", value) when title input changes', () => {
+  it('emits onFieldChange("title.<locale>", value) when title input changes', () => {
     const {onFieldChange} = renderEditable();
     const titleInput = screen.getByRole('textbox', {name: /title/i});
     fireEvent.change(titleInput, {target: {value: 'New title'}});
-    expect(onFieldChange).toHaveBeenCalledWith('title', 'New title');
+    expect(onFieldChange).toHaveBeenCalledWith('title.en', 'New title');
   });
 
   it('renders duration/distance/transportation as inputs and emits changes', () => {

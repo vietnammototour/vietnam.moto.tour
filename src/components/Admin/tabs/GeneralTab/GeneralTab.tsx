@@ -58,17 +58,27 @@ export function GeneralTab({
   const values = useWatch({control}) as GeneralTabFormData;
 
   const lastSlug = useRef(initialData.slug);
-  const lastTitle = useRef(initialData.title);
+  const lastTitle = useRef(
+    initialData[locale === 'en' ? 'titleEn' : 'titleVi'],
+  );
   useEffect(() => {
     if (values.slug !== lastSlug.current) {
       lastSlug.current = values.slug;
       onSlugChange?.(values.slug);
     }
-    if (values.title !== lastTitle.current) {
-      lastTitle.current = values.title;
-      onTitleChange?.(values.title);
+    const activeTitle = locale === 'en' ? values.titleEn : values.titleVi;
+    if (activeTitle !== lastTitle.current) {
+      lastTitle.current = activeTitle;
+      onTitleChange?.(activeTitle);
     }
-  }, [values.slug, values.title, onSlugChange, onTitleChange]);
+  }, [
+    values.slug,
+    values.titleEn,
+    values.titleVi,
+    locale,
+    onSlugChange,
+    onTitleChange,
+  ]);
 
   useEffect(() => {
     onDirtyChange?.(isDirty);
@@ -86,8 +96,9 @@ export function GeneralTab({
       let rhfPath: keyof GeneralTabFormData | null = null;
       if (path === 'description.en') rhfPath = 'descriptionEn';
       else if (path === 'description.vi') rhfPath = 'descriptionVi';
+      else if (path === 'title.en') rhfPath = 'titleEn';
+      else if (path === 'title.vi') rhfPath = 'titleVi';
       else if (
-        path === 'title' ||
         path === 'duration' ||
         path === 'distance' ||
         path === 'transportation' ||
@@ -120,12 +131,9 @@ export function GeneralTab({
     id: tourId ?? 'preview',
     slug: values.slug,
     destinationId: values.destinationId,
-    destinationName,
+    destinationName: {en: destinationName, vi: destinationName},
     destinationHeroImage: heroImage,
-    title: {
-      en: locale === 'en' ? values.title : (values.titleEn ?? values.title),
-      vi: locale === 'vi' ? values.title : (values.titleVi ?? values.title),
-    },
+    title: {en: values.titleEn, vi: values.titleVi},
     description: {en: values.descriptionEn, vi: values.descriptionVi},
     imageUrl: '',
     images: [],

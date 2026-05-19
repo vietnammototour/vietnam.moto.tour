@@ -63,7 +63,12 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
             <input
               aria-label="Title"
               value={tour.title[localeKey] ?? ''}
-              onChange={(e) => ctx!.onFieldChange('title', e.target.value)}
+              onChange={(e) =>
+                ctx!.onFieldChange(
+                  localeKey === 'en' ? 'title.en' : 'title.vi',
+                  e.target.value,
+                )
+              }
               className={`type-display-sm md:type-display-lg ${inputBaseClasses} mb-3 max-w-[70%] w-full`}
             />
           ) : (

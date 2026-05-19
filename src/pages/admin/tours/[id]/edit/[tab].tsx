@@ -73,7 +73,6 @@ export default function EditTour() {
   const initialGeneral = {
     slug: tourRecord.slug as string,
     destinationId: tourRecord.destinationId as string,
-    title: tourRecord.title as string,
     titleVi: (tourRecord.titleVi as string) ?? '',
     titleEn: (tourRecord.titleEn as string) ?? '',
     duration: (tourRecord.duration as number) ?? 1,

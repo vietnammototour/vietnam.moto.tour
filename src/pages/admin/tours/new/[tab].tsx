@@ -16,7 +16,6 @@ type Destination = {
 const emptyGeneral = {
   slug: '',
   destinationId: '',
-  title: '',
   titleVi: '',
   titleEn: '',
   duration: 1,
