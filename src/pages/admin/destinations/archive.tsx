@@ -6,7 +6,8 @@ import {routes, api} from '@/routes';
 
 type AdminDestination = {
   id: string;
-  name: string;
+  nameVi: string;
+  nameEn: string;
   slug: string;
   isActive: boolean;
   imageUrl: string | null;
@@ -108,7 +109,7 @@ export default function AdminDestinationsArchive() {
                       </div>
                     )}
                     <span className="type-body-lg text-on-surface">
-                      {dest.name}
+                      {dest.nameEn || dest.nameVi}
                     </span>
                   </div>
                 </td>

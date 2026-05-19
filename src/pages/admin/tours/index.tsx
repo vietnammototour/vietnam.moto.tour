@@ -14,10 +14,11 @@ import type * as VMT from '@/domain';
 
 type AdminTour = {
   id: string;
-  title: string;
+  titleVi: string;
+  titleEn: string;
   slug: string;
   status: VMT.TourStatus;
-  destination: {name: string};
+  destination: {nameVi: string; nameEn: string};
   pricingGroups: VMT.PricingGroup[];
   duration: string;
   imageUrl: string | null;
@@ -111,12 +112,12 @@ export default function AdminToursList() {
                       <i className="fa fa-image text-on-surface-tertiary" />
                     </div>
                     <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
-                      {tour.title}
+                      {tour.titleEn || tour.titleVi}
                     </span>
                   </Link>
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
-                  {tour.destination.name}
+                  {tour.destination.nameEn || tour.destination.nameVi}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5">

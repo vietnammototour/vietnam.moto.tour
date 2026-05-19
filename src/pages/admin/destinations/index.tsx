@@ -6,7 +6,8 @@ import {routes, api} from '@/routes';
 
 type AdminDestination = {
   id: string;
-  name: string;
+  nameVi: string;
+  nameEn: string;
   slug: string;
   isActive: boolean;
   imageUrl: string | null;
@@ -111,7 +112,7 @@ export default function AdminDestinationsList() {
                       <i className="fa fa-image text-on-surface-tertiary" />
                     </div>
                     <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
-                      {dest.name}
+                      {dest.nameEn || dest.nameVi}
                     </span>
                   </Link>
                 </td>
