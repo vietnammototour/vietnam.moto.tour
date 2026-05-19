@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {motion} from 'framer-motion';
-import {useTranslations} from 'next-intl';
+import {useTranslations, useLocale} from 'next-intl';
 import type * as VMT from '@/domain';
 import {routes} from '@/routes';
 
@@ -15,6 +15,8 @@ export const DestinationCard = ({
   const {name, imageUrl, slug, carOnlyCount, bikeOnlyCount, bikeAndCarCount} =
     destination;
   const t = useTranslations('common');
+  const locale = useLocale() as 'en' | 'vi';
+  const displayName = name[locale];
 
   const chips: {
     key: string;
@@ -65,13 +67,13 @@ export const DestinationCard = ({
       >
         <img
           src={imageUrl}
-          alt={name}
+          alt={displayName}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-5">
           <h2 className="type-title-lg text-white mb-1 group-hover:text-primary-light transition-colors">
-            {name}
+            {displayName}
           </h2>
           <div className="flex items-center flex-wrap gap-1.5">
             {chips.map((chip) => (

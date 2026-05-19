@@ -1,15 +1,17 @@
 import {motion} from 'framer-motion';
-import {useTranslations} from 'next-intl';
+import {useTranslations, useLocale} from 'next-intl';
 import type * as VMT from '@/domain';
+import type {LocalizedText} from '@/domain/shared/localized-text';
 import {TourCard} from '@/components/TourCard';
 
 type Props = {
   tours: VMT.Tour[];
-  destinationName: string;
+  destinationName: LocalizedText;
 };
 
 export function DestinationTours({tours, destinationName}: Props) {
   const t = useTranslations('destinationDetail');
+  const locale = useLocale() as 'en' | 'vi';
 
   return (
     <motion.section
@@ -24,7 +26,7 @@ export function DestinationTours({tours, destinationName}: Props) {
         <div className="flex items-end justify-between gap-4 mb-10">
           <div>
             <h2 className="type-headline-lg text-on-surface">
-              {t('toursTitle', {name: destinationName})}
+              {t('toursTitle', {name: destinationName[locale]})}
             </h2>
           </div>
         </div>

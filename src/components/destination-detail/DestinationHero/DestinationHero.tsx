@@ -57,7 +57,7 @@ export function DestinationHero({destination, locale}: Props) {
             animate="visible"
             className="type-display-md md:type-display-lg text-on-surface-inverse mb-6 max-w-[80%] leading-[0.95]"
           >
-            {destination.name}
+            {destination.name[locale]}
           </motion.h1>
 
           {description && (
@@ -92,7 +92,7 @@ export function DestinationHero({destination, locale}: Props) {
             </Link>
             <span>/</span>
             <span className="text-on-surface type-label-lg">
-              {destination.name}
+              {destination.name[locale]}
             </span>
           </nav>
         </div>

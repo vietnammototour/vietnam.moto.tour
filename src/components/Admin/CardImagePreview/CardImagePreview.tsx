@@ -65,10 +65,11 @@ export function CardImagePreview({
         ? slot.previewUrl
         : '';
 
+  const resolvedName = destinationName || 'Destination Name';
   const cardDestination = {
     id: destinationId ?? '',
     slug: '',
-    name: destinationName || 'Destination Name',
+    name: {en: resolvedName, vi: resolvedName},
     imageUrl: previewUrl,
     heroImage: '',
     size: size,

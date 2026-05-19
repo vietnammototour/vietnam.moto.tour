@@ -16,7 +16,7 @@ export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
     hotel: 'Pick up & Drop off',
     guided: 'Fully Guided Tour',
     destinationHeroImage: '',
-    destinationName: 'Test Destination',
+    destinationName: {en: 'Test Destination', vi: 'Test Destination'},
     images: [],
     highlights: [],
     included: [],
@@ -59,7 +59,7 @@ export function buildDestination(
   return {
     id: 'dest-1',
     slug: 'test-destination',
-    name: 'Test Destination',
+    name: {en: 'Test Destination', vi: 'Test Destination'},
     imageUrl: '/test-destination.jpg',
     heroImage: '',
     size: 'small',

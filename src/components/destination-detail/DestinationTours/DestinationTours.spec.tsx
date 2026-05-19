@@ -14,21 +14,31 @@ describe('DestinationTours', () => {
     render(
       <DestinationTours
         tours={[tour('1'), tour('2')]}
-        destinationName="Da Lat"
+        destinationName={{en: 'Da Lat', vi: 'Đà Lạt'}}
       />,
     );
     expect(screen.getAllByTestId('tour-card')).toHaveLength(2);
   });
 
   it('renders the destination-aware title key', () => {
-    render(<DestinationTours tours={[tour('1')]} destinationName="Da Lat" />);
+    render(
+      <DestinationTours
+        tours={[tour('1')]}
+        destinationName={{en: 'Da Lat', vi: 'Đà Lạt'}}
+      />,
+    );
     expect(
-      screen.getByText('toursTitle:{"name":"Da Lat"}'),
+      screen.getByText('toursTitle:{"name":"Đà Lạt"}'),
     ).toBeInTheDocument();
   });
 
   it('renders empty state when no tours', () => {
-    render(<DestinationTours tours={[]} destinationName="Da Lat" />);
+    render(
+      <DestinationTours
+        tours={[]}
+        destinationName={{en: 'Da Lat', vi: 'Đà Lạt'}}
+      />,
+    );
     expect(screen.getByText('noTours')).toBeInTheDocument();
   });
 });

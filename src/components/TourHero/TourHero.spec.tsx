@@ -18,7 +18,7 @@ const baseTour: VMT.Tour = {
   id: 't1',
   slug: 's',
   destinationId: 'd1',
-  destinationName: 'Mui Ne',
+  destinationName: {en: 'Mui Ne', vi: 'Mũi Né'},
   destinationHeroImage: '/img.jpg',
   title: {en: 'Title EN', vi: 'Title VI'},
   description: {en: '', vi: ''},

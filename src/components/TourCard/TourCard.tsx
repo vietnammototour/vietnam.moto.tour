@@ -148,13 +148,15 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           <h3 className="type-title-lg font-semibold leading-tight text-on-surface group-hover:text-primary transition-colors truncate">
             {title}
           </h3>
-          {tour.destinationName && (
+          {tour.destinationName[locale as 'en' | 'vi'] && (
             <p className="mt-2 flex items-center gap-1.5 type-label-sm uppercase tracking-wider text-on-surface-secondary">
               <i
                 className="fa fa-map-marker-alt text-[0.7rem]"
                 aria-hidden="true"
               />
-              <span className="truncate">{tour.destinationName}</span>
+              <span className="truncate">
+                {tour.destinationName[locale as 'en' | 'vi']}
+              </span>
             </p>
           )}
         </div>

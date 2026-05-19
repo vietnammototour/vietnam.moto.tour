@@ -20,7 +20,7 @@ const mockDestinations = [
   {
     id: 'dest-1',
     slug: 'nha-trang',
-    name: 'Nha Trang',
+    name: {en: 'Nha Trang', vi: 'Nha Trang'},
     imageUrl: '/img/dest1.jpg',
     heroImage: '',
     size: 'large' as const,
@@ -33,7 +33,7 @@ const mockDestinations = [
   {
     id: 'dest-2',
     slug: 'dalat',
-    name: 'Dalat',
+    name: {en: 'Dalat', vi: 'Dalat'},
     imageUrl: '/img/dest2.jpg',
     heroImage: '',
     size: 'small' as const,
@@ -46,7 +46,7 @@ const mockDestinations = [
   {
     id: 'dest-3',
     slug: 'mui-ne',
-    name: 'Mui Ne',
+    name: {en: 'Mui Ne', vi: 'Mũi Né'},
     imageUrl: '/img/dest3.jpg',
     heroImage: '',
     size: 'small' as const,
@@ -59,7 +59,7 @@ const mockDestinations = [
   {
     id: 'dest-4',
     slug: 'quy-nhon',
-    name: 'Quy Nhon',
+    name: {en: 'Quy Nhon', vi: 'Quy Nhơn'},
     imageUrl: '/img/dest4.jpg',
     heroImage: '',
     size: 'small' as const,
@@ -72,7 +72,7 @@ const mockDestinations = [
   {
     id: 'dest-5',
     slug: 'hoi-an',
-    name: 'Hoi An',
+    name: {en: 'Hoi An', vi: 'Hội An'},
     imageUrl: '/img/dest5.jpg',
     heroImage: '',
     size: 'small' as const,
