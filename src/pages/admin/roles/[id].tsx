@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
+import type {GetServerSidePropsContext} from 'next';
 import {RoleForm, type RoleFormValues} from '@/components/Admin/RoleForm';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
@@ -30,4 +31,10 @@ export default function EditRolePage() {
 
   if (!role) return null;
   return <RoleForm mode="edit" defaults={role} onSubmit={onSubmit} />;
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

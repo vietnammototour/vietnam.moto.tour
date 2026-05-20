@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {useSession} from 'next-auth/react';
 import {useTranslations} from 'next-intl';
+import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import type * as VMT from '@/domain';
@@ -85,7 +86,7 @@ export default function UsersListPage() {
                   href={routes.admin.users.edit.path({id: u.id})}
                   className="text-primary hover:underline cursor-pointer"
                 >
-                  Edit
+                  {t('edit')}
                 </Link>
                 {session?.user.id !== u.id && (
                   <button
@@ -103,4 +104,10 @@ export default function UsersListPage() {
       </table>
     </div>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }
