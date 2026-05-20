@@ -48,8 +48,7 @@ const messages = {
       emailLabel: 'Email',
       passwordLabel: 'Password',
       roleLabel: 'Role',
-      bioViLabel: 'Bio (VI)',
-      bioEnLabel: 'Bio (EN)',
+      bioLabel: 'Bio',
       birthDateLabel: 'Birth date',
       orderLabel: 'Order',
       isCoreTeamLabel: 'Core team',
@@ -85,7 +84,13 @@ function setup() {
   const onSubmit = jest.fn();
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <UserForm mode="create" roles={roles} images={[]} onSubmit={onSubmit} />
+      <UserForm
+        mode="create"
+        locale="en"
+        roles={roles}
+        images={[]}
+        onSubmit={onSubmit}
+      />
     </NextIntlClientProvider>,
   );
   return {onSubmit};
