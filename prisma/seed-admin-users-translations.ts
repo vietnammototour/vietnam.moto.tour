@@ -91,6 +91,12 @@ const ENTRIES: Entry[] = [
   },
   {
     namespace: 'admin',
+    key: 'users.bioLabel',
+    valueVi: 'Giới thiệu',
+    valueEn: 'Bio',
+  },
+  {
+    namespace: 'admin',
     key: 'users.bioViLabel',
     valueVi: 'Giới thiệu (VI)',
     valueEn: 'Bio (VI)',
@@ -100,6 +106,13 @@ const ENTRIES: Entry[] = [
     key: 'users.bioEnLabel',
     valueVi: 'Giới thiệu (EN)',
     valueEn: 'Bio (EN)',
+  },
+  {
+    namespace: 'admin',
+    key: 'users.count',
+    valueVi:
+      '{count, plural, =0 {Không có người dùng} one {# người dùng} other {# người dùng}}',
+    valueEn: '{count, plural, =0 {No users} one {# user} other {# users}}',
   },
   {
     namespace: 'admin',

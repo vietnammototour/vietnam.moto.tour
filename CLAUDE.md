@@ -69,6 +69,11 @@ Available: Button, TextInput, Textarea, NumberInput, FormField, Modal, Tabs, Tab
 
 When adding form fields, use shared components instead of inline `<input>` + `<label>` + error patterns. When adding buttons, use `<Button variant="...">` instead of raw `<button>` with Tailwind classes.
 
+### Admin Page Rules
+
+- **Locale-switcher per tab — never duplicate localized fields.** When an admin form edits localized content (e.g., `Bio`, `Title`, `Description`), render a single field with a locale switcher (tab/segmented control) above it. Do NOT render `Bio (VI)` and `Bio (EN)` as two separate stacked fields. One field, locale state controls which translation is being edited.
+- **Consistent admin layout — fixed header, fixed footer, scrollable content.** Every admin page uses the same shell: header pinned at the top, footer/action-bar pinned at the bottom, and the middle region is the only scrollable area. Do not let the whole page scroll; do not let action buttons drift off-screen. Use `h-screen` + flex column with `flex-1 overflow-y-auto` on the content region.
+
 ### Testing Rules
 
 - **Never implement tests that rely on styling.** Do not assert on CSS classes, inline styles, computed styles, or any visual/styling properties (e.g., `toHaveClass`, `toHaveStyle`, `className` checks). Tests should verify behavior, content, and structure — not presentation.

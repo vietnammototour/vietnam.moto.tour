@@ -45,8 +45,7 @@ const messages = {
   admin: {
     roles: {
       keyLabel: 'Key',
-      labelViLabel: 'Label (VI)',
-      labelEnLabel: 'Label (EN)',
+      labelLabel: 'Label',
       orderLabel: 'Order',
       save: 'Save',
       validation: {
@@ -62,7 +61,7 @@ function setup(props: Partial<React.ComponentProps<typeof RoleForm>> = {}) {
   const onSubmit = jest.fn();
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <RoleForm mode="create" onSubmit={onSubmit} {...props} />
+      <RoleForm mode="create" locale="en" onSubmit={onSubmit} {...props} />
     </NextIntlClientProvider>,
   );
   return {onSubmit};
@@ -77,11 +76,12 @@ describe('RoleForm', () => {
     expect(screen.getByLabelText('Key')).toBeDisabled();
   });
 
-  it('submits valid data', async () => {
-    const {onSubmit} = setup();
+  it('submits valid data with EN locale', async () => {
+    const {onSubmit} = setup({
+      defaults: {key: '', labelVi: 'HD', labelEn: '', order: 0},
+    });
     await userEvent.type(screen.getByLabelText('Key'), 'guide');
-    await userEvent.type(screen.getByLabelText('Label (VI)'), 'HD');
-    await userEvent.type(screen.getByLabelText('Label (EN)'), 'Guide');
+    await userEvent.type(screen.getByLabelText('Label'), 'Guide');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -93,11 +93,27 @@ describe('RoleForm', () => {
     );
   });
 
+  it('Label field binds to labelVi when locale=vi', async () => {
+    const {onSubmit} = setup({
+      locale: 'vi',
+      defaults: {key: '', labelVi: '', labelEn: 'Guide', order: 0},
+    });
+    await userEvent.type(screen.getByLabelText('Key'), 'guide');
+    await userEvent.type(screen.getByLabelText('Label'), 'HD');
+    await userEvent.click(screen.getByRole('button', {name: 'Save'}));
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        labelVi: 'HD',
+        labelEn: 'Guide',
+      }),
+    );
+  });
+
   it('errors on invalid key', async () => {
-    setup();
+    setup({
+      defaults: {key: '', labelVi: 'X', labelEn: 'Y', order: 0},
+    });
     await userEvent.type(screen.getByLabelText('Key'), 'Invalid!');
-    await userEvent.type(screen.getByLabelText('Label (VI)'), 'X');
-    await userEvent.type(screen.getByLabelText('Label (EN)'), 'Y');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(
       await screen.findByText('key must be lowercase snake_case'),

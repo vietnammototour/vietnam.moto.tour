@@ -67,6 +67,12 @@ const ENTRIES: Entry[] = [
   },
   {
     namespace: 'admin',
+    key: 'roles.labelLabel',
+    valueVi: 'Nhãn',
+    valueEn: 'Label',
+  },
+  {
+    namespace: 'admin',
     key: 'roles.labelViLabel',
     valueVi: 'Nhãn (VI)',
     valueEn: 'Label (VI)',
@@ -76,6 +82,13 @@ const ENTRIES: Entry[] = [
     key: 'roles.labelEnLabel',
     valueVi: 'Nhãn (EN)',
     valueEn: 'Label (EN)',
+  },
+  {
+    namespace: 'admin',
+    key: 'roles.count',
+    valueVi:
+      '{count, plural, =0 {Không có vai trò} one {# vai trò} other {# vai trò}}',
+    valueEn: '{count, plural, =0 {No roles} one {# role} other {# roles}}',
   },
   {
     namespace: 'admin',
