@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
+import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import type * as VMT from '@/domain';
@@ -81,4 +82,10 @@ export default function RolesListPage() {
       </table>
     </div>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

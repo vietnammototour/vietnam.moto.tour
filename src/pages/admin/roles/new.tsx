@@ -1,4 +1,5 @@
 import {useRouter} from 'next/router';
+import type {GetServerSidePropsContext} from 'next';
 import {RoleForm, type RoleFormValues} from '@/components/Admin/RoleForm';
 import {api, routes} from '@/routes';
 
@@ -17,4 +18,10 @@ export default function NewRolePage() {
   }
 
   return <RoleForm mode="create" onSubmit={onSubmit} />;
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

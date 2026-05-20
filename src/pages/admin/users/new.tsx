@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
+import type {GetServerSidePropsContext} from 'next';
 import {UserForm, type UserFormValues} from '@/components/Admin/UserForm';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
@@ -49,4 +50,10 @@ export default function NewUserPage() {
   return (
     <UserForm mode="create" roles={roles} images={images} onSubmit={onSubmit} />
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }
