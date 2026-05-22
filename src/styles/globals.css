@@ -7,6 +7,9 @@
 @theme {
   --color-primary: #b45309;
   --color-primary-light: #d97706;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-on-danger: #ffffff;
   --color-secondary: #0f766e;
   --color-secondary-light: #14b8a6;
   --color-surface: #fafaf9;
@@ -53,6 +56,9 @@
 [data-theme='dark'] {
   --color-primary: #f59e0b;
   --color-primary-light: #fbbf24;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-on-danger: #ffffff;
   --color-secondary: #2dd4bf;
   --color-secondary-light: #5eead4;
   --color-surface: #1c1917;
