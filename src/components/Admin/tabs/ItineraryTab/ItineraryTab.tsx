@@ -132,7 +132,7 @@ export function ItineraryTab({initialData, locale, onSave}: ItineraryTabProps) {
               </span>
               <Button
                 type="button"
-                variant="ghost"
+                variant="secondary"
                 size="sm"
                 onClick={() => handleAddItem(dayIndex)}
                 title="Add item"

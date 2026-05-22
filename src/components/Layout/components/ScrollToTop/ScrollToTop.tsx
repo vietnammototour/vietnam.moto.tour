@@ -9,7 +9,7 @@ export function ScrollToTop() {
 
   return (
     <Button
-      variant="ghost"
+      variant="secondary"
       iconOnly
       onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
       className={`fixed bottom-20 right-8 z-50 h-11 w-11 rounded-lg bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 text-white shadow-sm hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-all duration-300 ${
