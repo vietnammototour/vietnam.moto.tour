@@ -134,13 +134,15 @@ export function DestinationHighlights({
                 />
               ))}
             </div>
-            <button
+            <Button
+              variant="danger"
+              size="sm"
               type="button"
               onClick={() => handleDelete(h.id)}
-              className="self-end type-body-md text-red-500 hover:underline cursor-pointer"
+              className="self-end"
             >
               Delete
-            </button>
+            </Button>
           </div>
         ))}
 

@@ -39,22 +39,19 @@ export function TeamPhotoPicker({
           {t('pickImage')}
         </Button>
         {value ? (
-          <button
-            type="button"
-            onClick={() => onChange(null)}
-            className="text-sm text-error hover:underline cursor-pointer"
-          >
+          <Button variant="link" type="button" onClick={() => onChange(null)}>
             {t('removeImage')}
-          </button>
+          </Button>
         ) : null}
       </div>
       <Modal open={open} title={t('modalTitle')} onClose={() => setOpen(false)}>
         <div className="grid grid-cols-3 gap-3">
           {images.map((img) => (
-            <button
+            <Button
               key={img.id}
+              variant="secondary"
               type="button"
-              className="cursor-pointer overflow-hidden rounded-lg"
+              className="overflow-hidden rounded-lg"
               onClick={() => {
                 onChange(img.id);
                 setOpen(false);
@@ -67,7 +64,7 @@ export function TeamPhotoPicker({
                   className="h-32 w-full object-cover"
                 />
               ) : null}
-            </button>
+            </Button>
           ))}
         </div>
       </Modal>
