@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {useTranslations} from 'next-intl';
+import {Button} from '@/components/ui';
 import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -80,13 +81,13 @@ export default function RolesListPage() {
                   >
                     {t('edit')}
                   </Link>
-                  <button
-                    type="button"
+                  <Button
+                    variant="danger"
+                    size="sm"
                     onClick={() => handleDelete(r)}
-                    className="text-error hover:underline cursor-pointer"
                   >
                     {t('delete')}
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}

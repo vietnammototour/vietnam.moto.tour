@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {useSession} from 'next-auth/react';
+import {Button} from '@/components/ui';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
@@ -101,13 +102,13 @@ export default function UsersListPage() {
                     {t('edit')}
                   </Link>
                   {session?.user.id !== u.id && (
-                    <button
-                      type="button"
+                    <Button
+                      variant="danger"
+                      size="sm"
                       onClick={() => handleDelete(u)}
-                      className="text-error hover:underline cursor-pointer"
                     >
                       {t('delete')}
-                    </button>
+                    </Button>
                   )}
                 </td>
               </tr>
