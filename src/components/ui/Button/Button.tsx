@@ -55,7 +55,7 @@ const sizeClasses: Record<ButtonSize, string> = {
 };
 
 const baseClassButton =
-  'inline-flex items-center justify-center rounded-lg type-label-sm uppercase tracking-wide font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center type-label-sm uppercase tracking-wider font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
 const baseClassLink =
   'inline-flex items-center justify-center type-label-sm font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
@@ -84,7 +84,7 @@ export const Button = forwardRef<
     .join(' ');
 
   const content = loading ? (
-    <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+    <span className="w-4 h-4 border-2 border-current border-t-transparent aspect-square animate-spin" />
   ) : (
     <>
       {icon && !iconOnly ? <span className="mr-2">{icon}</span> : null}
