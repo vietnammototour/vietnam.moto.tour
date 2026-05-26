@@ -4,6 +4,10 @@ import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {Button} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {routes, api} from '@/routes';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
 
 type AdminDestination = {
   id: string;
@@ -42,28 +46,37 @@ export default function AdminDestinationsList() {
   const archivedCount = archivedDestinations?.length ?? 0;
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">Destinations</h1>
-        <div className="flex items-center gap-3">
-          {archivedCount > 0 && (
-            <Link
-              href={routes.admin.destinations.archive.path()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg type-label-sm uppercase border border-border text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
-            >
-              <i className="fa fa-archive text-xs" />
-              Archive ({archivedCount})
-            </Link>
-          )}
-          <Link
-            href={routes.admin.destinations.new.path()}
-            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
-          >
-            + New Destination
-          </Link>
-        </div>
-      </div>
-
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Destinations"
+          breadcrumbs={[
+            {label: 'Admin', href: routes.admin.dashboard.path()},
+            {label: 'Destinations'},
+          ]}
+          actions={
+            <>
+              {archivedCount > 0 && (
+                <Button
+                  variant="secondary"
+                  href={routes.admin.destinations.archive.path()}
+                  icon={<i className="fa fa-archive text-xs" />}
+                >
+                  Archive ({archivedCount})
+                </Button>
+              )}
+              <Button
+                variant="primary"
+                href={routes.admin.destinations.new.path()}
+                icon={<i className="fa fa-plus text-xs" />}
+              >
+                Add destination
+              </Button>
+            </>
+          }
+        />
+      }
+    >
       <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
         <table className="w-full">
           <thead>
@@ -128,11 +141,11 @@ export default function AdminDestinationsList() {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Button
-                    variant="danger"
+                    variant="ghost-danger"
                     size="sm"
                     onClick={() => handleArchive(dest.id)}
+                    icon={<i className="fa fa-archive text-xs" />}
                   >
-                    <i className="fa fa-archive text-xs mr-1.5" />
                     Archive
                   </Button>
                 </td>
@@ -141,6 +154,6 @@ export default function AdminDestinationsList() {
           </tbody>
         </table>
       </div>
-    </div>
+    </AdminPageShell>
   );
 }

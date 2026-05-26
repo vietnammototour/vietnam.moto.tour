@@ -10,6 +10,18 @@ type TranslationEditorProps = {
   namespaces: string[];
 };
 
+function humanizeNamespace(ns: string): string {
+  const parts = ns.split('.');
+  return parts
+    .map((p) =>
+      p
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/[-_]+/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
+    )
+    .join(' › ');
+}
+
 export function TranslationEditor({
   translations: initial,
   namespaces,
@@ -76,25 +88,32 @@ export function TranslationEditor({
   return (
     <div className="flex gap-6">
       {/* Section links sidebar */}
-      <nav className="w-48 shrink-0">
+      <nav className="w-56 shrink-0">
         <ul className="space-y-1">
           {namespaces.map((ns) => {
             const count = modifiedByNamespace.get(ns);
+            const isActive = ns === activeNamespace;
             return (
               <li key={ns}>
-                <Button
-                  variant="secondary"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={() => setActiveNamespace(ns)}
-                  className="w-full justify-between"
+                  title={ns}
+                  className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg type-body-sm transition-colors cursor-pointer text-left ${
+                    isActive
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'
+                  }`}
                 >
-                  {ns}
-                  {count && (
-                    <span className="bg-primary text-on-primary text-xs px-1.5 py-0.5 rounded-full">
+                  <span className="truncate min-w-0 flex-1">
+                    {humanizeNamespace(ns)}
+                  </span>
+                  {count ? (
+                    <span className="shrink-0 bg-primary text-on-primary text-xs px-1.5 py-0.5 rounded-full">
                       {count}
                     </span>
-                  )}
-                </Button>
+                  ) : null}
+                </button>
               </li>
             );
           })}

@@ -1,14 +1,19 @@
 import {useEffect, useState} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useTranslations} from 'next-intl';
-import Link from 'next/link';
 import {api, routes} from '@/routes';
 import {Button} from '@/components/ui';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
+import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 
 type Row = {id: string; key: string; label: string; imageCount: number};
 
 export default function ImageCollectionsListPage() {
   const t = useTranslations();
+  const {setLoading: setAdminLoading} = useAdminLoading();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,6 +24,10 @@ export default function ImageCollectionsListPage() {
     });
   }, []);
 
+  useEffect(() => {
+    setAdminLoading(loading);
+  }, [loading, setAdminLoading]);
+
   async function handleDelete(id: string) {
     if (!confirm(t('admin.imageCollections.confirmDelete'))) return;
     const res = await api.admin.imageCollections.delete(id);
@@ -26,15 +35,26 @@ export default function ImageCollectionsListPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">
-          {t('admin.imageCollections.title')}
-        </h1>
-        <Link href={routes.admin.imageCollections.new.path()}>
-          <Button variant="primary">{t('admin.imageCollections.new')}</Button>
-        </Link>
-      </div>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title={t('admin.imageCollections.title')}
+          breadcrumbs={[
+            {label: 'Admin', href: routes.admin.dashboard.path()},
+            {label: t('admin.imageCollections.title')},
+          ]}
+          actions={
+            <Button
+              variant="primary"
+              href={routes.admin.imageCollections.new.path()}
+              icon={<i className="fa fa-plus text-xs" />}
+            >
+              {t('admin.imageCollections.new')}
+            </Button>
+          }
+        />
+      }
+    >
       {loading ? (
         <p>{t('common.loading')}</p>
       ) : rows.length === 0 ? (
@@ -42,37 +62,53 @@ export default function ImageCollectionsListPage() {
           {t('admin.imageCollections.empty')}
         </p>
       ) : (
-        <table className="w-full">
+        <table className="w-full bg-surface-elevated rounded-xl border border-border">
           <thead>
             <tr className="text-left border-b border-border">
-              <th className="py-2">{t('admin.imageCollections.label')}</th>
-              <th className="py-2">{t('admin.imageCollections.key')}</th>
-              <th className="py-2">{t('admin.imageCollections.imageCount')}</th>
-              <th className="py-2"></th>
+              <th className="p-3 type-label-sm uppercase text-on-surface-secondary">
+                {t('admin.imageCollections.label')}
+              </th>
+              <th className="p-3 type-label-sm uppercase text-on-surface-secondary">
+                {t('admin.imageCollections.key')}
+              </th>
+              <th className="p-3 type-label-sm uppercase text-on-surface-secondary">
+                {t('admin.imageCollections.imageCount')}
+              </th>
+              <th className="p-3" />
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.id} className="border-b border-border">
-                <td className="py-3">{r.label}</td>
-                <td className="py-3 font-mono text-sm">{r.key}</td>
-                <td className="py-3">{r.imageCount}</td>
-                <td className="py-3 flex gap-2 justify-end">
-                  <Link
-                    href={routes.admin.imageCollections.edit.path({id: r.id})}
-                  >
-                    <Button variant="secondary">{t('common.edit')}</Button>
-                  </Link>
-                  <Button variant="danger" onClick={() => handleDelete(r.id)}>
-                    {t('common.delete')}
-                  </Button>
+              <tr key={r.id} className="border-t border-border">
+                <td className="p-3">{r.label}</td>
+                <td className="p-3 font-mono text-sm">{r.key}</td>
+                <td className="p-3">{r.imageCount}</td>
+                <td className="p-3">
+                  <div className="flex items-center gap-2 justify-end">
+                    <Button
+                      variant="ghost-primary"
+                      size="sm"
+                      href={routes.admin.imageCollections.edit.path({id: r.id})}
+                      icon={<i className="fa fa-pencil text-xs" />}
+                    >
+                      {t('common.edit')}
+                    </Button>
+                    <Button
+                      variant="ghost-danger"
+                      size="sm"
+                      onClick={() => handleDelete(r.id)}
+                      icon={<i className="fa fa-trash text-xs" />}
+                    >
+                      {t('common.delete')}
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-    </div>
+    </AdminPageShell>
   );
 }
 

@@ -2,6 +2,11 @@ import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TranslationEditor} from '@/components/Admin/TranslationEditor';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
+import {routes} from '@/routes';
 import type * as VMT from '@/domain';
 
 export default function AdminTranslations() {
@@ -18,14 +23,23 @@ export default function AdminTranslations() {
   }, [loading, setLoading]);
 
   return (
-    <div>
-      <h1 className="type-headline-sm mb-6">Translations</h1>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Translations"
+          breadcrumbs={[
+            {label: 'Admin', href: routes.admin.dashboard.path()},
+            {label: 'Translations'},
+          ]}
+        />
+      }
+    >
       {translations.length > 0 && (
         <TranslationEditor
           translations={translations}
           namespaces={namespaces}
         />
       )}
-    </div>
+    </AdminPageShell>
   );
 }
