@@ -172,3 +172,35 @@ model CollectionImage {
 
   @@index([collectionId, order])
 }
+
+enum VehicleType {
+  SCOOTER
+  BIKE
+}
+
+enum VehicleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Vehicle {
+  id             String        @id @default(uuid())
+  slug           String        @unique
+  type           VehicleType
+  brand          String
+  model          String
+  cc             Int
+  quantity       Int           @default(0)
+  priceUsdPerDay Int
+  imageUrl       String?
+  images         Json          @default("[]")
+  description    Json          @default("{\"en\":\"\",\"vi\":\"\"}")
+  status         VehicleStatus @default(DRAFT)
+  order          Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([status, order])
+  @@index([type])
+}
