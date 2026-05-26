@@ -3,11 +3,16 @@ import {toVehicle} from '@/domain/vehicle/mapper';
 import type {Vehicle} from '@/domain/vehicle';
 
 export async function getPublishedVehicles(): Promise<Vehicle[]> {
-  const rows = await prisma.vehicle.findMany({
-    where: {status: 'PUBLISHED'},
-    orderBy: [{order: 'asc'}, {createdAt: 'desc'}],
-  });
-  return rows.map(toVehicle);
+  try {
+    const rows = await prisma.vehicle.findMany({
+      where: {status: 'PUBLISHED'},
+      orderBy: [{order: 'asc'}, {createdAt: 'desc'}],
+    });
+    return rows.map(toVehicle);
+  } catch (error) {
+    console.error('getPublishedVehicles: DB query failed', error);
+    return [];
+  }
 }
 
 export async function getVehiclesForAdmin(
