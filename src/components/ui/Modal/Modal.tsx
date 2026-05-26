@@ -55,7 +55,7 @@ export function Modal({
       />
       <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
         <div
-          className={`bg-surface-elevated rounded-xl shadow-2xl w-full ${sizeClasses[size]} p-6`}
+          className={`bg-surface-elevated border border-border w-full ${sizeClasses[size]} p-6`}
           onClick={(e) => e.stopPropagation()}
         >
           {title && (

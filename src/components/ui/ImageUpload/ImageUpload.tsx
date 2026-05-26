@@ -87,7 +87,7 @@ export function ImageUpload({
         </label>
       )}
       <div
-        className={`relative group border-2 border-dashed border-border rounded-lg overflow-hidden ${heightClass}`}
+        className={`relative group border-2 border-dashed border-border overflow-hidden ${heightClass}`}
       >
         {displayUrl ? (
           <>

@@ -27,7 +27,7 @@ export function SegmentedControl<T extends string>({
   return (
     <div
       role="radiogroup"
-      className="inline-flex rounded-lg border border-border overflow-hidden"
+      className="inline-flex border border-border overflow-hidden"
     >
       {options.map((option) => {
         const isSelected = option.value === value;
