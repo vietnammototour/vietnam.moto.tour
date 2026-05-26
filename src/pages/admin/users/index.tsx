@@ -102,13 +102,13 @@ export default function UsersListPage() {
                     {t('edit')}
                   </Link>
                   {session?.user.id !== u.id && (
-                    <Button
-                      variant="danger"
-                      size="sm"
+                    <button
+                      type="button"
                       onClick={() => handleDelete(u)}
+                      className="text-error hover:underline cursor-pointer"
                     >
                       {t('delete')}
-                    </Button>
+                    </button>
                   )}
                 </td>
               </tr>

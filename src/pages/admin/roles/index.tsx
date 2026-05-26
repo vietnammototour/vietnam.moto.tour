@@ -81,13 +81,13 @@ export default function RolesListPage() {
                   >
                     {t('edit')}
                   </Link>
-                  <Button
-                    variant="danger"
-                    size="sm"
+                  <button
+                    type="button"
                     onClick={() => handleDelete(r)}
+                    className="text-error hover:underline cursor-pointer"
                   >
                     {t('delete')}
-                  </Button>
+                  </button>
                 </td>
               </tr>
             ))}
