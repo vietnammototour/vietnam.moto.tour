@@ -1,7 +1,7 @@
 import {forwardRef, type ButtonHTMLAttributes, type ReactNode} from 'react';
 
 type ButtonProps = {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'danger' | 'secondary' | 'link';
   size?: 'sm' | 'md' | 'lg';
   icon?: ReactNode;
   iconOnly?: boolean;
@@ -10,15 +10,14 @@ type ButtonProps = {
 
 const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
   primary: 'bg-primary hover:bg-primary-light text-on-primary',
-  secondary:
-    'border border-border text-on-surface-secondary hover:bg-surface-alt',
-  danger: 'bg-red-600 hover:bg-red-700 text-white',
-  ghost: 'text-on-surface-secondary hover:bg-surface-alt',
+  danger: 'bg-danger hover:bg-danger-hover text-on-danger',
+  secondary: 'border border-border text-on-surface hover:bg-surface-alt',
+  link: 'text-primary hover:underline',
 };
 
 const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
   sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2',
+  md: 'px-5 py-2',
   lg: 'px-6 py-2.5',
 };
 
@@ -38,8 +37,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) {
-    const base =
-      'inline-flex items-center justify-center rounded-lg type-label-sm uppercase transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
+    const isLink = variant === 'link';
+
+    const base = isLink
+      ? 'inline-flex items-center justify-center type-label-sm font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+      : 'inline-flex items-center justify-center rounded-lg type-label-sm uppercase tracking-wide font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
     const classes = [
       base,

@@ -3,6 +3,7 @@
 import {useState, useMemo} from 'react';
 import {api} from '@/routes';
 import type * as VMT from '@/domain';
+import {Button} from '@/components/ui';
 
 type TranslationEditorProps = {
   translations: VMT.Translation[];
@@ -81,13 +82,11 @@ export function TranslationEditor({
             const count = modifiedByNamespace.get(ns);
             return (
               <li key={ns}>
-                <button
+                <Button
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setActiveNamespace(ns)}
-                  className={`w-full text-left px-3 py-2 rounded-lg type-label-sm transition-colors cursor-pointer flex items-center justify-between ${
-                    activeNamespace === ns
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'
-                  }`}
+                  className="w-full justify-between"
                 >
                   {ns}
                   {count && (
@@ -95,7 +94,7 @@ export function TranslationEditor({
                       {count}
                     </span>
                   )}
-                </button>
+                </Button>
               </li>
             );
           })}
@@ -117,13 +116,15 @@ export function TranslationEditor({
             {filtered.length} keys
           </span>
           {modified.size > 0 && (
-            <button
+            <Button
+              variant="primary"
               onClick={handleSave}
               disabled={saving}
-              className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors disabled:opacity-50 ml-auto cursor-pointer"
+              loading={saving}
+              className="ml-auto"
             >
               {saving ? 'Saving...' : `Save ${modified.size} changes`}
-            </button>
+            </Button>
           )}
         </div>
 

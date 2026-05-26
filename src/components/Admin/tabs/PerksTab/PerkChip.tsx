@@ -2,6 +2,7 @@ import {useDraggable} from '@dnd-kit/core';
 import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import type {Locale} from '@/components/Admin/LocalePicker';
+import {Button} from '@/components/ui';
 
 type PerkChipProps = {
   perk: VMT.Perk;
@@ -39,17 +40,20 @@ export function PerkChip({perk, locale, zone, onRemove}: PerkChipProps) {
         ({tPerks(`category.${perk.category}`)})
       </span>
       {onRemove && (
-        <button
+        <Button
+          variant="secondary"
+          size="sm"
+          iconOnly
           type="button"
           onClick={(e) => {
             e.stopPropagation();
             onRemove();
           }}
           aria-label="Remove"
-          className="cursor-pointer ml-1 text-on-surface-secondary hover:text-on-surface"
+          className="ml-1 text-on-surface-secondary hover:text-on-surface"
         >
           ✕
-        </button>
+        </Button>
       )}
     </div>
   );

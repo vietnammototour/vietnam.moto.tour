@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import Link from 'next/link';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
+import {Button} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {routes, api} from '@/routes';
 
@@ -126,13 +127,14 @@ export default function AdminDestinationsList() {
                   {dest.size}
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <button
+                  <Button
+                    variant="danger"
+                    size="sm"
                     onClick={() => handleArchive(dest.id)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
                   >
-                    <i className="fa fa-archive text-xs" />
+                    <i className="fa fa-archive text-xs mr-1.5" />
                     Archive
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
