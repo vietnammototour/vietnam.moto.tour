@@ -27,6 +27,12 @@ export type DestinationTab = (typeof DESTINATION_TABS)[number]['key'];
 export const isDestinationTab = (s: unknown): s is DestinationTab =>
   typeof s === 'string' && DESTINATION_TABS.some((t) => t.key === s);
 
+export type VehicleTab = 'general' | 'description' | 'images';
+
+export function isVehicleTab(v: string): v is VehicleTab {
+  return v === 'general' || v === 'description' || v === 'images';
+}
+
 // ─── Route Registry ───────────────────────────────────────
 
 export const routes = {
@@ -41,6 +47,9 @@ export const routes = {
   },
   destinations: {
     detail: {path: (p: {slug: string}) => `/destinations/${p.slug}`},
+  },
+  rentals: {
+    list: {path: () => '/rentals'},
   },
   aboutUs: {path: () => '/about-us'},
   contact: {path: () => '/contact'},
@@ -73,6 +82,18 @@ export const routes = {
         path: (p: {id: string | number; tab?: DestinationTab}) =>
           `/admin/destinations/${p.id}/edit/${p.tab ?? 'general'}`,
         tabs: DESTINATION_TABS,
+      },
+    },
+    vehicles: {
+      list: {path: () => '/admin/rentals'},
+      archive: {path: () => '/admin/rentals/archive'},
+      new: {
+        path: (p?: {tab?: VehicleTab}) =>
+          `/admin/rentals/new/${p?.tab ?? 'general'}`,
+      },
+      edit: {
+        path: (p: {id: string; tab?: VehicleTab}) =>
+          `/admin/rentals/${p.id}/edit/${p.tab ?? 'general'}`,
       },
     },
     perks: {
