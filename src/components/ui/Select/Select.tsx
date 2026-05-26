@@ -186,7 +186,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             role="listbox"
             aria-activedescendant={`${selectId}-opt-${activeIndex}`}
             onKeyDown={handleListKey}
-            className="absolute z-50 mt-1 max-h-64 min-w-full w-max max-w-xs overflow-y-auto border border-border bg-surface-elevated shadow-lg focus:outline-none"
+            className="absolute z-50 mt-1 max-h-64 min-w-full w-max max-w-xs overflow-y-auto border border-border bg-surface-elevated focus:outline-none"
           >
             {options.map((opt, idx) => {
               const isSelected = opt.value === value;
