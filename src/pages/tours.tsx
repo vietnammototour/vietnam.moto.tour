@@ -38,6 +38,26 @@ export default function Tours({allTours, isAdmin}: ToursPageProps) {
     return allTours;
   }, [router.query.destination, allTours]);
 
+  const groupedTours = useMemo(() => {
+    const groups = new Map<
+      string,
+      {id: string; label: string; tours: VMT.Tour[]}
+    >();
+    for (const tour of tours) {
+      const label = tour.destinationName?.en || tour.destinationName?.vi || '—';
+      const bucket = groups.get(tour.destinationId) ?? {
+        id: tour.destinationId,
+        label,
+        tours: [],
+      };
+      bucket.tours.push(tour);
+      groups.set(tour.destinationId, bucket);
+    }
+    return Array.from(groups.values()).sort((a, b) =>
+      a.label.localeCompare(b.label),
+    );
+  }, [tours]);
+
   return (
     <>
       <Head>
@@ -55,26 +75,39 @@ export default function Tours({allTours, isAdmin}: ToursPageProps) {
       />
 
       <section className="py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {tours.map((tour, i) => (
-              <motion.div
-                key={tour.id}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{once: true}}
-                variants={{
-                  ...fadeInUp,
-                  visible: {
-                    ...fadeInUp.visible,
-                    transition: {duration: 0.6, delay: i * 0.1},
-                  },
-                }}
-              >
-                <TourCard tour={tour} />
-              </motion.div>
-            ))}
-          </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-20">
+          {groupedTours.map((group) => (
+            <div key={group.id}>
+              <div className="mb-8 flex items-end justify-between gap-4 border-b border-border pb-4">
+                <div className="flex items-center gap-3">
+                  <i className="fa fa-map-marker-alt text-primary" />
+                  <h2 className="type-headline-sm">{group.label}</h2>
+                </div>
+                <span className="type-body-sm text-on-surface-secondary">
+                  {group.tours.length}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                {group.tours.map((tour, i) => (
+                  <motion.div
+                    key={tour.id}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{once: true}}
+                    variants={{
+                      ...fadeInUp,
+                      visible: {
+                        ...fadeInUp.visible,
+                        transition: {duration: 0.6, delay: i * 0.05},
+                      },
+                    }}
+                  >
+                    <TourCard tour={tour} />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </>
