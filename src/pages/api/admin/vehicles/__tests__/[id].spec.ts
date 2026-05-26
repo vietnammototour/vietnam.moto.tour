@@ -72,6 +72,59 @@ describe('DELETE /api/admin/vehicles/[id]', () => {
   });
 });
 
+describe('PUT /api/admin/vehicles/[id]', () => {
+  it('updates only the provided fields', async () => {
+    (prisma.vehicle.update as jest.Mock).mockResolvedValue({
+      ...row,
+      quantity: 5,
+    });
+    const {req, res} = createMocks({
+      method: 'PUT',
+      query: {id: 'v1'},
+      body: {quantity: 5},
+    });
+    await handler(req as never, res as never);
+    expect(prisma.vehicle.update).toHaveBeenCalledWith({
+      where: {id: 'v1'},
+      data: {quantity: 5},
+    });
+    expect(res._getStatusCode()).toBe(200);
+  });
+
+  it('rejects invalid type', async () => {
+    const {req, res} = createMocks({
+      method: 'PUT',
+      query: {id: 'v1'},
+      body: {type: 'TRUCK'},
+    });
+    await handler(req as never, res as never);
+    expect(res._getStatusCode()).toBe(400);
+    expect(prisma.vehicle.update).not.toHaveBeenCalled();
+  });
+
+  it('rejects negative numeric fields', async () => {
+    const {req, res} = createMocks({
+      method: 'PUT',
+      query: {id: 'v1'},
+      body: {priceUsdPerDay: -1},
+    });
+    await handler(req as never, res as never);
+    expect(res._getStatusCode()).toBe(400);
+    expect(prisma.vehicle.update).not.toHaveBeenCalled();
+  });
+
+  it('rejects partial description payload', async () => {
+    const {req, res} = createMocks({
+      method: 'PUT',
+      query: {id: 'v1'},
+      body: {description: {vi: 'only vi'}},
+    });
+    await handler(req as never, res as never);
+    expect(res._getStatusCode()).toBe(400);
+    expect(prisma.vehicle.update).not.toHaveBeenCalled();
+  });
+});
+
 describe('POST /api/admin/vehicles/[id]/restore', () => {
   it('sets status to DRAFT', async () => {
     (prisma.vehicle.update as jest.Mock).mockResolvedValue({
@@ -87,5 +140,12 @@ describe('POST /api/admin/vehicles/[id]/restore', () => {
       }),
     );
     expect(res._getStatusCode()).toBe(200);
+  });
+
+  it('rejects non-POST methods with 405', async () => {
+    const {req, res} = createMocks({method: 'GET', query: {id: 'v1'}});
+    await restoreHandler(req as never, res as never);
+    expect(res._getStatusCode()).toBe(405);
+    expect(res.getHeader('Allow')).toBe('POST');
   });
 });

@@ -2,9 +2,7 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
 import {toVehicle} from '@/domain/vehicle/mapper';
-
-const VALID_TYPES = ['SCOOTER', 'BIKE'] as const;
-const VALID_STATUSES = ['DRAFT', 'PUBLISHED', 'ARCHIVED'] as const;
+import {VEHICLE_TYPES, VEHICLE_STATUSES} from '@/domain/vehicle/constants';
 
 type UpdateBody = Partial<{
   slug: string;
@@ -16,13 +14,13 @@ type UpdateBody = Partial<{
   priceUsdPerDay: number;
   imageUrl: string | null;
   images: string[];
-  description: {en?: string; vi?: string};
+  description: {en: string; vi: string};
   status: string;
   order: number;
 }>;
 
 function validateUpdate(body: UpdateBody): string | null {
-  if (body.type && !VALID_TYPES.includes(body.type as never))
+  if (body.type && !VEHICLE_TYPES.includes(body.type as never))
     return 'type must be SCOOTER or BIKE';
   if (body.cc !== undefined && (typeof body.cc !== 'number' || body.cc <= 0))
     return 'cc must be > 0';
@@ -36,8 +34,19 @@ function validateUpdate(body: UpdateBody): string | null {
     (typeof body.priceUsdPerDay !== 'number' || body.priceUsdPerDay < 0)
   )
     return 'priceUsdPerDay must be >= 0';
-  if (body.status && !VALID_STATUSES.includes(body.status as never))
+  if (body.status && !VEHICLE_STATUSES.includes(body.status as never))
     return 'status invalid';
+  if (body.description !== undefined) {
+    if (typeof body.description !== 'object' || body.description === null) {
+      return 'description must be an object with en and vi keys';
+    }
+    if (
+      typeof body.description.en !== 'string' ||
+      typeof body.description.vi !== 'string'
+    ) {
+      return 'description must have both en and vi as strings';
+    }
+  }
   return null;
 }
 

@@ -2,9 +2,7 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
 import {toVehicle} from '@/domain/vehicle/mapper';
-
-const VALID_TYPES = ['SCOOTER', 'BIKE'] as const;
-const VALID_STATUSES = ['DRAFT', 'PUBLISHED', 'ARCHIVED'] as const;
+import {VEHICLE_TYPES, VEHICLE_STATUSES} from '@/domain/vehicle/constants';
 
 type CreateBody = {
   slug?: string;
@@ -23,7 +21,7 @@ type CreateBody = {
 
 function validateCreate(body: CreateBody): string | null {
   if (!body.slug || typeof body.slug !== 'string') return 'slug is required';
-  if (!body.type || !VALID_TYPES.includes(body.type as never))
+  if (!body.type || !VEHICLE_TYPES.includes(body.type as never))
     return 'type must be SCOOTER or BIKE';
   if (!body.brand) return 'brand is required';
   if (!body.model) return 'model is required';
@@ -32,7 +30,7 @@ function validateCreate(body: CreateBody): string | null {
     return 'quantity must be >= 0';
   if (typeof body.priceUsdPerDay !== 'number' || body.priceUsdPerDay < 0)
     return 'priceUsdPerDay must be >= 0';
-  if (body.status && !VALID_STATUSES.includes(body.status as never))
+  if (body.status && !VEHICLE_STATUSES.includes(body.status as never))
     return 'status invalid';
   return null;
 }
