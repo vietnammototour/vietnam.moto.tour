@@ -34,6 +34,11 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
       icon: 'fa-map-marker-alt',
     },
     {
+      href: routes.admin.vehicles.list.path(),
+      label: 'Rentals',
+      icon: 'fa-motorcycle',
+    },
+    {
       href: routes.admin.perks.list.path(),
       label: 'Perks',
       icon: 'fa-check-circle',
