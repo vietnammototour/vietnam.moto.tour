@@ -22,6 +22,8 @@
   --color-on-surface: #e5e2e1;
   --color-on-surface-secondary: #cfc6ab;
   --color-on-surface-inverse: #313030;
+  --color-on-surface-tertiary: #989177;
+  --color-on-surface-accent: #ffdb00;
   --color-border: #333333;
   --color-border-subtle: #4c4732;
   --color-overlay: rgba(0, 0, 0, 0.85);
@@ -38,9 +40,6 @@
   --font-size-body-sm: 1rem;
   --font-size-label-lg: 0.875rem;
   --font-size-label-sm: 0.75rem;
-
-  --color-on-surface-tertiary: #989177;
-  --color-on-surface-accent: #ffdb00;
 
   --ease-lantern-sway: cubic-bezier(0.45, 0.05, 0.35, 0.95);
   --ease-motorbike-sweep: cubic-bezier(0.7, 0, 0.2, 1);
