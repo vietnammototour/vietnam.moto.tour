@@ -173,18 +173,16 @@ export default function PerksListPage() {
                     fullWidth={false}
                     selectSize="sm"
                     value={draft.category}
-                    onChange={(e) =>
+                    onChange={(v) =>
                       updateDraft(p.id, {
-                        category: e.target.value as VMT.PerkCategory,
+                        category: v as VMT.PerkCategory,
                       })
                     }
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>
-                        {t(`category.${c}`)}
-                      </option>
-                    ))}
-                  </Select>
+                    options={CATEGORIES.map((c) => ({
+                      value: c,
+                      label: t(`category.${c}`),
+                    }))}
+                  />
                   {dirty && (
                     <Button
                       onClick={() => handleSave(p.id)}

@@ -9,7 +9,12 @@ import {fetchToursServer} from '@/queries/fetchers/admin/tours.server';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes} from '@/routes';
-import {Badge} from '@/components/ui';
+import {Badge, Button, LocaleSwitcher} from '@/components/ui';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
+import {useAdminLocale} from '@/hooks/useAdminLocale';
 import type * as VMT from '@/domain';
 
 type AdminTour = {
@@ -25,6 +30,7 @@ type AdminTour = {
 };
 
 export default function AdminToursList() {
+  const [locale, setLocale] = useAdminLocale();
   const {data: tours, isLoading} = useTours({archived: false});
   const {data: archivedTours} = useTours({archived: true});
   const toggleStatus = useToggleTourStatus();
@@ -41,29 +47,50 @@ export default function AdminToursList() {
   const archivedCount = archivedTours?.length ?? 0;
   const tourList = (tours ?? []) as unknown as AdminTour[];
 
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">Tours</h1>
-        <div className="flex items-center gap-3">
-          {archivedCount > 0 && (
-            <Link
-              href={routes.admin.tours.archive.path()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg type-label-sm uppercase border border-border text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
-            >
-              <i className="fa fa-archive text-xs" />
-              Archive ({archivedCount})
-            </Link>
-          )}
-          <Link
-            href={routes.admin.tours.new.path()}
-            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
-          >
-            + New Tour
-          </Link>
-        </div>
-      </div>
+  const pickTitle = (t: AdminTour) =>
+    locale === 'vi' ? t.titleVi || t.titleEn : t.titleEn || t.titleVi;
+  const pickDestination = (t: AdminTour) =>
+    locale === 'vi'
+      ? t.destination.nameVi || t.destination.nameEn
+      : t.destination.nameEn || t.destination.nameVi;
 
+  return (
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Tours"
+          breadcrumbs={[
+            {label: 'Admin', href: routes.admin.dashboard.path()},
+            {label: 'Tours'},
+          ]}
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
+          actions={
+            <>
+              {archivedCount > 0 && (
+                <Button
+                  variant="secondary"
+                  size="md"
+                  href={routes.admin.tours.archive.path()}
+                  icon={<i className="fa fa-archive text-xs" />}
+                >
+                  Archive ({archivedCount})
+                </Button>
+              )}
+              <Button
+                variant="primary"
+                size="md"
+                href={routes.admin.tours.new.path()}
+                icon={<i className="fa fa-plus text-xs" />}
+              >
+                Add tour
+              </Button>
+            </>
+          }
+        />
+      }
+    >
       <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
         <table className="w-full">
           <thead>
@@ -112,12 +139,12 @@ export default function AdminToursList() {
                       <i className="fa fa-image text-on-surface-tertiary" />
                     </div>
                     <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
-                      {tour.titleEn || tour.titleVi}
+                      {pickTitle(tour)}
                     </span>
                   </Link>
                 </td>
                 <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
-                  {tour.destination.nameEn || tour.destination.nameVi}
+                  {pickDestination(tour)}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5">
@@ -158,7 +185,7 @@ export default function AdminToursList() {
           </tbody>
         </table>
       </div>
-    </div>
+    </AdminPageShell>
   );
 }
 

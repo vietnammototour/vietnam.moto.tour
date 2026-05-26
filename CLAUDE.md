@@ -71,8 +71,11 @@ When adding form fields, use shared components instead of inline `<input>` + `<l
 
 ### Admin Page Rules
 
-- **Locale-switcher per tab — never duplicate localized fields.** When an admin form edits localized content (e.g., `Bio`, `Title`, `Description`), render a single field with a locale switcher (tab/segmented control) above it. Do NOT render `Bio (VI)` and `Bio (EN)` as two separate stacked fields. One field, locale state controls which translation is being edited.
-- **Consistent admin layout — fixed header, fixed footer, scrollable content.** Every admin page uses the same shell: header pinned at the top, footer/action-bar pinned at the bottom, and the middle region is the only scrollable area. Do not let the whole page scroll; do not let action buttons drift off-screen. Use `h-screen` + flex column with `flex-1 overflow-y-auto` on the content region.
+- **Full canonical contract:** See [ADMIN.md](./ADMIN.md) for the complete admin-page rulebook (shell, header, footer, locale switcher, button variants, list/edit conventions, destructive-action pattern, per-page audit checklist). Every admin page MUST conform.
+- **Locale-switcher per tab — never duplicate localized fields.** When an admin form edits localized content (e.g., `Bio`, `Title`, `Description`), render a single field with a locale switcher (tab/segmented control) above it. Do NOT render `Bio (VI)` and `Bio (EN)` as two separate stacked fields. One field, locale state controls which translation is being edited. (Applies to list pages too — show only the active-locale value, not VI+EN columns.)
+- **Consistent admin layout — fixed header, fixed footer, scrollable content.** Every admin page uses the same shell: header pinned at the top, footer/action-bar pinned at the bottom (detached pill style), and the middle region is the only scrollable area. Do not let the whole page scroll; do not let action buttons drift off-screen. Use the shared `AdminPageShell` component.
+- **Buttons.** Use `<Button>` from `src/components/ui/Button` exclusively. Variants: `primary` (Add/Save), `secondary` (Cancel), `danger` (destructive confirm), `ghost` (row edit), `ghost-danger` (row delete/archive). Primary "Add" button is always `<Button variant="primary" icon="fa-plus">Add {Entity}</Button>`. Never use raw `<button>` styled with Tailwind classes or `<Link>` styled to look like a button.
+- **Destructive actions.** Never use `window.confirm()` or `window.alert()`. Use the shared `ConfirmModal` from `src/components/ui/ConfirmModal`.
 
 ### Testing Rules
 
