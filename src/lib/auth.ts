@@ -4,10 +4,14 @@ import bcrypt from 'bcrypt';
 import {prisma} from './prisma';
 
 const nextAuthSecret = process.env.NEXTAUTH_SECRET;
-const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
-if (!nextAuthSecret && !isBuildPhase) {
-  throw new Error(
-    'NEXTAUTH_SECRET is not set. Configure it in the environment before starting the server.',
+if (!nextAuthSecret) {
+  // Module-load must not throw — that breaks `next build` page-data
+  // collection and `next dev` route compilation in worktrees that
+  // don't pre-load the env. NextAuth itself raises a clear error at
+  // request time if the secret is missing when actually verifying a
+  // JWT, so the credential flow still fails loudly when misconfigured.
+  console.warn(
+    '[auth] NEXTAUTH_SECRET is not set. Sign-in will fail until it is configured.',
   );
 }
 
