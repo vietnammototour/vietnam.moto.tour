@@ -42,9 +42,9 @@ describe('upload entities', () => {
     expect(isValidCombination('collectionImage', 'hero')).toBe(false);
   });
 
-  it('allows vehicle:primary only', () => {
-    expect(isValidCombination('vehicle', 'primary')).toBe(true);
-    expect(isValidCombination('vehicle', 'card')).toBe(false);
+  it('allows vehicle:card only', () => {
+    expect(isValidCombination('vehicle', 'card')).toBe(true);
+    expect(isValidCombination('vehicle', 'primary')).toBe(false);
     expect(isValidCombination('vehicle', 'hero')).toBe(false);
   });
 
@@ -69,7 +69,7 @@ describe('upload entities', () => {
       model: 'collectionImage',
       field: 'url',
     });
-    expect(getDbField('vehicle', 'primary')).toEqual({
+    expect(getDbField('vehicle', 'card')).toEqual({
       model: 'vehicle',
       field: 'imageUrl',
     });
