@@ -1,5 +1,6 @@
 import {Html, Head, Main, NextScript} from 'next/document';
 import {getUrl} from '@/utils';
+import {themeInitScript} from './_document.theme-init';
 
 export default function Document() {
   return (
@@ -29,11 +30,7 @@ export default function Document() {
         />
       </Head>
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var m=document.cookie.match(/(?:^|; )NEXT_THEME=(\\w+)/);var t=m&&m[1]==='dark'?'dark':'light';document.documentElement.setAttribute('data-theme',t)}catch(e){}})();`,
-          }}
-        />
+        <script>{themeInitScript}</script>
         <Main />
         <NextScript />
       </body>
