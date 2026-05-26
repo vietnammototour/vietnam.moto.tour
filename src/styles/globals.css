@@ -134,6 +134,22 @@
   letter-spacing: 0.02em;
 }
 
+@utility type-mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@utility type-mono-data {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 @utility texture-grain-warm {
   position: relative;
   &::before {
