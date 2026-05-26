@@ -37,11 +37,11 @@ const fakeRow = {
 };
 
 describe('GET /api/admin/vehicles', () => {
-  it('returns 401 when not admin', async () => {
+  it('short-circuits when requireAdmin returns false', async () => {
     (requireAdmin as jest.Mock).mockResolvedValue(false);
     const {req, res} = createMocks({method: 'GET'});
     await handler(req as never, res as never);
-    expect(res._getStatusCode()).toBe(200); // requireAdmin writes its own response
+    expect(prisma.vehicle.findMany).not.toHaveBeenCalled();
   });
 
   it('returns mapped vehicles', async () => {
@@ -56,7 +56,7 @@ describe('GET /api/admin/vehicles', () => {
 });
 
 describe('POST /api/admin/vehicles', () => {
-  it('creates a vehicle', async () => {
+  it('creates a vehicle and returns the mapped row', async () => {
     (prisma.vehicle.create as jest.Mock).mockResolvedValue(fakeRow);
     const {req, res} = createMocks({
       method: 'POST',
@@ -72,6 +72,25 @@ describe('POST /api/admin/vehicles', () => {
     });
     await handler(req as never, res as never);
     expect(res._getStatusCode()).toBe(201);
+    expect(prisma.vehicle.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        slug: 'honda-airblade',
+        type: 'SCOOTER',
+        brand: 'Honda',
+        model: 'Airblade',
+        cc: 125,
+        quantity: 2,
+        priceUsdPerDay: 8,
+        status: 'DRAFT',
+        order: 0,
+        imageUrl: null,
+        images: [],
+        description: {en: '', vi: ''},
+      }),
+    });
+    const body = JSON.parse(res._getData());
+    expect(body.id).toBe('v1');
+    expect(body.createdAt).toBe('2026-01-01T00:00:00.000Z');
   });
 
   it('rejects missing required fields', async () => {
