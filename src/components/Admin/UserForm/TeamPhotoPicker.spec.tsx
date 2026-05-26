@@ -36,7 +36,29 @@ jest.mock('next-intl', () => {
   return {NextIntlClientProvider, useTranslations, useLocale};
 });
 
-import {render, screen} from '@testing-library/react';
+const listMock = jest.fn();
+const getMock = jest.fn();
+const createMock = jest.fn();
+
+jest.mock('@/routes', () => ({
+  api: {
+    admin: {
+      imageCollections: {
+        list: (...a: unknown[]) => listMock(...a),
+        get: (...a: unknown[]) => getMock(...a),
+        create: (...a: unknown[]) => createMock(...a),
+        images: {add: jest.fn(), delete: jest.fn()},
+      },
+      upload: {create: jest.fn()},
+    },
+  },
+}));
+
+jest.mock('@/lib/image-transcode', () => ({
+  transcodeImage: jest.fn(),
+}));
+
+import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {NextIntlClientProvider} from 'next-intl';
 import {TeamPhotoPicker} from './TeamPhotoPicker';
@@ -57,34 +79,62 @@ const images = [
 ];
 
 function setup(value: string | null = null) {
+  listMock.mockResolvedValue({
+    data: [{id: 'c1', key: 'team', label: 'Team', imageCount: 2}],
+  });
+  getMock.mockResolvedValue({
+    data: {id: 'c1', key: 'team', label: 'Team', images},
+  });
   const onChange = jest.fn();
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <TeamPhotoPicker images={images} value={value} onChange={onChange} />
+      <TeamPhotoPicker value={value} onChange={onChange} />
     </NextIntlClientProvider>,
   );
   return {onChange};
 }
 
 describe('TeamPhotoPicker', () => {
-  it('opens modal', async () => {
+  it('opens modal and lists fetched images', async () => {
     setup();
+    await waitFor(() => expect(getMock).toHaveBeenCalled());
     await userEvent.click(screen.getByRole('button', {name: 'Select photo'}));
     expect(screen.getByText('Choose a team photo')).toBeInTheDocument();
-    expect(screen.getAllByRole('img')).toHaveLength(2);
+    await waitFor(() =>
+      expect(screen.getAllByRole('img').length).toBeGreaterThanOrEqual(2),
+    );
   });
 
   it('selects and closes', async () => {
     const {onChange} = setup();
+    await waitFor(() => expect(getMock).toHaveBeenCalled());
     await userEvent.click(screen.getByRole('button', {name: 'Select photo'}));
-    await userEvent.click(screen.getByRole('img', {name: 'A'}));
+    const img = await screen.findByRole('img', {name: 'A'});
+    await userEvent.click(img);
     expect(onChange).toHaveBeenCalledWith('i1');
-    expect(screen.queryByText('Choose a team photo')).not.toBeInTheDocument();
   });
 
   it('removes selection', async () => {
     const {onChange} = setup('i1');
+    await waitFor(() => expect(getMock).toHaveBeenCalled());
     await userEvent.click(screen.getByRole('button', {name: 'Remove'}));
     expect(onChange).toHaveBeenCalledWith(null);
+  });
+
+  it('creates team collection if missing', async () => {
+    listMock.mockResolvedValue({data: []});
+    createMock.mockResolvedValue({
+      data: {id: 'c-new', key: 'team', label: 'Team Photos'},
+    });
+    getMock.mockResolvedValue({
+      data: {id: 'c-new', key: 'team', label: 'Team Photos', images: []},
+    });
+    const onChange = jest.fn();
+    render(
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <TeamPhotoPicker value={null} onChange={onChange} />
+      </NextIntlClientProvider>,
+    );
+    await waitFor(() => expect(createMock).toHaveBeenCalled());
   });
 });

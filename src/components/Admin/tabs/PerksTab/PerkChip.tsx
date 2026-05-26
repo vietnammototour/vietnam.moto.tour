@@ -41,18 +41,19 @@ export function PerkChip({perk, locale, zone, onRemove}: PerkChipProps) {
       </span>
       {onRemove && (
         <Button
-          variant="secondary"
+          variant="ghost-danger"
           size="sm"
           iconOnly
           type="button"
+          onPointerDown={(e) => e.stopPropagation()}
           onClick={(e) => {
             e.stopPropagation();
             onRemove();
           }}
           aria-label="Remove"
-          className="ml-1 text-on-surface-secondary hover:text-on-surface"
+          className="ml-1"
         >
-          ✕
+          <i className="fa fa-times" />
         </Button>
       )}
     </div>

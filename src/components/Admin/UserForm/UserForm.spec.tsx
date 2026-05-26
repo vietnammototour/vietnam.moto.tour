@@ -36,6 +36,24 @@ jest.mock('next-intl', () => {
   return {NextIntlClientProvider, useTranslations, useLocale};
 });
 
+jest.mock('@/routes', () => ({
+  api: {
+    admin: {
+      imageCollections: {
+        list: jest.fn().mockResolvedValue({data: []}),
+        get: jest.fn().mockResolvedValue({data: {images: []}}),
+        create: jest.fn().mockResolvedValue({data: {id: 'c1'}}),
+        images: {add: jest.fn(), delete: jest.fn()},
+      },
+      upload: {create: jest.fn()},
+    },
+  },
+}));
+
+jest.mock('@/lib/image-transcode', () => ({
+  transcodeImage: jest.fn(),
+}));
+
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {NextIntlClientProvider} from 'next-intl';
@@ -84,13 +102,7 @@ function setup() {
   const onSubmit = jest.fn();
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <UserForm
-        mode="create"
-        locale="en"
-        roles={roles}
-        images={[]}
-        onSubmit={onSubmit}
-      />
+      <UserForm mode="create" locale="en" roles={roles} onSubmit={onSubmit} />
       <button type="submit" form="user-form">
         Save
       </button>

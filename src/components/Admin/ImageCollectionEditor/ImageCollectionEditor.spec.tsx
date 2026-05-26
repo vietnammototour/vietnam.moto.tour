@@ -1,6 +1,19 @@
 import {render, screen} from '@testing-library/react';
 import {NextIntlClientProvider} from 'next-intl';
 import {ImageCollectionEditor} from './ImageCollectionEditor';
+import {AddImageButton} from './AddImageButton';
+import {useImageCollectionImages} from './useImageCollectionImages';
+import type {ImageCollection} from '@/domain';
+
+function Harness({collection}: {collection: ImageCollection}) {
+  const state = useImageCollectionImages(collection);
+  return (
+    <>
+      <AddImageButton disabled={!state.canAdd} onPick={state.handleAdd} />
+      <ImageCollectionEditor state={state} />
+    </>
+  );
+}
 
 // Override the global next-intl mock so NextIntlClientProvider actually resolves
 // message keys using the messages fixture passed to the provider.
@@ -116,7 +129,7 @@ const collection = {
 test('renders one card per image', () => {
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <ImageCollectionEditor collection={collection} />
+      <Harness collection={collection} />
     </NextIntlClientProvider>,
   );
   expect(screen.getAllByText('EN').length).toBe(2);
@@ -133,7 +146,7 @@ test('add disabled at max=10', () => {
   }));
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <ImageCollectionEditor collection={{...collection, images: fullImages}} />
+      <Harness collection={{...collection, images: fullImages}} />
     </NextIntlClientProvider>,
   );
   expect(screen.getByRole('button', {name: 'Add'})).toBeDisabled();
