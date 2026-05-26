@@ -9,7 +9,11 @@ import {fetchToursServer} from '@/queries/fetchers/admin/tours.server';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes} from '@/routes';
-import {Badge} from '@/components/ui';
+import {Badge, Button} from '@/components/ui';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
 import type * as VMT from '@/domain';
 
 type AdminTour = {
@@ -41,10 +45,13 @@ export default function AdminToursList() {
   const archivedCount = archivedTours?.length ?? 0;
   const tourList = (tours ?? []) as unknown as AdminTour[];
 
+  const pickTitle = (t: AdminTour) => t.titleEn || t.titleVi;
+  const pickDestination = (d: AdminTour['destination']) => d.nameEn || d.nameVi;
+
   const groupedByDestination = (() => {
     const groups = new Map<string, {label: string; tours: AdminTour[]}>();
     for (const tour of tourList) {
-      const key = tour.destination.nameEn || tour.destination.nameVi || '—';
+      const key = pickDestination(tour.destination) || '—';
       const bucket = groups.get(key) ?? {label: key, tours: []};
       bucket.tours.push(tour);
       groups.set(key, bucket);
@@ -53,35 +60,42 @@ export default function AdminToursList() {
       .map((g) => ({
         ...g,
         tours: [...g.tours].sort((a, b) =>
-          (a.titleEn || a.titleVi).localeCompare(b.titleEn || b.titleVi),
+          pickTitle(a).localeCompare(pickTitle(b)),
         ),
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   })();
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">Tours</h1>
-        <div className="flex items-center gap-3">
-          {archivedCount > 0 && (
-            <Link
-              href={routes.admin.tours.archive.path()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg type-label-sm uppercase border border-border text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
-            >
-              <i className="fa fa-archive text-xs" />
-              Archive ({archivedCount})
-            </Link>
-          )}
-          <Link
-            href={routes.admin.tours.new.path()}
-            className="bg-primary hover:bg-primary-light text-on-primary px-4 py-2 rounded-lg type-label-sm uppercase transition-colors cursor-pointer"
-          >
-            + New Tour
-          </Link>
-        </div>
-      </div>
-
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Tours"
+          actions={
+            <>
+              {archivedCount > 0 && (
+                <Button
+                  variant="secondary"
+                  size="md"
+                  href={routes.admin.tours.archive.path()}
+                  icon={<i className="fa fa-archive text-xs" />}
+                >
+                  Archive ({archivedCount})
+                </Button>
+              )}
+              <Button
+                variant="primary"
+                size="md"
+                href={routes.admin.tours.new.path()}
+                icon={<i className="fa fa-plus text-xs" />}
+              >
+                Add tour
+              </Button>
+            </>
+          }
+        />
+      }
+    >
       <div className="space-y-6">
         {groupedByDestination.map((group) => (
           <section
@@ -143,7 +157,7 @@ export default function AdminToursList() {
                           <i className="fa fa-image text-on-surface-tertiary" />
                         </div>
                         <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
-                          {tour.titleEn || tour.titleVi}
+                          {pickTitle(tour)}
                         </span>
                       </Link>
                     </td>
@@ -195,7 +209,7 @@ export default function AdminToursList() {
           </div>
         )}
       </div>
-    </div>
+    </AdminPageShell>
   );
 }
 

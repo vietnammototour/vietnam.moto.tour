@@ -2,6 +2,12 @@ import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TranslationEditor} from '@/components/Admin/TranslationEditor';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
+import {LocaleSwitcher} from '@/components/ui';
+import {useAdminLocale} from '@/hooks/useAdminLocale';
 import type * as VMT from '@/domain';
 
 export default function AdminTranslations() {
@@ -9,6 +15,7 @@ export default function AdminTranslations() {
     '/api/admin/translations',
   );
   const {setLoading} = useAdminLoading();
+  const [locale, setLocale] = useAdminLocale();
 
   const translations = data ?? [];
   const namespaces = [...new Set(translations.map((t) => t.namespace))].sort();
@@ -18,14 +25,23 @@ export default function AdminTranslations() {
   }, [loading, setLoading]);
 
   return (
-    <div>
-      <h1 className="type-headline-sm mb-6">Translations</h1>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Translations"
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
+        />
+      }
+    >
       {translations.length > 0 && (
         <TranslationEditor
           translations={translations}
           namespaces={namespaces}
+          locale={locale}
         />
       )}
-    </div>
+    </AdminPageShell>
   );
 }

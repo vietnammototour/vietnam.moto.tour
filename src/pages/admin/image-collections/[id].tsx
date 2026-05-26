@@ -1,17 +1,25 @@
 import type {GetServerSidePropsContext} from 'next';
 import {useState} from 'react';
+import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import {prisma} from '@/lib/prisma';
 import {toImageCollection} from '@/domain/image-collection/mapper';
 import type {ImageCollection} from '@/domain';
 import {ImageCollectionEditor} from '@/components/Admin/ImageCollectionEditor';
-import {api} from '@/routes';
-import {Button, TextInput} from '@/components/ui';
+import {api, routes} from '@/routes';
+import {Button, TextInput, LocaleSwitcher} from '@/components/ui';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
+import {useAdminLocale} from '@/hooks/useAdminLocale';
 
 type Props = {collection: ImageCollection};
 
 export default function EditImageCollectionPage({collection}: Props) {
   const t = useTranslations();
+  const router = useRouter();
+  const [locale, setLocale] = useAdminLocale();
   const [label, setLabel] = useState(collection.label);
   const [savedLabel, setSavedLabel] = useState(collection.label);
   const [saving, setSaving] = useState(false);
@@ -25,33 +33,62 @@ export default function EditImageCollectionPage({collection}: Props) {
   }
 
   return (
-    <div>
-      <div className="mb-6">
-        <p className="type-label-sm text-on-surface-secondary mb-1">
-          {t('admin.imageCollections.key')}:{' '}
-          <span className="font-mono">{collection.key}</span>
-        </p>
-        <div className="flex gap-2 items-end">
-          <div className="flex-1 max-w-md">
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title={savedLabel || collection.key}
+          breadcrumbs={[
+            {label: 'Admin', href: routes.admin.dashboard.path()},
+            {
+              label: t('admin.imageCollections.title'),
+              href: routes.admin.imageCollections.list.path(),
+            },
+            {label: collection.key},
+          ]}
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
+          actions={
+            <Button
+              variant="secondary"
+              onClick={() =>
+                router.push(routes.admin.imageCollections.list.path())
+              }
+              icon={<i className="fa fa-arrow-left text-xs" />}
+            >
+              {t('common.back') === 'common.back' ? 'Back' : t('common.back')}
+            </Button>
+          }
+        />
+      }
+    >
+      <div className="space-y-6 max-w-6xl">
+        <div className="bg-surface-elevated rounded-xl border border-border p-6 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TextInput
+              label={t('admin.imageCollections.key')}
+              value={collection.key}
+              disabled
+            />
             <TextInput
               label={t('admin.imageCollections.label')}
               value={label}
               onChange={(e) => setLabel(e.target.value)}
               onBlur={saveLabel}
+              hint={
+                saving
+                  ? 'Saving…'
+                  : label !== savedLabel
+                    ? 'Unsaved'
+                    : undefined
+              }
             />
           </div>
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={saveLabel}
-            disabled={saving || label === savedLabel}
-          >
-            {t('common.save')}
-          </Button>
         </div>
+
+        <ImageCollectionEditor collection={collection} locale={locale} />
       </div>
-      <ImageCollectionEditor collection={collection} />
-    </div>
+    </AdminPageShell>
   );
 }
 

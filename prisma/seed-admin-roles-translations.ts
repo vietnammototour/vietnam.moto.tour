@@ -104,6 +104,12 @@ const ENTRIES: Entry[] = [
   },
   {
     namespace: 'admin',
+    key: 'roles.cancel',
+    valueVi: 'Hủy',
+    valueEn: 'Cancel',
+  },
+  {
+    namespace: 'admin',
     key: 'roles.delete',
     valueVi: 'Xóa',
     valueEn: 'Delete',

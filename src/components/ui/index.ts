@@ -7,6 +7,8 @@ export {Textarea} from './Textarea';
 export {NumberInput} from './NumberInput';
 export {SegmentedControl} from './SegmentedControl';
 export {Modal} from './Modal';
+export {ConfirmModal} from './ConfirmModal';
+export {LocaleSwitcher, type AdminLocale} from './LocaleSwitcher';
 export {Tabs, TabPanel} from './Tabs';
 export {ImageUpload} from './ImageUpload';
 export {ThemeToggle} from './ThemeToggle';

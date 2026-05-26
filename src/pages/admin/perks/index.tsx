@@ -5,6 +5,10 @@ import {api} from '@/routes';
 import {Button, IconPicker, Select} from '@/components/ui';
 import {LocalePicker, type Locale} from '@/components/Admin/LocalePicker';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+} from '@/components/Admin/AdminPageShell';
 import type * as VMT from '@/domain';
 
 const CATEGORIES: VMT.PerkCategory[] = [
@@ -126,16 +130,23 @@ export default function PerksListPage() {
   }, {});
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="type-headline-sm">{t('title')}</h1>
-        <Button onClick={handleCreate}>{t('new')}</Button>
-      </div>
-
-      <div className="mb-4">
-        <LocalePicker value={locale} onChange={setLocale} />
-      </div>
-
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title={t('title')}
+          localeSwitcher={<LocalePicker value={locale} onChange={setLocale} />}
+          actions={
+            <Button
+              variant="primary"
+              onClick={handleCreate}
+              icon={<i className="fa fa-plus text-xs" />}
+            >
+              {t('new')}
+            </Button>
+          }
+        />
+      }
+    >
       {!loading && perks.length === 0 && (
         <p className="text-on-surface-secondary">{t('empty')}</p>
       )}
@@ -173,27 +184,33 @@ export default function PerksListPage() {
                     fullWidth={false}
                     selectSize="sm"
                     value={draft.category}
-                    onChange={(e) =>
+                    onChange={(v) =>
                       updateDraft(p.id, {
-                        category: e.target.value as VMT.PerkCategory,
+                        category: v as VMT.PerkCategory,
                       })
                     }
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>
-                        {t(`category.${c}`)}
-                      </option>
-                    ))}
-                  </Select>
+                    options={CATEGORIES.map((c) => ({
+                      value: c,
+                      label: t(`category.${c}`),
+                    }))}
+                  />
                   {dirty && (
                     <Button
+                      variant="primary"
+                      size="sm"
                       onClick={() => handleSave(p.id)}
                       disabled={savingId === p.id}
+                      loading={savingId === p.id}
                     >
                       {savingId === p.id ? tc('form.saving') : tc('form.save')}
                     </Button>
                   )}
-                  <Button variant="secondary" onClick={() => handleDelete(p)}>
+                  <Button
+                    variant="ghost-danger"
+                    size="sm"
+                    onClick={() => handleDelete(p)}
+                    icon={<i className="fa fa-trash text-xs" />}
+                  >
                     {tc('delete')}
                   </Button>
                 </li>
@@ -202,7 +219,7 @@ export default function PerksListPage() {
           </ul>
         </section>
       ))}
-    </div>
+    </AdminPageShell>
   );
 }
 

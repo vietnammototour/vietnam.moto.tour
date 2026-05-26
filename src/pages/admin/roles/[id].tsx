@@ -4,8 +4,13 @@ import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
 import {RoleForm} from '@/components/Admin/RoleForm';
 import type {RoleFormValues} from '@/components/Admin/RoleForm/RoleForm.form-utils';
-import {AdminBreadcrumbs} from '@/components/Admin/AdminBreadcrumbs';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+  AdminPageFooter,
+} from '@/components/Admin/AdminPageShell';
 import {LocalePicker, type Locale} from '@/components/Admin/LocalePicker';
+import {Button} from '@/components/ui';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
 
@@ -42,24 +47,36 @@ export default function EditRolePage() {
     : '';
 
   return (
-    <div className="h-full flex flex-col min-h-0">
-      <div className="flex items-start justify-between mb-6 gap-4 shrink-0">
-        <div className="min-w-0">
-          <AdminBreadcrumbs
-            items={[
-              {label: 'Admin', href: routes.admin.dashboard.path()},
-              {label: t('title'), href: routes.admin.roles.list.path()},
-              {label: role?.key ?? id},
-            ]}
-          />
-          <h1 className="type-headline-sm truncate">
-            {currentLabel || t('edit')}
-          </h1>
-        </div>
-        <div className="flex items-center gap-3 shrink-0">
-          <LocalePicker value={locale} onChange={setLocale} />
-        </div>
-      </div>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title={currentLabel || t('edit')}
+          breadcrumbs={[
+            {label: 'Admin', href: routes.admin.dashboard.path()},
+            {label: t('title'), href: routes.admin.roles.list.path()},
+            {label: role?.key ?? id},
+          ]}
+          localeSwitcher={<LocalePicker value={locale} onChange={setLocale} />}
+        />
+      }
+      footer={
+        <AdminPageFooter
+          actions={
+            <>
+              <Button
+                variant="secondary"
+                onClick={() => router.push(routes.admin.roles.list.path())}
+              >
+                {t('cancel')}
+              </Button>
+              <Button variant="primary" type="submit" form="role-form">
+                {t('save')}
+              </Button>
+            </>
+          }
+        />
+      }
+    >
       {role && (
         <RoleForm
           mode="edit"
@@ -68,7 +85,7 @@ export default function EditRolePage() {
           onSubmit={onSubmit}
         />
       )}
-    </div>
+    </AdminPageShell>
   );
 }
 

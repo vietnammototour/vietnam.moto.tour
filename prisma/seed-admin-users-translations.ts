@@ -146,6 +146,12 @@ const ENTRIES: Entry[] = [
   },
   {
     namespace: 'admin',
+    key: 'users.cancel',
+    valueVi: 'Hủy',
+    valueEn: 'Cancel',
+  },
+  {
+    namespace: 'admin',
     key: 'users.delete',
     valueVi: 'Xóa',
     valueEn: 'Delete',

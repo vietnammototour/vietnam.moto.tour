@@ -160,15 +160,15 @@ export function PerksTab({
             <Select
               fullWidth={false}
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-            >
-              <option value="">{tc('allCategories')}</option>
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {tPerks(`category.${c}`)}
-                </option>
-              ))}
-            </Select>
+              onChange={setCategoryFilter}
+              options={[
+                {value: '', label: tc('allCategories')},
+                ...CATEGORIES.map((c) => ({
+                  value: c,
+                  label: tPerks(`category.${c}`),
+                })),
+              ]}
+            />
           </div>
           {availablePerks.map((p) => (
             <PerkChip key={p.id} perk={p} locale={locale} zone="available" />

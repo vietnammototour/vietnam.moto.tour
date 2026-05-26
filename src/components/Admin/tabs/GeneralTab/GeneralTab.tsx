@@ -157,20 +157,14 @@ export function GeneralTab({
     <Select
       aria-label="Destination"
       value={values.destinationId}
-      onChange={(e) => {
-        const id = (e.target as HTMLSelectElement).value;
+      onChange={(id) => {
         setValue('destinationId', id, {shouldDirty: true});
         onDestinationChange?.(id);
       }}
       className="bg-surface-elevated/90 backdrop-blur"
-    >
-      <option value="">Select destination...</option>
-      {destinations.map((d) => (
-        <option key={d.id} value={d.id}>
-          {d.name}
-        </option>
-      ))}
-    </Select>
+      placeholder="Select destination..."
+      options={destinations.map((d) => ({value: d.id, label: d.name}))}
+    />
   );
 
   return (

@@ -164,17 +164,18 @@ export function PricingTab({initialData, locale, onSave}: PricingTabProps) {
                     fullWidth={false}
                     selectSize="sm"
                     value={group.type}
-                    onChange={(e) =>
+                    onChange={(v) =>
                       setValue(
                         `groups.${gIdx}.type` as any,
-                        e.target.value as 'vehicle' | 'group-size',
+                        v as 'vehicle' | 'group-size',
                         {shouldDirty: true},
                       )
                     }
-                  >
-                    <option value="vehicle">Vehicle</option>
-                    <option value="group-size">Group Size</option>
-                  </Select>
+                    options={[
+                      {value: 'vehicle', label: 'Vehicle'},
+                      {value: 'group-size', label: 'Group Size'},
+                    ]}
+                  />
                   <TextInput
                     placeholder="Icon (e.g. fa-motorcycle)"
                     className="flex-1 min-w-0"

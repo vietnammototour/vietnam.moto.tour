@@ -3,11 +3,11 @@ import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useTranslations} from 'next-intl';
 import {
-  Button,
   TextInput,
   Textarea,
   NumberInput,
   FormField,
+  Select,
 } from '@/components/ui';
 import {TeamPhotoPicker} from './TeamPhotoPicker';
 import type {Locale} from '../LocalePicker';
@@ -24,6 +24,7 @@ type PickableImage = Pick<
 >;
 
 type UserFormProps = {
+  id?: string;
   mode: 'create' | 'edit';
   locale: Locale;
   roles: VMT.OrgRole[];
@@ -33,6 +34,7 @@ type UserFormProps = {
 };
 
 export function UserForm({
+  id = 'user-form',
   mode,
   locale,
   roles,
@@ -41,7 +43,6 @@ export function UserForm({
   onSubmit,
 }: UserFormProps) {
   const t = useTranslations('admin.users');
-  const roleSelectId = useId();
   const isCoreTeamId = useId();
   const allowAuthId = useId();
 
@@ -49,7 +50,7 @@ export function UserForm({
     register,
     handleSubmit,
     control,
-    formState: {errors, isSubmitting},
+    formState: {errors},
   } = useForm<UserFormValues>({
     resolver: yupResolver(buildUserSchema(t, mode)),
     defaultValues: defaults ?? userFormDefaults,
@@ -57,12 +58,18 @@ export function UserForm({
 
   const bioField = locale === 'en' ? 'bioEn' : 'bioVi';
 
+  const roleOptions = roles.map((r) => ({
+    value: r.id,
+    label: locale === 'en' ? r.labelEn : r.labelVi,
+  }));
+
   return (
     <form
+      id={id}
       onSubmit={handleSubmit((data) => onSubmit(data))}
-      className="flex flex-col flex-1 min-h-0"
+      className="max-w-4xl bg-surface-elevated rounded-xl border border-border p-6 space-y-6"
     >
-      <div className="flex-1 overflow-y-auto pr-1 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TextInput
           label={t('nameLabel')}
           {...register('name')}
@@ -77,33 +84,24 @@ export function UserForm({
         <TextInput
           label={t('passwordLabel')}
           type="password"
+          autoComplete="new-password"
           {...register('password')}
           error={errors.password?.message}
+          hint={mode === 'edit' ? t('passwordHelp') : undefined}
         />
-        <FormField
-          label={t('roleLabel')}
-          htmlFor={roleSelectId}
-          error={errors.orgRoleId?.message}
-        >
-          <select
-            id={roleSelectId}
-            {...register('orgRoleId')}
-            className="w-full bg-surface-elevated border border-border rounded-lg p-2 cursor-pointer"
-          >
-            <option value="">—</option>
-            {roles.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.labelEn}
-              </option>
-            ))}
-          </select>
-        </FormField>
-        <Textarea
-          key={bioField}
-          label={t('bioLabel')}
-          {...register(bioField)}
-          rows={4}
-          error={errors[bioField]?.message}
+        <Controller
+          control={control}
+          name="orgRoleId"
+          render={({field}) => (
+            <Select
+              label={t('roleLabel')}
+              value={field.value ?? ''}
+              onChange={field.onChange}
+              options={roleOptions}
+              placeholder="—"
+              error={errors.orgRoleId?.message}
+            />
+          )}
         />
         <TextInput
           label={t('birthDateLabel')}
@@ -116,47 +114,56 @@ export function UserForm({
           {...register('teamOrder', {valueAsNumber: true})}
           error={errors.teamOrder?.message}
         />
-        <Controller
-          control={control}
-          name="imageId"
-          render={({field}) => (
-            <TeamPhotoPicker
-              images={images}
-              value={field.value}
-              onChange={field.onChange}
+      </div>
+
+      <Textarea
+        key={bioField}
+        label={t('bioLabel')}
+        {...register(bioField)}
+        rows={4}
+        error={errors[bioField]?.message}
+      />
+
+      <Controller
+        control={control}
+        name="imageId"
+        render={({field}) => (
+          <TeamPhotoPicker
+            images={images}
+            value={field.value}
+            onChange={field.onChange}
+          />
+        )}
+      />
+
+      <FormField label=" ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <label
+            htmlFor={isCoreTeamId}
+            className="flex items-center gap-2 cursor-pointer rounded-lg border border-border bg-surface px-3 py-2 hover:bg-surface-alt transition-colors"
+          >
+            <input
+              id={isCoreTeamId}
+              type="checkbox"
+              {...register('isCoreTeam')}
+              className="cursor-pointer accent-primary"
             />
-          )}
-        />
-        <label
-          htmlFor={isCoreTeamId}
-          className="flex items-center gap-2 cursor-pointer"
-        >
-          <input
-            id={isCoreTeamId}
-            type="checkbox"
-            {...register('isCoreTeam')}
-            className="cursor-pointer"
-          />
-          {t('isCoreTeamLabel')}
-        </label>
-        <label
-          htmlFor={allowAuthId}
-          className="flex items-center gap-2 cursor-pointer"
-        >
-          <input
-            id={allowAuthId}
-            type="checkbox"
-            {...register('allowAuth')}
-            className="cursor-pointer"
-          />
-          {t('allowAuthLabel')}
-        </label>
-      </div>
-      <div className="shrink-0 flex justify-end gap-3 border-t border-border pt-4 mt-6">
-        <Button type="submit" disabled={isSubmitting}>
-          {t('save')}
-        </Button>
-      </div>
+            <span className="type-body-sm">{t('isCoreTeamLabel')}</span>
+          </label>
+          <label
+            htmlFor={allowAuthId}
+            className="flex items-center gap-2 cursor-pointer rounded-lg border border-border bg-surface px-3 py-2 hover:bg-surface-alt transition-colors"
+          >
+            <input
+              id={allowAuthId}
+              type="checkbox"
+              {...register('allowAuth')}
+              className="cursor-pointer accent-primary"
+            />
+            <span className="type-body-sm">{t('allowAuthLabel')}</span>
+          </label>
+        </div>
+      </FormField>
     </form>
   );
 }

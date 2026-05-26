@@ -27,6 +27,7 @@ export function AddImageButton({disabled, onPick}: Props) {
         variant="primary"
         type="button"
         disabled={disabled}
+        icon={<i className="fa fa-plus text-xs" />}
         onClick={() => ref.current?.click()}
       >
         {t('admin.imageCollections.addImage')}

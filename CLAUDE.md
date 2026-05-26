@@ -71,8 +71,21 @@ When adding form fields, use shared components instead of inline `<input>` + `<l
 
 ### Admin Page Rules
 
-- **Locale-switcher per tab — never duplicate localized fields.** When an admin form edits localized content (e.g., `Bio`, `Title`, `Description`), render a single field with a locale switcher (tab/segmented control) above it. Do NOT render `Bio (VI)` and `Bio (EN)` as two separate stacked fields. One field, locale state controls which translation is being edited.
-- **Consistent admin layout — fixed header, fixed footer, scrollable content.** Every admin page uses the same shell: header pinned at the top, footer/action-bar pinned at the bottom, and the middle region is the only scrollable area. Do not let the whole page scroll; do not let action buttons drift off-screen. Use `h-screen` + flex column with `flex-1 overflow-y-auto` on the content region.
+- **Full canonical contract:** See [.claude/ADMIN.md](./.claude/ADMIN.md) for the complete admin-page rulebook (shell, header, footer, locale switcher, button variants, list/edit conventions, destructive-action pattern, per-page audit checklist). Every admin page MUST conform.
+- **Locale-switcher per tab — never duplicate localized fields.** When an admin form edits localized content (e.g., `Bio`, `Title`, `Description`), render a single field with a locale switcher (tab/segmented control) above it. Do NOT render `Bio (VI)` and `Bio (EN)` as two separate stacked fields. One field, locale state controls which translation is being edited. (Applies to list pages too — show only the active-locale value, not VI+EN columns.)
+- **Consistent admin layout — fixed header, fixed footer, scrollable content.** Every admin page uses the same shell: header pinned at the top, footer/action-bar pinned at the bottom (detached pill style), and the middle region is the only scrollable area. Do not let the whole page scroll; do not let action buttons drift off-screen. Use the shared `AdminPageShell` component.
+- **Buttons.** Use `<Button>` from `src/components/ui/Button` exclusively. Never use raw `<button>` styled with Tailwind classes or `<Link>` styled to look like a button. Variants:
+  - `primary` — Add/Save/Submit actions.
+  - `secondary` — Cancel and neutral secondary actions.
+  - `danger` — destructive confirmation buttons (inside ConfirmModal, on confirm-of-destructive forms).
+  - `ghost-primary` — inline row edit / row primary action (e.g. "Edit").
+  - `ghost-danger` — inline row destructive action (e.g. "Delete", "Remove", "Archive").
+  - `ghost` — neutral inline action.
+  - `link` — text-style link action.
+- **Destructive buttons MUST use a danger-family variant.** Every destructive action (delete, remove, archive, unpublish, discard, reset) must render with `variant="danger"` (for confirmation buttons) or `variant="ghost-danger"` (for inline row actions). Never style a destructive action as `ghost`, `secondary`, `primary`, or a raw element. This rule is absolute — if it deletes or removes data, it must be red.
+- **Edit buttons MUST be visually consistent across all admin pages.** Every inline row "Edit" action uses `<Button variant="ghost-primary" icon={<i className="fa fa-pencil" />} href={...}>Edit</Button>`. Do not vary the label, icon, or variant per page (no `Edit user`, `Edit role`, `Edit destination` — just `Edit`).
+- **Primary "Add" button is always** `<Button variant="primary" icon={<i className="fa fa-plus" />}>Add {Entity}</Button>`. Label is `Add {Entity}` (e.g. `Add user`, `Add role`, `Add tour`) — not `New user` or `+ New Destination`.
+- **Destructive actions.** Never use `window.confirm()` or `window.alert()`. Use the shared `ConfirmModal` from `src/components/ui/ConfirmModal`.
 
 ### Testing Rules
 
@@ -123,6 +136,6 @@ Next.js 16 app using the **Pages Router** (`src/pages/`), TypeScript strict mode
 
 Pushes to `main` trigger SSH deployment to production (`/var/www/vietnam-moto-tours`) via `.github/workflows/deploy.yml`. The workflow calls an external deploy script at `/home/ci-cd/deploy.sh` on the VPS via SSH (user: `ci-cd`). The server runs the app with pm2.
 
-**Full VPS documentation:** See [VPS.md](./VPS.md) for server setup, PostgreSQL, CI/CD gotchas, auth, and useful commands.
+**Full VPS documentation:** See [.claude/VPS.md](./.claude/VPS.md) for server setup, PostgreSQL, CI/CD gotchas, auth, and useful commands.
 
-**Image uploads / object storage:** See [STORAGE.md](./STORAGE.md) for the `UPLOAD_DIR` env var, canonical filesystem layout, transcode pipeline, API routes, sweep/backup cron jobs, and the migration runbook.
+**Image uploads / object storage:** See [.claude/STORAGE.md](./.claude/STORAGE.md) for the `UPLOAD_DIR` env var, canonical filesystem layout, transcode pipeline, API routes, sweep/backup cron jobs, and the migration runbook.

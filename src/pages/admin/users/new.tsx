@@ -4,8 +4,13 @@ import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
 import {UserForm} from '@/components/Admin/UserForm';
 import type {UserFormValues} from '@/components/Admin/UserForm/UserForm.form-utils';
-import {AdminBreadcrumbs} from '@/components/Admin/AdminBreadcrumbs';
+import {
+  AdminPageShell,
+  AdminPageHeader,
+  AdminPageFooter,
+} from '@/components/Admin/AdminPageShell';
 import {LocalePicker, type Locale} from '@/components/Admin/LocalePicker';
+import {Button} from '@/components/ui';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
 
@@ -54,22 +59,36 @@ export default function NewUserPage() {
   }
 
   return (
-    <div className="h-full flex flex-col min-h-0">
-      <div className="flex items-start justify-between mb-6 gap-4 shrink-0">
-        <div className="min-w-0">
-          <AdminBreadcrumbs
-            items={[
-              {label: 'Admin', href: routes.admin.dashboard.path()},
-              {label: t('title'), href: routes.admin.users.list.path()},
-              {label: t('new')},
-            ]}
-          />
-          <h1 className="type-headline-sm truncate">{t('new')}</h1>
-        </div>
-        <div className="flex items-center gap-3 shrink-0">
-          <LocalePicker value={locale} onChange={setLocale} />
-        </div>
-      </div>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title={t('new')}
+          breadcrumbs={[
+            {label: 'Admin', href: routes.admin.dashboard.path()},
+            {label: t('title'), href: routes.admin.users.list.path()},
+            {label: t('new')},
+          ]}
+          localeSwitcher={<LocalePicker value={locale} onChange={setLocale} />}
+        />
+      }
+      footer={
+        <AdminPageFooter
+          actions={
+            <>
+              <Button
+                variant="secondary"
+                onClick={() => router.push(routes.admin.users.list.path())}
+              >
+                {t('cancel')}
+              </Button>
+              <Button variant="primary" type="submit" form="user-form">
+                {t('save')}
+              </Button>
+            </>
+          }
+        />
+      }
+    >
       <UserForm
         mode="create"
         locale={locale}
@@ -77,7 +96,7 @@ export default function NewUserPage() {
         images={images}
         onSubmit={onSubmit}
       />
-    </div>
+    </AdminPageShell>
   );
 }
 
