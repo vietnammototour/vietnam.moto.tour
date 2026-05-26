@@ -51,13 +51,13 @@ export default function ImageCollectionsListPage() {
         />
       }
     >
-      {loading ? (
-        <p>{t('common.loading')}</p>
-      ) : rows.length === 0 ? (
+      {loading && <p>{t('common.loading')}</p>}
+      {!loading && rows.length === 0 && (
         <p className="text-on-surface-secondary">
           {t('admin.imageCollections.empty')}
         </p>
-      ) : (
+      )}
+      {!loading && rows.length > 0 && (
         <table className="w-full bg-surface-elevated rounded-xl border border-border">
           <thead>
             <tr className="text-left border-b border-border">

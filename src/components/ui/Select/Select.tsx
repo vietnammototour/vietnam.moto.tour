@@ -11,6 +11,12 @@ import {
 } from 'react';
 import {FormField} from '@/components/ui/FormField';
 
+function optionStateClass(disabled: boolean | undefined, isActive: boolean) {
+  if (disabled) return 'opacity-50 cursor-not-allowed';
+  if (isActive) return 'bg-surface-alt';
+  return '';
+}
+
 export type SelectOption = {
   value: string;
   label: string;
@@ -197,11 +203,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                   onClick={() => pick(idx)}
                   className={[
                     'px-3 py-2 type-body-md cursor-pointer flex items-center justify-between gap-2',
-                    opt.disabled
-                      ? 'opacity-50 cursor-not-allowed'
-                      : isActive
-                        ? 'bg-surface-alt'
-                        : '',
+                    optionStateClass(opt.disabled, isActive),
                     isSelected ? 'text-primary' : 'text-on-surface',
                   ].join(' ')}
                 >

@@ -11,12 +11,11 @@ export default async function handler(
 
   if (req.method === 'GET') {
     const archivedParam = req.query.archived;
-    const filters =
-      archivedParam === 'true'
-        ? {archived: true}
-        : archivedParam === 'false'
-          ? {archived: false}
-          : {};
+    const filters = (() => {
+      if (archivedParam === 'true') return {archived: true};
+      if (archivedParam === 'false') return {archived: false};
+      return {};
+    })();
     const {getToursForAdmin} = await import('@/data/queries');
     const tours = await getToursForAdmin(filters);
     return res.json(tours);

@@ -81,19 +81,24 @@ export const TourCard = ({tour, interactive = true}: Props) => {
       onMouseEnter={interactive ? onMouseEnter : undefined}
     >
       <div className="relative overflow-hidden aspect-[3/2] bg-secondary/10">
-        {tour.status && tour.status !== 'PUBLISHED' && (
-          <span
-            className={`absolute top-2 left-2 z-20 px-2 py-0.5 rounded-full type-label-sm uppercase tracking-wider text-white ${
-              tour.status === 'DRAFT'
-                ? 'bg-amber-500/90'
-                : tour.status === 'FEATURED'
-                  ? 'bg-blue-500/90'
-                  : 'bg-gray-500/90'
-            }`}
-          >
-            {tour.status}
-          </span>
-        )}
+        {tour.status &&
+          tour.status !== 'PUBLISHED' &&
+          (() => {
+            const statusBg = {
+              DRAFT: 'bg-amber-500/90',
+              FEATURED: 'bg-blue-500/90',
+            };
+            const bg =
+              statusBg[tour.status as keyof typeof statusBg] ??
+              'bg-gray-500/90';
+            return (
+              <span
+                className={`absolute top-2 left-2 z-20 px-2 py-0.5 rounded-full type-label-sm uppercase tracking-wider text-white ${bg}`}
+              >
+                {tour.status}
+              </span>
+            );
+          })()}
         {imageUrl ? (
           <motion.img
             src={imageUrl}

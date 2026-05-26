@@ -23,7 +23,7 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
   const [open, setOpen] = useState(false);
   const [collectionId, setCollectionId] = useState<string | null>(null);
   const [images, setImages] = useState<PickableImage[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -32,7 +32,6 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
     (async () => {
       const list = await api.admin.imageCollections.list();
       if (cancelled) return;
@@ -172,13 +171,15 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
         {error && (
           <div className="mb-4 bg-error/10 text-error p-3 rounded">{error}</div>
         )}
-        {loading ? (
+        {loading && (
           <p className="text-on-surface-secondary py-8 text-center">Loading…</p>
-        ) : images.length === 0 ? (
+        )}
+        {!loading && images.length === 0 && (
           <p className="text-on-surface-secondary py-8 text-center">
             No team photos yet. Upload one to get started.
           </p>
-        ) : (
+        )}
+        {!loading && images.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {images.map((img) => {
               const isSelected = img.id === value;

@@ -23,6 +23,39 @@ export function AdminBreadcrumbs({items}: Props) {
     >
       {items.map((item, i) => {
         const isLast = i === items.length - 1;
+        const renderSegment = () => {
+          if (item.href && !isLast) {
+            return (
+              <Link
+                href={item.href}
+                className="hover:text-primary transition-colors cursor-pointer"
+              >
+                {item.label}
+              </Link>
+            );
+          }
+          if (isLast && item.editable) {
+            return (
+              <EditableSegment
+                label={item.label}
+                fieldLabel={item.editable.fieldLabel}
+                onCommit={item.editable.onCommit}
+              />
+            );
+          }
+          return (
+            <span
+              className={
+                isLast
+                  ? 'text-on-surface type-label-lg font-medium'
+                  : 'text-on-surface-secondary'
+              }
+              aria-current={isLast ? 'page' : undefined}
+            >
+              {item.label}
+            </span>
+          );
+        };
         return (
           <span key={i} className="flex items-center gap-2">
             {i > 0 && (
@@ -30,31 +63,7 @@ export function AdminBreadcrumbs({items}: Props) {
                 /
               </span>
             )}
-            {item.href && !isLast ? (
-              <Link
-                href={item.href}
-                className="hover:text-primary transition-colors cursor-pointer"
-              >
-                {item.label}
-              </Link>
-            ) : isLast && item.editable ? (
-              <EditableSegment
-                label={item.label}
-                fieldLabel={item.editable.fieldLabel}
-                onCommit={item.editable.onCommit}
-              />
-            ) : (
-              <span
-                className={
-                  isLast
-                    ? 'text-on-surface type-label-lg font-medium'
-                    : 'text-on-surface-secondary'
-                }
-                aria-current={isLast ? 'page' : undefined}
-              >
-                {item.label}
-              </span>
-            )}
+            {renderSegment()}
           </span>
         );
       })}

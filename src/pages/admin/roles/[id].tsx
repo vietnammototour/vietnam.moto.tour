@@ -40,11 +40,10 @@ export default function EditRolePage() {
     router.push(routes.admin.roles.list.path());
   }
 
-  const currentLabel = role
-    ? locale === 'en'
-      ? role.labelEn
-      : role.labelVi
-    : '';
+  const currentLabel = (() => {
+    if (!role) return '';
+    return locale === 'en' ? role.labelEn : role.labelVi;
+  })();
 
   return (
     <AdminPageShell

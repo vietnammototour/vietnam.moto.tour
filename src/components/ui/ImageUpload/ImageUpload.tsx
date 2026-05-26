@@ -71,12 +71,11 @@ export function ImageUpload({
     }
   }
 
-  const displayUrl =
-    value.kind === 'saved'
-      ? value.url
-      : value.kind === 'pending-replace'
-        ? value.previewUrl
-        : null;
+  const displayUrl = (() => {
+    if (value.kind === 'saved') return value.url;
+    if (value.kind === 'pending-replace') return value.previewUrl;
+    return null;
+  })();
   const showRemove = value.kind === 'saved' || value.kind === 'pending-replace';
   const errMsg = localError ?? error ?? undefined;
 
