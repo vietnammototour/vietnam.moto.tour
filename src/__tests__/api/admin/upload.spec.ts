@@ -18,6 +18,7 @@ jest.mock('@/lib/prisma', () => ({
     tour: {findUnique: jest.fn(), update: jest.fn()},
     destination: {findUnique: jest.fn(), update: jest.fn()},
     highlight: {findUnique: jest.fn(), update: jest.fn()},
+    vehicle: {findUnique: jest.fn(), update: jest.fn()},
   },
 }));
 
@@ -180,6 +181,29 @@ describe('POST /api/admin/upload', () => {
     });
     await handler(req as any, res as any);
     expect(res._getStatusCode()).toBe(400);
+  });
+
+  it('writes hashed file + updates DB for vehicle:primary', async () => {
+    (prisma.vehicle.findUnique as jest.Mock).mockResolvedValue({
+      id: 'v1',
+      imageUrl: null,
+    });
+    const {req, res} = makeMultipartMock({
+      entityType: 'vehicle',
+      entityId: 'v1',
+      imageType: 'primary',
+      file: {bytes: VALID_WEBP, filename: 'x.webp', mime: 'image/webp'},
+    });
+    await handler(req as any, res as any);
+    expect(res._getStatusCode()).toBe(200);
+    const body = JSON.parse(res._getData());
+    expect(body.url).toMatch(
+      /^\/uploads\/vehicles\/v1\/primary\.[0-9a-f]{8}\.webp$/,
+    );
+    expect(prisma.vehicle.update).toHaveBeenCalledWith({
+      where: {id: 'v1'},
+      data: {imageUrl: body.url},
+    });
   });
 
   it('unlinks freshly written file when DB update fails', async () => {
