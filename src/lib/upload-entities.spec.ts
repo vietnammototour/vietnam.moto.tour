@@ -12,11 +12,12 @@ describe('upload entities', () => {
       'destination',
       'highlight',
       'collectionImage',
+      'vehicle',
     ]);
   });
 
   it('exposes image type allowlist', () => {
-    expect(IMAGE_TYPES).toEqual(['card', 'hero']);
+    expect(IMAGE_TYPES).toEqual(['card', 'hero', 'primary']);
   });
 
   it('allows tour:card', () => {
@@ -41,6 +42,12 @@ describe('upload entities', () => {
     expect(isValidCombination('collectionImage', 'hero')).toBe(false);
   });
 
+  it('allows vehicle:primary only', () => {
+    expect(isValidCombination('vehicle', 'primary')).toBe(true);
+    expect(isValidCombination('vehicle', 'card')).toBe(false);
+    expect(isValidCombination('vehicle', 'hero')).toBe(false);
+  });
+
   it('maps to Prisma model + field', () => {
     expect(getDbField('tour', 'card')).toEqual({
       model: 'tour',
@@ -61,6 +68,10 @@ describe('upload entities', () => {
     expect(getDbField('collectionImage', 'card')).toEqual({
       model: 'collectionImage',
       field: 'url',
+    });
+    expect(getDbField('vehicle', 'primary')).toEqual({
+      model: 'vehicle',
+      field: 'imageUrl',
     });
   });
 });

@@ -56,6 +56,7 @@ Structural contract:
 - **One field per localized value, never two.** Forms and detail pages show a single editor with the `LocaleSwitcher` controlling which translation is being edited. (Already mandated by CLAUDE.md.)
 - **List pages drop VI+EN columns.** Tables show the value in the currently active admin locale only. Locale switching is done via the header `LocaleSwitcher`.
 - Active admin locale lives in URL query (`?locale=en|vi`) or per-page state — pick one and use it consistently. Default to `en`.
+- **Localized fields stored as `{en, vi}` JSON, not split columns.** See CLAUDE.md → Code Style → "Localized DB columns…" for the convention. Admin forms continue to render one field + locale switcher; the switcher mutates the `en` or `vi` key inside the same JSON value rather than two separate columns.
 
 ---
 

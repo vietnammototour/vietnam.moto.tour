@@ -35,16 +35,11 @@ export const Header = () => {
       label: t('tours'),
       active: router.pathname.startsWith('/tours'),
     },
-    // TODO: unhide when rental page is ready
-    // {
-    //   href: '/rental',
-    //   label: t('rental'),
-    //   active: router.pathname.startsWith('/rental'),
-    //   children: [
-    //     {href: '/rental', label: t('motorbike')},
-    //     {href: '/rental', label: t('car')},
-    //   ],
-    // },
+    {
+      href: routes.rentals.list.path(),
+      label: t('rental'),
+      active: router.pathname.startsWith('/rentals'),
+    },
     ...(session
       ? [
           {

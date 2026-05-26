@@ -54,6 +54,8 @@ async function checkEntityExists(
   }
   if (entityType === 'highlight')
     return !!(await prisma.highlight.findUnique({where: {id: entityId}}));
+  if (entityType === 'vehicle')
+    return !!(await prisma.vehicle.findUnique({where: {id: entityId}}));
   return !!(await prisma.collectionImage.findUnique({where: {id: entityId}}));
 }
 
@@ -78,6 +80,10 @@ async function readPreviousUrl(
     const r = await prisma.highlight.findUnique({where: {id: entityId}});
     return r?.imageUrl ?? null;
   }
+  if (entityType === 'vehicle') {
+    const r = await prisma.vehicle.findUnique({where: {id: entityId}});
+    return r?.imageUrl ?? null;
+  }
   const r = await prisma.collectionImage.findUnique({where: {id: entityId}});
   return r?.url ?? null;
 }
@@ -95,6 +101,8 @@ async function updateDb(
     await prisma.destination.update({where: {id: entityId}, data});
   else if (model === 'highlight')
     await prisma.highlight.update({where: {id: entityId}, data});
+  else if (model === 'vehicle')
+    await prisma.vehicle.update({where: {id: entityId}, data});
   else await prisma.collectionImage.update({where: {id: entityId}, data});
 }
 

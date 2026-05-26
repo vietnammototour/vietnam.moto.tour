@@ -30,14 +30,12 @@ export const Footer = () => {
             >
               {tNav('tours')}
             </Link>
-            {/* TODO: unhide when rental page is ready
             <Link
-              href="/rental"
+              href={routes.rentals.list.path()}
               className="hover:text-on-surface-inverse transition-colors cursor-pointer"
             >
               {tNav('rental')}
             </Link>
-            */}
           </nav>
         </div>
       </div>
