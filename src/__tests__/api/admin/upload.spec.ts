@@ -183,7 +183,7 @@ describe('POST /api/admin/upload', () => {
     expect(res._getStatusCode()).toBe(400);
   });
 
-  it('writes hashed file + updates DB for vehicle:primary', async () => {
+  it('writes hashed file + updates DB for vehicle:card', async () => {
     (prisma.vehicle.findUnique as jest.Mock).mockResolvedValue({
       id: 'v1',
       imageUrl: null,
@@ -191,14 +191,14 @@ describe('POST /api/admin/upload', () => {
     const {req, res} = makeMultipartMock({
       entityType: 'vehicle',
       entityId: 'v1',
-      imageType: 'primary',
+      imageType: 'card',
       file: {bytes: VALID_WEBP, filename: 'x.webp', mime: 'image/webp'},
     });
     await handler(req as any, res as any);
     expect(res._getStatusCode()).toBe(200);
     const body = JSON.parse(res._getData());
     expect(body.url).toMatch(
-      /^\/uploads\/vehicles\/v1\/primary\.[0-9a-f]{8}\.webp$/,
+      /^\/uploads\/vehicles\/v1\/card\.[0-9a-f]{8}\.webp$/,
     );
     expect(prisma.vehicle.update).toHaveBeenCalledWith({
       where: {id: 'v1'},

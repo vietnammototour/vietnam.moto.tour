@@ -15,7 +15,7 @@ const VALID: Record<EntityType, readonly ImageType[]> = {
   destination: ['card', 'hero'],
   highlight: ['card'],
   collectionImage: ['card'],
-  vehicle: ['primary'],
+  vehicle: ['card'],
 };
 
 export function isValidEntityType(s: string): s is EntityType {
