@@ -45,7 +45,8 @@ const messages = {
   admin: {
     roles: {
       keyLabel: 'Key',
-      labelLabel: 'Label',
+      labelEnLabel: 'English Label',
+      labelViLabel: 'Vietnamese Label',
       orderLabel: 'Order',
       save: 'Save',
       validation: {
@@ -62,6 +63,9 @@ function setup(props: Partial<React.ComponentProps<typeof RoleForm>> = {}) {
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
       <RoleForm mode="create" locale="en" onSubmit={onSubmit} {...props} />
+      <button type="submit" form="role-form">
+        Save
+      </button>
     </NextIntlClientProvider>,
   );
   return {onSubmit};
@@ -81,7 +85,7 @@ describe('RoleForm', () => {
       defaults: {key: '', labelVi: 'HD', labelEn: '', order: 0},
     });
     await userEvent.type(screen.getByLabelText('Key'), 'guide');
-    await userEvent.type(screen.getByLabelText('Label'), 'Guide');
+    await userEvent.type(screen.getByLabelText('English Label'), 'Guide');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -99,7 +103,7 @@ describe('RoleForm', () => {
       defaults: {key: '', labelVi: '', labelEn: 'Guide', order: 0},
     });
     await userEvent.type(screen.getByLabelText('Key'), 'guide');
-    await userEvent.type(screen.getByLabelText('Label'), 'HD');
+    await userEvent.type(screen.getByLabelText('Vietnamese Label'), 'HD');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({

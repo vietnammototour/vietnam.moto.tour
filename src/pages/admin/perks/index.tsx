@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useTranslations} from 'next-intl';
-import {api, routes} from '@/routes';
+import {api} from '@/routes';
 import {Button, IconPicker, Select} from '@/components/ui';
 import {LocalePicker, type Locale} from '@/components/Admin/LocalePicker';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -134,10 +134,6 @@ export default function PerksListPage() {
       header={
         <AdminPageHeader
           title={t('title')}
-          breadcrumbs={[
-            {label: 'Admin', href: routes.admin.dashboard.path()},
-            {label: t('title')},
-          ]}
           localeSwitcher={<LocalePicker value={locale} onChange={setLocale} />}
           actions={
             <Button

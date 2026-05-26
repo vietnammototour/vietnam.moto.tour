@@ -39,10 +39,6 @@ export default function ImageCollectionsListPage() {
       header={
         <AdminPageHeader
           title={t('admin.imageCollections.title')}
-          breadcrumbs={[
-            {label: 'Admin', href: routes.admin.dashboard.path()},
-            {label: t('admin.imageCollections.title')},
-          ]}
           actions={
             <Button
               variant="primary"

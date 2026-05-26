@@ -50,10 +50,6 @@ export default function AdminDestinationsList() {
       header={
         <AdminPageHeader
           title="Destinations"
-          breadcrumbs={[
-            {label: 'Admin', href: routes.admin.dashboard.path()},
-            {label: 'Destinations'},
-          ]}
           actions={
             <>
               {archivedCount > 0 && (

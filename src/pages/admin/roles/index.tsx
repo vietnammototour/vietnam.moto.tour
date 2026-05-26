@@ -7,7 +7,6 @@ import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {
   AdminPageShell,
   AdminPageHeader,
-  AdminPageFooter,
 } from '@/components/Admin/AdminPageShell';
 import type * as VMT from '@/domain';
 
@@ -43,10 +42,6 @@ export default function RolesListPage() {
       header={
         <AdminPageHeader
           title={t('title')}
-          breadcrumbs={[
-            {label: 'Admin', href: routes.admin.dashboard.path()},
-            {label: t('title')},
-          ]}
           actions={
             <Button
               variant="primary"
@@ -58,7 +53,6 @@ export default function RolesListPage() {
           }
         />
       }
-      footer={<AdminPageFooter status={t('count', {count: roles.length})} />}
     >
       <table className="w-full bg-surface-elevated rounded-xl border border-border">
         <thead>

@@ -6,7 +6,6 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
-import {routes} from '@/routes';
 import type * as VMT from '@/domain';
 
 export default function AdminTranslations() {
@@ -23,17 +22,7 @@ export default function AdminTranslations() {
   }, [loading, setLoading]);
 
   return (
-    <AdminPageShell
-      header={
-        <AdminPageHeader
-          title="Translations"
-          breadcrumbs={[
-            {label: 'Admin', href: routes.admin.dashboard.path()},
-            {label: 'Translations'},
-          ]}
-        />
-      }
-    >
+    <AdminPageShell header={<AdminPageHeader title="Translations" />}>
       {translations.length > 0 && (
         <TranslationEditor
           translations={translations}
