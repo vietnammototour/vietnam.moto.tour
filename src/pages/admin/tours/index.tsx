@@ -9,12 +9,11 @@ import {fetchToursServer} from '@/queries/fetchers/admin/tours.server';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes} from '@/routes';
-import {Badge, Button, LocaleSwitcher} from '@/components/ui';
+import {Badge, Button} from '@/components/ui';
 import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
-import {useAdminLocale} from '@/hooks/useAdminLocale';
 import type * as VMT from '@/domain';
 
 type AdminTour = {
@@ -30,7 +29,6 @@ type AdminTour = {
 };
 
 export default function AdminToursList() {
-  const [locale, setLocale] = useAdminLocale();
   const {data: tours, isLoading} = useTours({archived: false});
   const {data: archivedTours} = useTours({archived: true});
   const toggleStatus = useToggleTourStatus();
@@ -47,10 +45,8 @@ export default function AdminToursList() {
   const archivedCount = archivedTours?.length ?? 0;
   const tourList = (tours ?? []) as unknown as AdminTour[];
 
-  const pickTitle = (t: AdminTour) =>
-    locale === 'vi' ? t.titleVi || t.titleEn : t.titleEn || t.titleVi;
-  const pickDestination = (d: AdminTour['destination']) =>
-    locale === 'vi' ? d.nameVi || d.nameEn : d.nameEn || d.nameVi;
+  const pickTitle = (t: AdminTour) => t.titleEn || t.titleVi;
+  const pickDestination = (d: AdminTour['destination']) => d.nameEn || d.nameVi;
 
   const groupedByDestination = (() => {
     const groups = new Map<string, {label: string; tours: AdminTour[]}>();
@@ -79,9 +75,6 @@ export default function AdminToursList() {
             {label: 'Admin', href: routes.admin.dashboard.path()},
             {label: 'Tours'},
           ]}
-          localeSwitcher={
-            <LocaleSwitcher value={locale} onChange={setLocale} />
-          }
           actions={
             <>
               {archivedCount > 0 && (

@@ -12,6 +12,13 @@ import {TourEditTabs} from '@/components/Admin/TourEditTabs';
 import {savedSlot} from '@/lib/image-slot';
 import {isTourTab, type TourTab} from '@/routes';
 
+type DestinationApiRow = {
+  id: string;
+  nameVi: string;
+  nameEn: string;
+  heroImage: string;
+};
+
 type Destination = {
   id: string;
   name: string;
@@ -30,9 +37,16 @@ export default function EditTour() {
     isLoading: tourLoading,
     error: tourError,
   } = useTour(id ?? undefined);
-  const {data: destinations, loading: destLoading} = useAdminFetch<
-    Destination[]
+  const {data: destinationsRaw, loading: destLoading} = useAdminFetch<
+    DestinationApiRow[]
   >('/api/admin/destinations');
+  const destinations: Destination[] | null = destinationsRaw
+    ? destinationsRaw.map((d) => ({
+        id: d.id,
+        name: d.nameEn || d.nameVi,
+        heroImage: d.heroImage,
+      }))
+    : null;
   const {setLoading} = useAdminLoading();
 
   const loading = tourLoading || destLoading;

@@ -7,6 +7,13 @@ import {TourEditTabs} from '@/components/Admin/TourEditTabs';
 import {emptySlot} from '@/lib/image-slot';
 import {isTourTab, type TourTab} from '@/routes';
 
+type DestinationApiRow = {
+  id: string;
+  nameVi: string;
+  nameEn: string;
+  heroImage: string;
+};
+
 type Destination = {
   id: string;
   name: string;
@@ -33,9 +40,16 @@ export default function NewTour() {
   const tab: TourTab =
     typeof tabParam === 'string' && isTourTab(tabParam) ? tabParam : 'general';
 
-  const {data: destinations, loading} = useAdminFetch<Destination[]>(
+  const {data: destinationsRaw, loading} = useAdminFetch<DestinationApiRow[]>(
     '/api/admin/destinations',
   );
+  const destinations: Destination[] | null = destinationsRaw
+    ? destinationsRaw.map((d) => ({
+        id: d.id,
+        name: d.nameEn || d.nameVi,
+        heroImage: d.heroImage,
+      }))
+    : null;
   const {setLoading} = useAdminLoading();
 
   useEffect(() => {
