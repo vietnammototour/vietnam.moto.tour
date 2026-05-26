@@ -23,3 +23,5 @@ jobs:
             set -a && source .env && set +a
             npx --yes tsx prisma/seed.ts
             npx --yes tsx prisma/seed-admin-translations.ts
+            npx --yes tsx prisma/seed-admin-users-translations.ts
+            npx --yes tsx prisma/seed-admin-roles-translations.ts
