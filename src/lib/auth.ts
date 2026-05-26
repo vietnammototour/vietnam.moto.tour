@@ -4,14 +4,15 @@ import bcrypt from 'bcrypt';
 import {prisma} from './prisma';
 
 const nextAuthSecret = process.env.NEXTAUTH_SECRET;
-if (!nextAuthSecret) {
+const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+if (!nextAuthSecret && !isBuildPhase) {
   throw new Error(
     'NEXTAUTH_SECRET is not set. Configure it in the environment before starting the server.',
   );
 }
 
 export const authOptions: NextAuthOptions = {
-  secret: nextAuthSecret,
+  secret: nextAuthSecret ?? '',
   providers: [
     CredentialsProvider({
       name: 'Credentials',
