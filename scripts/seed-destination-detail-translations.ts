@@ -48,12 +48,6 @@ const entries: Entry[] = [
   },
   {
     namespace: 'destinationDetail',
-    key: 'breadcrumbHome',
-    valueEn: 'Home',
-    valueVi: 'Trang chủ',
-  },
-  {
-    namespace: 'destinationDetail',
     key: 'breadcrumbDestinations',
     valueEn: 'Destinations',
     valueVi: 'Điểm đến',
@@ -192,19 +186,6 @@ const entries: Entry[] = [
     valueEn: 'Explore tours',
     valueVi: 'Xem các tour',
   },
-  {
-    namespace: 'destinationDetail',
-    key: 'whatsappUs',
-    valueEn: 'WhatsApp us',
-    valueVi: 'Nhắn WhatsApp',
-  },
-  {
-    namespace: 'destinationDetail',
-    key: 'emailInquiry',
-    valueEn: 'Email inquiry',
-    valueVi: 'Gửi email',
-  },
-
   // CTA
   {
     namespace: 'destinationDetail.cta',
