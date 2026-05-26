@@ -7,6 +7,7 @@ type TourCTAProps = {
 
 export function TourCTA({tourTitle}: TourCTAProps) {
   const t = useTranslations('tourDetail');
+  const tc = useTranslations('common');
 
   const whatsappMessage = encodeURIComponent(
     `Hi! I'm interested in the "${tourTitle}" tour.`,
@@ -25,14 +26,14 @@ export function TourCTA({tourTitle}: TourCTAProps) {
         className="flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 px-4 rounded-lg type-title-sm font-semibold hover:brightness-105 cursor-pointer elevation-2 hover:elevation-3 transition-[box-shadow,filter] duration-200"
       >
         <i className="fab fa-whatsapp text-lg" />
-        {t('whatsappUs')}
+        {tc('whatsappUs')}
       </a>
       <a
         href={emailUrl}
         className="flex items-center justify-center gap-2 bg-primary text-on-primary py-3 px-4 rounded-lg type-title-sm font-semibold hover:brightness-105 cursor-pointer elevation-2 hover:elevation-3 transition-[box-shadow,filter] duration-200"
       >
         <i className="fa fa-envelope" />
-        {t('emailInquiry')}
+        {tc('emailInquiry')}
       </a>
     </div>
   );

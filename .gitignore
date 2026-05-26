@@ -64,3 +64,6 @@ next-env.d.ts
 
 # Local DB dumps for VPS sync
 /perks-data.json
+
+scripts/.common-keys-candidates.json
+scripts/migration-report.md

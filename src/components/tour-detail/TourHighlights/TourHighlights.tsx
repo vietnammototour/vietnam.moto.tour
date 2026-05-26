@@ -10,6 +10,7 @@ type TourHighlightsProps = {
 
 export function TourHighlights({highlights, locale}: TourHighlightsProps) {
   const t = useTranslations('tourDetail');
+  const tc = useTranslations('common');
   const localeKey = locale as 'en' | 'vi';
 
   if (highlights.length === 0) return null;
@@ -26,7 +27,7 @@ export function TourHighlights({highlights, locale}: TourHighlightsProps) {
       className="mb-10"
     >
       <h2 className="type-headline-sm text-on-surface mb-4">
-        {t('highlights')}
+        {tc('highlights')}
       </h2>
       <div className="flex flex-wrap gap-2">
         {highlights.map((highlight, i) => (

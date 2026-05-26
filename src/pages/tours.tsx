@@ -22,6 +22,7 @@ type ToursPageProps = {
 
 export default function Tours({allTours, isAdmin}: ToursPageProps) {
   const t = useTranslations('tours');
+  const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
   const router = useRouter();
 
@@ -68,8 +69,8 @@ export default function Tours({allTours, isAdmin}: ToursPageProps) {
       <PageHeader
         title={t('title')}
         breadcrumbs={[
-          {label: t('breadcrumbHome'), href: '/'},
-          {label: t('breadcrumbTours')},
+          {label: tc('breadcrumbHome'), href: '/'},
+          {label: tc('breadcrumbTours')},
         ]}
         backgroundImage="https://data.agatetravel.com/images/photogallery/2025/halong-bay-hanoi-vietnam.jpg"
       />

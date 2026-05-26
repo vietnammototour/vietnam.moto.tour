@@ -15,6 +15,7 @@ import {FormField} from '@/components/ui';
 
 export default function Contact() {
   const t = useTranslations('contact');
+  const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
 
   const {
@@ -43,7 +44,7 @@ export default function Contact() {
       <PageHeader
         title={t('title')}
         breadcrumbs={[
-          {label: t('breadcrumbHome'), href: '/'},
+          {label: tc('breadcrumbHome'), href: '/'},
           {label: t('breadcrumbContact')},
         ]}
         backgroundImage="https://media.gadventures.com/media-server/cache/59/d0/59d0b4d7c98928e2b9bf2e208409d5d6.jpg"

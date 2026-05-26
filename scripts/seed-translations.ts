@@ -247,6 +247,68 @@ const rows: Row[] = [
     valueEn: 'Saving...',
     valueVi: 'Đang lưu...',
   },
+
+  // ── common (consolidated from per-page namespaces; see scripts/common-keys-allowlist.ts) ──
+  {
+    namespace: 'common',
+    key: 'breadcrumbHome',
+    valueEn: 'Home',
+    valueVi: 'Trang chủ',
+  },
+  {
+    namespace: 'common',
+    key: 'breadcrumbTours',
+    valueEn: 'Tours',
+    valueVi: 'Tour',
+  },
+  {
+    namespace: 'common',
+    key: 'whatsappUs',
+    valueEn: 'WhatsApp us',
+    valueVi: 'Nhắn WhatsApp',
+  },
+  {
+    namespace: 'common',
+    key: 'emailInquiry',
+    valueEn: 'Email inquiry',
+    valueVi: 'Gửi email',
+  },
+  {
+    namespace: 'common',
+    key: 'planYourTrip',
+    valueEn: 'Plan your trip with us',
+    valueVi: 'Lên kế hoạch chuyến đi cùng chúng tôi',
+  },
+  {
+    namespace: 'common',
+    key: 'bookTourNow',
+    valueEn: 'Book tour now',
+    valueVi: 'Đặt tour ngay',
+  },
+  {
+    namespace: 'common',
+    key: 'readyToTravel',
+    valueEn: 'Are you ready to travel?',
+    valueVi: 'Bạn đã sẵn sàng du lịch?',
+  },
+  {
+    namespace: 'common',
+    key: 'highlights',
+    valueEn: 'Highlights',
+    valueVi: 'Điểm nổi bật',
+  },
+  {
+    namespace: 'common',
+    key: 'itinerary',
+    valueEn: 'Itinerary',
+    valueVi: 'Lịch trình',
+  },
+  {
+    namespace: 'common',
+    key: 'pricing',
+    valueEn: 'Pricing',
+    valueVi: 'Bảng giá',
+  },
 ];
 
 async function main(): Promise<void> {
