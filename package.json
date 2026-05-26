@@ -26,6 +26,7 @@
     "db:seed-about-translations": "npx tsx prisma/seed-about-translations.ts",
     "db:seed-admin-roles-translations": "npx tsx prisma/seed-admin-roles-translations.ts",
     "db:seed-admin-users-translations": "npx tsx prisma/seed-admin-users-translations.ts",
+    "seed:rentals-translations": "npx tsx prisma/seed-rentals-translations.ts",
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
     "migrate:uploads": "npx tsx scripts/migrate-uploads.ts",
