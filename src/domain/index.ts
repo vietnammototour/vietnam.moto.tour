@@ -16,3 +16,4 @@ export type {UserAdmin} from './user';
 export type {Translation} from './translation';
 export type {Perk, PerkCategory, PerkBucket} from './perk';
 export type {ImageCollection, CollectionImage} from './image-collection';
+export type {Vehicle, VehicleType, VehicleStatus} from './vehicle';
