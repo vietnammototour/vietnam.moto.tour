@@ -35,7 +35,9 @@
     "import:perks-data": "npx tsx scripts/import-perks-data.ts",
     "perks:auto-assign": "npx tsx scripts/auto-assign-perks.ts",
     "sweep:uploads": "npx tsx scripts/sweep-orphan-uploads.ts",
-    "i18n:scan": "npx tsx scripts/scan-common-translations.ts"
+    "i18n:scan": "npx tsx scripts/scan-common-translations.ts",
+    "i18n:apply": "npx tsx scripts/apply-common-translations.ts",
+    "i18n:apply:write": "npx tsx scripts/apply-common-translations.ts --apply"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
