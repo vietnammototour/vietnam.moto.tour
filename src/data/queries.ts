@@ -267,3 +267,9 @@ export async function getTeamForPublic(): Promise<TeamMember[]> {
     return [];
   }
 }
+
+export {
+  getPublishedVehicles,
+  getVehiclesForAdmin,
+  getVehicleByIdForAdmin,
+} from './queries/vehicles';
