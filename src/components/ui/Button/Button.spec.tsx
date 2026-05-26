@@ -62,4 +62,24 @@ describe('Button', () => {
     );
     expect(screen.getByRole('button', {name: 'Scroll up'})).toBeInTheDocument();
   });
+
+  it('renders primary variant by default', () => {
+    render(<Button>Save</Button>);
+    expect(screen.getByRole('button', {name: 'Save'})).toBeInTheDocument();
+  });
+
+  it('renders danger variant', () => {
+    render(<Button variant="danger">Delete</Button>);
+    expect(screen.getByRole('button', {name: 'Delete'})).toBeInTheDocument();
+  });
+
+  it('renders secondary variant', () => {
+    render(<Button variant="secondary">Edit</Button>);
+    expect(screen.getByRole('button', {name: 'Edit'})).toBeInTheDocument();
+  });
+
+  it('renders link variant', () => {
+    render(<Button variant="link">More</Button>);
+    expect(screen.getByRole('button', {name: 'More'})).toBeInTheDocument();
+  });
 });

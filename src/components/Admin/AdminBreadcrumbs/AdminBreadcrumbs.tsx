@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {useState, useEffect, useRef} from 'react';
+import {Button} from '@/components/ui';
 
 export type BreadcrumbItem = {
   label: string;
@@ -88,7 +89,9 @@ function EditableSegment({
         >
           {label}
         </span>
-        <button
+        <Button
+          variant="secondary"
+          iconOnly
           type="button"
           aria-label={`Edit ${fieldLabel}`}
           onClick={() => {
@@ -96,10 +99,9 @@ function EditableSegment({
             setDraft(label);
             setEditing(true);
           }}
-          className="text-on-surface-secondary hover:text-primary cursor-pointer"
         >
           <i className="fa fa-pencil" aria-hidden />
-        </button>
+        </Button>
       </span>
     );
   }

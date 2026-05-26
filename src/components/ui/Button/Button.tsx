@@ -7,7 +7,8 @@ type ButtonVariant =
   | 'danger'
   | 'ghost'
   | 'ghost-primary'
-  | 'ghost-danger';
+  | 'ghost-danger'
+  | 'link';
 
 type ButtonSize = 'sm' | 'md' | 'lg';
 
@@ -40,20 +41,24 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-primary hover:bg-primary-light text-on-primary',
   secondary:
     'border border-border text-on-surface-secondary hover:bg-surface-alt',
-  danger: 'bg-red-600 hover:bg-red-700 text-white',
+  danger: 'bg-danger hover:bg-danger-hover text-on-danger',
   ghost: 'text-on-surface-secondary hover:bg-surface-alt',
   'ghost-primary': 'text-primary hover:bg-primary/10',
   'ghost-danger': 'text-error hover:bg-red-500/10',
+  link: 'text-primary hover:underline',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
   sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 uppercase',
-  lg: 'px-6 py-2.5 uppercase',
+  md: 'px-5 py-2',
+  lg: 'px-6 py-2.5',
 };
 
-const baseClass =
-  'inline-flex items-center justify-center rounded-lg type-label-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
+const baseClassButton =
+  'inline-flex items-center justify-center rounded-lg type-label-sm uppercase tracking-wide font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
+
+const baseClassLink =
+  'inline-flex items-center justify-center type-label-sm font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
 export const Button = forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
@@ -67,8 +72,10 @@ export const Button = forwardRef<
   const className = props.className ?? '';
   const children = props.children;
 
+  const isLink = variant === 'link';
+
   const classes = [
-    baseClass,
+    isLink ? baseClassLink : baseClassButton,
     variantClasses[variant],
     iconOnly ? 'p-2' : sizeClasses[size],
     className,

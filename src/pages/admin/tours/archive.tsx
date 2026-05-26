@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import Link from 'next/link';
 import type {GetServerSideProps} from 'next';
+import {Button} from '@/components/ui';
 import {dehydrate} from '@tanstack/react-query';
 import {getQueryClient} from '@/lib/queryClient';
 import {
@@ -121,20 +122,22 @@ export default function AdminToursArchive() {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="inline-flex items-center gap-2">
-                    <button
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       onClick={() => handleRestore(tour.id)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-on-surface-secondary border border-border hover:bg-surface-alt transition-colors cursor-pointer"
                     >
-                      <i className="fa fa-rotate-left text-xs" />
+                      <i className="fa fa-rotate-left text-xs mr-1.5" />
                       Restore
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size="sm"
                       onClick={() => handleHardDelete(tour.id)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg type-label-sm text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors cursor-pointer"
                     >
-                      <i className="fa fa-trash text-xs" />
+                      <i className="fa fa-trash text-xs mr-1.5" />
                       Delete
-                    </button>
+                    </Button>
                   </div>
                 </td>
               </tr>

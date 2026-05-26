@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useSession, signOut} from 'next-auth/react';
 import {routes} from '@/routes';
+import {Button} from '@/components/ui';
 import {ProgressBar} from '../ProgressBar';
 import {
   AdminLoadingProvider,
@@ -102,12 +103,14 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
           <p className="type-label-sm text-on-surface-secondary truncate">
             {session?.user.name}
           </p>
-          <button
+          <Button
+            variant="link"
+            size="sm"
             onClick={() => signOut({callbackUrl: '/'})}
-            className="type-label-sm text-on-surface-secondary hover:text-primary transition-colors mt-1 cursor-pointer"
+            className="mt-1"
           >
             Logout
-          </button>
+          </Button>
         </div>
       </aside>
 

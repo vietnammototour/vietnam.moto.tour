@@ -3,7 +3,7 @@
 import {useState} from 'react';
 import {DestinationCard} from '@/components/DestinationCard';
 import {ImageUpload} from '@/components/ui';
-import {Button} from '@/components/ui/Button';
+import {Button} from '@/components/ui';
 import {flushImageSlots} from '@/lib/submit-with-images';
 import {savedSlot, type ImageSlot, isDirty} from '@/lib/image-slot';
 
@@ -88,28 +88,22 @@ export function CardImagePreview({
             Card Size:
           </span>
           <div className="flex rounded-lg border border-border overflow-hidden">
-            <button
+            <Button
+              variant="secondary"
+              size="sm"
               type="button"
               onClick={() => onSizeChange('small')}
-              className={`px-4 py-1.5 type-label-sm transition-colors cursor-pointer ${
-                size === 'small'
-                  ? 'bg-primary text-on-primary'
-                  : 'bg-surface text-on-surface-secondary hover:bg-surface-alt'
-              }`}
             >
               Small
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
               type="button"
               onClick={() => onSizeChange('large')}
-              className={`px-4 py-1.5 type-label-sm transition-colors cursor-pointer ${
-                size === 'large'
-                  ? 'bg-primary text-on-primary'
-                  : 'bg-surface text-on-surface-secondary hover:bg-surface-alt'
-              }`}
             >
               Big
-            </button>
+            </Button>
           </div>
         </div>
         {isDirty(slot) && destinationId && (
