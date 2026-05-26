@@ -14,15 +14,12 @@ import {Button} from '@/components/ui';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
 
-type TeamImage = {id: string; url: string | null; altVi: string; altEn: string};
-
 export default function EditUserPage() {
   const router = useRouter();
   const t = useTranslations('admin.users');
   const id = typeof router.query.id === 'string' ? router.query.id : '';
   const [user, setUser] = useState<VMT.UserAdmin | null>(null);
   const [roles, setRoles] = useState<VMT.OrgRole[]>([]);
-  const [images, setImages] = useState<TeamImage[]>([]);
   const [locale, setLocale] = useState<Locale>('en');
 
   useEffect(() => {
@@ -33,22 +30,6 @@ export default function EditUserPage() {
     api.admin.roles.list().then(({data}) => {
       if (data) setRoles(data);
     });
-    fetch('/api/admin/image-collections?key=team')
-      .then((r) => r.json())
-      .then(async (collections) => {
-        const found = Array.isArray(collections)
-          ? collections.find((c: {key: string}) => c.key === 'team')
-          : null;
-        if (!found) return;
-        if (Array.isArray(found.images)) {
-          setImages(found.images);
-        } else {
-          const detail = await fetch(
-            `/api/admin/image-collections/${found.id}`,
-          ).then((r) => r.json());
-          if (Array.isArray(detail.images)) setImages(detail.images);
-        }
-      });
   }, [id]);
 
   async function onSubmit(values: UserFormValues) {
@@ -116,7 +97,6 @@ export default function EditUserPage() {
         locale={locale}
         defaults={defaults}
         roles={roles}
-        images={images}
         onSubmit={onSubmit}
       />
     </AdminPageShell>

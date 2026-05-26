@@ -18,17 +18,11 @@ import {
 } from './UserForm.form-utils';
 import type * as VMT from '@/domain';
 
-type PickableImage = Pick<
-  VMT.CollectionImage,
-  'id' | 'url' | 'altVi' | 'altEn'
->;
-
 type UserFormProps = {
   id?: string;
   mode: 'create' | 'edit';
   locale: Locale;
   roles: VMT.OrgRole[];
-  images: PickableImage[];
   defaults?: UserFormValues;
   onSubmit: (data: UserFormValues) => void;
 };
@@ -38,7 +32,6 @@ export function UserForm({
   mode,
   locale,
   roles,
-  images,
   defaults,
   onSubmit,
 }: UserFormProps) {
@@ -128,11 +121,7 @@ export function UserForm({
         control={control}
         name="imageId"
         render={({field}) => (
-          <TeamPhotoPicker
-            images={images}
-            value={field.value}
-            onChange={field.onChange}
-          />
+          <TeamPhotoPicker value={field.value} onChange={field.onChange} />
         )}
       />
 

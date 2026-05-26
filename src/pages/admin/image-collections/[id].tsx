@@ -1,13 +1,16 @@
 import type {GetServerSidePropsContext} from 'next';
 import {useState} from 'react';
-import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import {prisma} from '@/lib/prisma';
 import {toImageCollection} from '@/domain/image-collection/mapper';
 import type {ImageCollection} from '@/domain';
-import {ImageCollectionEditor} from '@/components/Admin/ImageCollectionEditor';
+import {
+  ImageCollectionEditor,
+  AddImageButton,
+  useImageCollectionImages,
+} from '@/components/Admin/ImageCollectionEditor';
 import {api, routes} from '@/routes';
-import {Button, TextInput, LocaleSwitcher} from '@/components/ui';
+import {TextInput, LocaleSwitcher} from '@/components/ui';
 import {
   AdminPageShell,
   AdminPageHeader,
@@ -18,11 +21,11 @@ type Props = {collection: ImageCollection};
 
 export default function EditImageCollectionPage({collection}: Props) {
   const t = useTranslations();
-  const router = useRouter();
   const [locale, setLocale] = useAdminLocale();
   const [label, setLabel] = useState(collection.label);
   const [savedLabel, setSavedLabel] = useState(collection.label);
   const [saving, setSaving] = useState(false);
+  const state = useImageCollectionImages(collection);
 
   async function saveLabel() {
     if (label === savedLabel) return;
@@ -49,20 +52,12 @@ export default function EditImageCollectionPage({collection}: Props) {
             <LocaleSwitcher value={locale} onChange={setLocale} />
           }
           actions={
-            <Button
-              variant="secondary"
-              onClick={() =>
-                router.push(routes.admin.imageCollections.list.path())
-              }
-              icon={<i className="fa fa-arrow-left text-xs" />}
-            >
-              {t('common.back') === 'common.back' ? 'Back' : t('common.back')}
-            </Button>
+            <AddImageButton disabled={!state.canAdd} onPick={state.handleAdd} />
           }
         />
       }
     >
-      <div className="space-y-6 max-w-6xl">
+      <div className="space-y-6">
         <div className="bg-surface-elevated rounded-xl border border-border p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <TextInput
@@ -86,7 +81,7 @@ export default function EditImageCollectionPage({collection}: Props) {
           </div>
         </div>
 
-        <ImageCollectionEditor collection={collection} locale={locale} />
+        <ImageCollectionEditor state={state} locale={locale} />
       </div>
     </AdminPageShell>
   );
