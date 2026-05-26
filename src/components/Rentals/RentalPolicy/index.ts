@@ -1,0 +1,1 @@
+export {RentalPolicy} from './RentalPolicy';
