@@ -55,6 +55,7 @@ function EditableText({
 
 export function TourItinerary({itinerary, locale}: TourItineraryProps) {
   const t = useTranslations('tourDetail');
+  const tc = useTranslations('common');
   const ctx = useEditable();
   const localeKey = ctx?.locale ?? (locale as 'en' | 'vi');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -78,7 +79,7 @@ export function TourItinerary({itinerary, locale}: TourItineraryProps) {
       className="mb-10"
     >
       <h2 className="type-headline-sm text-on-surface mb-6">
-        {t('itinerary')}
+        {tc('itinerary')}
       </h2>
       <div ref={containerRef} className="relative">
         {/* Road path SVG */}

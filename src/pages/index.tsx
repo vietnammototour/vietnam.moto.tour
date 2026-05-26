@@ -45,6 +45,7 @@ export default function Home({
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const t = useTranslations('home');
+  const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
 
   const spotlight = useCursorSpotlight(200, 0.15);
@@ -238,7 +239,7 @@ export default function Home({
                 <span className="icon-phone-call text-2xl text-primary" />
                 <div>
                   <p className="type-label-sm font-normal text-on-surface-secondary">
-                    {t('bookTourNow')}
+                    {tc('bookTourNow')}
                   </p>
                   <a
                     href={`tel:${contactInfo.phone}`}
@@ -260,7 +261,7 @@ export default function Home({
                 {t('getToKnowUs')}
               </span>
               <h2 className="type-headline-sm lg:type-headline-lg mt-2 mb-6">
-                {t('planYourTrip')}
+                {tc('planYourTrip')}
               </h2>
               <p className="type-body-lg text-on-surface-secondary mb-6">
                 {t('aboutDescription')}

@@ -13,6 +13,7 @@ type Props = {
 
 export function DestinationHero({destination, locale}: Props) {
   const t = useTranslations('destinationDetail');
+  const tc = useTranslations('common');
   const spotlight = useCursorSpotlight(280, 0.14);
   const spotlightBg = useMotionTemplate`radial-gradient(280px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.18), transparent)`;
 
@@ -81,7 +82,7 @@ export function DestinationHero({destination, locale}: Props) {
               href={routes.home.path()}
               className="hover:text-primary transition-colors cursor-pointer"
             >
-              {t('breadcrumbHome')}
+              {tc('breadcrumbHome')}
             </Link>
             <span>/</span>
             <Link

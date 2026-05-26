@@ -19,6 +19,7 @@ type TourHeroProps = {
 
 export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
   const t = useTranslations('tourDetail');
+  const tc = useTranslations('common');
   const locale = useLocale();
   const ctx = useEditable();
   const editable = !!ctx?.editable;
@@ -184,14 +185,14 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
                 href={routes.home.path()}
                 className="hover:text-primary transition-colors cursor-pointer"
               >
-                {t('breadcrumbHome')}
+                {tc('breadcrumbHome')}
               </Link>
               <span>/</span>
               <Link
                 href={routes.tours.list.path()}
                 className="hover:text-primary transition-colors cursor-pointer"
               >
-                {t('breadcrumbTours')}
+                {tc('breadcrumbTours')}
               </Link>
               <span>/</span>
               <span className="text-on-surface type-label-lg">{tourTitle}</span>

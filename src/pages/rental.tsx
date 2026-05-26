@@ -50,6 +50,7 @@ const rentalItems = [
 
 export default function Rental() {
   const t = useTranslations('rental');
+  const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
 
   return (
@@ -62,7 +63,7 @@ export default function Rental() {
       <PageHeader
         title={t('title')}
         breadcrumbs={[
-          {label: t('breadcrumbHome'), href: '/'},
+          {label: tc('breadcrumbHome'), href: '/'},
           {label: t('breadcrumbRental')},
         ]}
         backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg"

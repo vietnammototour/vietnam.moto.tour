@@ -33,6 +33,7 @@ export function TourPricing({
   onPriceChange,
 }: TourPricingProps) {
   const t = useTranslations('tourDetail');
+  const tc = useTranslations('common');
   const localeKey = locale as 'en' | 'vi';
   const ctx = useEditable();
   const activeLocale = ctx?.locale ?? localeKey;
@@ -98,7 +99,7 @@ export function TourPricing({
 
   return (
     <div className="border-2 border-primary rounded-xl p-5 mb-5">
-      <h3 className="type-title-lg text-on-surface mb-4">{t('pricing')}</h3>
+      <h3 className="type-title-lg text-on-surface mb-4">{tc('pricing')}</h3>
 
       {hasVehicle && (
         <VehiclePricing
