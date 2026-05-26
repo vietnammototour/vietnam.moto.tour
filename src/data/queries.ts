@@ -228,12 +228,12 @@ export {
 export type AdminTourFilters = {archived?: boolean};
 
 export async function getToursForAdmin(filters: AdminTourFilters = {}) {
-  const where =
-    filters.archived === true
-      ? {status: 'ARCHIVED' as TourStatus}
-      : filters.archived === false
-        ? {status: {not: 'ARCHIVED' as TourStatus}}
-        : undefined;
+  const where = (() => {
+    if (filters.archived === true) return {status: 'ARCHIVED' as TourStatus};
+    if (filters.archived === false)
+      return {status: {not: 'ARCHIVED' as TourStatus}};
+    return undefined;
+  })();
   return prisma.tour.findMany({
     where,
     orderBy: {createdAt: 'desc'},

@@ -6,6 +6,11 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   prettierConfig,
   // Override default ignores of eslint-config-next.
+  {
+    rules: {
+      "no-nested-ternary": "error",
+    },
+  },
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
@@ -14,6 +19,7 @@ const eslintConfig = defineConfig([
     "dist/**",
     "public/**",
     "next-env.d.ts",
+    ".worktrees/**",
   ]),
 ]);
 

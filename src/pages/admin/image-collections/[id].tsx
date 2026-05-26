@@ -70,13 +70,11 @@ export default function EditImageCollectionPage({collection}: Props) {
               value={label}
               onChange={(e) => setLabel(e.target.value)}
               onBlur={saveLabel}
-              hint={
-                saving
-                  ? 'Saving…'
-                  : label !== savedLabel
-                    ? 'Unsaved'
-                    : undefined
-              }
+              hint={(() => {
+                if (saving) return 'Saving…';
+                if (label !== savedLabel) return 'Unsaved';
+                return undefined;
+              })()}
             />
           </div>
         </div>

@@ -200,13 +200,13 @@ export function GeneralTab({
       </AdminIntlProvider>
 
       <div className="border-t border-border bg-surface-elevated p-4 flex items-center justify-between gap-3 sticky bottom-0">
-        {submitError ? (
+        {submitError && (
           <span className="type-label-sm text-red-500">{submitError}</span>
-        ) : isDirty ? (
-          <span className="type-label-sm text-amber-500">Unsaved changes</span>
-        ) : (
-          <span />
         )}
+        {!submitError && isDirty && (
+          <span className="type-label-sm text-amber-500">Unsaved changes</span>
+        )}
+        {!submitError && !isDirty && <span />}
         <Button
           type="submit"
           disabled={isSubmitting || !isDirty}

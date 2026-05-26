@@ -43,12 +43,11 @@ export function HeroImagePreview({
     onImageChange(next.kind === 'saved' ? next.url : '');
   }
 
-  const previewUrl =
-    slot.kind === 'saved'
-      ? slot.url
-      : slot.kind === 'pending-replace'
-        ? slot.previewUrl
-        : '';
+  const previewUrl = (() => {
+    if (slot.kind === 'saved') return slot.url;
+    if (slot.kind === 'pending-replace') return slot.previewUrl;
+    return '';
+  })();
 
   return (
     <div>
