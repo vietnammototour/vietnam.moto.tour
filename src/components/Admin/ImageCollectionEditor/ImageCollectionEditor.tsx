@@ -20,14 +20,15 @@ import {api} from '@/routes';
 import {transcodeImage} from '@/lib/image-transcode';
 import {SortableImageCard} from './SortableImageCard';
 import {AddImageButton} from './AddImageButton';
+import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 
 const MAX = 10;
 const MIN = 1;
 const DEBOUNCE_MS = 500;
 
-type Props = {collection: ImageCollection};
+type Props = {collection: ImageCollection; locale?: AdminLocale};
 
-export function ImageCollectionEditor({collection}: Props) {
+export function ImageCollectionEditor({collection, locale}: Props) {
   const t = useTranslations();
   const [images, setImages] = useState<CollectionImage[]>(collection.images);
   const [error, setError] = useState<string | null>(null);
@@ -199,6 +200,7 @@ export function ImageCollectionEditor({collection}: Props) {
                 key={img.id}
                 image={img}
                 canDelete={images.length > MIN}
+                locale={locale}
                 onAltChange={handleAltChange}
                 onDelete={handleDelete}
                 onReplace={handleReplace}

@@ -4,10 +4,12 @@ import {useState, useMemo} from 'react';
 import {api} from '@/routes';
 import type * as VMT from '@/domain';
 import {Button} from '@/components/ui';
+import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 
 type TranslationEditorProps = {
   translations: VMT.Translation[];
   namespaces: string[];
+  locale: AdminLocale;
 };
 
 function humanizeNamespace(ns: string): string {
@@ -25,12 +27,17 @@ function humanizeNamespace(ns: string): string {
 export function TranslationEditor({
   translations: initial,
   namespaces,
+  locale,
 }: TranslationEditorProps) {
   const [translations, setTranslations] = useState(initial);
   const [filter, setFilter] = useState('');
   const [activeNamespace, setActiveNamespace] = useState(namespaces[0] ?? '');
   const [modified, setModified] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
+
+  const valueField: 'valueEn' | 'valueVi' =
+    locale === 'en' ? 'valueEn' : 'valueVi';
+  const valueColumnLabel = locale === 'en' ? 'English' : 'Vietnamese';
 
   const modifiedByNamespace = useMemo(() => {
     const counts = new Map<string, number>();
@@ -87,8 +94,7 @@ export function TranslationEditor({
 
   return (
     <div className="flex gap-6">
-      {/* Section links sidebar */}
-      <nav className="w-56 shrink-0">
+      <nav className="w-72 shrink-0">
         <ul className="space-y-1">
           {namespaces.map((ns) => {
             const count = modifiedByNamespace.get(ns);
@@ -120,9 +126,7 @@ export function TranslationEditor({
         </ul>
       </nav>
 
-      {/* Content area */}
       <div className="flex-1 min-w-0">
-        {/* Search + save bar */}
         <div className="flex flex-wrap gap-4 mb-4">
           <input
             type="text"
@@ -147,19 +151,15 @@ export function TranslationEditor({
           )}
         </div>
 
-        {/* Table */}
         <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-surface-alt">
-                <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary w-48">
+                <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary w-64">
                   Key
                 </th>
                 <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                  English
-                </th>
-                <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                  Vietnamese
+                  {valueColumnLabel}
                 </th>
               </tr>
             </thead>
@@ -177,19 +177,9 @@ export function TranslationEditor({
                   <td className="px-4 py-2">
                     <input
                       type="text"
-                      value={t.valueEn}
+                      value={t[valueField]}
                       onChange={(e) =>
-                        handleChange(t.id, 'valueEn', e.target.value)
-                      }
-                      className="w-full px-2 py-1 rounded border border-transparent hover:border-border focus:border-primary bg-transparent text-on-surface focus:outline-none type-body-sm"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={t.valueVi}
-                      onChange={(e) =>
-                        handleChange(t.id, 'valueVi', e.target.value)
+                        handleChange(t.id, valueField, e.target.value)
                       }
                       className="w-full px-2 py-1 rounded border border-transparent hover:border-border focus:border-primary bg-transparent text-on-surface focus:outline-none type-body-sm"
                     />

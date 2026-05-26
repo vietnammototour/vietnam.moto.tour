@@ -91,14 +91,23 @@ function setup() {
         images={[]}
         onSubmit={onSubmit}
       />
+      <button type="submit" form="user-form">
+        Save
+      </button>
     </NextIntlClientProvider>,
   );
   return {onSubmit};
 }
 
+async function pickRole(roleLabel: string) {
+  await userEvent.click(screen.getByRole('button', {name: 'Role'}));
+  await userEvent.click(screen.getByRole('option', {name: roleLabel}));
+}
+
 describe('UserForm', () => {
-  it('populates role select', () => {
+  it('populates role select', async () => {
     setup();
+    await userEvent.click(screen.getByRole('button', {name: 'Role'}));
     expect(screen.getByRole('option', {name: 'Admin'})).toBeInTheDocument();
     expect(screen.getByRole('option', {name: 'Founder'})).toBeInTheDocument();
   });
@@ -108,7 +117,7 @@ describe('UserForm', () => {
     await userEvent.type(screen.getByLabelText('Name'), 'Alice');
     await userEvent.type(screen.getByLabelText('Email'), 'a@b.com');
     await userEvent.type(screen.getByLabelText('Password'), 'longpass1');
-    await userEvent.selectOptions(screen.getByLabelText('Role'), 'r1');
+    await pickRole('Admin');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -125,7 +134,7 @@ describe('UserForm', () => {
     await userEvent.type(screen.getByLabelText('Name'), 'A');
     await userEvent.type(screen.getByLabelText('Email'), 'a@b.com');
     await userEvent.type(screen.getByLabelText('Password'), 'short');
-    await userEvent.selectOptions(screen.getByLabelText('Role'), 'r1');
+    await pickRole('Admin');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(await screen.findByText('Password too short')).toBeInTheDocument();
   });
@@ -134,7 +143,7 @@ describe('UserForm', () => {
     const {onSubmit} = setup();
     await userEvent.click(screen.getByLabelText('Allow sign-in'));
     await userEvent.type(screen.getByLabelText('Name'), 'Thomas');
-    await userEvent.selectOptions(screen.getByLabelText('Role'), 'r2');
+    await pickRole('Founder');
     await userEvent.click(screen.getByRole('button', {name: 'Save'}));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({

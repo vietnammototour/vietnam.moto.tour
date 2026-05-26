@@ -6,6 +6,8 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {LocaleSwitcher} from '@/components/ui';
+import {useAdminLocale} from '@/hooks/useAdminLocale';
 import type * as VMT from '@/domain';
 
 export default function AdminTranslations() {
@@ -13,6 +15,7 @@ export default function AdminTranslations() {
     '/api/admin/translations',
   );
   const {setLoading} = useAdminLoading();
+  const [locale, setLocale] = useAdminLocale();
 
   const translations = data ?? [];
   const namespaces = [...new Set(translations.map((t) => t.namespace))].sort();
@@ -22,11 +25,21 @@ export default function AdminTranslations() {
   }, [loading, setLoading]);
 
   return (
-    <AdminPageShell header={<AdminPageHeader title="Translations" />}>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Translations"
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
+        />
+      }
+    >
       {translations.length > 0 && (
         <TranslationEditor
           translations={translations}
           namespaces={namespaces}
+          locale={locale}
         />
       )}
     </AdminPageShell>

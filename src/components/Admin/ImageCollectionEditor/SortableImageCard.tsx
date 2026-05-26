@@ -4,10 +4,12 @@ import {CSS} from '@dnd-kit/utilities';
 import {useTranslations} from 'next-intl';
 import type {CollectionImage} from '@/domain';
 import {Button, TextInput} from '@/components/ui';
+import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 
 type Props = {
   image: CollectionImage;
   canDelete: boolean;
+  locale?: AdminLocale;
   onAltChange: (id: string, patch: {altEn?: string; altVi?: string}) => void;
   onDelete: (id: string) => void;
   onReplace: (id: string, file: File) => void;
@@ -16,6 +18,7 @@ type Props = {
 export function SortableImageCard({
   image,
   canDelete,
+  locale,
   onAltChange,
   onDelete,
   onReplace,
@@ -24,6 +27,9 @@ export function SortableImageCard({
   const fileRef = useRef<HTMLInputElement>(null);
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
     useSortable({id: image.id});
+
+  const showVi = locale === undefined || locale === 'vi';
+  const showEn = locale === undefined || locale === 'en';
 
   return (
     <div
@@ -57,16 +63,20 @@ export function SortableImageCard({
           </div>
         )}
       </div>
-      <TextInput
-        label={t('admin.imageCollections.altEn')}
-        value={image.altEn}
-        onChange={(e) => onAltChange(image.id, {altEn: e.target.value})}
-      />
-      <TextInput
-        label={t('admin.imageCollections.altVi')}
-        value={image.altVi}
-        onChange={(e) => onAltChange(image.id, {altVi: e.target.value})}
-      />
+      {showEn ? (
+        <TextInput
+          label={t('admin.imageCollections.altEn')}
+          value={image.altEn}
+          onChange={(e) => onAltChange(image.id, {altEn: e.target.value})}
+        />
+      ) : null}
+      {showVi ? (
+        <TextInput
+          label={t('admin.imageCollections.altVi')}
+          value={image.altVi}
+          onChange={(e) => onAltChange(image.id, {altVi: e.target.value})}
+        />
+      ) : null}
       <input
         ref={fileRef}
         type="file"
@@ -80,15 +90,19 @@ export function SortableImageCard({
       />
       <div className="flex gap-2">
         <Button
-          variant="secondary"
+          variant="ghost-primary"
+          size="sm"
           type="button"
+          icon={<i className="fa fa-sync text-xs" />}
           onClick={() => fileRef.current?.click()}
         >
           {t('admin.imageCollections.replace')}
         </Button>
         <Button
-          variant="danger"
+          variant="ghost-danger"
+          size="sm"
           type="button"
+          icon={<i className="fa fa-trash text-xs" />}
           disabled={!canDelete}
           onClick={() => onDelete(image.id)}
         >

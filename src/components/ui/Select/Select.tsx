@@ -137,7 +137,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
         const el = listRef.current.querySelector<HTMLLIElement>(
           `[data-index="${activeIndex}"]`,
         );
-        el?.scrollIntoView({block: 'nearest'});
+        if (el && typeof el.scrollIntoView === 'function') {
+          el.scrollIntoView({block: 'nearest'});
+        }
         listRef.current.focus();
       }
     }, [open, activeIndex]);
@@ -162,7 +164,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
         >
           <span
             className={
-              selected ? 'truncate' : 'truncate text-on-surface-tertiary'
+              selected
+                ? 'whitespace-nowrap'
+                : 'whitespace-nowrap text-on-surface-tertiary'
             }
           >
             {selected ? selected.label : placeholder}
@@ -176,7 +180,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             role="listbox"
             aria-activedescendant={`${selectId}-opt-${activeIndex}`}
             onKeyDown={handleListKey}
-            className="absolute z-50 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-border bg-surface-elevated shadow-lg focus:outline-none"
+            className="absolute z-50 mt-1 max-h-64 min-w-full w-max max-w-xs overflow-y-auto rounded-lg border border-border bg-surface-elevated shadow-lg focus:outline-none"
           >
             {options.map((opt, idx) => {
               const isSelected = opt.value === value;
