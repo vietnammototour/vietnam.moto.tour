@@ -3,7 +3,7 @@ import type {InferType} from 'yup';
 import type {Vehicle, VehicleType, VehicleStatus} from '@/domain';
 
 export const vehicleGeneralSchema = yup.object({
-  slug: yup.string().required(),
+  slug: yup.string().defined().default(''),
   type: yup.mixed<VehicleType>().oneOf(['SCOOTER', 'BIKE']).required(),
   brand: yup.string().required('Brand is required'),
   model: yup.string().required('Model is required'),
