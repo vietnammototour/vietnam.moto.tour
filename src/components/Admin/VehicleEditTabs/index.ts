@@ -1,0 +1,1 @@
+export {VehicleEditTabs} from './VehicleEditTabs';
