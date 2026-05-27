@@ -1,5 +1,6 @@
 import {useSession} from 'next-auth/react';
 import {useEffect} from 'react';
+import type {GetServerSidePropsContext} from 'next';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {AdminPageLegacy} from '@/components/Admin/AdminPageShell';
@@ -56,4 +57,10 @@ export default function AdminDashboard() {
       </div>
     </AdminPageLegacy>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

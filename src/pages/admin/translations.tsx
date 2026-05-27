@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import type {GetServerSidePropsContext} from 'next';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {TranslationEditor} from '@/components/Admin/TranslationEditor';
@@ -44,4 +45,10 @@ export default function AdminTranslations() {
       )}
     </AdminPageShell>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }
