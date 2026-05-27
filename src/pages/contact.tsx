@@ -191,12 +191,13 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* TODO: replace with interactive map when ready */}
       <section>
-        <img
-          src="/assets/images/map.png"
-          alt="Location map"
-          className="w-full h-96 object-cover"
+        <iframe
+          title="Nha Trang location map"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=109.180%2C12.235%2C109.215%2C12.260&layer=mapnik&marker=12.247%2C109.196"
+          className="w-full h-96 border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer"
         />
       </section>
     </>

@@ -65,10 +65,10 @@ describe('Contact page', () => {
     expect(document.querySelector('.fa-whatsapp')).toBeInTheDocument();
   });
 
-  it('renders the map image', () => {
+  it('renders the location map embed', () => {
     render(<Contact />);
-    const mapImg = screen.getByAltText('Location map');
-    expect(mapImg).toBeInTheDocument();
+    const mapFrame = screen.getByTitle('Nha Trang location map');
+    expect(mapFrame).toBeInTheDocument();
   });
 });
 
