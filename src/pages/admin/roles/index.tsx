@@ -54,7 +54,7 @@ export default function RolesListPage() {
         />
       }
     >
-      <table className="w-full bg-surface-elevated rounded-xl border border-border">
+      <table className="w-full bg-surface-elevated border border-border">
         <thead>
           <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
             <th className="p-3">{t('orderLabel')}</th>

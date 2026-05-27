@@ -105,7 +105,7 @@ export function TranslationEditor({
                   type="button"
                   onClick={() => setActiveNamespace(ns)}
                   title={ns}
-                  className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg type-body-sm transition-colors cursor-pointer text-left ${
+                  className={`w-full flex items-center justify-between gap-2 px-3 py-2 type-body-sm transition-colors cursor-pointer text-left ${
                     isActive
                       ? 'bg-primary/10 text-primary'
                       : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'
@@ -115,7 +115,7 @@ export function TranslationEditor({
                     {humanizeNamespace(ns)}
                   </span>
                   {count ? (
-                    <span className="shrink-0 bg-primary text-on-primary text-xs px-1.5 py-0.5 rounded-full">
+                    <span className="shrink-0 bg-primary text-on-primary text-xs px-1.5 py-0.5">
                       {count}
                     </span>
                   ) : null}
@@ -133,7 +133,7 @@ export function TranslationEditor({
             placeholder="Search keys or values..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary w-64"
+            className="px-3 py-2 border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary w-64"
           />
           <span className="type-label-sm text-on-surface-secondary self-center">
             {filtered.length} keys
@@ -151,7 +151,7 @@ export function TranslationEditor({
           )}
         </div>
 
-        <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
+        <div className="bg-surface-elevated border border-border overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-surface-alt">
@@ -181,7 +181,7 @@ export function TranslationEditor({
                       onChange={(e) =>
                         handleChange(t.id, valueField, e.target.value)
                       }
-                      className="w-full px-2 py-1 rounded border border-transparent hover:border-border focus:border-primary bg-transparent text-on-surface focus:outline-none type-body-sm"
+                      className="w-full px-2 py-1 border border-transparent hover:border-border focus:border-primary bg-transparent text-on-surface focus:outline-none type-body-sm"
                     />
                   </td>
                 </tr>

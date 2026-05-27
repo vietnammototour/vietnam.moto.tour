@@ -37,10 +37,10 @@ export default function AdminDashboard() {
         {statCards.map((card) => (
           <div
             key={card.label}
-            className="bg-surface-elevated rounded-xl border border-border p-6"
+            className="bg-surface-elevated border border-border p-6"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-primary/10 flex items-center justify-center">
                 <i className={`fas ${card.icon} text-xl text-primary`} />
               </div>
               <div>
