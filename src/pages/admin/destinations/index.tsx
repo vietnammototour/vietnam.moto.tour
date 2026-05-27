@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import type {GetServerSidePropsContext} from 'next';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {Button} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -156,4 +157,10 @@ export default function AdminDestinationsList() {
       </div>
     </AdminPageShell>
   );
+}
+
+export async function getServerSideProps({locale}: GetServerSidePropsContext) {
+  const {getMessagesFromDb} = await import('@/data/queries');
+  const messages = await getMessagesFromDb(locale ?? 'vi');
+  return {props: {messages: messages ?? {}}};
 }

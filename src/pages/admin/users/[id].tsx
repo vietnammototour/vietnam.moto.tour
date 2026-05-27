@@ -9,8 +9,11 @@ import {
   AdminPageHeader,
   AdminPageFooter,
 } from '@/components/Admin/AdminPageShell';
-import {LocalePicker, type Locale} from '@/components/Admin/LocalePicker';
-import {Button} from '@/components/ui';
+import {
+  Button,
+  LocaleSwitcher,
+  type AdminLocale as Locale,
+} from '@/components/ui';
 import {api, routes} from '@/routes';
 import type * as VMT from '@/domain';
 
@@ -73,7 +76,9 @@ export default function EditUserPage() {
             {label: t('title'), href: routes.admin.users.list.path()},
             {label: user.name || id},
           ]}
-          localeSwitcher={<LocalePicker value={locale} onChange={setLocale} />}
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
         />
       }
       footer={

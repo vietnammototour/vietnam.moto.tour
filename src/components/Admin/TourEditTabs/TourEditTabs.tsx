@@ -13,7 +13,7 @@ import {ItineraryTab} from '../tabs/ItineraryTab';
 import {PricingTab} from '../tabs/PricingTab';
 import {HighlightsTab} from '../tabs/HighlightsTab';
 import {PerksTab} from '../tabs/PerksTab';
-import {LocalePicker, type Locale} from '../LocalePicker';
+import {LocaleSwitcher, type AdminLocale as Locale} from '@/components/ui';
 import {AdminBreadcrumbs} from '../AdminBreadcrumbs';
 
 type TourEditTabsProps = {
@@ -177,7 +177,7 @@ export function TourEditTabs({
               Unsaved changes
             </span>
           )}
-          <LocalePicker value={locale} onChange={setLocale} />
+          <LocaleSwitcher value={locale} onChange={setLocale} />
         </div>
       </div>
 

@@ -1,8 +1,7 @@
 import {useDraggable} from '@dnd-kit/core';
 import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
-import type {Locale} from '@/components/Admin/LocalePicker';
-import {Button} from '@/components/ui';
+import {Button, type AdminLocale as Locale} from '@/components/ui';
 
 type PerkChipProps = {
   perk: VMT.Perk;

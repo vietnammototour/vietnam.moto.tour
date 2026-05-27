@@ -6,7 +6,7 @@ import {useTranslations} from 'next-intl';
 import type * as VMT from '@/domain';
 import {api} from '@/routes';
 import {Button, Select} from '@/components/ui';
-import type {Locale} from '@/components/Admin/LocalePicker';
+import type {AdminLocale as Locale} from '@/components/ui';
 import {PerkChip} from './PerkChip';
 import {PerkDropZone} from './PerkDropZone';
 
