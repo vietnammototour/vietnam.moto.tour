@@ -30,14 +30,14 @@ export const DestinationCard = ({
       icon: <i className="fa fa-car text-xs" aria-hidden="true" />,
       count: carOnlyCount,
       ariaLabel: `${carOnlyCount} ${t('car')} ${t('tours', {count: carOnlyCount})}`,
-      colorClass: 'bg-sky-500/95 text-white',
+      colorClass: 'bg-vehicle-car text-on-vehicle',
     },
     {
       key: 'bike',
       icon: <i className="fa fa-motorcycle text-xs" aria-hidden="true" />,
       count: bikeOnlyCount,
       ariaLabel: `${bikeOnlyCount} ${t('motorbike')} ${t('tours', {count: bikeOnlyCount})}`,
-      colorClass: 'bg-emerald-500/95 text-white',
+      colorClass: 'bg-vehicle-bike text-on-vehicle',
     },
     {
       key: 'bike-car',
@@ -50,7 +50,7 @@ export const DestinationCard = ({
       ),
       count: bikeAndCarCount,
       ariaLabel: `${bikeAndCarCount} ${t('motorbike')}/${t('car')} ${t('tours', {count: bikeAndCarCount})}`,
-      colorClass: 'bg-fuchsia-500/95 text-white',
+      colorClass: 'bg-vehicle-both text-on-vehicle',
     },
   ].filter((c) => c.count > 0);
 

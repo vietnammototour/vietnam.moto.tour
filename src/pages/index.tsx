@@ -55,7 +55,7 @@ export default function Home({
     onMouseMove: onSpotlightMove,
     onMouseLeave: onSpotlightLeave,
   } = useCursorSpotlight(200, 0.15);
-  const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlightX}px ${spotlightY}px, rgba(180, 83, 9, 0.15), transparent)`;
+  const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlightX}px ${spotlightY}px, rgb(var(--color-spotlight-rgb) / 0.15), transparent)`;
 
   const galleryImages =
     gallery?.images.map((img) => ({

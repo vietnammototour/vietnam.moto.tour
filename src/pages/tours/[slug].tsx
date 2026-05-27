@@ -156,7 +156,7 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#25D366] text-white px-4 py-2 type-label-sm font-semibold"
+              className="bg-whatsapp text-on-whatsapp px-4 py-2 type-label-sm font-semibold"
             >
               WhatsApp
             </a>
