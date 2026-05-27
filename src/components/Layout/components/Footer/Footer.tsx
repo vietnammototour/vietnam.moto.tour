@@ -16,9 +16,9 @@ export const Footer = () => {
           {/* Logo */}
           <Link href={routes.home.path()} className="shrink-0 cursor-pointer">
             <img
-              src={getUrl('assets/images/logo/logo-white.png')}
+              src={getUrl('assets/images/logo/logo-amber.png')}
               alt="Logo"
-              className="h-11 opacity-90"
+              className="h-11"
             />
           </Link>
 

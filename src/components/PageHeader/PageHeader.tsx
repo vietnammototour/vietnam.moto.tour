@@ -16,7 +16,7 @@ export function PageHeader({title, breadcrumbs, backgroundImage}: Props) {
         />
         <div className="absolute inset-0 bg-overlay" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center h-full">
-          <h2 className="type-headline-lg md:type-display-sm text-on-surface-inverse">
+          <h2 className="type-headline-lg md:type-display-sm text-on-surface drop-shadow-lg">
             {title}
           </h2>
         </div>

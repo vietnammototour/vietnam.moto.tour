@@ -53,7 +53,7 @@ export function DestinationHero({destination, locale}: Props) {
             initial={{opacity: 0, y: 12}}
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.5, delay: 0.1}}
-            className="type-label-sm tracking-[0.3em] uppercase text-on-surface-inverse/70 mb-4"
+            className="type-label-sm tracking-[0.3em] uppercase text-on-surface/70 mb-4"
           >
             {t('eyebrow')}
           </motion.span>
@@ -62,7 +62,7 @@ export function DestinationHero({destination, locale}: Props) {
             variants={clipReveal}
             initial="hidden"
             animate="visible"
-            className="type-display-md md:type-display-lg text-on-surface-inverse mb-6 max-w-[80%] leading-[0.95]"
+            className="type-display-md md:type-display-lg text-on-surface mb-6 max-w-[80%] leading-[0.95]"
           >
             {destination.name[locale]}
           </motion.h1>
@@ -73,7 +73,7 @@ export function DestinationHero({destination, locale}: Props) {
               initial="hidden"
               animate="visible"
               transition={{delay: 0.4}}
-              className="type-body-lg text-on-surface-inverse/85 max-w-2xl mb-6"
+              className="type-body-lg text-on-surface/85 max-w-2xl mb-6"
             >
               {description}
             </motion.p>

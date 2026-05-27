@@ -58,6 +58,20 @@ async function snapshot(
   try {
     await page.goto(url, {waitUntil: 'networkidle', timeout: 30_000});
     await page.addStyleTag({content: FREEZE_ANIMATIONS});
+
+    // Scroll through full page height in steps to trigger framer-motion
+    // `whileInView` reveals (IntersectionObserver-based, not CSS animation).
+    await page.evaluate(async () => {
+      const step = window.innerHeight * 0.8;
+      const total = document.documentElement.scrollHeight;
+      for (let y = 0; y <= total; y += step) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 80));
+      }
+      window.scrollTo(0, 0);
+      await new Promise((r) => setTimeout(r, 120));
+    });
+
     await page.waitForTimeout(250);
 
     const safeName =
