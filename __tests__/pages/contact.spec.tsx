@@ -60,9 +60,9 @@ describe('Contact page', () => {
 
   it('renders social media icons', () => {
     render(<Contact />);
-    expect(document.querySelector('.fa-facebook')).toBeInTheDocument();
-    expect(document.querySelector('.fa-twitter')).toBeInTheDocument();
-    expect(document.querySelector('.fa-instagram')).toBeInTheDocument();
+    expect(document.querySelector('.fa-youtube')).toBeInTheDocument();
+    expect(document.querySelector('.fa-tripadvisor')).toBeInTheDocument();
+    expect(document.querySelector('.fa-whatsapp')).toBeInTheDocument();
   });
 
   it('renders the map image', () => {

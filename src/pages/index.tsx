@@ -48,8 +48,14 @@ export default function Home({
   const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
 
-  const spotlight = useCursorSpotlight(200, 0.15);
-  const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.15), transparent)`;
+  const {
+    ref: spotlightRef,
+    x: spotlightX,
+    y: spotlightY,
+    onMouseMove: onSpotlightMove,
+    onMouseLeave: onSpotlightLeave,
+  } = useCursorSpotlight(200, 0.15);
+  const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlightX}px ${spotlightY}px, rgba(180, 83, 9, 0.15), transparent)`;
 
   const galleryImages =
     gallery?.images.map((img) => ({
@@ -72,9 +78,9 @@ export default function Home({
 
       {/* Hero */}
       <section
-        ref={spotlight.ref as React.RefObject<HTMLElement>}
-        onMouseMove={spotlight.onMouseMove}
-        onMouseLeave={spotlight.onMouseLeave}
+        ref={spotlightRef as React.RefObject<HTMLElement>}
+        onMouseMove={onSpotlightMove}
+        onMouseLeave={onSpotlightLeave}
         className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center overflow-hidden texture-grain-warm"
       >
         <video
@@ -280,12 +286,12 @@ export default function Home({
                   </li>
                 ))}
               </ul>
-              <a
-                href="#"
+              <Link
+                href={routes.tours.list.path()}
                 className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg transition-colors cursor-pointer"
               >
                 {t('bookWithUsNow')}
-              </a>
+              </Link>
             </motion.div>
           </div>
         </div>
