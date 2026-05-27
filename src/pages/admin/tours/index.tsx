@@ -100,7 +100,7 @@ export default function AdminToursList() {
         {groupedByDestination.map((group) => (
           <section
             key={group.label}
-            className="bg-surface-elevated rounded-xl border border-border overflow-hidden"
+            className="bg-surface-elevated border border-border overflow-hidden"
           >
             <header className="flex items-center justify-between px-4 py-3 bg-surface-alt border-b border-border">
               <div className="flex items-center gap-2">
@@ -142,7 +142,7 @@ export default function AdminToursList() {
                           <img
                             src={tour.imageUrl}
                             alt=""
-                            className="h-[50px] w-auto rounded object-contain shrink-0"
+                            className="h-[50px] w-auto object-contain shrink-0"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                               e.currentTarget.nextElementSibling?.classList.remove(
@@ -152,7 +152,7 @@ export default function AdminToursList() {
                           />
                         ) : null}
                         <div
-                          className={`h-[50px] w-[50px] rounded bg-surface-alt flex items-center justify-center shrink-0 ${tour.imageUrl ? 'hidden' : ''}`}
+                          className={`h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0 ${tour.imageUrl ? 'hidden' : ''}`}
                         >
                           <i className="fa fa-image text-on-surface-tertiary" />
                         </div>
@@ -204,7 +204,7 @@ export default function AdminToursList() {
           </section>
         ))}
         {groupedByDestination.length === 0 && !isLoading && (
-          <div className="bg-surface-elevated rounded-xl border border-border p-8 text-center type-body-md text-on-surface-secondary">
+          <div className="bg-surface-elevated border border-border p-8 text-center type-body-md text-on-surface-secondary">
             No tours yet.
           </div>
         )}

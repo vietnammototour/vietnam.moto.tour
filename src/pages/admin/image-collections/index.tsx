@@ -58,7 +58,7 @@ export default function ImageCollectionsListPage() {
         </p>
       )}
       {!loading && rows.length > 0 && (
-        <table className="w-full bg-surface-elevated rounded-xl border border-border">
+        <table className="w-full bg-surface-elevated border border-border">
           <thead>
             <tr className="text-left border-b border-border">
               <th className="p-3 type-label-sm uppercase text-on-surface-secondary">

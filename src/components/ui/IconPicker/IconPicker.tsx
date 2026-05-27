@@ -31,7 +31,7 @@ export function IconPicker({
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Pick icon"
-          className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-lg border border-border bg-surface hover:bg-surface-alt"
+          className="cursor-pointer flex items-center justify-center w-10 h-10 border border-border bg-surface hover:bg-surface-alt"
         >
           {value ? (
             <i
@@ -84,7 +84,7 @@ export function IconPicker({
           placeholder="Search icons..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full mb-4 px-3 py-2 border rounded"
+          className="w-full mb-4 px-3 py-2 border"
         />
         <div className="grid grid-cols-8 gap-2 max-h-96 overflow-auto">
           {filtered.map((cls) => (
@@ -97,7 +97,7 @@ export function IconPicker({
                 onChange(cls);
                 setOpen(false);
               }}
-              className="cursor-pointer aspect-square flex items-center justify-center border rounded hover:bg-surface-secondary"
+              className="cursor-pointer aspect-square flex items-center justify-center border hover:bg-surface-secondary"
             >
               <i className={cls} />
             </button>

@@ -16,7 +16,7 @@ export function VideoModal({videoUrl, isOpen, onClose}: Props) {
       <div className="aspect-video">
         <iframe
           src={embedUrl}
-          className="w-full h-full rounded-lg"
+          className="w-full h-full"
           allow="autoplay; fullscreen"
           allowFullScreen
           title="Video"

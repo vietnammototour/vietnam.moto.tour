@@ -96,7 +96,7 @@ export const Header = () => {
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
           isSticky
-            ? 'bg-surface-elevated/95 backdrop-blur-md shadow-md'
+            ? 'bg-surface-elevated/95 backdrop-blur-md'
             : 'bg-surface-elevated'
         } ${isHidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
