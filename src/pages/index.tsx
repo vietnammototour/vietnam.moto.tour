@@ -64,9 +64,17 @@ export default function Home({
     })) ?? [];
 
   useEffect(() => {
-    if (bannerVideoRef.current) {
-      bannerVideoRef.current.playbackRate = 0.8;
+    const video = bannerVideoRef.current;
+    if (!video) return;
+    const reduceMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      video.pause();
+      video.removeAttribute('autoplay');
+      return;
     }
+    video.playbackRate = 0.8;
   }, []);
 
   return (
