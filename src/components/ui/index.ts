@@ -11,6 +11,5 @@ export {ConfirmModal} from './ConfirmModal';
 export {LocaleSwitcher, type AdminLocale} from './LocaleSwitcher';
 export {Tabs, TabPanel} from './Tabs';
 export {ImageUpload} from './ImageUpload';
-export {ThemeToggle} from './ThemeToggle';
 export {IconPicker} from './IconPicker';
 export {TripAdvisorIcon} from './TripAdvisorIcon';

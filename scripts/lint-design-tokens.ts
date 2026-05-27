@@ -1,4 +1,4 @@
-import {readFileSync, statSync, readdirSync} from 'node:fs';
+import {readFileSync, readdirSync, type Dirent} from 'node:fs';
 import {join, relative, extname} from 'node:path';
 
 const ROOT = process.cwd();
@@ -26,7 +26,7 @@ const FORBIDDEN = [
 
 function walk(dir: string, exts: string[], out: string[]): void {
   const abs = join(ROOT, dir);
-  let entries: ReturnType<typeof readdirSync>;
+  let entries: Dirent<string>[];
   try {
     entries = readdirSync(abs, {withFileTypes: true});
   } catch {
