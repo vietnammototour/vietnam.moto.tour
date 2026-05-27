@@ -129,28 +129,65 @@ export default function Contact() {
       </section>
 
       <section className="py-16 bg-surface-alt">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: 'icon-place',
-                lines: [contactInfo.address, `${contactInfo.city}, Vietnam`],
-              },
-              {icon: 'icon-phone-call', lines: [contactInfo.phone]},
-              {icon: 'icon-at', lines: [contactInfo.email]},
-            ].map((info, i) => (
-              <div key={i} className="bg-surface-elevated p-8 text-center">
-                <span
-                  className={`${info.icon} text-xl text-primary block mb-8`}
-                />
-                {info.lines.map((line, j) => (
-                  <p key={j} className="type-body-sm text-on-surface">
-                    {line}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <dl className="divide-y divide-border border-y border-border">
+            {(() => {
+              const rows = [
+                {
+                  key: 'loc',
+                  icon: 'icon-place',
+                  value: (
+                    <>
+                      <span className="block">{contactInfo.address}</span>
+                      <span className="block text-on-surface-secondary">
+                        {contactInfo.city}, Vietnam
+                      </span>
+                    </>
+                  ),
+                },
+                {
+                  key: 'tel',
+                  icon: 'icon-phone-call',
+                  value: (
+                    <a
+                      href={`tel:${contactInfo.phone}`}
+                      className="hover:text-primary underline-offset-4 hover:underline transition-colors cursor-pointer"
+                    >
+                      {contactInfo.phone}
+                    </a>
+                  ),
+                },
+                {
+                  key: 'mail',
+                  icon: 'icon-at',
+                  value: (
+                    <a
+                      href={`mailto:${contactInfo.email}`}
+                      className="hover:text-primary underline-offset-4 hover:underline transition-colors cursor-pointer break-all"
+                    >
+                      {contactInfo.email}
+                    </a>
+                  ),
+                },
+              ];
+              return rows.map((row, i) => (
+                <div
+                  key={row.key}
+                  className="grid grid-cols-[auto_auto_1fr] items-center gap-x-5 py-5"
+                >
+                  <dt className="font-mono type-label-sm text-on-surface-tertiary tabular-nums">
+                    {String(i + 1).padStart(2, '0')}/
+                    {String(rows.length).padStart(2, '0')}
+                  </dt>
+                  <span
+                    className={`${row.icon} text-xl text-primary w-6 text-center`}
+                    aria-hidden="true"
+                  />
+                  <dd className="type-body-lg text-on-surface">{row.value}</dd>
+                </div>
+              ));
+            })()}
+          </dl>
         </div>
       </section>
 
