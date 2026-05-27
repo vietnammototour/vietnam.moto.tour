@@ -44,7 +44,11 @@
     "design:push": "echo 'Run inside Claude Code: ask `design:push` — reads DESIGN.md frontmatter+token blocks, calls Stitch MCP upload_design_md on 4683768170577706110.'",
     "design:verify": "npx tsx scripts/design-verify.ts",
     "design:audit-page": "npx tsx scripts/design-verify.ts",
-    "lint:design": "npx tsx scripts/lint-design-tokens.ts"
+    "lint:design": "npx tsx scripts/lint-design-tokens.ts",
+    "impeccable": "impeccable detect src/",
+    "impeccable:fast": "impeccable detect --fast src/",
+    "impeccable:live": "impeccable detect http://localhost:3000",
+    "impeccable:json": "impeccable detect --json src/"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

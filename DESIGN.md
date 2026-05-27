@@ -176,12 +176,10 @@ inputs, cards, selection indicators. Lines feel cut from steel.
 | `pnpm design:verify`             | Batch screenshots all default routes (desktop + mobile) into `.design-snapshots/`. Claude reads PNGs and diffs against tokens above. |
 | `pnpm design:audit-page -- /foo` | Single-page screenshot pair. Same script, one route.                                                                                 |
 | Ask Claude: `design:audit`       | Interactive Playwright MCP loop — navigate, screenshot, inspect computed styles via `browser_evaluate`, compare against this file.   |
-
-`design:pull` and `design:push` run in-session via the Stitch MCP server. No
-standalone CLI. `design:verify` is the deterministic batch path; `design:audit`
-is the interactive path using the Playwright MCP server (configured in
-`.mcp.json`). When token migration is finalized, add
-`@import './design-tokens.css';` to `src/styles/globals.css`.
+| `pnpm impeccable`                | Static scan: 27 UI anti-patterns (AI-slop tells, WCAG contrast, layout monotony, typography flatness, motion smell) over `src/`.     |
+| `pnpm impeccable:fast`           | Regex-only mode of above — skips jsdom, faster, less accurate. Suitable for pre-commit / staged-files runs.                          |
+| `pnpm impeccable:live`           | Same rules engine but run against `http://localhost:3000` via Puppeteer. Catches issues only visible after render.                   |
+| Ask Claude: `/impeccable …`      | Impeccable skill slash commands: `/audit`, `/critique`, `/polish`, `/typeset`, `/layout`, `/harden`, `/shape`, `/craft`, etc.        |
 
 ## Visual verification loop (Playwright MCP)
 
@@ -206,7 +204,19 @@ Stitch (designMd) ──pull──▶ DESIGN.md / design-tokens.css
 - **Animations frozen** before screenshot (`scripts/design-verify.ts` injects a
   `* { animation-duration: 0s; transition: none; }` style tag) to avoid Framer
   Motion / Swiper flake.
-- **Static guard:** `pnpm lint:design` catches hardcoded hex / off-token colors
-  without rendering — runs in `pnpm build`. Use it as the cheap first pass; use
-  `design:verify` when you need to catch layout / typography / contrast issues
-  that static lint can't see.
+- **Static guards (two passes):**
+  - `pnpm lint:design` — token-purity check (hardcoded hex / off-palette).
+  - `pnpm impeccable` — anti-pattern check (AI-slop tells, WCAG, layout/typography).
+  - Both are cheap and run without rendering. Use them as the first line of defence.
+- **Rendered guards (two passes):**
+  - `pnpm design:verify` — Claude-driven visual diff via screenshots.
+  - `pnpm impeccable:live` — automated rules engine against the live page.
+  - Use these when the static passes are clean but something still looks wrong.
+- **Stitch governs design language; Impeccable governs design hygiene.** Stitch
+  enforces brand-specific tokens (mustard accent, 0 radius, 1px borders).
+  Impeccable enforces universal rules (no gradient text, AA contrast, no purple
+  accents). Both apply. Conflicts: Stitch wins on brand choices, Impeccable wins
+  on accessibility/contrast violations.
+- **`/document` (Impeccable skill) is disabled by convention.** It rewrites
+  `DESIGN.md` from scratch — would clobber the Stitch sync block at the top of
+  this file. Use `design:pull` instead.
