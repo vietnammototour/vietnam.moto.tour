@@ -28,6 +28,17 @@
 - **Query example:** `sudo -u postgres psql -d vietnam_moto_tours -c 'SELECT id, email, name, role FROM "User";'`
 - Note: Prisma uses uppercase table names — always quote them (`"User"`, `"Tour"`, etc.)
 
+## Command Convention
+
+**Always `cd /var/www/vietnam-moto-tours` first.** Every VPS command suggested to the user must start by entering the project directory, even when the command would technically work from `$HOME`. Keeps logs, `.env` access, `pnpm`, `prisma`, and relative paths consistent and avoids accidentally running against the wrong working dir.
+
+Example:
+
+```bash
+cd /var/www/vietnam-moto-tours && pm2ci restart vietnam-moto-tours
+cd /var/www/vietnam-moto-tours && pm2ci logs vietnam-moto-tours --lines 50
+```
+
 ## Application
 
 - **Path:** `/var/www/vietnam-moto-tours`
@@ -79,6 +90,8 @@ npx prisma migrate deploy
 rm -rf public/uploads
 cp -r /var/www/uploads public/uploads
 rm -rf .next
+# Required — Next 16.2 Turbopack worker OOMs at ~478MB under default v8 heap cap
+export NODE_OPTIONS="--max-old-space-size=2048"
 pnpm build
 # Replace copy with symlink for runtime serving (new uploads go to /var/www/uploads)
 rm -rf public/uploads
@@ -97,8 +110,63 @@ The deploy process runs `git checkout -- .` which reverts all local changes, the
 - **`rm -rf node_modules`** before install avoids EACCES permission errors when pnpm tries to recreate modules.
 - **`set -a && source .env && set +a`** exports all .env vars so Prisma `env()` helper can read DATABASE_URL.
 - **Swap is essential** — Next.js build uses 1-2GB RAM, VPS only has 961MB. Without swap, build crashes the server.
+- **`NODE_OPTIONS=--max-old-space-size=2048` required for build** — without it, Next 16.2 Turbopack build worker SIGABRTs at ~478MB heap with `FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory`. Swap alone is not enough; v8 enforces the per-process cap before swap is touched.
+- **Workflow can report ✅ while build fails** — `appleboy/ssh-action` does not default to `script_stop: true`. If `bash /home/ci-cd/deploy.sh` exits non-zero (e.g. build OOM), the next inline commands in the workflow (`prisma/seed*.ts` etc.) still run, and their success masks the failed build. Symptom: workflow green, pm2 still serving stale `.next/` (or worse, deploy.sh's `rm -rf .next` ran but `pnpm build` failed → no `.next/` at all → all SSR routes 500). Fix: add `script_stop: true` under the action's `with:` block.
+- **`pm2ci` alias is root-only and interactive-only** — defined in `/root/.bashrc`. Does NOT work in non-login shells, scripts, or under any other user. From `ci-cd`'s shell use bare `pm2`. From anywhere else use the full path: `sudo -u ci-cd /home/ci-cd/.nvm/versions/node/v24.14.0/lib/node_modules/pm2/bin/pm2 <cmd> vietnam-moto-tours`.
 - **No symlinks in `public/`** — Turbopack rejects symlinks pointing outside the project root. Use `cp -r` instead (see Image Uploads section).
 - **Never run project commands as root** — creates files owned by root in `.next/`, `node_modules/`, etc. that ci-cd can't delete on next deploy. Always use `su - ci-cd` for manual operations. If this happens, fix with `chown -R ci-cd:ci-cd /var/www/vietnam-moto-tours`.
+
+### Editing deploy.sh on the VPS
+
+The deploy script lives at `/home/ci-cd/deploy.sh` and must be edited as root (or with `sudo`).
+
+- **Ghostty / unknown terminal:** nano/vim error with `Error opening terminal: xterm-ghostty`. Prefix the command: `TERM=xterm nano /home/ci-cd/deploy.sh`.
+- **No-editor one-liner** (insert a line before `pnpm build`):
+
+  ```bash
+  sed -i 's|^  pnpm build$|  export NODE_OPTIONS="--max-old-space-size=2048"\n  pnpm build|' /home/ci-cd/deploy.sh
+  grep -n NODE_OPTIONS /home/ci-cd/deploy.sh  # verify
+  ```
+
+  If `sed` newline interpolation misbehaves on the host, use Python:
+
+  ```bash
+  python3 -c "
+  p='/home/ci-cd/deploy.sh'
+  s=open(p).read()
+  s=s.replace('  pnpm build','  export NODE_OPTIONS=\"--max-old-space-size=2048\"\n  pnpm build')
+  open(p,'w').write(s)"
+  ```
+
+### Recovery runbook — admin pages 500 / Next i18n ENOENT after a deploy
+
+Symptom in `pm2 logs`: `Error: Failed to load static file for page: /en/admin ENOENT: no such file or directory, open '.../.next/server/pages/en/admin.html'`.
+
+This means the new build was never produced (typically OOM) and pm2 is either serving a stale `.next/` or running with no `.next/` at all.
+
+```bash
+# 1. As root: confirm deploy.sh has the heap flag
+grep -n NODE_OPTIONS /home/ci-cd/deploy.sh
+
+# 2. Re-run the deploy as ci-cd
+su - ci-cd -c 'bash /home/ci-cd/deploy.sh'
+
+# 3. Verify build artifact
+cat /var/www/vietnam-moto-tours/.next/BUILD_ID
+
+# 4. Restart pm2 (only needed if deploy.sh's own restart line was skipped)
+sudo -u ci-cd /home/ci-cd/.nvm/versions/node/v24.14.0/lib/node_modules/pm2/bin/pm2 restart vietnam-moto-tours
+
+# 5. Smoke test — expect 307 (auth redirect), NOT 500
+curl -sI http://localhost:3000/en/admin | head -3
+curl -sI http://localhost:3000/en/admin/destinations | head -3
+curl -sI http://localhost:3000/en/admin/translations | head -3
+
+# 6. Confirm no ENOENT in error log
+sudo -u ci-cd /home/ci-cd/.nvm/versions/node/v24.14.0/lib/node_modules/pm2/bin/pm2 logs vietnam-moto-tours --err --lines 30 --nostream
+```
+
+Note: pages using `getServerSideProps` (admin dashboard, destinations list, translations) deliberately produce no prerendered `.html`. After the fix, Next stops looking for the file and the ENOENT goes away.
 
 ## Swap
 
