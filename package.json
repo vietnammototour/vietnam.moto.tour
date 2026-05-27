@@ -39,7 +39,9 @@
     "sweep:uploads": "npx tsx scripts/sweep-orphan-uploads.ts",
     "i18n:scan": "npx tsx scripts/scan-common-translations.ts",
     "i18n:apply": "npx tsx scripts/apply-common-translations.ts",
-    "i18n:apply:write": "npx tsx scripts/apply-common-translations.ts --apply"
+    "i18n:apply:write": "npx tsx scripts/apply-common-translations.ts --apply",
+    "design:pull": "echo 'Run inside Claude Code: ask `design:pull` — invokes Stitch MCP get_project on 4683768170577706110, rewrites DESIGN.md + src/styles/design-tokens.css.'",
+    "design:push": "echo 'Run inside Claude Code: ask `design:push` — reads DESIGN.md frontmatter+token blocks, calls Stitch MCP upload_design_md on 4683768170577706110.'"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
