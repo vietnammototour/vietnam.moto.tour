@@ -11,7 +11,7 @@ import {
   submitContact,
   type ContactFormData,
 } from '@/lib/contact-form-utils';
-import {Button, TextInput, Textarea} from '@/components/ui';
+import {Button, TextInput, Textarea, TripAdvisorIcon} from '@/components/ui';
 
 export default function Contact() {
   const t = useTranslations('contact');
@@ -75,7 +75,7 @@ export default function Contact() {
                   aria-label="TripAdvisor"
                   className="w-11 h-11 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all cursor-pointer"
                 >
-                  <i className="fab fa-tripadvisor" aria-hidden="true" />
+                  <TripAdvisorIcon className="h-5 w-auto" />
                 </a>
                 <a
                   href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}

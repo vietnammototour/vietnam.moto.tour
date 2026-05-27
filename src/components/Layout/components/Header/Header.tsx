@@ -21,6 +21,7 @@ export const Header = () => {
   const {data: session} = useSession();
   const [loginOpen, setLoginOpen] = useState(false);
   const t = useTranslations('header');
+  const tc = useTranslations('common');
 
   const isSticky = scrollY > 100;
   const isHidden = scrollDirection === 'down' && scrollY > 200;
@@ -40,6 +41,11 @@ export const Header = () => {
       href: routes.rentals.list.path(),
       label: t('rental'),
       active: router.pathname.startsWith('/rentals'),
+    },
+    {
+      href: routes.contact.path(),
+      label: tc('contact'),
+      active: router.pathname.startsWith('/contact'),
     },
     ...(session
       ? [

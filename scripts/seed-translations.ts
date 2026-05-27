@@ -309,6 +309,12 @@ const rows: Row[] = [
     valueEn: 'Pricing',
     valueVi: 'Bảng giá',
   },
+  {
+    namespace: 'common',
+    key: 'contact',
+    valueEn: 'Contact us',
+    valueVi: 'Liên hệ',
+  },
 ];
 
 async function main(): Promise<void> {

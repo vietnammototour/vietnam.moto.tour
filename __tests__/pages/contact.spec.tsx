@@ -61,7 +61,7 @@ describe('Contact page', () => {
   it('renders social media icons', () => {
     render(<Contact />);
     expect(document.querySelector('.fa-youtube')).toBeInTheDocument();
-    expect(document.querySelector('.fa-tripadvisor')).toBeInTheDocument();
+    expect(screen.getByLabelText('TripAdvisor')).toBeInTheDocument();
     expect(document.querySelector('.fa-whatsapp')).toBeInTheDocument();
   });
 
