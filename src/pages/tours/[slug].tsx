@@ -60,77 +60,56 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
 
       <TourHero tour={tour} />
 
-      <article className="py-10 lg:py-16">
+      <article className="py-10 lg:py-16 pb-24 lg:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="lg:flex lg:gap-10">
-            {/* Main content */}
-            <div className="lg:w-2/3">
-              <TourDescription
-                description={tour.description}
-                locale={locale}
-                imageUrl={tour.imageUrl}
-                imageAlt={
-                  tour.title[locale as 'en' | 'vi'] ?? tour.title.vi ?? ''
-                }
-              />
-              <TourHighlights highlights={tour.highlights} locale={locale} />
+          {/*
+            Single-render layout: each sidebar component instantiates once.
+            Mobile: natural document flow — aside slots between Highlights and Itinerary.
+            Desktop: grid places aside in col-2 spanning all rows; aside sticks at top.
+            TourCTA hidden on mobile (mobile uses sticky bottom CTA bar instead).
+          */}
+          <div className="lg:grid lg:grid-cols-[2fr_1fr] lg:gap-10 lg:items-start">
+            <TourDescription
+              description={tour.description}
+              locale={locale}
+              imageUrl={tour.imageUrl}
+              imageAlt={
+                tour.title[locale as 'en' | 'vi'] ?? tour.title.vi ?? ''
+              }
+            />
+            <TourHighlights highlights={tour.highlights} locale={locale} />
 
-              {/* On mobile: pricing + details between highlights and itinerary */}
-              <div className="lg:hidden mb-10">
-                <TourPricing
-                  pricingGroups={tour.pricingGroups}
-                  locale={locale}
-                  onPriceChange={handlePriceChange}
-                />
-                <TourDetails tour={tour} />
-              </div>
-
-              <TourItinerary itinerary={tour.itinerary} locale={locale} />
-              <TourIncluded
-                included={tour.included}
-                excluded={tour.excluded}
-                locale={locale}
-              />
-
-              {/* On mobile: payment + notes after included */}
-              <div className="lg:hidden">
-                <TourPayment
-                  paymentDetails={tour.paymentDetails}
-                  locale={locale}
-                />
-                <TourNotes
-                  notes={tour.notes}
-                  mealsInfo={tour.mealsInfo}
-                  locale={locale}
-                />
-              </div>
-            </div>
-
-            {/* Desktop sidebar */}
-            <aside className="hidden lg:block lg:w-1/3">
-              <div className="sticky top-24">
-                <div className="p-6 texture-grain-warm">
-                  <div className="relative z-10">
-                    <TourPricing
-                      pricingGroups={tour.pricingGroups}
-                      locale={locale}
-                      onPriceChange={handlePriceChange}
-                    />
+            <aside className="mb-10 lg:mb-0 lg:col-start-2 lg:[grid-row:1/-1] lg:sticky lg:top-24 lg:self-start">
+              <div className="lg:p-6 lg:texture-grain-warm">
+                <div className="relative z-10">
+                  <TourPricing
+                    pricingGroups={tour.pricingGroups}
+                    locale={locale}
+                    onPriceChange={handlePriceChange}
+                  />
+                  <div className="hidden lg:block">
                     <TourCTA tourTitle={tourTitle} />
-                    <TourDetails tour={tour} />
-                    <TourPayment
-                      paymentDetails={tour.paymentDetails}
-                      locale={locale}
-                    />
-                    <TourNotes
-                      notes={tour.notes}
-                      mealsInfo={tour.mealsInfo}
-                      locale={locale}
-                    />
                   </div>
+                  <TourDetails tour={tour} />
+                  <TourPayment
+                    paymentDetails={tour.paymentDetails}
+                    locale={locale}
+                  />
+                  <TourNotes
+                    notes={tour.notes}
+                    mealsInfo={tour.mealsInfo}
+                    locale={locale}
+                  />
                 </div>
               </div>
             </aside>
+
+            <TourItinerary itinerary={tour.itinerary} locale={locale} />
+            <TourIncluded
+              included={tour.included}
+              excluded={tour.excluded}
+              locale={locale}
+            />
           </div>
         </div>
       </article>
@@ -156,13 +135,15 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-whatsapp text-on-whatsapp px-4 py-2 type-label-sm font-semibold"
+              aria-label="Contact via WhatsApp"
+              className="inline-flex items-center justify-center bg-whatsapp text-on-whatsapp px-4 min-h-11 type-label-sm font-semibold cursor-pointer"
             >
               WhatsApp
             </a>
             <a
               href={`mailto:${contactInfo.email}?subject=${encodeURIComponent(`Inquiry: ${tourTitle}`)}`}
-              className="bg-primary text-on-primary px-4 py-2 type-label-sm font-semibold"
+              aria-label="Contact via email"
+              className="inline-flex items-center justify-center bg-primary text-on-primary px-4 min-h-11 type-label-sm font-semibold cursor-pointer"
             >
               Email
             </a>
