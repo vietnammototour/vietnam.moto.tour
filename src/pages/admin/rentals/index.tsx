@@ -1,5 +1,6 @@
 import {useEffect, useMemo, useState} from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type {GetServerSideProps} from 'next';
 import {dehydrate} from '@tanstack/react-query';
 import {getQueryClient} from '@/lib/queryClient';
@@ -153,9 +154,12 @@ export default function AdminRentalsList() {
                         className="flex items-center gap-3 cursor-pointer"
                       >
                         {v.imageUrl ? (
-                          <img
+                          <Image
                             src={v.imageUrl}
                             alt=""
+                            width={60}
+                            height={40}
+                            unoptimized
                             className="h-[40px] w-auto object-cover"
                           />
                         ) : null}

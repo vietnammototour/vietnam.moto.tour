@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type {GetServerSideProps} from 'next';
 import {Button} from '@/components/ui';
 import {dehydrate} from '@tanstack/react-query';
@@ -99,9 +100,12 @@ export default function AdminToursArchive() {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     {tour.imageUrl ? (
-                      <img
+                      <Image
                         src={tour.imageUrl}
                         alt=""
+                        width={75}
+                        height={50}
+                        unoptimized
                         className="h-[50px] w-auto object-contain shrink-0"
                       />
                     ) : (

@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
+import Image from 'next/image';
 import {useTranslations} from 'next-intl';
 import {Modal, Button} from '@/components/ui';
 import {api} from '@/routes';
@@ -112,9 +113,12 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
   return (
     <div className="flex items-center gap-4">
       {selected?.url ? (
-        <img
+        <Image
           src={selected.url}
           alt={selected.altEn || selected.altVi || ''}
+          width={96}
+          height={96}
+          unoptimized
           className="h-24 w-24 object-cover border border-border"
         />
       ) : (
@@ -198,11 +202,16 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
                   }`}
                 >
                   {img.url ? (
-                    <img
-                      src={img.url}
-                      alt={img.altEn || img.altVi || ''}
-                      className="h-32 w-full object-cover"
-                    />
+                    <div className="relative h-32 w-full">
+                      <Image
+                        src={img.url}
+                        alt={img.altEn || img.altVi || ''}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
                   ) : (
                     <div className="h-32 w-full bg-surface-alt" />
                   )}
