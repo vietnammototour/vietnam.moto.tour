@@ -8,6 +8,7 @@ import {TripAdvisorIcon} from '@/components/ui';
 export const Footer = () => {
   const t = useTranslations('footer');
   const tNav = useTranslations('header');
+  const tc = useTranslations('common');
 
   return (
     <footer className="bg-surface-inverse text-on-surface-inverse">
@@ -38,6 +39,12 @@ export const Footer = () => {
               className="underline-offset-4 hover:underline transition-colors cursor-pointer"
             >
               {tNav('rental')}
+            </Link>
+            <Link
+              href={routes.contact.path()}
+              className="underline-offset-4 hover:underline transition-colors cursor-pointer"
+            >
+              {tc('contact')}
             </Link>
           </nav>
         </div>
