@@ -66,7 +66,7 @@ export function DestinationHighlights({
       </div>
 
       {total === 0 ? (
-        <p className="type-body-md text-on-surface-secondary border border-dashed border-border-subtle rounded-xl p-8 text-center">
+        <p className="type-body-md text-on-surface-secondary border border-dashed border-border-subtle p-8 text-center">
           {t('noHighlights')}
         </p>
       ) : (

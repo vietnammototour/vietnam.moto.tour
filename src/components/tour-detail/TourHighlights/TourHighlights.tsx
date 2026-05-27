@@ -37,7 +37,7 @@ export function TourHighlights({highlights, locale}: TourHighlightsProps) {
             whileInView={{opacity: 1, scale: 1}}
             viewport={{once: true}}
             transition={{duration: 0.3, delay: i * 0.08}}
-            className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full type-label-sm"
+            className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 type-label-sm"
           >
             {highlight.imageUrl && (
               <Image
@@ -45,7 +45,7 @@ export function TourHighlights({highlights, locale}: TourHighlightsProps) {
                 alt={text(highlight)}
                 width={20}
                 height={20}
-                className="rounded-full object-cover w-5 h-5"
+                className="object-cover w-5 h-5"
               />
             )}
             {text(highlight)}

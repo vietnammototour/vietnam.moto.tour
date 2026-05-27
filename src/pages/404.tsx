@@ -17,7 +17,7 @@ export default function NotFound() {
         <p className="type-headline-sm text-on-surface mb-8">{t('message')}</p>
         <Link
           href={routes.home.path()}
-          className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg cursor-pointer transition-colors"
+          className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 cursor-pointer transition-colors"
         >
           {t('backHome')}
         </Link>

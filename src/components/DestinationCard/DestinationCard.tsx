@@ -63,7 +63,7 @@ export const DestinationCard = ({
       <Link
         href={routes.destinations.detail.path({slug})}
         data-testid="destination-card"
-        className="group relative rounded-lg overflow-hidden block cursor-pointer elevation-1 hover:elevation-2 transition-all duration-300 w-full h-full"
+        className="group relative overflow-hidden block cursor-pointer transition-all duration-300 w-full h-full"
       >
         <img
           src={imageUrl}
@@ -79,7 +79,7 @@ export const DestinationCard = ({
             {chips.map((chip) => (
               <span
                 key={chip.key}
-                className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full type-label-sm uppercase ${chip.colorClass}`}
+                className={`inline-flex items-center gap-1.5 h-7 px-2.5 type-label-sm uppercase ${chip.colorClass}`}
                 aria-label={chip.ariaLabel}
               >
                 {chip.icon}

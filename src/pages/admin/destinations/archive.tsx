@@ -59,13 +59,13 @@ export default function AdminDestinationsArchive() {
         <h1 className="type-headline-sm">Archived Destinations</h1>
         <Link
           href={routes.admin.destinations.list.path()}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg type-label-sm uppercase border border-border text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 type-label-sm uppercase border border-border text-on-surface-secondary hover:bg-surface-alt transition-colors cursor-pointer"
         >
           ← Back to Destinations
         </Link>
       </div>
 
-      <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
+      <div className="bg-surface-elevated border border-border overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-surface-alt">
@@ -102,10 +102,10 @@ export default function AdminDestinationsArchive() {
                       <img
                         src={dest.imageUrl}
                         alt=""
-                        className="h-[50px] w-auto rounded object-contain shrink-0"
+                        className="h-[50px] w-auto object-contain shrink-0"
                       />
                     ) : (
-                      <div className="h-[50px] w-[50px] rounded bg-surface-alt flex items-center justify-center shrink-0">
+                      <div className="h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0">
                         <i className="fa fa-image text-on-surface-tertiary" />
                       </div>
                     )}

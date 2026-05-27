@@ -48,7 +48,7 @@ export default function AdminRentalsArchive() {
           No archived vehicles.
         </p>
       ) : (
-        <table className="w-full bg-surface-elevated rounded-xl border border-border overflow-hidden">
+        <table className="w-full bg-surface-elevated border border-border overflow-hidden">
           <thead>
             <tr className="border-b border-border">
               <th className="text-left px-4 py-2 type-label-sm text-on-surface-tertiary">

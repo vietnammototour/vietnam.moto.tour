@@ -61,19 +61,19 @@ export default function Contact() {
               <div className="flex gap-3">
                 <a
                   href="#"
-                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary rounded-full flex items-center justify-center text-on-surface-secondary transition-all"
+                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all"
                 >
                   <i className="fab fa-facebook" />
                 </a>
                 <a
                   href="#"
-                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary rounded-full flex items-center justify-center text-on-surface-secondary transition-all"
+                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all"
                 >
                   <i className="fab fa-twitter" />
                 </a>
                 <a
                   href="#"
-                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary rounded-full flex items-center justify-center text-on-surface-secondary transition-all"
+                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all"
                 >
                   <i className="fab fa-instagram" />
                 </a>
@@ -86,7 +86,7 @@ export default function Contact() {
                     <input
                       type="text"
                       placeholder={t('namePlaceholder')}
-                      className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full bg-surface-alt border-0 px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       {...register('name')}
                     />
                   </FormField>
@@ -94,7 +94,7 @@ export default function Contact() {
                     <input
                       type="email"
                       placeholder={t('emailPlaceholder')}
-                      className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full bg-surface-alt border-0 px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       {...register('email')}
                     />
                   </FormField>
@@ -103,14 +103,14 @@ export default function Contact() {
                   <textarea
                     placeholder={t('messagePlaceholder')}
                     rows={6}
-                    className="w-full bg-surface-alt border-0 rounded-lg px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                    className="w-full bg-surface-alt border-0 px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                     {...register('message')}
                   />
                 </FormField>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 transition-colors cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting ? '...' : t('sendMessage')}
                 </button>
@@ -131,10 +131,7 @@ export default function Contact() {
               {icon: 'icon-phone-call', lines: [contactInfo.phone]},
               {icon: 'icon-at', lines: [contactInfo.email]},
             ].map((info, i) => (
-              <div
-                key={i}
-                className="bg-surface-elevated rounded-lg p-8 text-center shadow-sm"
-              >
+              <div key={i} className="bg-surface-elevated p-8 text-center">
                 <span
                   className={`${info.icon} text-xl text-primary block mb-8`}
                 />

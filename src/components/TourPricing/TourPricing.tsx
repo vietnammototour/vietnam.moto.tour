@@ -98,7 +98,7 @@ export function TourPricing({
   }, []);
 
   return (
-    <div className="border-2 border-primary rounded-xl p-5 mb-5">
+    <div className="border-2 border-primary p-5 mb-5">
       <h3 className="type-title-lg text-on-surface mb-4">{tc('pricing')}</h3>
 
       {hasVehicle && (

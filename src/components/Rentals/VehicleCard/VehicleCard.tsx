@@ -12,7 +12,7 @@ export function VehicleCard({vehicle}: Props) {
   const available = vehicle.quantity > 0;
 
   return (
-    <article className="bg-surface-elevated rounded-lg border border-border overflow-hidden flex flex-col">
+    <article className="bg-surface-elevated border border-border overflow-hidden flex flex-col">
       <div className="aspect-[3/2] bg-surface-alt overflow-hidden">
         {vehicle.imageUrl ? (
           <img

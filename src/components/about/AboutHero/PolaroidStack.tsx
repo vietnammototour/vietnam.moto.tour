@@ -17,7 +17,7 @@ export function PolaroidStack({featured, locale}: PolaroidStackProps) {
         return (
           <figure
             key={m.id}
-            className={`absolute ${offset} ${rotation} w-48 transform shadow-2xl`}
+            className={`absolute ${offset} ${rotation} w-48 transform`}
           >
             <div className="aspect-[3/4] w-full bg-surface-alt">
               {m.photo?.url ? (
@@ -28,7 +28,7 @@ export function PolaroidStack({featured, locale}: PolaroidStackProps) {
                 />
               ) : null}
             </div>
-            <figcaption className="bg-white px-3 py-2 text-xs">
+            <figcaption className="bg-surface-elevated px-3 py-2 text-xs">
               <span className="block font-semibold">{m.name}</span>
               <span className="text-on-surface-secondary">{role}</span>
             </figcaption>

@@ -49,7 +49,7 @@ export function DestinationCTA({heroImage}: Props) {
         >
           <Link
             href={routes.contact.path()}
-            className="group inline-flex items-center gap-2 bg-white text-primary type-title-md font-semibold px-9 py-4 rounded-full cursor-pointer hover:brightness-105 elevation-3 hover:elevation-4 transition-[box-shadow,filter] duration-200"
+            className="group inline-flex items-center gap-2 bg-surface-elevated text-primary type-title-md font-semibold px-9 py-4 cursor-pointer hover:brightness-105 transition-[filter] duration-200"
           >
             {t('button')}
             <span

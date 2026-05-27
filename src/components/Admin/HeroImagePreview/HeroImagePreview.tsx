@@ -77,7 +77,7 @@ export function HeroImagePreview({
           error={error ?? undefined}
         />
       </div>
-      <div className="rounded-lg overflow-hidden">
+      <div className="overflow-hidden">
         <TourHero
           preview={{
             heroImage: previewUrl,

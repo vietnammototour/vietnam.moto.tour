@@ -29,7 +29,7 @@ export function Badge({
     <span
       data-variant={variant}
       data-size={size}
-      className={`inline-flex items-center rounded-full font-medium ${variantClasses[variant]} ${sizeClasses[size]}`}
+      className={`inline-flex items-center font-medium ${variantClasses[variant]} ${sizeClasses[size]}`}
     >
       {children}
     </span>

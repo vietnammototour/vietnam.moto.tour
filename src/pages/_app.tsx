@@ -3,8 +3,7 @@ import type {AppProps} from 'next/app';
 import {SessionProvider} from 'next-auth/react';
 import {NextIntlClientProvider, type IntlError} from 'next-intl';
 import {useRouter} from 'next/router';
-import {DM_Sans} from 'next/font/google';
-import localFont from 'next/font/local';
+import {Hanken_Grotesk, JetBrains_Mono} from 'next/font/google';
 import {routes} from '@/routes';
 import {ThemeProvider} from '@/components/ThemeProvider';
 import {Layout} from '@/components/Layout';
@@ -15,27 +14,17 @@ import {getQueryClient} from '@/lib/queryClient';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@/styles/globals.css';
 
-const dmSans = DM_Sans({
+const hankenGrotesk = Hanken_Grotesk({
   subsets: ['latin'],
-  variable: '--font-dm-sans',
-  weight: ['400', '600', '700'],
+  variable: '--font-hanken-grotesk',
+  weight: ['400', '500', '700', '800'],
   display: 'swap',
 });
 
-const outBrave = localFont({
-  src: [
-    {
-      path: '../../public/assets/fonts/outbrave.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/assets/fonts/outbrave.otf',
-      weight: '400',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-outbrave',
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  weight: ['400', '500'],
   display: 'swap',
 });
 
@@ -71,7 +60,9 @@ export default function App({
   }
 
   const content = (
-    <div className={`${dmSans.variable} ${outBrave.variable} font-sans`}>
+    <div
+      className={`${hankenGrotesk.variable} ${jetbrainsMono.variable} font-sans`}
+    >
       {routeLoading && !isAdmin && (
         <div className="fixed top-0 left-0 right-0 h-1 z-[9999] overflow-hidden bg-primary/20">
           <div className="h-full bg-primary animate-progress-bar" />

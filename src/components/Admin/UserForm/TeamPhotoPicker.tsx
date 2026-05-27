@@ -115,10 +115,10 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
         <img
           src={selected.url}
           alt={selected.altEn || selected.altVi || ''}
-          className="h-24 w-24 object-cover rounded-lg border border-border"
+          className="h-24 w-24 object-cover border border-border"
         />
       ) : (
-        <div className="h-24 w-24 rounded-lg border border-dashed border-border flex items-center justify-center text-on-surface-secondary bg-surface">
+        <div className="h-24 w-24 border border-dashed border-border flex items-center justify-center text-on-surface-secondary bg-surface">
           <i className="fa fa-user text-2xl" />
         </div>
       )}
@@ -169,7 +169,7 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
           </Button>
         </div>
         {error && (
-          <div className="mb-4 bg-error/10 text-error p-3 rounded">{error}</div>
+          <div className="mb-4 bg-error/10 text-error p-3">{error}</div>
         )}
         {loading && (
           <p className="text-on-surface-secondary py-8 text-center">Loading…</p>
@@ -191,7 +191,7 @@ export function TeamPhotoPicker({value, onChange}: TeamPhotoPickerProps) {
                     onChange(img.id);
                     setOpen(false);
                   }}
-                  className={`overflow-hidden rounded-lg border-2 cursor-pointer transition-colors ${
+                  className={`overflow-hidden border-2 cursor-pointer transition-colors ${
                     isSelected
                       ? 'border-primary'
                       : 'border-transparent hover:border-border'

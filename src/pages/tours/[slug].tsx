@@ -109,7 +109,7 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
             {/* Desktop sidebar */}
             <aside className="hidden lg:block lg:w-1/3">
               <div className="sticky top-24">
-                <div className="rounded-xl elevation-3 p-6 texture-grain-warm">
+                <div className="p-6 texture-grain-warm">
                   <div className="relative z-10">
                     <TourPricing
                       pricingGroups={tour.pricingGroups}
@@ -136,7 +136,7 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
       </article>
 
       {/* Mobile sticky bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-surface-elevated border-t border-border elevation-3">
+      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-surface-elevated border-t border-border">
         <div className="flex items-center justify-between px-4 py-3">
           <div>
             <span className="type-title-sm text-on-surface">
@@ -156,13 +156,13 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#25D366] text-white px-4 py-2 rounded-lg type-label-sm font-semibold"
+              className="bg-[#25D366] text-white px-4 py-2 type-label-sm font-semibold"
             >
               WhatsApp
             </a>
             <a
               href={`mailto:${contactInfo.email}?subject=${encodeURIComponent(`Inquiry: ${tourTitle}`)}`}
-              className="bg-primary text-on-primary px-4 py-2 rounded-lg type-label-sm font-semibold"
+              className="bg-primary text-on-primary px-4 py-2 type-label-sm font-semibold"
             >
               Email
             </a>

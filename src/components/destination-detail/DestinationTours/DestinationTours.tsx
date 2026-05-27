@@ -32,7 +32,7 @@ export function DestinationTours({tours, destinationName}: Props) {
         </div>
 
         {tours.length === 0 ? (
-          <p className="type-body-md text-on-surface-secondary border border-dashed border-border-subtle rounded-xl p-10 text-center bg-surface">
+          <p className="type-body-md text-on-surface-secondary border border-dashed border-border-subtle p-10 text-center bg-surface">
             {t('noTours')}
           </p>
         ) : (

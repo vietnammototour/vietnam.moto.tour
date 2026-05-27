@@ -22,7 +22,7 @@ export function RentalsFilter({value, onChange}: Props) {
     <div
       role="group"
       aria-label="Vehicle filter"
-      className="inline-flex rounded-full border border-border bg-surface-elevated p-1"
+      className="inline-flex border border-border bg-surface-elevated p-1"
     >
       {OPTIONS.map((opt) => {
         const active = value === opt.value;
@@ -34,8 +34,8 @@ export function RentalsFilter({value, onChange}: Props) {
             onClick={() => onChange(opt.value)}
             className={
               active
-                ? 'cursor-pointer px-4 py-1.5 rounded-full type-label-sm bg-primary text-on-primary'
-                : 'cursor-pointer px-4 py-1.5 rounded-full type-label-sm text-on-surface-secondary'
+                ? 'cursor-pointer px-4 py-1.5 type-label-sm bg-primary text-on-primary'
+                : 'cursor-pointer px-4 py-1.5 type-label-sm text-on-surface-secondary'
             }
           >
             {t(opt.key)}

@@ -21,7 +21,7 @@ export function HighlightCard({highlight, locale, index}: Props) {
       viewport={{once: true, margin: '-80px'}}
       transition={{duration: 0.5, delay: index * 0.06}}
       whileHover={{y: -4}}
-      className="group relative flex flex-col overflow-hidden rounded-2xl bg-surface elevation-1 hover:elevation-3 transition-shadow"
+      className="group relative flex flex-col overflow-hidden bg-surface transition-shadow"
     >
       {highlight.imageUrl ? (
         <div className="relative aspect-[4/3] overflow-hidden">

@@ -121,7 +121,7 @@ export function ItineraryTab({initialData, locale, onSave}: ItineraryTabProps) {
           {dayFields.map((field, dayIndex) => (
             <div
               key={field.id}
-              className="inline-flex items-center gap-2 bg-surface-elevated rounded-lg px-3 py-1.5 border border-border type-label-sm"
+              className="inline-flex items-center gap-2 bg-surface-elevated px-3 py-1.5 border border-border type-label-sm"
             >
               <span className="text-on-surface font-medium">
                 {watchedDays?.[dayIndex]?.dayLabel[locale] ||

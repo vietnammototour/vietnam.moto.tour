@@ -82,4 +82,15 @@ describe('Button', () => {
     render(<Button variant="link">More</Button>);
     expect(screen.getByRole('button', {name: 'More'})).toBeInTheDocument();
   });
+
+  // Explicit exception to CLAUDE.md "no styling assertions" rule:
+  // the brutalist Stitch design contract mandates 0px radius on all interactive
+  // elements (see DESIGN.md). This test guards that contract; once the
+  // scripts/lint-design-tokens.ts CI guard from Task 7 lands, this assertion
+  // could be retired in favour of the source-layer check.
+  it('renders without rounded corners (brutalist design contract)', () => {
+    render(<Button>Click</Button>);
+    const btn = screen.getByRole('button');
+    expect(btn.className).not.toMatch(/rounded/);
+  });
 });

@@ -90,7 +90,7 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[0.9375rem] transition-colors cursor-pointer ${
+                className={`flex items-center gap-3 px-3 py-2.5 text-[0.9375rem] transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-primary/10 text-primary'
                     : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'

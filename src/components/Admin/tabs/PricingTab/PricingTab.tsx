@@ -156,7 +156,7 @@ export function PricingTab({initialData, locale, onSave}: PricingTabProps) {
             return (
               <div
                 key={field.id}
-                className="rounded-lg border border-border overflow-hidden"
+                className="border border-border overflow-hidden"
               >
                 {/* Group header */}
                 <div className="bg-surface-elevated px-4 py-3 flex items-center gap-3">

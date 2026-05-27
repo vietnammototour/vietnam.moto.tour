@@ -19,7 +19,7 @@ type CardImagePreviewProps = {
 function PlaceholderCard({big}: {big?: boolean}) {
   return (
     <div
-      className={`relative rounded-lg overflow-hidden bg-surface-alt flex flex-col items-center justify-center text-on-surface-muted ${big ? 'h-full' : 'aspect-[3/2]'}`}
+      className={`relative overflow-hidden bg-surface-alt flex flex-col items-center justify-center text-on-surface-muted ${big ? 'h-full' : 'aspect-[3/2]'}`}
     >
       <i className="fa fa-image text-2xl opacity-20 mb-1" />
       <span className="type-label-sm uppercase opacity-40">Destination</span>
@@ -86,7 +86,7 @@ export function CardImagePreview({
           <span className="type-label-sm text-on-surface-secondary">
             Card Size:
           </span>
-          <div className="flex rounded-lg border border-border overflow-hidden">
+          <div className="flex border border-border overflow-hidden">
             <Button
               variant="secondary"
               size="sm"
@@ -129,10 +129,10 @@ export function CardImagePreview({
         {size === 'large' ? (
           <>
             <div className="sm:col-span-2 sm:row-span-2 relative">
-              <div className="absolute top-2 left-2 z-30 bg-primary text-on-primary px-2 py-0.5 rounded type-label-sm uppercase">
+              <div className="absolute top-2 left-2 z-30 bg-primary text-on-primary px-2 py-0.5 type-label-sm uppercase">
                 Editing
               </div>
-              <div className="ring-2 ring-primary rounded-lg h-full [&_a]:pointer-events-none">
+              <div className="ring-2 ring-primary h-full [&_a]:pointer-events-none">
                 <DestinationCard
                   destination={cardDestination}
                   className="h-full"
@@ -150,10 +150,10 @@ export function CardImagePreview({
               <PlaceholderCard big />
             </div>
             <div className="relative">
-              <div className="absolute top-2 left-2 z-30 bg-primary text-on-primary px-2 py-0.5 rounded type-label-sm uppercase">
+              <div className="absolute top-2 left-2 z-30 bg-primary text-on-primary px-2 py-0.5 type-label-sm uppercase">
                 Editing
               </div>
-              <div className="ring-2 ring-primary rounded-lg [&_a]:pointer-events-none">
+              <div className="ring-2 ring-primary [&_a]:pointer-events-none">
                 <DestinationCard destination={cardDestination} />
               </div>
             </div>

@@ -18,7 +18,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           ref={ref}
           id={inputId}
           type="number"
-          className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-text disabled:bg-surface-alt disabled:text-on-surface-tertiary disabled:cursor-not-allowed disabled:border-border/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-full px-3 py-2 border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-text disabled:bg-surface-alt disabled:text-on-surface-tertiary disabled:cursor-not-allowed disabled:border-border/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           {...rest}
         />
       </FormField>

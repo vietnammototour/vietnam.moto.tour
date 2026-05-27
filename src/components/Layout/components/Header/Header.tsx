@@ -10,7 +10,7 @@ import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
 import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
-import {ThemeToggle, TripAdvisorIcon} from '@/components/ui';
+import {TripAdvisorIcon} from '@/components/ui';
 import {LoginModal} from '@/components/Admin/LoginModal';
 
 export const Header = () => {
@@ -86,8 +86,6 @@ export const Header = () => {
                 <i className="fab fa-whatsapp" aria-hidden="true" />
               </a>
             </div>
-            <span className="mx-2 text-on-surface-inverse/30">|</span>
-            <ThemeToggle />
           </div>
         </div>
       </div>
@@ -96,7 +94,7 @@ export const Header = () => {
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
           isSticky
-            ? 'bg-surface-elevated/95 backdrop-blur-md shadow-md'
+            ? 'bg-surface-elevated/95 backdrop-blur-md'
             : 'bg-surface-elevated'
         } ${isHidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
@@ -244,9 +242,6 @@ export const Header = () => {
           </div>
           <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">
             <LanguageSwitcher />
-          </div>
-          <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">
-            <ThemeToggle />
           </div>
           <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">
             {session ? (

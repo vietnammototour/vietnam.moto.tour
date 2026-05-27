@@ -95,7 +95,7 @@ export default function AdminRentalsList() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by brand or model…"
-          className="cursor-text w-full max-w-md px-3 py-2 rounded-md border border-border bg-surface-elevated"
+          className="cursor-text w-full max-w-md px-3 py-2 border border-border bg-surface-elevated"
         />
 
         {grouped.length === 0 && (
@@ -108,7 +108,7 @@ export default function AdminRentalsList() {
         {grouped.map((group) => (
           <section
             key={group.type}
-            className="bg-surface-elevated rounded-xl border border-border overflow-hidden"
+            className="bg-surface-elevated border border-border overflow-hidden"
           >
             <header className="flex items-center justify-between px-4 py-3 bg-surface-alt border-b border-border">
               <h2 className="type-label-sm uppercase tracking-wide text-on-surface-secondary">
@@ -156,7 +156,7 @@ export default function AdminRentalsList() {
                           <img
                             src={v.imageUrl}
                             alt=""
-                            className="h-[40px] w-auto rounded object-cover"
+                            className="h-[40px] w-auto object-cover"
                           />
                         ) : null}
                         <span className="type-title-sm text-on-surface">

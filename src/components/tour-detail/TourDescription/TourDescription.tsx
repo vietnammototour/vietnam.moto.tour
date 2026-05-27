@@ -58,7 +58,7 @@ export function TourDescription({
       {imageUrl ? (
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
           <figure className="md:col-span-5 md:order-2">
-            <div className="relative aspect-[3/2] rounded-lg overflow-hidden border border-border elevation-2 bg-secondary/10">
+            <div className="relative aspect-[3/2] overflow-hidden border border-border bg-secondary/10">
               <img
                 src={imageUrl}
                 alt={imageAlt ?? ''}

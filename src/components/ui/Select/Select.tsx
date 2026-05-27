@@ -80,7 +80,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     const triggerClass = [
       widthClass,
       sizeClass,
-      'inline-flex items-center justify-between gap-2 rounded-lg border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-left',
+      'inline-flex items-center justify-between gap-2 border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-left',
       className,
     ]
       .filter(Boolean)
@@ -186,7 +186,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             role="listbox"
             aria-activedescendant={`${selectId}-opt-${activeIndex}`}
             onKeyDown={handleListKey}
-            className="absolute z-50 mt-1 max-h-64 min-w-full w-max max-w-xs overflow-y-auto rounded-lg border border-border bg-surface-elevated shadow-lg focus:outline-none"
+            className="absolute z-50 mt-1 max-h-64 min-w-full w-max max-w-xs overflow-y-auto border border-border bg-surface-elevated focus:outline-none"
           >
             {options.map((opt, idx) => {
               const isSelected = opt.value === value;

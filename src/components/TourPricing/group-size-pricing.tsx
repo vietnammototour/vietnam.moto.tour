@@ -78,7 +78,7 @@ export function GroupSizePricing({
           aria-label={t('decreasePeople')}
           onClick={() => handleChange(count - 1)}
           disabled={count <= minSize}
-          className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          className="flex h-11 w-11 items-center justify-center border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
         >
           -
         </button>
@@ -90,7 +90,7 @@ export function GroupSizePricing({
           aria-label={t('increasePeople')}
           onClick={() => handleChange(count + 1)}
           disabled={count >= maxSize}
-          className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          className="flex h-11 w-11 items-center justify-center border-2 border-border-subtle text-on-surface type-title-sm font-semibold transition-colors hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
         >
           +
         </button>
@@ -114,7 +114,7 @@ export function GroupSizePricing({
         </span>
       </div>
 
-      <div className="rounded-lg bg-surface-elevated p-3 text-center">
+      <div className="bg-surface-elevated p-3 text-center">
         <p className="type-label-sm text-on-surface-secondary">
           {t('largerGroupBetterPrice')}
         </p>

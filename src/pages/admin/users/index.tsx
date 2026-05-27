@@ -56,7 +56,7 @@ export default function UsersListPage() {
         />
       }
     >
-      <table className="w-full bg-surface-elevated rounded-xl border border-border">
+      <table className="w-full bg-surface-elevated border border-border">
         <thead>
           <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
             <th className="p-3">{t('orderLabel')}</th>
@@ -78,10 +78,10 @@ export default function UsersListPage() {
                   <img
                     src={u.photo.url}
                     alt=""
-                    className="h-12 w-12 object-cover rounded"
+                    className="h-12 w-12 object-cover"
                   />
                 ) : (
-                  <div className="h-12 w-12 bg-surface-alt rounded" />
+                  <div className="h-12 w-12 bg-surface-alt" />
                 )}
               </td>
               <td className="p-3 font-medium">{u.name}</td>

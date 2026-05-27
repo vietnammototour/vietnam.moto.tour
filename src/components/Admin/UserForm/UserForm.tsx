@@ -60,7 +60,7 @@ export function UserForm({
     <form
       id={id}
       onSubmit={handleSubmit((data) => onSubmit(data))}
-      className="max-w-4xl bg-surface-elevated rounded-xl border border-border p-6 space-y-6"
+      className="max-w-4xl bg-surface-elevated border border-border p-6 space-y-6"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TextInput
@@ -129,7 +129,7 @@ export function UserForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <label
             htmlFor={isCoreTeamId}
-            className="flex items-center gap-2 cursor-pointer rounded-lg border border-border bg-surface px-3 py-2 hover:bg-surface-alt transition-colors"
+            className="flex items-center gap-2 cursor-pointer border border-border bg-surface px-3 py-2 hover:bg-surface-alt transition-colors"
           >
             <input
               id={isCoreTeamId}
@@ -141,7 +141,7 @@ export function UserForm({
           </label>
           <label
             htmlFor={allowAuthId}
-            className="flex items-center gap-2 cursor-pointer rounded-lg border border-border bg-surface px-3 py-2 hover:bg-surface-alt transition-colors"
+            className="flex items-center gap-2 cursor-pointer border border-border bg-surface px-3 py-2 hover:bg-surface-alt transition-colors"
           >
             <input
               id={allowAuthId}

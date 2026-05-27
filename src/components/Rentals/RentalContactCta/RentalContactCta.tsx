@@ -11,7 +11,7 @@ export function RentalContactCta() {
       </p>
       <Link
         href="/contact"
-        className="cursor-pointer inline-block bg-primary text-on-primary px-6 py-3 rounded-full type-label-sm uppercase tracking-wide"
+        className="cursor-pointer inline-block bg-primary text-on-primary px-6 py-3 type-label-sm uppercase tracking-wide"
       >
         {t('button')}
       </Link>
