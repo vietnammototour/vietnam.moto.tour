@@ -57,13 +57,13 @@ export const Header = () => {
       <div className="bg-surface-inverse text-on-surface-inverse type-body-sm hidden lg:block">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-end py-2">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-4 text-xl">
+            <div className="flex items-center gap-2 text-xl">
               <a
                 href={contactInfo.youtubeLink}
                 aria-label="YouTube"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary-light transition-colors cursor-pointer"
+                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
               >
                 <i className="fab fa-youtube" aria-hidden="true" />
               </a>
@@ -72,7 +72,7 @@ export const Header = () => {
                 aria-label="TripAdvisor"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary-light transition-colors cursor-pointer"
+                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
               >
                 <TripAdvisorIcon className="h-[0.8em] w-auto" />
               </a>
@@ -81,7 +81,7 @@ export const Header = () => {
                 aria-label="WhatsApp"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary-light transition-colors cursor-pointer"
+                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
               >
                 <i className="fab fa-whatsapp" aria-hidden="true" />
               </a>
@@ -180,7 +180,7 @@ export const Header = () => {
           mobileOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-on-surface-inverse/10">
+        <div className="flex items-center justify-between p-4 border-b border-on-surface-inverse/25">
           <img
             src={getUrl('assets/images/logo/logo-white.png')}
             alt="Logo"
@@ -188,7 +188,7 @@ export const Header = () => {
           />
           <button
             onClick={() => setMobileOpen(false)}
-            className="text-on-surface-inverse text-xl hover:text-primary-light transition-colors cursor-pointer"
+            className="w-9 h-9 flex items-center justify-center text-on-surface-inverse text-xl hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
             aria-label="Close menu"
           >
             <i className="fa fa-times" />
@@ -200,10 +200,10 @@ export const Header = () => {
               key={link.href + link.label}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className={`block py-3 border-b border-on-surface-inverse/10 type-label-lg uppercase transition-colors cursor-pointer ${
+              className={`block py-3 border-b border-on-surface-inverse/25 type-label-lg uppercase underline-offset-4 transition-colors cursor-pointer ${
                 link.active
-                  ? 'text-primary-light'
-                  : 'text-on-surface-inverse hover:text-primary-light'
+                  ? 'text-on-surface-inverse font-bold underline'
+                  : 'text-on-surface-inverse hover:underline'
               }`}
             >
               {link.label}
@@ -211,13 +211,13 @@ export const Header = () => {
           ))}
         </nav>
         <div className="p-4 mt-4">
-          <div className="flex gap-4 text-xl">
+          <div className="flex gap-2 text-xl">
             <a
               href={contactInfo.youtubeLink}
               aria-label="YouTube"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-on-surface-secondary hover:text-on-surface-inverse"
+              className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
             >
               <i className="fab fa-youtube" aria-hidden="true" />
             </a>
@@ -226,7 +226,7 @@ export const Header = () => {
               aria-label="TripAdvisor"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-on-surface-secondary hover:text-on-surface-inverse"
+              className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
             >
               <TripAdvisorIcon className="h-[0.8em] w-auto" />
             </a>
@@ -235,18 +235,18 @@ export const Header = () => {
               aria-label="WhatsApp"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-on-surface-secondary hover:text-on-surface-inverse"
+              className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
             >
               <i className="fab fa-whatsapp" aria-hidden="true" />
             </a>
           </div>
-          <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">
+          <div className="mt-4 pt-4 border-t border-on-surface-inverse/25">
             <LanguageSwitcher />
           </div>
-          <div className="mt-4 pt-4 border-t border-on-surface-inverse/10">
+          <div className="mt-4 pt-4 border-t border-on-surface-inverse/25">
             {session ? (
               <div className="space-y-2">
-                <p className="type-label-sm text-on-surface-inverse/70">
+                <p className="type-label-sm text-on-surface-inverse/85">
                   {session.user.name}
                 </p>
                 <button
@@ -254,7 +254,7 @@ export const Header = () => {
                     signOut({redirect: false});
                     setMobileOpen(false);
                   }}
-                  className="type-label-sm text-on-surface-inverse hover:text-primary-light transition-colors cursor-pointer"
+                  className="type-label-sm text-on-surface-inverse underline-offset-4 hover:underline transition-colors cursor-pointer"
                 >
                   {t('logout')}
                 </button>
@@ -265,7 +265,7 @@ export const Header = () => {
                   setLoginOpen(true);
                   setMobileOpen(false);
                 }}
-                className="type-label-sm text-on-surface-inverse hover:text-primary-light transition-colors cursor-pointer"
+                className="type-label-sm text-on-surface-inverse underline-offset-4 hover:underline transition-colors cursor-pointer"
               >
                 {t('login')}
               </button>
