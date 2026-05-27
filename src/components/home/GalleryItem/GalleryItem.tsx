@@ -1,6 +1,7 @@
 'use client';
 
 import {useState} from 'react';
+import Image from 'next/image';
 
 type Props = {
   imageSrc: string;
@@ -19,10 +20,13 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
         aria-label={alt}
         className="group relative block overflow-hidden aspect-square cursor-pointer"
       >
-        <img
+        <Image
           src={imageSrc}
           alt={alt}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          unoptimized
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <span className="w-12 h-12 bg-surface-elevated/90 flex items-center justify-center text-on-surface">
@@ -43,10 +47,13 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
           >
             <i className="fa fa-times" />
           </button>
-          <img
+          <Image
             src={imageSrc}
             alt={alt}
-            className="max-w-[90vw] max-h-[90vh] object-contain"
+            width={1600}
+            height={1200}
+            unoptimized
+            className="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain"
             onClick={(e) => e.stopPropagation()}
           />
         </div>

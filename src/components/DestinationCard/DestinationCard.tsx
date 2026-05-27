@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import {motion} from 'framer-motion';
 import {useTranslations, useLocale} from 'next-intl';
 import type * as VMT from '@/domain';
@@ -65,10 +66,13 @@ export const DestinationCard = ({
         data-testid="destination-card"
         className="group relative overflow-hidden block cursor-pointer transition-all duration-300 w-full h-full"
       >
-        <img
+        <Image
           src={imageUrl}
           alt={displayName}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          unoptimized
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-5">

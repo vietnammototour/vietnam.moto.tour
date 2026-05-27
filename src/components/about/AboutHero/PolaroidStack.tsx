@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type {TeamMember} from '@/domain';
 
 type PolaroidStackProps = {
@@ -19,12 +20,15 @@ export function PolaroidStack({featured, locale}: PolaroidStackProps) {
             key={m.id}
             className={`absolute ${offset} ${rotation} w-48 transform`}
           >
-            <div className="aspect-[3/4] w-full bg-surface-alt">
+            <div className="relative aspect-[3/4] w-full bg-surface-alt">
               {m.photo?.url ? (
-                <img
+                <Image
                   src={m.photo.url}
                   alt={alt ?? m.name}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="12rem"
+                  unoptimized
+                  className="object-cover"
                 />
               ) : null}
             </div>

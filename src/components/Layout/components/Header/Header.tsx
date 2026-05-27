@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import {useSession, signOut} from 'next-auth/react';
@@ -104,15 +105,21 @@ export const Header = () => {
               href={routes.home.path()}
               className="flex-shrink-0 cursor-pointer"
             >
-              <img
+              <Image
                 src={getUrl('assets/images/logo/logo-amber-dark.png')}
                 alt="Vietnam Motorcycle Tour"
-                className="h-11 lg:h-14 block dark:hidden"
+                width={2000}
+                height={939}
+                priority
+                className="h-11 lg:h-14 w-auto block dark:hidden"
               />
-              <img
+              <Image
                 src={getUrl('assets/images/logo/logo-white.png')}
                 alt="Vietnam Motorcycle Tour"
-                className="h-11 lg:h-14 hidden dark:block"
+                width={2000}
+                height={939}
+                priority
+                className="h-11 lg:h-14 w-auto hidden dark:block"
               />
             </Link>
             <nav className="hidden lg:flex items-center gap-8">
@@ -181,10 +188,12 @@ export const Header = () => {
         }`}
       >
         <div className="flex items-center justify-between p-4 border-b border-on-surface-inverse/25">
-          <img
-            src={getUrl('assets/images/logo/logo-white.png')}
+          <Image
+            src={getUrl('assets/images/logo/logo-amber.png')}
             alt="Logo"
-            className="h-10"
+            width={2000}
+            height={939}
+            className="h-10 w-auto"
           />
           <button
             onClick={() => setMobileOpen(false)}

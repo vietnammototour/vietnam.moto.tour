@@ -1,4 +1,5 @@
 import {motion} from 'framer-motion';
+import Image from 'next/image';
 import {useTranslations} from 'next-intl';
 import {useId} from 'react';
 import type * as VMT from '@/domain';
@@ -59,10 +60,13 @@ export function TourDescription({
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
           <figure className="md:col-span-5 md:order-2">
             <div className="relative aspect-[3/2] overflow-hidden border border-border bg-secondary/10">
-              <img
+              <Image
                 src={imageUrl}
                 alt={imageAlt ?? ''}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                unoptimized
+                className="object-cover"
               />
             </div>
           </figure>
