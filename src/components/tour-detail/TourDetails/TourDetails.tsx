@@ -14,7 +14,7 @@ export function TourDetails({tour}: TourDetailsProps) {
   ];
 
   return (
-    <div className="border border-border-subtle rounded-xl p-5 mb-5">
+    <div className="border border-border-subtle p-5 mb-5">
       <h3 className="type-title-lg text-on-surface mb-4">{t('tourDetails')}</h3>
       <div className="flex flex-col gap-1">
         {details.map((detail) => (

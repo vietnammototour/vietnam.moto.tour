@@ -104,7 +104,7 @@ export function TourItinerary({itinerary, locale}: TourItineraryProps) {
             />
           </svg>
           <motion.div
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary"
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-primary"
             style={{opacity: endpointOpacity}}
           />
         </div>
@@ -130,7 +130,7 @@ export function TourItinerary({itinerary, locale}: TourItineraryProps) {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{once: true}}
-                  className="group/item relative p-4 rounded-lg elevation-1 bg-surface-elevated texture-grain-warm mb-4 last:mb-0"
+                  className="group/item relative p-4 bg-surface-elevated texture-grain-warm mb-4 last:mb-0"
                 >
                   {ctx?.onRemoveItem && (
                     <button
@@ -140,7 +140,7 @@ export function TourItinerary({itinerary, locale}: TourItineraryProps) {
                           `itinerary.${dayIndex}.items.${itemIndex}`,
                         )
                       }
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-red-500/80 text-white type-label-sm flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-opacity cursor-pointer z-20"
+                      className="absolute top-2 right-2 w-6 h-6 bg-red-500/80 text-white type-label-sm flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-opacity cursor-pointer z-20"
                       title="Remove item"
                     >
                       ×

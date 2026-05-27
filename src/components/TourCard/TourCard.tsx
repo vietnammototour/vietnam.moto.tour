@@ -70,7 +70,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
   const cardInner = (
     <motion.div
       ref={interactive ? (ref as React.RefObject<HTMLDivElement>) : undefined}
-      className="group bg-surface-elevated rounded-lg border border-border elevation-2 hover:elevation-4 transition-shadow overflow-hidden h-full flex flex-col"
+      className="group bg-surface-elevated border border-border transition-shadow overflow-hidden h-full flex flex-col"
       style={
         interactive
           ? {rotateX, rotateY, scale, transformPerspective: 1000}
@@ -93,7 +93,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
               'bg-gray-500/90';
             return (
               <span
-                className={`absolute top-2 left-2 z-20 px-2 py-0.5 rounded-full type-label-sm uppercase tracking-wider text-white ${bg}`}
+                className={`absolute top-2 left-2 z-20 px-2 py-0.5 type-label-sm uppercase tracking-wider text-white ${bg}`}
               >
                 {tour.status}
               </span>

@@ -90,7 +90,7 @@ export function VehiclePricing({
           <div
             role="radiogroup"
             aria-label={group.label[activeLocale]}
-            className="flex flex-col rounded-lg border border-border-subtle overflow-hidden"
+            className="flex flex-col border border-border-subtle overflow-hidden"
           >
             {group.tiers.map((tier, tIdx) => {
               const isSelected =
@@ -110,15 +110,13 @@ export function VehiclePricing({
                   }`}
                 >
                   <span
-                    className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${
+                    className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border-2 ${
                       isSelected
                         ? 'border-primary'
                         : 'border-on-surface-secondary'
                     }`}
                   >
-                    {isSelected && (
-                      <span className="h-2.5 w-2.5 rounded-full bg-primary" />
-                    )}
+                    {isSelected && <span className="h-2.5 w-2.5 bg-primary" />}
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center">
