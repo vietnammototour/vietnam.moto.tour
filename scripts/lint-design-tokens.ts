@@ -1,30 +1,61 @@
-import {spawnSync} from 'node:child_process';
+import {readFileSync, statSync, readdirSync} from 'node:fs';
+import {join, relative, extname} from 'node:path';
+
+const ROOT = process.cwd();
 
 const FORBIDDEN = [
   {
-    pattern: '#[0-9a-fA-F]{6}',
-    glob: 'src/components/**/*.{ts,tsx}',
+    regex: /#[0-9a-fA-F]{6}\b/,
+    root: 'src/components',
+    exts: ['.ts', '.tsx'],
     label: 'hardcoded hex color',
   },
   {
-    pattern: 'rounded-(sm|md|lg|xl|2xl|3xl|full)',
-    glob: 'src/components/**/*.{ts,tsx}',
+    regex: /\brounded-(sm|md|lg|xl|2xl|3xl|full)\b/,
+    root: 'src/components',
+    exts: ['.ts', '.tsx'],
     label: 'rounded utility',
   },
   {
-    pattern: 'shadow-elevation',
-    glob: 'src/**/*.{ts,tsx,css}',
+    regex: /\bshadow-elevation\b/,
+    root: 'src',
+    exts: ['.ts', '.tsx', '.css'],
     label: 'shadow-elevation token',
   },
 ];
 
+function walk(dir: string, exts: string[], out: string[]): void {
+  const abs = join(ROOT, dir);
+  let entries: ReturnType<typeof readdirSync>;
+  try {
+    entries = readdirSync(abs, {withFileTypes: true});
+  } catch {
+    return;
+  }
+  for (const entry of entries) {
+    const childRel = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
+      walk(childRel, exts, out);
+    } else if (entry.isFile() && exts.includes(extname(entry.name))) {
+      out.push(childRel);
+    }
+  }
+}
+
 let failed = false;
-for (const {pattern, glob, label} of FORBIDDEN) {
-  const result = spawnSync('rg', ['-n', '--glob', glob, pattern], {
-    encoding: 'utf8',
-  });
-  if (result.status === 0 && result.stdout.trim()) {
-    console.error(`\n[design-lint] FAIL: ${label}\n${result.stdout}`);
+for (const {regex, root, exts, label} of FORBIDDEN) {
+  const files: string[] = [];
+  walk(root, exts, files);
+  const hits: string[] = [];
+  for (const file of files) {
+    const lines = readFileSync(join(ROOT, file), 'utf8').split('\n');
+    lines.forEach((line, i) => {
+      if (regex.test(line)) hits.push(`${file}:${i + 1}: ${line.trim()}`);
+    });
+  }
+  if (hits.length > 0) {
+    console.error(`\n[design-lint] FAIL: ${label}\n${hits.join('\n')}`);
     failed = true;
   }
 }
