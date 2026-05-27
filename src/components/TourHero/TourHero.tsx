@@ -24,8 +24,14 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
   const ctx = useEditable();
   const editable = !!ctx?.editable;
   const localeKey = (ctx?.locale ?? (locale as 'en' | 'vi')) as 'en' | 'vi';
-  const spotlight = useCursorSpotlight(250, 0.12);
-  const spotlightBg = useMotionTemplate`radial-gradient(250px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.12), transparent)`;
+  const {
+    ref: spotlightRef,
+    x: spotlightX,
+    y: spotlightY,
+    onMouseMove: onSpotlightMove,
+    onMouseLeave: onSpotlightLeave,
+  } = useCursorSpotlight(250, 0.12);
+  const spotlightBg = useMotionTemplate`radial-gradient(250px circle at ${spotlightX}px ${spotlightY}px, rgb(var(--color-spotlight-rgb) / 0.12), transparent)`;
 
   const isPreview = !!preview;
   const heroImage = preview?.heroImage ?? tour?.destinationHeroImage;
@@ -38,9 +44,9 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
   return (
     <section className="relative">
       <div
-        ref={spotlight.ref as React.RefObject<HTMLDivElement>}
-        onMouseMove={spotlight.onMouseMove}
-        onMouseLeave={spotlight.onMouseLeave}
+        ref={spotlightRef as React.RefObject<HTMLDivElement>}
+        onMouseMove={onSpotlightMove}
+        onMouseLeave={onSpotlightLeave}
         className="relative h-72 md:h-96 lg:h-[28rem] overflow-hidden texture-grain-warm"
       >
         {heroImage && (

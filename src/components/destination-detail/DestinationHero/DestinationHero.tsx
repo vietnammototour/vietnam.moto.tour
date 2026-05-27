@@ -14,17 +14,23 @@ type Props = {
 export function DestinationHero({destination, locale}: Props) {
   const t = useTranslations('destinationDetail');
   const tc = useTranslations('common');
-  const spotlight = useCursorSpotlight(280, 0.14);
-  const spotlightBg = useMotionTemplate`radial-gradient(280px circle at ${spotlight.x}px ${spotlight.y}px, rgba(180, 83, 9, 0.18), transparent)`;
+  const {
+    ref: spotlightRef,
+    x: spotlightX,
+    y: spotlightY,
+    onMouseMove: onSpotlightMove,
+    onMouseLeave: onSpotlightLeave,
+  } = useCursorSpotlight(280, 0.14);
+  const spotlightBg = useMotionTemplate`radial-gradient(280px circle at ${spotlightX}px ${spotlightY}px, rgb(var(--color-spotlight-rgb) / 0.18), transparent)`;
 
   const description = destination.description[locale];
 
   return (
     <section className="relative">
       <div
-        ref={spotlight.ref as React.RefObject<HTMLDivElement>}
-        onMouseMove={spotlight.onMouseMove}
-        onMouseLeave={spotlight.onMouseLeave}
+        ref={spotlightRef as React.RefObject<HTMLDivElement>}
+        onMouseMove={onSpotlightMove}
+        onMouseLeave={onSpotlightLeave}
         className="relative h-[70vh] min-h-[28rem] lg:h-[36rem] overflow-hidden texture-grain-warm"
       >
         <motion.div

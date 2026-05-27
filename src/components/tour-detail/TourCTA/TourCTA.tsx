@@ -23,7 +23,7 @@ export function TourCTA({tourTitle}: TourCTAProps) {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 px-4 type-title-sm font-semibold hover:brightness-105 cursor-pointer transition-[filter] duration-200"
+        className="flex items-center justify-center gap-2 bg-whatsapp text-on-whatsapp py-3 px-4 type-title-sm font-semibold hover:brightness-105 cursor-pointer transition-[filter] duration-200"
       >
         <i className="fab fa-whatsapp text-lg" />
         {tc('whatsappUs')}

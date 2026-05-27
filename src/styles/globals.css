@@ -28,6 +28,27 @@
   --color-border-subtle: #4c4732;
   --color-overlay: rgba(0, 0, 0, 0.85);
 
+  /* Vehicle-type chip accents — muted tactical tones, not Tailwind pop colors. OKLCH-tuned. */
+  --color-vehicle-bike: oklch(60% 0.12 145);
+  --color-vehicle-car: oklch(58% 0.1 240);
+  --color-vehicle-both: oklch(60% 0.13 320);
+  --color-on-vehicle: #0a0a0a;
+
+  /* Tour status badges */
+  --color-status-draft: oklch(72% 0.16 80);
+  --color-on-status-draft: #1c1b1b;
+  --color-status-featured: oklch(60% 0.14 250);
+  --color-on-status-featured: #e5e2e1;
+  --color-status-default: #4c4732;
+  --color-on-status-default: #e5e2e1;
+
+  /* Brand-locked external colors */
+  --color-whatsapp: #25d366;
+  --color-on-whatsapp: #0a0a0a;
+
+  /* Cursor spotlight tint — RGB triple for use inside rgba(). Aligned to primary mustard. */
+  --color-spotlight-rgb: 255 219 0;
+
   --font-sans: var(--font-hanken-grotesk), 'Hanken Grotesk', sans-serif;
   --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
 

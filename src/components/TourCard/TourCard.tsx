@@ -84,16 +84,16 @@ export const TourCard = ({tour, interactive = true}: Props) => {
         {tour.status &&
           tour.status !== 'PUBLISHED' &&
           (() => {
-            const statusBg = {
-              DRAFT: 'bg-amber-500/90',
-              FEATURED: 'bg-blue-500/90',
+            const statusClass = {
+              DRAFT: 'bg-status-draft text-on-status-draft',
+              FEATURED: 'bg-status-featured text-on-status-featured',
             };
-            const bg =
-              statusBg[tour.status as keyof typeof statusBg] ??
-              'bg-gray-500/90';
+            const cls =
+              statusClass[tour.status as keyof typeof statusClass] ??
+              'bg-status-default text-on-status-default';
             return (
               <span
-                className={`absolute top-2 left-2 z-20 px-2 py-0.5 type-label-sm uppercase tracking-wider text-white ${bg}`}
+                className={`absolute top-2 left-2 z-20 px-2 py-0.5 type-label-sm uppercase tracking-wider ${cls}`}
               >
                 {tour.status}
               </span>
