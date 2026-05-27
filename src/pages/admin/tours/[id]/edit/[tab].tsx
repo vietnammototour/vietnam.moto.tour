@@ -57,7 +57,7 @@ export default function EditTour() {
 
   if (tourError) {
     return (
-      <div>
+      <div className="flex-1 overflow-y-auto p-8">
         <h1 className="type-headline-sm mb-6">Tour Not Found</h1>
         <p className="text-on-surface-secondary">
           The tour you are looking for does not exist or could not be loaded.
@@ -103,19 +103,21 @@ export default function EditTour() {
   };
 
   return (
-    <TourEditTabs
-      activeTab={tab}
-      mode="edit"
-      tourId={tourRecord.id as string}
-      destinations={destinations}
-      initialGeneral={initialGeneral}
-      initialCard={initialCard}
-      initialItinerary={(tourRecord.itinerary as never) ?? []}
-      initialPricingGroups={(tourRecord.pricingGroups as never) ?? []}
-      initialHighlightIds={highlights.map((h) => h.id)}
-      initialIncludedPerkIds={initialIncludedPerkIds}
-      initialExcludedPerkIds={initialExcludedPerkIds}
-    />
+    <div className="flex-1 flex flex-col min-h-0 p-8">
+      <TourEditTabs
+        activeTab={tab}
+        mode="edit"
+        tourId={tourRecord.id as string}
+        destinations={destinations}
+        initialGeneral={initialGeneral}
+        initialCard={initialCard}
+        initialItinerary={(tourRecord.itinerary as never) ?? []}
+        initialPricingGroups={(tourRecord.pricingGroups as never) ?? []}
+        initialHighlightIds={highlights.map((h) => h.id)}
+        initialIncludedPerkIds={initialIncludedPerkIds}
+        initialExcludedPerkIds={initialExcludedPerkIds}
+      />
+    </div>
   );
 }
 

@@ -59,19 +59,21 @@ export default function NewTour() {
   if (loading || !destinations) return null;
 
   return (
-    <TourEditTabs
-      activeTab={tab}
-      mode="create"
-      tourId={null}
-      destinations={destinations}
-      initialGeneral={emptyGeneral}
-      initialCard={{imageCard: emptySlot}}
-      initialItinerary={[]}
-      initialPricingGroups={[]}
-      initialHighlightIds={[]}
-      initialIncludedPerkIds={[]}
-      initialExcludedPerkIds={[]}
-    />
+    <div className="flex-1 flex flex-col min-h-0 p-8">
+      <TourEditTabs
+        activeTab={tab}
+        mode="create"
+        tourId={null}
+        destinations={destinations}
+        initialGeneral={emptyGeneral}
+        initialCard={{imageCard: emptySlot}}
+        initialItinerary={[]}
+        initialPricingGroups={[]}
+        initialHighlightIds={[]}
+        initialIncludedPerkIds={[]}
+        initialExcludedPerkIds={[]}
+      />
+    </div>
   );
 }
 

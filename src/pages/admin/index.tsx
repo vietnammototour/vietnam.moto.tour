@@ -2,6 +2,7 @@ import {useSession} from 'next-auth/react';
 import {useEffect} from 'react';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
+import {AdminPageLegacy} from '@/components/Admin/AdminPageShell';
 type AdminStats = {
   tourCount: number;
   destinationCount: number;
@@ -28,7 +29,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div>
+    <AdminPageLegacy>
       <h1 className="type-headline-sm mb-8">
         Welcome back, {session?.user.name ?? ''}
       </h1>
@@ -53,6 +54,6 @@ export default function AdminDashboard() {
           </div>
         ))}
       </div>
-    </div>
+    </AdminPageLegacy>
   );
 }

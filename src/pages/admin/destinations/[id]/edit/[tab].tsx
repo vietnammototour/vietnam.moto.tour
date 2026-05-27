@@ -30,7 +30,7 @@ export default function EditDestination() {
 
   if (error) {
     return (
-      <div>
+      <div className="flex-1 overflow-y-auto p-8">
         <h1 className="type-headline-sm mb-6">Destination Not Found</h1>
         <p className="text-on-surface-secondary">
           The destination you are looking for does not exist or could not be
@@ -56,12 +56,14 @@ export default function EditDestination() {
   };
 
   return (
-    <DestinationEditTabs
-      activeTab={tab}
-      mode="edit"
-      destinationId={destination.id as string}
-      initialData={initialData}
-    />
+    <div className="flex-1 flex flex-col min-h-0 p-8">
+      <DestinationEditTabs
+        activeTab={tab}
+        mode="edit"
+        destinationId={destination.id as string}
+        initialData={initialData}
+      />
+    </div>
   );
 }
 

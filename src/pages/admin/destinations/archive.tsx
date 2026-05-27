@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {Button, ConfirmModal} from '@/components/ui';
+import {AdminPageLegacy} from '@/components/Admin/AdminPageShell';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {routes, api} from '@/routes';
 
@@ -70,7 +71,7 @@ export default function AdminDestinationsArchive() {
   const destList = destinations ?? [];
 
   return (
-    <div>
+    <AdminPageLegacy>
       <div className="flex items-center justify-between mb-6">
         <h1 className="type-headline-sm">Archived Destinations</h1>
         <Link
@@ -181,6 +182,6 @@ export default function AdminDestinationsArchive() {
           setDeleteError(null);
         }}
       />
-    </div>
+    </AdminPageLegacy>
   );
 }
