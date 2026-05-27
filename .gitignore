@@ -55,6 +55,9 @@ next-env.d.ts
 /blob-report/
 /playwright/.cache/
 
+# Design verification snapshots (Stitch ↔ rendered-UI diff)
+/.design-snapshots/
+
 # Uploaded user images live outside the repo (UPLOAD_DIR)
 /public/uploads/
 /.uploads/

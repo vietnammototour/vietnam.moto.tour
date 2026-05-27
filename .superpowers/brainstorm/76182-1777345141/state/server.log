@@ -1,8 +1,0 @@
-{"type":"server-started","port":60049,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:60049","screen_dir":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/content","state_dir":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/state"}
-{"type":"screen-added","file":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/content/approaches.html"}
-{"type":"screen-added","file":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/content/schema-design.html"}
-{"type":"screen-added","file":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/content/page-layout.html"}
-{"type":"screen-added","file":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/content/components.html"}
-{"type":"screen-added","file":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/content/mobile-layout.html"}
-{"type":"screen-added","file":"/Users/wentris/Documents/vietnam.moto.tour/.superpowers/brainstorm/76182-1777345141/content/waiting.html"}
-{"type":"server-stopped","reason":"idle timeout"}

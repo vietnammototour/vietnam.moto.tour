@@ -169,11 +169,44 @@ inputs, cards, selection indicators. Lines feel cut from steel.
 
 ## Sync workflow
 
-| Command                   | Effect                                                                  |
-| ------------------------- | ----------------------------------------------------------------------- |
-| Ask Claude: `design:pull` | Fetch Stitch project `4683768170577706110`, rewrite this file + tokens. |
-| Ask Claude: `design:push` | Read this file's frontmatter+tokens block, call `upload_design_md`.     |
+| Command                          | Effect                                                                                                                               |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Ask Claude: `design:pull`        | Fetch Stitch project `4683768170577706110`, rewrite this file + `src/styles/design-tokens.css`.                                      |
+| Ask Claude: `design:push`        | Read this file's frontmatter + tokens block, call Stitch MCP `upload_design_md`.                                                     |
+| `pnpm design:verify`             | Batch screenshots all default routes (desktop + mobile) into `.design-snapshots/`. Claude reads PNGs and diffs against tokens above. |
+| `pnpm design:audit-page -- /foo` | Single-page screenshot pair. Same script, one route.                                                                                 |
+| Ask Claude: `design:audit`       | Interactive Playwright MCP loop — navigate, screenshot, inspect computed styles via `browser_evaluate`, compare against this file.   |
 
-Both run in-session via the Stitch MCP. No standalone CLI yet. When token
-migration is finalized, add `@import './design-tokens.css';` to
-`src/styles/globals.css`.
+`design:pull` and `design:push` run in-session via the Stitch MCP server. No
+standalone CLI. `design:verify` is the deterministic batch path; `design:audit`
+is the interactive path using the Playwright MCP server (configured in
+`.mcp.json`). When token migration is finalized, add
+`@import './design-tokens.css';` to `src/styles/globals.css`.
+
+## Visual verification loop (Playwright MCP)
+
+```
+Stitch (designMd) ──pull──▶ DESIGN.md / design-tokens.css
+                                      │
+                                      ▼
+                          Next dev server (localhost:3000)
+                                      │
+                  Playwright MCP ─────┤
+                                      ▼
+                       PNG screenshots → Claude (multimodal)
+                                      ▼
+                       diff vs tokens in this file
+                                      ▼
+                       fix code OR push corrected tokens (design:push)
+```
+
+- **MCP server:** `@playwright/mcp` configured in `.mcp.json`. Tools available:
+  `browser_navigate`, `browser_screenshot`, `browser_click`, `browser_snapshot`
+  (a11y tree), `browser_evaluate`.
+- **Animations frozen** before screenshot (`scripts/design-verify.ts` injects a
+  `* { animation-duration: 0s; transition: none; }` style tag) to avoid Framer
+  Motion / Swiper flake.
+- **Static guard:** `pnpm lint:design` catches hardcoded hex / off-token colors
+  without rendering — runs in `pnpm build`. Use it as the cheap first pass; use
+  `design:verify` when you need to catch layout / typography / contrast issues
+  that static lint can't see.
