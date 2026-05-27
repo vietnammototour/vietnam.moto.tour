@@ -1,4 +1,5 @@
 import {motion} from 'framer-motion';
+import Image from 'next/image';
 import type * as VMT from '@/domain';
 
 type Props = {
@@ -25,10 +26,13 @@ export function HighlightCard({highlight, locale, index}: Props) {
     >
       {highlight.imageUrl ? (
         <div className="relative aspect-[4/3] overflow-hidden">
-          <img
+          <Image
             src={highlight.imageUrl}
             alt={title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            unoptimized
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
           <span className="absolute top-4 left-4 type-label-sm tracking-[0.2em] text-on-surface/90 font-semibold">

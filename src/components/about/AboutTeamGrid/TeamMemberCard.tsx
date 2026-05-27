@@ -1,4 +1,5 @@
 import {useTranslations} from 'next-intl';
+import Image from 'next/image';
 import type {TeamMember} from '@/domain';
 
 type TeamMemberCardProps = {
@@ -15,12 +16,15 @@ export function TeamMemberCard({member, locale}: TeamMemberCardProps) {
 
   return (
     <article className="group relative overflow-hidden bg-secondary">
-      <div className="aspect-[3/4] w-full bg-surface-alt">
+      <div className="relative aspect-[3/4] w-full bg-surface-alt">
         {member.photo?.url ? (
-          <img
+          <Image
             src={member.photo.url}
             alt={alt ?? member.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            unoptimized
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div

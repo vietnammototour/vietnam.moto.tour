@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import {useTranslations, useLocale} from 'next-intl';
 import {motion, useTransform} from 'framer-motion';
 import {routes} from '@/routes';
@@ -100,12 +101,19 @@ export const TourCard = ({tour, interactive = true}: Props) => {
             );
           })()}
         {imageUrl ? (
-          <motion.img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          <motion.div
+            className="absolute inset-0"
             style={interactive ? {x: imageX, y: imageY} : undefined}
-          />
+          >
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              unoptimized
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </motion.div>
         ) : (
           <div className="flex items-center justify-center w-full h-full">
             <svg

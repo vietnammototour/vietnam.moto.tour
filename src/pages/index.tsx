@@ -13,6 +13,7 @@ import type {GetServerSidePropsContext} from 'next';
 import {getServerSession} from 'next-auth/next';
 import {authOptions} from '@/lib/auth';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import {routes} from '@/routes';
 
@@ -242,11 +243,14 @@ export default function Home({
               viewport={{once: true}}
               variants={fadeInUp}
             >
-              <div className="rounded-lg overflow-hidden aspect-[4/3]">
-                <img
+              <div className="relative rounded-lg overflow-hidden aspect-[4/3]">
+                <Image
                   src="https://i0.wp.com/jolandblog.com/wp-content/uploads/2015/11/ninh-binh-vietname.jpg?fit=1000%2C667&ssl=1"
                   alt="Vietnam landscape"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  unoptimized
+                  className="object-cover"
                 />
               </div>
               <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-5 shadow-lg flex items-center gap-4">

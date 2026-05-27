@@ -1,4 +1,5 @@
 import {useTranslations} from 'next-intl';
+import Image from 'next/image';
 import type {Vehicle} from '@/domain';
 
 type Props = {
@@ -13,12 +14,15 @@ export function VehicleCard({vehicle}: Props) {
 
   return (
     <article className="bg-surface-elevated border border-border overflow-hidden flex flex-col">
-      <div className="aspect-[3/2] bg-surface-alt overflow-hidden">
+      <div className="relative aspect-[3/2] bg-surface-alt overflow-hidden">
         {vehicle.imageUrl ? (
-          <img
+          <Image
             src={vehicle.imageUrl}
             alt={`${vehicle.brand} ${vehicle.model}`}
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            unoptimized
+            className="object-cover"
           />
         ) : null}
       </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import {useTranslations} from 'next-intl';
 import {routes} from '@/routes';
 import {getUrl, contactInfo} from '@/utils';
@@ -15,10 +16,12 @@ export const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
           <Link href={routes.home.path()} className="shrink-0 cursor-pointer">
-            <img
+            <Image
               src={getUrl('assets/images/logo/logo-amber.png')}
               alt="Logo"
-              className="h-11"
+              width={2000}
+              height={939}
+              className="h-11 w-auto"
             />
           </Link>
 
