@@ -56,9 +56,13 @@
   --font-size-display-sm: 2.75rem;
   --font-size-headline-lg: 2rem;
   --font-size-headline-sm: 1.5rem;
+  --font-size-headline-md: 1.75rem;
+  --font-size-display-md: 3.125rem;
   --font-size-title-lg: 1.25rem;
+  --font-size-title-md: 1.1875rem;
   --font-size-title-sm: 1.125rem;
   --font-size-body-lg: 1.125rem;
+  --font-size-body-md: 1.0625rem;
   --font-size-body-sm: 1rem;
   --font-size-label-lg: 0.875rem;
   --font-size-label-sm: 0.75rem;
@@ -86,6 +90,15 @@
   text-transform: uppercase;
 }
 
+@utility type-display-md {
+  font-family: var(--font-hanken-grotesk), sans-serif;
+  font-size: var(--font-size-display-md);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 @utility type-display-sm {
   font-family: var(--font-hanken-grotesk), sans-serif;
   font-size: var(--font-size-display-sm);
@@ -100,6 +113,15 @@
   font-size: var(--font-size-headline-lg);
   font-weight: 700;
   line-height: 1.2;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@utility type-headline-md {
+  font-family: var(--font-hanken-grotesk), sans-serif;
+  font-size: var(--font-size-headline-md);
+  font-weight: 700;
+  line-height: 1.25;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -120,6 +142,13 @@
   letter-spacing: 0;
 }
 
+@utility type-title-md {
+  font-size: var(--font-size-title-md);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
 @utility type-title-sm {
   font-size: var(--font-size-title-sm);
   font-weight: 600;
@@ -131,6 +160,13 @@
   font-size: var(--font-size-body-lg);
   font-weight: 400;
   line-height: 1.7;
+  letter-spacing: 0;
+}
+
+@utility type-body-md {
+  font-size: var(--font-size-body-md);
+  font-weight: 400;
+  line-height: 1.65;
   letter-spacing: 0;
 }
 

@@ -4,7 +4,7 @@ import {useState, useEffect, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {HighlightRowImage} from './HighlightRowImage';
-import {TextInput, Button} from '@/components/ui';
+import {TextInput, Button, ConfirmModal} from '@/components/ui';
 import {api} from '@/routes';
 import {
   addHighlightSchema,
@@ -35,6 +35,9 @@ export function DestinationHighlights({
   const descField = locale === 'en' ? 'descriptionEn' : 'descriptionVi';
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const {
     register,
@@ -59,6 +62,7 @@ export function DestinationHighlights({
   }, [destinationId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchHighlights();
   }, [fetchHighlights]);
 
@@ -70,9 +74,17 @@ export function DestinationHighlights({
     }
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm('Delete this highlight?')) return;
-    await api.admin.highlights.delete(id);
+  async function performDelete() {
+    if (!deleteId) return;
+    setDeleting(true);
+    setDeleteError(null);
+    const {error} = await api.admin.highlights.delete(deleteId);
+    setDeleting(false);
+    if (error) {
+      setDeleteError(error);
+      return;
+    }
+    setDeleteId(null);
     await fetchHighlights();
   }
 
@@ -138,7 +150,7 @@ export function DestinationHighlights({
               variant="danger"
               size="sm"
               type="button"
-              onClick={() => handleDelete(h.id)}
+              onClick={() => setDeleteId(h.id)}
               className="self-end"
             >
               Delete
@@ -170,6 +182,20 @@ export function DestinationHighlights({
           </Button>
         </form>
       </div>
+      <ConfirmModal
+        open={!!deleteId}
+        title="Delete this highlight?"
+        confirmLabel="Delete"
+        variant="danger"
+        loading={deleting}
+        error={deleteError}
+        onConfirm={performDelete}
+        onCancel={() => {
+          if (deleting) return;
+          setDeleteId(null);
+          setDeleteError(null);
+        }}
+      />
     </div>
   );
 }

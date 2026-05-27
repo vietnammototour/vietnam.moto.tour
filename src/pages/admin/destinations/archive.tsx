@@ -1,8 +1,8 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
-import {Button} from '@/components/ui';
+import {Button, ConfirmModal} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {routes, api} from '@/routes';
 
@@ -25,6 +25,11 @@ export default function AdminDestinationsArchive() {
     '/api/admin/destinations?archived=true',
   );
   const {setLoading} = useAdminLoading();
+  const [deleteTarget, setDeleteTarget] = useState<AdminDestination | null>(
+    null,
+  );
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(loading);
@@ -35,20 +40,30 @@ export default function AdminDestinationsArchive() {
     if (!error) refetch();
   }
 
-  async function handleHardDelete(id: string, tourCount: number) {
-    if (tourCount > 0) {
-      alert(
+  function handleHardDelete(dest: AdminDestination) {
+    setDeleteError(null);
+    if (dest._count.tours > 0) {
+      setDeleteError(
         'Cannot delete: destination has tours. Reassign or delete its tours first.',
       );
-      return;
     }
-    if (!confirm('Permanently delete this destination? This cannot be undone.'))
-      return;
-    const {error} = await api.admin.destinations.delete(id, {hard: true});
+    setDeleteTarget(dest);
+  }
+
+  async function performHardDelete() {
+    if (!deleteTarget) return;
+    if (deleteTarget._count.tours > 0) return;
+    setDeleting(true);
+    setDeleteError(null);
+    const {error} = await api.admin.destinations.delete(deleteTarget.id, {
+      hard: true,
+    });
+    setDeleting(false);
     if (error) {
-      alert(error);
+      setDeleteError(error);
       return;
     }
+    setDeleteTarget(null);
     refetch();
   }
 
@@ -135,9 +150,7 @@ export default function AdminDestinationsArchive() {
                       variant="danger"
                       size="sm"
                       disabled={dest._count.tours > 0}
-                      onClick={() =>
-                        handleHardDelete(dest.id, dest._count.tours)
-                      }
+                      onClick={() => handleHardDelete(dest)}
                     >
                       <i className="fa fa-trash text-xs mr-1.5" />
                       Delete
@@ -149,6 +162,25 @@ export default function AdminDestinationsArchive() {
           </tbody>
         </table>
       </div>
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Permanently delete this destination?"
+        description={
+          deleteTarget && deleteTarget._count.tours > 0
+            ? 'Cannot delete: destination has tours. Reassign or delete its tours first.'
+            : 'This cannot be undone.'
+        }
+        confirmLabel="Delete"
+        variant="danger"
+        loading={deleting}
+        error={deleteError}
+        onConfirm={performHardDelete}
+        onCancel={() => {
+          if (deleting) return;
+          setDeleteTarget(null);
+          setDeleteError(null);
+        }}
+      />
     </div>
   );
 }

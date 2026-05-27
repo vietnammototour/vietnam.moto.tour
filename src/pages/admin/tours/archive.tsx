@@ -1,8 +1,8 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type {GetServerSideProps} from 'next';
-import {Button} from '@/components/ui';
+import {Button, ConfirmModal} from '@/components/ui';
 import {dehydrate} from '@tanstack/react-query';
 import {getQueryClient} from '@/lib/queryClient';
 import {
@@ -34,6 +34,7 @@ export default function AdminToursArchive() {
   const restore = useUpdateTour();
   const hardDelete = useDeleteTourHard();
   const {setLoading} = useAdminLoading();
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(isLoading);
@@ -43,10 +44,14 @@ export default function AdminToursArchive() {
     restore.mutate({id, input: {status: 'DRAFT'}});
   }
 
-  function handleHardDelete(id: string) {
-    if (!confirm('Permanently delete this tour? This cannot be undone.'))
-      return;
-    hardDelete.mutate({id});
+  function performHardDelete() {
+    if (!deleteId) return;
+    hardDelete.mutate(
+      {id: deleteId},
+      {
+        onSettled: () => setDeleteId(null),
+      },
+    );
   }
 
   const tourList = (tours ?? []) as unknown as AdminTour[];
@@ -137,7 +142,7 @@ export default function AdminToursArchive() {
                     <Button
                       variant="danger"
                       size="sm"
-                      onClick={() => handleHardDelete(tour.id)}
+                      onClick={() => setDeleteId(tour.id)}
                     >
                       <i className="fa fa-trash text-xs mr-1.5" />
                       Delete
@@ -149,6 +154,19 @@ export default function AdminToursArchive() {
           </tbody>
         </table>
       </div>
+      <ConfirmModal
+        open={!!deleteId}
+        title="Permanently delete this tour?"
+        description="This cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        loading={hardDelete.isPending}
+        onConfirm={performHardDelete}
+        onCancel={() => {
+          if (hardDelete.isPending) return;
+          setDeleteId(null);
+        }}
+      />
     </div>
   );
 }

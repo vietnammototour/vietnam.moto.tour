@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useTranslations} from 'next-intl';
-import {Button} from '@/components/ui';
+import {Button, ConfirmModal} from '@/components/ui';
 import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -15,6 +15,9 @@ export default function RolesListPage() {
   const {setLoading: setAdminLoading} = useAdminLoading();
   const [roles, setRoles] = useState<VMT.OrgRole[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<VMT.OrgRole | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     api.admin.roles.list().then(({data}) => {
@@ -27,14 +30,18 @@ export default function RolesListPage() {
     setAdminLoading(loading);
   }, [loading, setAdminLoading]);
 
-  async function handleDelete(role: VMT.OrgRole) {
-    if (!confirm(t('deleteConfirm', {label: role.labelEn}))) return;
-    const {error} = await api.admin.roles.delete(role.id);
+  async function performDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setDeleteError(null);
+    const {error} = await api.admin.roles.delete(deleteTarget.id);
+    setDeleting(false);
     if (error) {
-      alert(error.includes('Role in use') ? t('deleteInUse') : error);
+      setDeleteError(error.includes('Role in use') ? t('deleteInUse') : error);
       return;
     }
-    setRoles((prev) => prev.filter((r) => r.id !== role.id));
+    setRoles((prev) => prev.filter((r) => r.id !== deleteTarget.id));
+    setDeleteTarget(null);
   }
 
   return (
@@ -84,7 +91,7 @@ export default function RolesListPage() {
                   <Button
                     variant="ghost-danger"
                     size="sm"
-                    onClick={() => handleDelete(r)}
+                    onClick={() => setDeleteTarget(r)}
                     icon={<i className="fa fa-trash text-xs" />}
                   >
                     {t('delete')}
@@ -95,6 +102,22 @@ export default function RolesListPage() {
           ))}
         </tbody>
       </table>
+      <ConfirmModal
+        open={!!deleteTarget}
+        title={
+          deleteTarget ? t('deleteConfirm', {label: deleteTarget.labelEn}) : ''
+        }
+        confirmLabel={t('delete')}
+        variant="danger"
+        loading={deleting}
+        error={deleteError}
+        onConfirm={performDelete}
+        onCancel={() => {
+          if (deleting) return;
+          setDeleteTarget(null);
+          setDeleteError(null);
+        }}
+      />
     </AdminPageShell>
   );
 }

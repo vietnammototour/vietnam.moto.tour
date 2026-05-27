@@ -20,6 +20,7 @@ export default function EditRolePage() {
   const id = typeof router.query.id === 'string' ? router.query.id : '';
   const [role, setRole] = useState<VMT.OrgRole | null>(null);
   const [locale, setLocale] = useState<Locale>('en');
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -29,12 +30,13 @@ export default function EditRolePage() {
   }, [id]);
 
   async function onSubmit(values: RoleFormValues) {
+    setSubmitError(null);
     const {error} = await api.admin.roles.update(
       id,
       values as unknown as Record<string, unknown>,
     );
     if (error) {
-      alert(error);
+      setSubmitError(error);
       return;
     }
     router.push(routes.admin.roles.list.path());
@@ -76,6 +78,14 @@ export default function EditRolePage() {
         />
       }
     >
+      {submitError && (
+        <div
+          role="alert"
+          className="mb-4 bg-error/10 text-error type-body-sm p-3 border border-error/30"
+        >
+          {submitError}
+        </div>
+      )}
       {role && (
         <RoleForm
           mode="edit"

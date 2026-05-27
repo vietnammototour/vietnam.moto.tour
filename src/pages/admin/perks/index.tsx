@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useTranslations} from 'next-intl';
 import {api} from '@/routes';
-import {Button, IconPicker, Select} from '@/components/ui';
+import {Button, ConfirmModal, IconPicker, Select} from '@/components/ui';
 import {LocalePicker, type Locale} from '@/components/Admin/LocalePicker';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {
@@ -53,10 +53,13 @@ export default function PerksListPage() {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [locale, setLocale] = useState<Locale>('vi');
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<VMT.Perk | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const {setLoading: setAdminLoading} = useAdminLoading();
 
   useEffect(() => {
-    setLoading(true);
     api.admin.perks.list().then(({data}) => {
       if (data) {
         setPerks(data);
@@ -84,32 +87,38 @@ export default function PerksListPage() {
     const draft = drafts[id];
     if (!draft) return;
     setSavingId(id);
+    setActionError(null);
     const {data, error} = await api.admin.perks.update(id, draft);
     setSavingId(null);
     if (error || !data) {
-      alert(error ?? 'Failed to save');
+      setActionError(error ?? 'Failed to save');
       return;
     }
     setPerks((prev) => prev.map((p) => (p.id === id ? data : p)));
     setDrafts((prev) => ({...prev, [id]: toDraft(data)}));
   }
 
-  async function handleDelete(perk: VMT.Perk) {
-    if (!confirm(t('deleteConfirm', {label: perk.labelEn}))) return;
-    const {error} = await api.admin.perks.delete(perk.id);
+  async function performDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setDeleteError(null);
+    const {error} = await api.admin.perks.delete(deleteTarget.id);
+    setDeleting(false);
     if (error) {
-      alert(error);
+      setDeleteError(error);
       return;
     }
-    setPerks((prev) => prev.filter((p) => p.id !== perk.id));
+    setPerks((prev) => prev.filter((p) => p.id !== deleteTarget.id));
     setDrafts((prev) => {
       const next = {...prev};
-      delete next[perk.id];
+      delete next[deleteTarget.id];
       return next;
     });
+    setDeleteTarget(null);
   }
 
   async function handleCreate() {
+    setActionError(null);
     const {data, error} = await api.admin.perks.create({
       labelEn: 'Untitled',
       labelVi: '',
@@ -117,7 +126,7 @@ export default function PerksListPage() {
       category: 'OTHER',
     });
     if (error || !data) {
-      alert(error ?? 'Failed to create perk');
+      setActionError(error ?? 'Failed to create perk');
       return;
     }
     setPerks((prev) => [...prev, data]);
@@ -147,6 +156,15 @@ export default function PerksListPage() {
         />
       }
     >
+      {actionError && (
+        <div
+          role="alert"
+          className="mb-4 bg-error/10 text-error type-body-sm p-3 border border-error/30"
+        >
+          {actionError}
+        </div>
+      )}
+
       {!loading && perks.length === 0 && (
         <p className="text-on-surface-secondary">{t('empty')}</p>
       )}
@@ -208,7 +226,7 @@ export default function PerksListPage() {
                   <Button
                     variant="ghost-danger"
                     size="sm"
-                    onClick={() => handleDelete(p)}
+                    onClick={() => setDeleteTarget(p)}
                     icon={<i className="fa fa-trash text-xs" />}
                   >
                     {tc('delete')}
@@ -219,6 +237,22 @@ export default function PerksListPage() {
           </ul>
         </section>
       ))}
+      <ConfirmModal
+        open={!!deleteTarget}
+        title={
+          deleteTarget ? t('deleteConfirm', {label: deleteTarget.labelEn}) : ''
+        }
+        confirmLabel={tc('delete')}
+        variant="danger"
+        loading={deleting}
+        error={deleteError}
+        onConfirm={performDelete}
+        onCancel={() => {
+          if (deleting) return;
+          setDeleteTarget(null);
+          setDeleteError(null);
+        }}
+      />
     </AdminPageShell>
   );
 }

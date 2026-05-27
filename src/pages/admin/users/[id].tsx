@@ -21,6 +21,7 @@ export default function EditUserPage() {
   const [user, setUser] = useState<VMT.UserAdmin | null>(null);
   const [roles, setRoles] = useState<VMT.OrgRole[]>([]);
   const [locale, setLocale] = useState<Locale>('en');
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -33,6 +34,7 @@ export default function EditUserPage() {
   }, [id]);
 
   async function onSubmit(values: UserFormValues) {
+    setSubmitError(null);
     const payload: Record<string, unknown> = {
       ...values,
       birthDate: values.birthDate || null,
@@ -40,7 +42,7 @@ export default function EditUserPage() {
     if (!values.password) delete payload.password;
     const {error} = await api.admin.users.update(id, payload);
     if (error) {
-      alert(error);
+      setSubmitError(error);
       return;
     }
     router.push(routes.admin.users.list.path());
@@ -92,6 +94,14 @@ export default function EditUserPage() {
         />
       }
     >
+      {submitError && (
+        <div
+          role="alert"
+          className="mb-4 bg-error/10 text-error type-body-sm p-3 border border-error/30"
+        >
+          {submitError}
+        </div>
+      )}
       <UserForm
         mode="edit"
         locale={locale}
