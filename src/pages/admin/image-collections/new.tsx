@@ -5,6 +5,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useTranslations} from 'next-intl';
 import {api, routes} from '@/routes';
 import {Button, FormField, TextInput} from '@/components/ui';
+import {AdminPageLegacy} from '@/components/Admin/AdminPageShell';
 import {
   newCollectionSchema,
   newCollectionDefaults,
@@ -34,28 +35,30 @@ export default function NewImageCollectionPage() {
   }
 
   return (
-    <div className="max-w-xl">
-      <h1 className="type-headline-sm mb-6">
-        {t('admin.imageCollections.newTitle')}
-      </h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          label={t('admin.imageCollections.key')}
-          error={errors.key?.message}
-        >
-          <TextInput {...register('key')} placeholder="home-gallery" />
-        </FormField>
-        <FormField
-          label={t('admin.imageCollections.label')}
-          error={errors.label?.message}
-        >
-          <TextInput {...register('label')} placeholder="Home Gallery" />
-        </FormField>
-        <Button type="submit" variant="primary" disabled={isSubmitting}>
-          {t('common.create')}
-        </Button>
-      </form>
-    </div>
+    <AdminPageLegacy>
+      <div className="max-w-xl">
+        <h1 className="type-headline-sm mb-6">
+          {t('admin.imageCollections.newTitle')}
+        </h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            label={t('admin.imageCollections.key')}
+            error={errors.key?.message}
+          >
+            <TextInput {...register('key')} placeholder="home-gallery" />
+          </FormField>
+          <FormField
+            label={t('admin.imageCollections.label')}
+            error={errors.label?.message}
+          >
+            <TextInput {...register('label')} placeholder="Home Gallery" />
+          </FormField>
+          <Button type="submit" variant="primary" disabled={isSubmitting}>
+            {t('common.create')}
+          </Button>
+        </form>
+      </div>
+    </AdminPageLegacy>
   );
 }
 

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type {GetServerSideProps} from 'next';
 import {Button, ConfirmModal} from '@/components/ui';
+import {AdminPageLegacy} from '@/components/Admin/AdminPageShell';
 import {dehydrate} from '@tanstack/react-query';
 import {getQueryClient} from '@/lib/queryClient';
 import {
@@ -57,7 +58,7 @@ export default function AdminToursArchive() {
   const tourList = (tours ?? []) as unknown as AdminTour[];
 
   return (
-    <div>
+    <AdminPageLegacy>
       <div className="flex items-center justify-between mb-6">
         <h1 className="type-headline-sm">Archived Tours</h1>
         <Link
@@ -167,7 +168,7 @@ export default function AdminToursArchive() {
           setDeleteId(null);
         }}
       />
-    </div>
+    </AdminPageLegacy>
   );
 }
 

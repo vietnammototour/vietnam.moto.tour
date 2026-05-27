@@ -119,10 +119,8 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto flex flex-col p-8">
-        {children}
-      </main>
+      {/* Main content — own no scroll; AdminPageShell or AdminPageLegacy own it */}
+      <main className="flex-1 flex flex-col min-h-0">{children}</main>
     </div>
   );
 }
