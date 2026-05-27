@@ -1,8 +1,11 @@
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useTranslations} from 'next-intl';
-import {TextInput, NumberInput} from '@/components/ui';
-import type {Locale} from '../LocalePicker';
+import {
+  TextInput,
+  NumberInput,
+  type AdminLocale as Locale,
+} from '@/components/ui';
 import {
   buildRoleSchema,
   roleFormDefaults,

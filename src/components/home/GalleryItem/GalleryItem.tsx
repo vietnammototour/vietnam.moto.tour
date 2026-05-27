@@ -28,7 +28,7 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
           unoptimized
           className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <div className="absolute inset-0 bg-surface-alt/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <span className="w-12 h-12 bg-surface-elevated/90 flex items-center justify-center text-on-surface">
             <i className="fa fa-expand" />
           </span>
@@ -37,7 +37,7 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
 
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-overlay"
           onClick={() => setLightboxOpen(false)}
         >
           <button

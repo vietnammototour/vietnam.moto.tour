@@ -2,8 +2,14 @@ import {useEffect, useMemo, useState} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useTranslations} from 'next-intl';
 import {api} from '@/routes';
-import {Button, ConfirmModal, IconPicker, Select} from '@/components/ui';
-import {LocalePicker, type Locale} from '@/components/Admin/LocalePicker';
+import {
+  Button,
+  ConfirmModal,
+  IconPicker,
+  LocaleSwitcher,
+  Select,
+  type AdminLocale as Locale,
+} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {
   AdminPageShell,
@@ -143,7 +149,9 @@ export default function PerksListPage() {
       header={
         <AdminPageHeader
           title={t('title')}
-          localeSwitcher={<LocalePicker value={locale} onChange={setLocale} />}
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
           actions={
             <Button
               variant="primary"

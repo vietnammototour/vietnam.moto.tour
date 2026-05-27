@@ -10,7 +10,7 @@ import {
   Select,
 } from '@/components/ui';
 import {TeamPhotoPicker} from './TeamPhotoPicker';
-import type {Locale} from '../LocalePicker';
+import type {AdminLocale as Locale} from '@/components/ui';
 import {
   buildUserSchema,
   userFormDefaults,
