@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from 'react';
-import {useTranslations} from 'next-intl';
 import type {ImageCollection, CollectionImage} from '@/domain';
 import {api} from '@/routes';
 import {transcodeImage} from '@/lib/image-transcode';
@@ -12,9 +11,11 @@ export const IMAGE_COLLECTION_MAX = MAX;
 export const IMAGE_COLLECTION_MIN = MIN;
 
 export function useImageCollectionImages(collection: ImageCollection) {
-  const t = useTranslations();
   const [images, setImages] = useState<CollectionImage[]>(collection.images);
   const [error, setError] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const altTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(
     new Map(),
   );
@@ -106,18 +107,33 @@ export function useImageCollectionImages(collection: ImageCollection) {
     );
   }
 
-  async function handleDelete(id: string) {
+  function requestDelete(id: string) {
     if (images.length <= MIN) return;
-    if (!confirm(t('admin.imageCollections.confirmDeleteImage'))) return;
+    setDeleteError(null);
+    setDeleteId(id);
+  }
+
+  function cancelDelete() {
+    if (deleting) return;
+    setDeleteId(null);
+    setDeleteError(null);
+  }
+
+  async function confirmDelete() {
+    if (!deleteId) return;
+    setDeleting(true);
+    setDeleteError(null);
     const res = await api.admin.imageCollections.images.delete(
       collection.id,
-      id,
+      deleteId,
     );
+    setDeleting(false);
     if (res.error) {
-      setError(res.error);
+      setDeleteError(res.error);
       return;
     }
-    setImages((prev) => prev.filter((p) => p.id !== id));
+    setImages((prev) => prev.filter((p) => p.id !== deleteId));
+    setDeleteId(null);
   }
 
   function reorder(next: CollectionImage[], previous: CollectionImage[]) {
@@ -145,9 +161,14 @@ export function useImageCollectionImages(collection: ImageCollection) {
     count: images.length,
     handleAdd,
     handleReplace,
-    handleDelete,
     handleAltChange,
     reorder,
+    requestDelete,
+    confirmDelete,
+    cancelDelete,
+    pendingDeleteId: deleteId,
+    deleting,
+    deleteError,
   };
 }
 

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import Image from 'next/image';
 import {useSession} from 'next-auth/react';
-import {Button} from '@/components/ui';
+import {Button, ConfirmModal} from '@/components/ui';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
@@ -18,6 +18,9 @@ export default function UsersListPage() {
   const {setLoading: setAdminLoading} = useAdminLoading();
   const [users, setUsers] = useState<VMT.UserAdmin[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<VMT.UserAdmin | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     api.admin.users.list().then(({data}) => {
@@ -30,14 +33,18 @@ export default function UsersListPage() {
     setAdminLoading(loading);
   }, [loading, setAdminLoading]);
 
-  async function handleDelete(u: VMT.UserAdmin) {
-    if (!confirm(t('deleteConfirm', {name: u.name}))) return;
-    const {error} = await api.admin.users.delete(u.id);
+  async function performDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setDeleteError(null);
+    const {error} = await api.admin.users.delete(deleteTarget.id);
+    setDeleting(false);
     if (error) {
-      alert(error);
+      setDeleteError(error);
       return;
     }
-    setUsers((prev) => prev.filter((x) => x.id !== u.id));
+    setUsers((prev) => prev.filter((x) => x.id !== deleteTarget.id));
+    setDeleteTarget(null);
   }
 
   return (
@@ -109,7 +116,7 @@ export default function UsersListPage() {
                     <Button
                       variant="ghost-danger"
                       size="sm"
-                      onClick={() => handleDelete(u)}
+                      onClick={() => setDeleteTarget(u)}
                       icon={<i className="fa fa-trash text-xs" />}
                     >
                       {t('delete')}
@@ -121,6 +128,22 @@ export default function UsersListPage() {
           ))}
         </tbody>
       </table>
+      <ConfirmModal
+        open={!!deleteTarget}
+        title={
+          deleteTarget ? t('deleteConfirm', {name: deleteTarget.name}) : ''
+        }
+        confirmLabel={t('delete')}
+        variant="danger"
+        loading={deleting}
+        error={deleteError}
+        onConfirm={performDelete}
+        onCancel={() => {
+          if (deleting) return;
+          setDeleteTarget(null);
+          setDeleteError(null);
+        }}
+      />
     </AdminPageShell>
   );
 }

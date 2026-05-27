@@ -19,6 +19,7 @@ import {
   type ImageCollectionState,
 } from './useImageCollectionImages';
 import {SortableImageCard} from './SortableImageCard';
+import {ConfirmModal} from '@/components/ui';
 import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 
 type Props = {state: ImageCollectionState; locale?: AdminLocale};
@@ -31,9 +32,14 @@ export function ImageCollectionEditor({state, locale}: Props) {
     canDelete,
     count,
     handleAltChange,
-    handleDelete,
     handleReplace,
     reorder,
+    requestDelete,
+    confirmDelete,
+    cancelDelete,
+    pendingDeleteId,
+    deleting,
+    deleteError,
   } = state;
 
   const sensors = useSensors(
@@ -81,13 +87,23 @@ export function ImageCollectionEditor({state, locale}: Props) {
                 canDelete={canDelete}
                 locale={locale}
                 onAltChange={handleAltChange}
-                onDelete={handleDelete}
+                onDelete={requestDelete}
                 onReplace={handleReplace}
               />
             ))}
           </div>
         </SortableContext>
       </DndContext>
+      <ConfirmModal
+        open={!!pendingDeleteId}
+        title={t('admin.imageCollections.confirmDeleteImage')}
+        confirmLabel={t('common.delete')}
+        variant="danger"
+        loading={deleting}
+        error={deleteError}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
     </div>
   );
 }

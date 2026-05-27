@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useTranslations} from 'next-intl';
 import {api, routes} from '@/routes';
-import {Button} from '@/components/ui';
+import {Button, ConfirmModal} from '@/components/ui';
 import {
   AdminPageShell,
   AdminPageHeader,
@@ -16,6 +16,9 @@ export default function ImageCollectionsListPage() {
   const {setLoading: setAdminLoading} = useAdminLoading();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<Row | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     api.admin.imageCollections.list().then((res) => {
@@ -28,10 +31,18 @@ export default function ImageCollectionsListPage() {
     setAdminLoading(loading);
   }, [loading, setAdminLoading]);
 
-  async function handleDelete(id: string) {
-    if (!confirm(t('admin.imageCollections.confirmDelete'))) return;
-    const res = await api.admin.imageCollections.delete(id);
-    if (!res.error) setRows((prev) => prev.filter((r) => r.id !== id));
+  async function performDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setDeleteError(null);
+    const res = await api.admin.imageCollections.delete(deleteTarget.id);
+    setDeleting(false);
+    if (res.error) {
+      setDeleteError(res.error);
+      return;
+    }
+    setRows((prev) => prev.filter((r) => r.id !== deleteTarget.id));
+    setDeleteTarget(null);
   }
 
   return (
@@ -92,7 +103,7 @@ export default function ImageCollectionsListPage() {
                     <Button
                       variant="ghost-danger"
                       size="sm"
-                      onClick={() => handleDelete(r.id)}
+                      onClick={() => setDeleteTarget(r)}
                       icon={<i className="fa fa-trash text-xs" />}
                     >
                       {t('common.delete')}
@@ -104,6 +115,20 @@ export default function ImageCollectionsListPage() {
           </tbody>
         </table>
       )}
+      <ConfirmModal
+        open={!!deleteTarget}
+        title={t('admin.imageCollections.confirmDelete')}
+        confirmLabel={t('common.delete')}
+        variant="danger"
+        loading={deleting}
+        error={deleteError}
+        onConfirm={performDelete}
+        onCancel={() => {
+          if (deleting) return;
+          setDeleteTarget(null);
+          setDeleteError(null);
+        }}
+      />
     </AdminPageShell>
   );
 }

@@ -17,13 +17,15 @@ export default function NewRolePage() {
   const router = useRouter();
   const t = useTranslations('admin.roles');
   const [locale, setLocale] = useState<Locale>('en');
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   async function onSubmit(values: RoleFormValues) {
+    setSubmitError(null);
     const {error} = await api.admin.roles.create(
       values as unknown as Record<string, unknown>,
     );
     if (error) {
-      alert(error);
+      setSubmitError(error);
       return;
     }
     router.push(routes.admin.roles.list.path());
@@ -60,6 +62,14 @@ export default function NewRolePage() {
         />
       }
     >
+      {submitError && (
+        <div
+          role="alert"
+          className="mb-4 bg-error/10 text-error type-body-sm p-3 border border-error/30"
+        >
+          {submitError}
+        </div>
+      )}
       <RoleForm mode="create" locale={locale} onSubmit={onSubmit} />
     </AdminPageShell>
   );
