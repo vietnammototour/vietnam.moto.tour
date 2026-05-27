@@ -41,7 +41,8 @@
     "i18n:apply": "npx tsx scripts/apply-common-translations.ts",
     "i18n:apply:write": "npx tsx scripts/apply-common-translations.ts --apply",
     "design:pull": "echo 'Run inside Claude Code: ask `design:pull` — invokes Stitch MCP get_project on 4683768170577706110, rewrites DESIGN.md + src/styles/design-tokens.css.'",
-    "design:push": "echo 'Run inside Claude Code: ask `design:push` — reads DESIGN.md frontmatter+token blocks, calls Stitch MCP upload_design_md on 4683768170577706110.'"
+    "design:push": "echo 'Run inside Claude Code: ask `design:push` — reads DESIGN.md frontmatter+token blocks, calls Stitch MCP upload_design_md on 4683768170577706110.'",
+    "lint:design": "npx tsx scripts/lint-design-tokens.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
