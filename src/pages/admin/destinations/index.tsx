@@ -73,7 +73,7 @@ export default function AdminDestinationsList() {
         />
       }
     >
-      <div className="bg-surface-elevated rounded-xl border border-border overflow-hidden">
+      <div className="bg-surface-elevated border border-border overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-surface-alt">
@@ -107,7 +107,7 @@ export default function AdminDestinationsList() {
                       <img
                         src={dest.imageUrl}
                         alt=""
-                        className="h-[50px] w-auto rounded object-contain shrink-0"
+                        className="h-[50px] w-auto object-contain shrink-0"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           e.currentTarget.nextElementSibling?.classList.remove(
@@ -117,7 +117,7 @@ export default function AdminDestinationsList() {
                       />
                     ) : null}
                     <div
-                      className={`h-[50px] w-[50px] rounded bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
+                      className={`h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
                     >
                       <i className="fa fa-image text-on-surface-tertiary" />
                     </div>
