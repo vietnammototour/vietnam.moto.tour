@@ -39,7 +39,7 @@ export function SortableImageCard({
         transition,
         opacity: isDragging ? 0.5 : 1,
       }}
-      className="bg-surface-elevated border border-border rounded-lg p-3 flex flex-col gap-3"
+      className="bg-surface-elevated border border-border p-3 flex flex-col gap-3"
     >
       <button
         type="button"
@@ -50,7 +50,7 @@ export function SortableImageCard({
       >
         <i className="fa fa-grip-vertical" />
       </button>
-      <div className="aspect-square bg-surface-alt rounded overflow-hidden">
+      <div className="aspect-square bg-surface-alt overflow-hidden">
         {image.url ? (
           <img
             src={image.url}

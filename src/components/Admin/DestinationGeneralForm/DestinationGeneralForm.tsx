@@ -75,7 +75,7 @@ export function DestinationGeneralForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {submitError && (
-        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg type-body-sm">
+        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 type-body-sm">
           {submitError}
         </div>
       )}
