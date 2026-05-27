@@ -39,7 +39,7 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
   const displayName = preview?.destinationName ?? tourTitle;
 
   const inputBaseClasses =
-    'bg-transparent text-on-surface-inverse border border-dashed border-white/40 hover:border-white focus:border-white rounded px-1 outline-none';
+    'bg-transparent text-on-surface border border-dashed border-white/40 hover:border-white focus:border-white rounded px-1 outline-none';
 
   return (
     <section className="relative">
@@ -83,7 +83,7 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
               variants={clipReveal}
               initial="hidden"
               animate="visible"
-              className="type-display-sm md:type-display-lg text-on-surface-inverse mb-3 max-w-[70%]"
+              className="type-display-sm md:type-display-lg text-on-surface mb-3 max-w-[70%]"
             >
               {displayName}
             </motion.h1>
@@ -92,7 +92,7 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
           {!isPreview && tour && (
             <>
               {editable ? (
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface-inverse/80 type-body-sm">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface/80 type-body-sm">
                   <span className="flex items-center gap-1.5">
                     <i className="fa fa-map-marker-alt" />{' '}
                     {tour.destinationName[localeKey]}
@@ -144,7 +144,7 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
                   initial="hidden"
                   animate="visible"
                   transition={{delay: 0.3}}
-                  className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface-inverse/80 type-body-sm"
+                  className="flex flex-wrap items-center gap-x-5 gap-y-2 text-on-surface/80 type-body-sm"
                 >
                   <span className="flex items-center gap-1.5">
                     <i className="fa fa-map-marker-alt" />{' '}
@@ -168,7 +168,7 @@ export function TourHero({tour, preview, destinationSlot}: TourHeroProps) {
                   initial="hidden"
                   animate="visible"
                   transition={{delay: 0.5}}
-                  className="mt-4 text-on-surface-inverse"
+                  className="mt-4 text-on-surface"
                 >
                   <span className="type-headline-lg">
                     {t('from')} ${getMinPrice(tour.pricingGroups)}

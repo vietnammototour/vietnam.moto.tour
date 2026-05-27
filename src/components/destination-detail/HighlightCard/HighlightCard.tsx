@@ -31,7 +31,7 @@ export function HighlightCard({highlight, locale, index}: Props) {
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-          <span className="absolute top-4 left-4 type-label-sm tracking-[0.2em] text-on-surface-inverse/90 font-semibold">
+          <span className="absolute top-4 left-4 type-label-sm tracking-[0.2em] text-on-surface/90 font-semibold">
             {indexLabel}
           </span>
         </div>
