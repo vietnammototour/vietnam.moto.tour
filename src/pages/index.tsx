@@ -341,58 +341,44 @@ export default function Home({
               </div>
             </div>
             <div className="lg:w-2/5">
-              <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
-                {[
-                  {
-                    icon: 'fas fa-user-tie',
-                    label: t('localExperts'),
-                    accent: 'primary',
-                  },
-                  {
-                    icon: 'fas fa-route',
-                    label: t('hiddenRoutes'),
-                    accent: 'secondary',
-                  },
-                  {
-                    icon: 'fas fa-medal',
-                    label: t('yearsOnRoad'),
-                    accent: 'primary',
-                  },
-                  {
-                    icon: 'fas fa-calendar-alt',
-                    label: t('dayAndMultiDay'),
-                    accent: 'secondary',
-                  },
-                  {
-                    icon: 'fas fa-users',
-                    label: t('smallGroups'),
-                    accent: 'primary',
-                  },
-                  {
-                    icon: 'fas fa-hand-holding-usd',
-                    label: t('allInclusive'),
-                    accent: 'secondary',
-                  },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.icon}
-                    custom={index}
-                    variants={waveStagger(0.1)}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{once: true}}
-                    data-testid="feature-card"
-                    className="elevation-1 bg-surface-elevated/15 dark:bg-black/40 backdrop-blur dark:backdrop-blur-lg border border-white/15 dark:border-white/15 shadow-sm rounded-lg px-6 py-10 text-center text-white hover:bg-surface-elevated/25 dark:hover:bg-black/50 transition-colors"
-                  >
-                    <span
-                      className={`${item.icon} text-4xl block mb-3 ${item.accent === 'primary' ? 'text-primary-light' : 'text-secondary-light'}`}
-                    />
-                    <h4 className="type-label-lg whitespace-pre-line text-white drop-shadow-md">
-                      {item.label}
-                    </h4>
-                  </motion.div>
-                ))}
-              </div>
+              {(() => {
+                const features = [
+                  {icon: 'fas fa-user-tie', label: t('localExperts')},
+                  {icon: 'fas fa-route', label: t('hiddenRoutes')},
+                  {icon: 'fas fa-medal', label: t('yearsOnRoad')},
+                  {icon: 'fas fa-calendar-alt', label: t('dayAndMultiDay')},
+                  {icon: 'fas fa-users', label: t('smallGroups')},
+                  {icon: 'fas fa-hand-holding-usd', label: t('allInclusive')},
+                ];
+                return (
+                  <ul className="divide-y divide-white/20 border-y border-white/30 backdrop-blur-sm">
+                    {features.map((item, index) => (
+                      <motion.li
+                        key={item.icon}
+                        custom={index}
+                        variants={waveStagger(0.1)}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{once: true}}
+                        data-testid="feature-card"
+                        className="grid grid-cols-[auto_auto_1fr] items-center gap-x-5 px-4 py-4 text-white"
+                      >
+                        <span className="font-mono type-label-sm text-primary tabular-nums">
+                          {String(index + 1).padStart(2, '0')}/
+                          {String(features.length).padStart(2, '0')}
+                        </span>
+                        <span
+                          className={`${item.icon} text-2xl text-primary-light w-7 text-center`}
+                          aria-hidden="true"
+                        />
+                        <span className="type-label-lg uppercase whitespace-pre-line drop-shadow-md">
+                          {item.label}
+                        </span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                );
+              })()}
             </div>
           </div>
         </div>
