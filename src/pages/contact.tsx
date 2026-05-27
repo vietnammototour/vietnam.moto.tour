@@ -11,7 +11,7 @@ import {
   submitContact,
   type ContactFormData,
 } from '@/lib/contact-form-utils';
-import {FormField} from '@/components/ui';
+import {Button, TextInput, Textarea} from '@/components/ui';
 
 export default function Contact() {
   const t = useTranslations('contact');
@@ -60,60 +60,68 @@ export default function Contact() {
               <h2 className="type-headline-lg mt-2 mb-6">{t('anyQuestion')}</h2>
               <div className="flex gap-3">
                 <a
-                  href="#"
-                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all"
+                  href={contactInfo.youtubeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-11 h-11 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all cursor-pointer"
                 >
-                  <i className="fab fa-facebook" />
+                  <i className="fab fa-youtube" aria-hidden="true" />
                 </a>
                 <a
-                  href="#"
-                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all"
+                  href={contactInfo.tripadvisorLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="TripAdvisor"
+                  className="w-11 h-11 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all cursor-pointer"
                 >
-                  <i className="fab fa-twitter" />
+                  <i className="fab fa-tripadvisor" aria-hidden="true" />
                 </a>
                 <a
-                  href="#"
-                  className="w-10 h-10 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all"
+                  href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                  className="w-11 h-11 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all cursor-pointer"
                 >
-                  <i className="fab fa-instagram" />
+                  <i className="fab fa-whatsapp" aria-hidden="true" />
                 </a>
               </div>
             </div>
             <div className="lg:col-span-8">
               <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <FormField error={errors.name?.message}>
-                    <input
-                      type="text"
-                      placeholder={t('namePlaceholder')}
-                      className="w-full bg-surface-alt border-0 px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                      {...register('name')}
-                    />
-                  </FormField>
-                  <FormField error={errors.email?.message}>
-                    <input
-                      type="email"
-                      placeholder={t('emailPlaceholder')}
-                      className="w-full bg-surface-alt border-0 px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                      {...register('email')}
-                    />
-                  </FormField>
-                </div>
-                <FormField error={errors.message?.message}>
-                  <textarea
-                    placeholder={t('messagePlaceholder')}
-                    rows={6}
-                    className="w-full bg-surface-alt border-0 px-5 py-4 type-body-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                    {...register('message')}
+                  <TextInput
+                    type="text"
+                    label={t('namePlaceholder')}
+                    placeholder={t('namePlaceholder')}
+                    error={errors.name?.message}
+                    {...register('name')}
                   />
-                </FormField>
-                <button
+                  <TextInput
+                    type="email"
+                    label={t('emailPlaceholder')}
+                    placeholder={t('emailPlaceholder')}
+                    error={errors.email?.message}
+                    {...register('email')}
+                  />
+                </div>
+                <Textarea
+                  label={t('messagePlaceholder')}
+                  placeholder={t('messagePlaceholder')}
+                  rows={6}
+                  error={errors.message?.message}
+                  {...register('message')}
+                />
+                <Button
                   type="submit"
+                  variant="primary"
+                  size="lg"
+                  loading={isSubmitting}
                   disabled={isSubmitting}
-                  className="bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-4 transition-colors cursor-pointer disabled:opacity-50"
                 >
-                  {isSubmitting ? '...' : t('sendMessage')}
-                </button>
+                  {t('sendMessage')}
+                </Button>
               </form>
             </div>
           </div>
@@ -136,7 +144,7 @@ export default function Contact() {
                   className={`${info.icon} text-xl text-primary block mb-8`}
                 />
                 {info.lines.map((line, j) => (
-                  <p key={j} className="text-on-surface text-[0.6rem]">
+                  <p key={j} className="type-body-sm text-on-surface">
                     {line}
                   </p>
                 ))}
