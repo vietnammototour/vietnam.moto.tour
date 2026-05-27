@@ -69,17 +69,21 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
             TourCTA hidden on mobile (mobile uses sticky bottom CTA bar instead).
           */}
           <div className="lg:grid lg:grid-cols-[2fr_1fr] lg:gap-10 lg:items-start">
-            <TourDescription
-              description={tour.description}
-              locale={locale}
-              imageUrl={tour.imageUrl}
-              imageAlt={
-                tour.title[locale as 'en' | 'vi'] ?? tour.title.vi ?? ''
-              }
-            />
-            <TourHighlights highlights={tour.highlights} locale={locale} />
+            {/* Main column part A — above the sidebar's vertical mid-point */}
+            <div className="lg:col-start-1 lg:row-start-1">
+              <TourDescription
+                description={tour.description}
+                locale={locale}
+                imageUrl={tour.imageUrl}
+                imageAlt={
+                  tour.title[locale as 'en' | 'vi'] ?? tour.title.vi ?? ''
+                }
+              />
+              <TourHighlights highlights={tour.highlights} locale={locale} />
+            </div>
 
-            <aside className="mb-10 lg:mb-0 lg:col-start-2 lg:[grid-row:1/-1] lg:sticky lg:top-24 lg:self-start">
+            {/* Sidebar — explicit row-span so sticky can scroll across both main rows */}
+            <aside className="mb-10 lg:mb-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-24 lg:self-start">
               <div className="lg:p-6 lg:texture-grain-warm">
                 <div className="relative z-10">
                   <TourPricing
@@ -104,12 +108,15 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
               </div>
             </aside>
 
-            <TourItinerary itinerary={tour.itinerary} locale={locale} />
-            <TourIncluded
-              included={tour.included}
-              excluded={tour.excluded}
-              locale={locale}
-            />
+            {/* Main column part B — below the aside's mobile-inline position */}
+            <div className="lg:col-start-1 lg:row-start-2">
+              <TourItinerary itinerary={tour.itinerary} locale={locale} />
+              <TourIncluded
+                included={tour.included}
+                excluded={tour.excluded}
+                locale={locale}
+              />
+            </div>
           </div>
         </div>
       </article>
