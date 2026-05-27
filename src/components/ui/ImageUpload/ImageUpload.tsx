@@ -1,6 +1,7 @@
 'use client';
 
 import {useEffect, useRef, useState} from 'react';
+import Image from 'next/image';
 import {Button} from '@/components/ui/Button';
 import {transcodeImage, type ImagePreset} from '@/lib/image-transcode';
 import type {ImageSlot} from '@/lib/image-slot';
@@ -91,10 +92,13 @@ export function ImageUpload({
       >
         {displayUrl ? (
           <>
-            <img
+            <Image
               src={displayUrl}
               alt="Upload preview"
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              unoptimized
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
               <Button

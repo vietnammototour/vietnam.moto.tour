@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type {GetServerSideProps} from 'next';
 import {dehydrate} from '@tanstack/react-query';
 import {getQueryClient} from '@/lib/queryClient';
@@ -139,9 +140,12 @@ export default function AdminToursList() {
                         className="group/link flex items-center gap-3 cursor-pointer"
                       >
                         {tour.imageUrl ? (
-                          <img
+                          <Image
                             src={tour.imageUrl}
                             alt=""
+                            width={75}
+                            height={50}
+                            unoptimized
                             className="h-[50px] w-auto object-contain shrink-0"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';

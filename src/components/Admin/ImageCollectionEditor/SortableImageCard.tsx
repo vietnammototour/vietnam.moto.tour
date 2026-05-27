@@ -1,4 +1,5 @@
 import {useRef} from 'react';
+import Image from 'next/image';
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
 import {useTranslations} from 'next-intl';
@@ -50,12 +51,15 @@ export function SortableImageCard({
       >
         <i className="fa fa-grip-vertical" />
       </button>
-      <div className="aspect-square bg-surface-alt overflow-hidden">
+      <div className="relative aspect-square bg-surface-alt overflow-hidden">
         {image.url ? (
-          <img
+          <Image
             src={image.url}
             alt={image.altEn}
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            unoptimized
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-on-surface-secondary text-sm">

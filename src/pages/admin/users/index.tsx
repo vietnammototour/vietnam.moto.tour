@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import Image from 'next/image';
 import {useSession} from 'next-auth/react';
 import {Button} from '@/components/ui';
 import {useTranslations} from 'next-intl';
@@ -75,9 +76,12 @@ export default function UsersListPage() {
               <td className="p-3">{u.teamOrder}</td>
               <td className="p-3">
                 {u.photo?.url ? (
-                  <img
+                  <Image
                     src={u.photo.url}
                     alt=""
+                    width={48}
+                    height={48}
+                    unoptimized
                     className="h-12 w-12 object-cover"
                   />
                 ) : (

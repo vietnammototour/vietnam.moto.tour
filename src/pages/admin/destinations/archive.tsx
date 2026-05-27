@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {Button} from '@/components/ui';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -99,9 +100,12 @@ export default function AdminDestinationsArchive() {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     {dest.imageUrl ? (
-                      <img
+                      <Image
                         src={dest.imageUrl}
                         alt=""
+                        width={75}
+                        height={50}
+                        unoptimized
                         className="h-[50px] w-auto object-contain shrink-0"
                       />
                     ) : (
