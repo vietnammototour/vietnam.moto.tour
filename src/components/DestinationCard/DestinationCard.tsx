@@ -70,9 +70,9 @@ export const DestinationCard = ({
           unoptimized
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e]/90 via-[#0e0e0e]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
         <div className="absolute top-3 left-3">
-          <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#ffdb00] bg-[#0e0e0e]/80 px-2 py-1 border border-[#989177]">
+          <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-accent bg-black/80 px-2 py-1 border border-on-surface-tertiary">
             {displayName.slice(0, 3).toUpperCase()}-
             {String(carOnlyCount + bikeOnlyCount + bikeAndCarCount).padStart(
               2,
@@ -80,15 +80,15 @@ export const DestinationCard = ({
             )}
           </span>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-[#4c4732]/50">
-          <h2 className="font-display text-lg lg:text-xl font-bold uppercase tracking-[0.05em] text-[#e5e2e1] mb-2 group-hover:text-[#ffdb00] transition-colors">
+        <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-border-subtle/50">
+          <h2 className="font-display text-lg lg:text-xl font-bold uppercase tracking-[0.05em] text-on-surface mb-2 group-hover:text-on-surface-accent transition-colors">
             {displayName}
           </h2>
           <div className="flex items-center flex-wrap gap-1.5">
             {chips.map((chip) => (
               <span
                 key={chip.key}
-                className="inline-flex items-center gap-1.5 h-6 px-2 font-mono text-[10px] uppercase tracking-[0.05em] bg-[#0e0e0e]/80 border border-[#4c4732] text-[#cfc6ab]"
+                className="inline-flex items-center gap-1.5 h-6 px-2 font-mono text-[10px] uppercase tracking-[0.05em] bg-black/80 border border-border-subtle text-on-surface-secondary"
                 aria-label={chip.ariaLabel}
               >
                 {chip.icon}
