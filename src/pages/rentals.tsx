@@ -35,7 +35,7 @@ export default function RentalsPage({vehicles}: Props) {
       </Head>
 
       <div className="bg-surface text-on-surface">
-        <RentalsHero backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg" />
+        <RentalsHero backgroundImage="/assets/rentals-hero.jpg" />
 
         <section className="px-6 sm:px-10 lg:px-12 pb-10">
           <p className="type-body-lg text-white max-w-[60ch]">{t('intro')}</p>
