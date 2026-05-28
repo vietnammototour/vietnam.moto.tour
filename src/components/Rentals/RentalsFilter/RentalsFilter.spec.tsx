@@ -41,7 +41,10 @@ import {NextIntlClientProvider} from 'next-intl';
 import {RentalsFilter} from './RentalsFilter';
 
 const messages = {
-  rentals: {filter: {all: 'All', scooter: 'Scooters', bike: 'Bikes'}},
+  rentals: {
+    filter: {all: 'All', scooter: 'Scooters', bike: 'Bikes'},
+    vehiclesCount: '3 vehicles',
+  },
 };
 
 function withIntl(node: React.ReactNode) {
@@ -55,13 +58,17 @@ function withIntl(node: React.ReactNode) {
 describe('RentalsFilter', () => {
   it('renders three options and calls onChange', () => {
     const onChange = jest.fn();
-    render(withIntl(<RentalsFilter value="all" onChange={onChange} />));
+    render(
+      withIntl(<RentalsFilter value="all" onChange={onChange} count={3} />),
+    );
     fireEvent.click(screen.getByText('Scooters'));
     expect(onChange).toHaveBeenCalledWith('scooter');
   });
 
   it('marks the active option', () => {
-    render(withIntl(<RentalsFilter value="bike" onChange={() => {}} />));
+    render(
+      withIntl(<RentalsFilter value="bike" onChange={() => {}} count={3} />),
+    );
     expect(
       screen.getByRole('button', {name: 'Bikes', pressed: true}),
     ).toBeInTheDocument();

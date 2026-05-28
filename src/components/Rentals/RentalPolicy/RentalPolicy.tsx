@@ -19,41 +19,58 @@ const RULE_KEYS = [
   'confirmationRequired',
 ] as const;
 
+function num(i: number) {
+  return String(i + 1).padStart(2, '0');
+}
+
 export function RentalPolicy() {
   const ti = useTranslations('rentals.policy.included');
   const tr = useTranslations('rentals.policy.rules');
 
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 py-16 border-t border-border">
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 py-12">
       <div>
-        <h2 className="type-title-sm uppercase tracking-wide text-on-surface mb-6">
+        <h2 className="type-headline-lg text-primary mb-8">
+          {'// '}
           {ti('title')}
         </h2>
-        <ul className="space-y-3">
-          {INCLUDED_KEYS.map((k) => (
+        <ul className="flex flex-col">
+          {INCLUDED_KEYS.map((k, i) => (
             <li
               key={k}
-              className="flex items-center justify-between type-body-md text-on-surface"
+              className="flex justify-between items-center py-4 border-b border-border"
             >
-              <span>{ti(k)}</span>
-              <span className="type-label-sm uppercase text-on-surface-tertiary">
+              <div className="flex items-center gap-6">
+                <span className="type-mono-data text-on-surface-tertiary">
+                  {num(i)}
+                </span>
+                <span className="type-headline-md text-white">{ti(k)}</span>
+              </div>
+              <span className="bg-primary text-on-primary px-2 py-0.5 type-mono-label">
                 {ti('free')}
               </span>
             </li>
           ))}
         </ul>
       </div>
+
       <div>
-        <h2 className="type-title-sm uppercase tracking-wide text-on-surface mb-6">
+        <h2 className="type-headline-lg text-primary mb-8">
+          {'// '}
           {tr('title')}
         </h2>
-        <ol className="space-y-3 list-decimal pl-5">
-          {RULE_KEYS.map((k) => (
-            <li key={k} className="type-body-md text-on-surface-secondary">
-              {tr(k)}
+        <ul className="flex flex-col space-y-4">
+          {RULE_KEYS.map((k, i) => (
+            <li key={k} className="grid grid-cols-[3rem_1fr] gap-4 items-start">
+              <span className="type-mono-data text-on-surface-tertiary">
+                {num(i)}
+              </span>
+              <span className="type-body-md uppercase tracking-wider text-white">
+                {tr(k)}
+              </span>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
   );

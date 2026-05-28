@@ -9,48 +9,70 @@ type Props = {
 export function VehicleCard({vehicle}: Props) {
   const t = useTranslations('rentals');
   const tt = useTranslations('rentals.type');
-  const typeLabel = vehicle.type === 'SCOOTER' ? tt('scooter') : tt('bike');
+  const isScooter = vehicle.type === 'SCOOTER';
+  const typeLabel = isScooter ? tt('scooter') : tt('bike');
+  const transmission = isScooter
+    ? t('transmissionAuto')
+    : t('transmissionManual');
   const available = vehicle.quantity > 0;
+  const accentBorder = isScooter ? 'border-t-white' : 'border-t-primary';
 
   return (
-    <article className="bg-surface-elevated border border-border overflow-hidden flex flex-col">
-      <div className="relative aspect-[3/2] bg-surface-alt overflow-hidden">
+    <article
+      className={`group flex flex-col bg-surface-alt border border-border border-t-4 ${accentBorder} transition-colors hover:bg-surface-elevated`}
+    >
+      <div className="relative aspect-[1.75] overflow-hidden bg-black">
         {vehicle.imageUrl ? (
           <Image
             src={vehicle.imageUrl}
             alt={`${vehicle.brand} ${vehicle.model}`}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             unoptimized
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : null}
       </div>
-      <div className="p-4 flex flex-col gap-2 flex-1">
-        <span className="type-label-sm uppercase tracking-wide text-on-surface-secondary">
-          {typeLabel}
-        </span>
-        <h3 className="type-title-sm text-on-surface">
+
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="h-4 w-1 bg-primary" aria-hidden />
+          <span className="type-mono-label text-white">{typeLabel}</span>
+        </div>
+
+        <h3 className="type-headline-lg text-white mb-2">
           {vehicle.brand} {vehicle.model}
         </h3>
-        <p className="type-body-sm text-on-surface-secondary">
-          {vehicle.cc} {t('cc')}
-        </p>
-        <p
-          className={
-            available
-              ? 'type-label-sm text-on-surface-secondary'
-              : 'type-label-sm text-on-surface-tertiary'
-          }
-        >
-          {available ? t('available') : t('outOfStock')}
-        </p>
-        <p className="mt-auto type-title-sm text-on-surface-accent">
-          ${vehicle.priceUsdPerDay}{' '}
-          <span className="type-body-sm text-on-surface-secondary">
-            {t('perDay')}
+
+        <dl className="type-mono-data text-primary uppercase mb-6 flex justify-between gap-2 border-y border-border py-2">
+          <div>
+            <dt className="sr-only">{t('cc')}</dt>
+            <dd>
+              {vehicle.cc} {t('cc')}
+            </dd>
+          </div>
+          <div>
+            <dt className="sr-only">{t('transmissionLabel')}</dt>
+            <dd>{transmission}</dd>
+          </div>
+          <div>
+            <dt className="sr-only">{t('availabilityLabel')}</dt>
+            <dd
+              className={
+                available ? 'text-primary' : 'text-on-surface-tertiary'
+              }
+            >
+              {available ? t('available') : t('outOfStock')}
+            </dd>
+          </div>
+        </dl>
+
+        <div className="mt-auto flex items-baseline gap-2">
+          <span className="type-display-sm text-primary leading-none">
+            ${vehicle.priceUsdPerDay}
           </span>
-        </p>
+          <span className="type-mono-label text-white">{t('perDay')}</span>
+        </div>
       </div>
     </article>
   );
