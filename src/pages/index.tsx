@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {motion} from 'framer-motion';
 import {
   clipReveal,
@@ -54,6 +54,14 @@ export default function Home({
       src: img.url,
       alt: locale === 'vi' ? img.altVi : img.altEn,
     })) ?? [];
+
+  const destinationPlaceholders = useMemo(() => {
+    const usedSlots = destinations.reduce(
+      (sum, d) => sum + (d.size === 'large' ? 4 : 1),
+      0,
+    );
+    return Array.from({length: Math.max(0, 8 - usedSlots)});
+  }, [destinations]);
 
   useEffect(() => {
     const video = bannerVideoRef.current;
@@ -174,67 +182,60 @@ export default function Home({
             </motion.h2>
           </div>
 
-          {(() => {
-            const usedSlots = destinations.reduce(
-              (sum, d) => sum + (d.size === 'large' ? 4 : 1),
-              0,
-            );
-            const minSlots = 8;
-            const slotsToFill = Math.max(0, minSlots - usedSlots);
-            const placeholders = Array.from({length: slotsToFill});
-            return (
-              <div className="grid grid-flow-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border-subtle border border-border-subtle">
-                {destinations.map((destination, i) => {
-                  const isLarge = destination.size === 'large';
-                  return (
-                    <motion.div
-                      key={destination.id}
-                      className={`bg-surface-alt ${isLarge ? 'sm:col-span-2 sm:row-span-2' : ''}`}
-                      custom={i}
-                      variants={waveStagger(0.08)}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{once: true}}
-                    >
-                      <DestinationCard
-                        destination={destination}
-                        className={isLarge ? 'h-full' : undefined}
-                      />
-                    </motion.div>
-                  );
-                })}
-                {placeholders.map((_, i) => (
-                  <motion.div
-                    key={`placeholder-${i}`}
-                    className="bg-surface-alt"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{once: true}}
-                    variants={{
-                      ...fadeInUp,
-                      visible: {
-                        ...fadeInUp.visible,
-                        transition: {
-                          duration: 0.6,
-                          delay: (destinations.length + i) * 0.1,
-                        },
-                      },
-                    }}
-                  >
-                    <div className="relative aspect-[3/2] flex flex-col items-center justify-center text-on-surface-tertiary h-full">
-                      <i
-                        className="fa fa-motorcycle text-3xl opacity-40 mb-2"
-                        aria-hidden="true"
-                      />
-                      <span className="font-mono text-xs uppercase tracking-[0.05em] opacity-60">
-                        {t('comingSoon')}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            );
-          })()}
+          <div className="grid grid-flow-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border-subtle border border-border-subtle">
+            {destinations.map((destination, i) => {
+              const isLarge = destination.size === 'large';
+              return (
+                <motion.div
+                  key={destination.id}
+                  className={
+                    isLarge
+                      ? 'bg-surface-alt sm:col-span-2 sm:row-span-2'
+                      : 'bg-surface-alt'
+                  }
+                  custom={i}
+                  variants={waveStagger(0.08)}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{once: true}}
+                >
+                  <DestinationCard
+                    destination={destination}
+                    className={isLarge ? 'h-full' : undefined}
+                  />
+                </motion.div>
+              );
+            })}
+            {destinationPlaceholders.map((_, i) => (
+              <motion.div
+                key={`placeholder-${i}`}
+                className="bg-surface-alt"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{once: true}}
+                variants={{
+                  ...fadeInUp,
+                  visible: {
+                    ...fadeInUp.visible,
+                    transition: {
+                      duration: 0.6,
+                      delay: (destinations.length + i) * 0.1,
+                    },
+                  },
+                }}
+              >
+                <div className="relative aspect-[3/2] flex flex-col items-center justify-center text-on-surface-tertiary h-full">
+                  <i
+                    className="fa fa-motorcycle text-3xl opacity-40 mb-2"
+                    aria-hidden="true"
+                  />
+                  <span className="font-mono text-xs uppercase tracking-[0.05em] opacity-60">
+                    {t('comingSoon')}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
