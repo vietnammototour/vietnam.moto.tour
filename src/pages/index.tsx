@@ -91,6 +91,8 @@ export default function Home({
           muted
           loop
           playsInline
+          preload="metadata"
+          aria-hidden="true"
           ref={bannerVideoRef}
           className="absolute inset-0 w-full h-full object-cover"
         >
@@ -240,7 +242,7 @@ export default function Home({
       </section>
 
       {/* About */}
-      <section className="bg-black py-20 lg:py-28 border-y border-on-surface-tertiary">
+      <section className="bg-surface-deep py-20 lg:py-28 border-y border-on-surface-tertiary">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-px bg-border-subtle border border-border-subtle">
             <motion.div
@@ -260,7 +262,7 @@ export default function Home({
                   className="object-cover"
                 />
               </div>
-              <div className="absolute bottom-4 left-4 bg-black border border-on-surface-tertiary p-4 flex items-center gap-3">
+              <div className="absolute bottom-4 left-4 bg-surface-deep border border-on-surface-tertiary p-4 flex items-center gap-3">
                 <i
                   className="fa fa-phone text-primary text-xl"
                   aria-hidden="true"
@@ -340,10 +342,9 @@ export default function Home({
             </h2>
           </motion.div>
 
-          {/* Tactical chip filter row — visual only */}
+          {/* Tactical chip ribbon — decorative, non-interactive */}
           <div
-            role="list"
-            aria-label={t('toursFilterLabel')}
+            aria-hidden="true"
             className="mb-8 flex flex-wrap gap-px bg-border-subtle border border-border-subtle"
           >
             {[
@@ -355,7 +356,6 @@ export default function Home({
             ].map((label, idx) => (
               <span
                 key={label}
-                role="listitem"
                 className={`font-mono text-xs uppercase tracking-[0.05em] px-4 py-2 ${
                   idx === 0
                     ? 'bg-surface-alt text-on-surface-accent'
@@ -372,14 +372,14 @@ export default function Home({
       </section>
 
       {/* Video / CTA */}
-      <section className="relative bg-black py-24 lg:py-32 border-y border-on-surface-tertiary">
+      <section className="relative bg-surface-deep py-24 lg:py-32 border-y border-on-surface-tertiary overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-fixed opacity-25"
+          className="absolute inset-0 bg-cover bg-center opacity-25"
           style={{
             backgroundImage: `url(${getUrl('assets/images/backgrounds/video-one-bg-0.jpeg')})`,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-surface-deep via-surface-deep/80 to-transparent" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="lg:flex lg:gap-12 lg:items-center">
             <div className="lg:w-3/5 mb-10 lg:mb-0">

@@ -44,7 +44,7 @@ export function RentalPolicy() {
                 <span className="type-mono-data text-on-surface-tertiary">
                   {num(i)}
                 </span>
-                <span className="type-headline-md text-white">{ti(k)}</span>
+                <span className="type-headline-md text-on-surface">{ti(k)}</span>
               </div>
               <span className="bg-primary text-on-primary px-2 py-0.5 type-mono-label">
                 {ti('free')}
@@ -65,7 +65,7 @@ export function RentalPolicy() {
               <span className="type-mono-data text-on-surface-tertiary">
                 {num(i)}
               </span>
-              <span className="type-body-md uppercase tracking-wider text-white">
+              <span className="type-body-md uppercase tracking-wider text-on-surface">
                 {tr(k)}
               </span>
             </li>

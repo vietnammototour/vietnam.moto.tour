@@ -38,7 +38,7 @@ export default function RentalsPage({vehicles}: Props) {
         <RentalsHero backgroundImage="/assets/rentals-hero.jpg" />
 
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10">
-          <p className="type-body-lg text-white max-w-[60ch]">{t('intro')}</p>
+          <p className="type-body-lg text-on-surface max-w-[60ch]">{t('intro')}</p>
         </section>
 
         <RentalsFilter

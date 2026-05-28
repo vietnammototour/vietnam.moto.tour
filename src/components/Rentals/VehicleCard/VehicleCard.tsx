@@ -15,13 +15,13 @@ export function VehicleCard({vehicle}: Props) {
     ? t('transmissionAuto')
     : t('transmissionManual');
   const available = vehicle.quantity > 0;
-  const accentBar = isScooter ? 'bg-white' : 'bg-primary';
+  const accentBar = isScooter ? 'bg-on-surface' : 'bg-primary';
 
   return (
     <article
       className="group flex flex-col bg-surface-alt transition-colors hover:bg-surface-elevated"
     >
-      <div className="relative aspect-[1.75] overflow-hidden bg-black">
+      <div className="relative aspect-[1.75] overflow-hidden bg-surface-deep">
         {vehicle.imageUrl ? (
           <Image
             src={vehicle.imageUrl}
@@ -37,10 +37,10 @@ export function VehicleCard({vehicle}: Props) {
       <div className="p-6 flex flex-col flex-1">
         <div className="flex items-center gap-2 mb-4">
           <span className={`h-4 w-1 ${accentBar}`} aria-hidden />
-          <span className="type-mono-label text-white">{typeLabel}</span>
+          <span className="type-mono-label text-on-surface">{typeLabel}</span>
         </div>
 
-        <h3 className="type-headline-lg text-white mb-2">
+        <h3 className="type-headline-lg text-on-surface mb-2">
           {vehicle.brand} {vehicle.model}
         </h3>
 
@@ -71,7 +71,7 @@ export function VehicleCard({vehicle}: Props) {
           <span className="type-display-sm text-primary leading-none">
             ${vehicle.priceUsdPerDay}
           </span>
-          <span className="type-mono-label text-white">{t('perDay')}</span>
+          <span className="type-mono-label text-on-surface">{t('perDay')}</span>
         </div>
       </div>
     </article>

@@ -16,6 +16,7 @@
   --color-secondary: #c8c6c5;
   --color-secondary-light: #474746;
   --color-surface: #131313;
+  --color-surface-deep: #0e0e0e;
   --color-surface-alt: #1c1b1b;
   --color-surface-elevated: #201f1f;
   --color-surface-inverse: #e5e2e1;
@@ -278,6 +279,11 @@
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 
   select {

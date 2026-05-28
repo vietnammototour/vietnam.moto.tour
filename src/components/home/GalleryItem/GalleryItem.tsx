@@ -30,8 +30,8 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
           unoptimized
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/70 transition-colors duration-300 flex items-center justify-center">
-          <span className="w-10 h-10 border border-on-surface-accent flex items-center justify-center text-on-surface-accent opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute inset-0 bg-surface-deep/0 group-hover:bg-surface-deep/70 transition-colors duration-300 flex items-center justify-center">
+          <span className="w-11 h-11 border border-on-surface-accent flex items-center justify-center text-on-surface-accent opacity-0 group-hover:opacity-100 transition-opacity">
             <i className="fa fa-expand" aria-hidden="true" />
           </span>
         </div>
@@ -39,11 +39,11 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
 
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-deep/95"
           onClick={() => setLightboxOpen(false)}
         >
           <button
-            className="absolute top-6 right-6 w-10 h-10 border border-on-surface-accent text-on-surface-accent hover:bg-primary hover:text-on-primary transition-colors cursor-pointer flex items-center justify-center"
+            className="absolute top-6 right-6 w-11 h-11 border border-on-surface-accent text-on-surface-accent hover:bg-primary hover:text-on-primary transition-colors cursor-pointer flex items-center justify-center"
             onClick={() => setLightboxOpen(false)}
             aria-label={tc('close')}
           >

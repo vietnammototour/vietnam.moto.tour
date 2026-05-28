@@ -81,7 +81,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
       onMouseLeave={interactive ? onMouseLeave : undefined}
       onMouseEnter={interactive ? onMouseEnter : undefined}
     >
-      <div className="relative overflow-hidden aspect-[3/2] bg-secondary/10 border-b border-border-subtle">
+      <div className="relative overflow-hidden aspect-[3/2] bg-surface-deep border-b border-border-subtle">
         {tour.status &&
           tour.status !== 'PUBLISHED' &&
           (() => {
@@ -127,7 +127,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           </div>
         )}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-surface-deep/85 via-surface-deep/45 to-transparent" />
 
         <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-4 pt-8">
           <ul className="grid grid-cols-2 gap-2">
@@ -136,12 +136,12 @@ export const TourCard = ({tour, interactive = true}: Props) => {
                 key={s.key}
                 className={`flex ${
                   i > 0
-                    ? 'border-l border-white/20 justify-end text-right pl-2'
+                    ? 'border-l border-on-surface/20 justify-end text-right pl-2'
                     : ''
                 }`}
               >
                 <span
-                  className={`flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.05em] text-white truncate ${
+                  className={`flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.05em] text-on-surface truncate ${
                     i > 0 ? 'flex-row-reverse' : ''
                   }`}
                 >

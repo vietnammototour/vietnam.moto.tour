@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import type {AppProps} from 'next/app';
 import {SessionProvider} from 'next-auth/react';
 import {NextIntlClientProvider, type IntlError} from 'next-intl';
+import {MotionConfig} from 'framer-motion';
 import {useRouter} from 'next/router';
 import {Hanken_Grotesk, JetBrains_Mono} from 'next/font/google';
 import {routes} from '@/routes';
@@ -91,7 +92,7 @@ export default function App({
               timeZone="Asia/Ho_Chi_Minh"
               onError={handleIntlError}
             >
-              {content}
+              <MotionConfig reducedMotion="user">{content}</MotionConfig>
             </NextIntlClientProvider>
           </ThemeProvider>
         </SessionProvider>

@@ -150,6 +150,18 @@ const ENTRIES: Entry[] = [
     valueVi: '4500+',
     valueEn: '4500+',
   },
+  {
+    namespace: 'home',
+    key: 'videoIframeTitle',
+    valueVi: 'Video tư liệu Vietnam Moto Tour',
+    valueEn: 'Vietnam Moto Tour field report video',
+  },
+  {
+    namespace: 'rentals.filter',
+    key: 'filterLabel',
+    valueVi: 'Bộ lọc xe',
+    valueEn: 'Vehicle filter',
+  },
 ];
 
 async function main() {

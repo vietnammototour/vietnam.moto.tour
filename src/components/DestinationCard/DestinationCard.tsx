@@ -70,9 +70,9 @@ export const DestinationCard = ({
           unoptimized
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-surface-deep/90 via-surface-deep/40 to-transparent" />
         <div className="absolute top-3 left-3">
-          <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-accent bg-black/80 px-2 py-1 border border-on-surface-tertiary">
+          <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-accent bg-surface-deep/80 px-2 py-1 border border-on-surface-tertiary">
             {displayName.slice(0, 3).toUpperCase()}-
             {String(carOnlyCount + bikeOnlyCount + bikeAndCarCount).padStart(
               2,
@@ -88,7 +88,7 @@ export const DestinationCard = ({
             {chips.map((chip) => (
               <span
                 key={chip.key}
-                className="inline-flex items-center gap-1.5 h-6 px-2 font-mono text-[10px] uppercase tracking-[0.05em] bg-black/80 border border-border-subtle text-on-surface-secondary"
+                className="inline-flex items-center gap-1.5 h-6 px-2 font-mono text-[10px] uppercase tracking-[0.05em] bg-surface-deep/80 border border-border-subtle text-on-surface-secondary"
                 aria-label={chip.ariaLabel}
               >
                 {chip.icon}
