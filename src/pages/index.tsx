@@ -449,9 +449,17 @@ export default function Home({
 
       {/* Gallery */}
       {galleryImages.length > 0 && (
-        <section className="py-16 lg:py-24 bg-surface-alt">
+        <section className="bg-surface py-20 lg:py-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="mb-12 border-l-2 border-primary pl-4">
+              <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-secondary block">
+                {t('galleryEyebrow')}
+              </span>
+              <h2 className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2">
+                {t('galleryTitle')}
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border-subtle border border-border-subtle">
               {galleryImages.map(({src, alt}, index) => (
                 <GalleryItem
                   key={index}

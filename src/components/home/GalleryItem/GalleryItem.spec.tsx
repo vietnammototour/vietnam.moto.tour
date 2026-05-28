@@ -38,7 +38,7 @@ describe('GalleryItem', () => {
     );
     const button = screen.getByRole('button', {name: 'Test gallery image'});
     await user.click(button);
-    const closeButton = screen.getByLabelText('Close lightbox');
+    const closeButton = screen.getByLabelText('close');
     expect(closeButton).toBeInTheDocument();
     const images = document.querySelectorAll('img');
     expect(images).toHaveLength(2);
@@ -54,7 +54,7 @@ describe('GalleryItem', () => {
       />,
     );
     await user.click(screen.getByRole('button', {name: 'Test gallery image'}));
-    await user.click(screen.getByLabelText('Close lightbox'));
-    expect(screen.queryByLabelText('Close lightbox')).not.toBeInTheDocument();
+    await user.click(screen.getByLabelText('close'));
+    expect(screen.queryByLabelText('close')).not.toBeInTheDocument();
   });
 });
