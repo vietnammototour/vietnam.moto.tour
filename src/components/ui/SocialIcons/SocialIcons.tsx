@@ -10,7 +10,7 @@ type Props = {
 
 const VARIANTS: Record<Variant, {box: string; icon: string; gap: string}> = {
   compact: {
-    box: 'w-11 h-11 bg-transparent hover:bg-primary hover:text-on-primary text-on-surface',
+    box: 'w-11 h-11 bg-transparent hover:bg-primary hover:text-on-primary text-on-surface-inverse',
     icon: 'text-xl',
     gap: 'gap-2',
   },
