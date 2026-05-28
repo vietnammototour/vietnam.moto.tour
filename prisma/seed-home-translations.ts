@@ -162,6 +162,18 @@ const ENTRIES: Entry[] = [
     valueVi: 'Bộ lọc xe',
     valueEn: 'Vehicle filter',
   },
+  {
+    namespace: 'home',
+    key: 'testimonialsEyebrow',
+    valueVi: 'Tiếng nói trên đường',
+    valueEn: 'Field Voices',
+  },
+  {
+    namespace: 'home',
+    key: 'testimonialsTitle',
+    valueVi: 'NGƯỜI ĐÃ ĐI CÙNG CHÚNG TÔI',
+    valueEn: 'WHO HAS RIDDEN WITH US',
+  },
 ];
 
 async function main() {

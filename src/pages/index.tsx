@@ -20,6 +20,7 @@ import {DestinationCard} from '@/components/DestinationCard';
 import {TourCarousel} from '@/components/home/TourCarousel';
 import {GalleryItem} from '@/components/home/GalleryItem';
 import {StatsStrip} from '@/components/home/StatsStrip';
+import {Testimonials} from '@/components/home/Testimonials';
 import {VideoModal} from '@/components/VideoModal';
 import {contactInfo} from '@/utils';
 
@@ -451,6 +452,8 @@ export default function Home({
         isOpen={videoModalOpen}
         onClose={() => setVideoModalOpen(false)}
       />
+
+      <Testimonials />
 
       {/* Gallery */}
       {galleryImages.length > 0 && (
