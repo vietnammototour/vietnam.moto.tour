@@ -240,17 +240,17 @@ export default function Home({
       </section>
 
       {/* About */}
-      <section className="py-16 lg:py-24 texture-grain-cool bg-surface-alt">
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
+      <section className="bg-black py-20 lg:py-28 border-y border-on-surface-tertiary">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-px bg-border-subtle border border-border-subtle">
             <motion.div
-              className="relative"
+              className="relative bg-surface-alt"
               initial="hidden"
               whileInView="visible"
               viewport={{once: true}}
               variants={fadeInUp}
             >
-              <div className="relative rounded-lg overflow-hidden aspect-[4/3]">
+              <div className="relative aspect-[4/3]">
                 <Image
                   src="https://i0.wp.com/jolandblog.com/wp-content/uploads/2015/11/ninh-binh-vietname.jpg?fit=1000%2C667&ssl=1"
                   alt="Vietnam landscape"
@@ -260,15 +260,18 @@ export default function Home({
                   className="object-cover"
                 />
               </div>
-              <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-5 shadow-lg flex items-center gap-4">
-                <span className="icon-phone-call text-2xl text-primary" />
+              <div className="absolute bottom-4 left-4 bg-black border border-on-surface-tertiary p-4 flex items-center gap-3">
+                <i
+                  className="fa fa-phone text-primary text-xl"
+                  aria-hidden="true"
+                />
                 <div>
-                  <p className="type-label-sm font-normal text-on-surface-secondary">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-secondary">
                     {tc('bookTourNow')}
                   </p>
                   <a
                     href={`tel:${contactInfo.phone}`}
-                    className="text-lg font-semibold text-on-surface hover:text-on-surface-accent transition-colors cursor-pointer"
+                    className="font-mono text-base text-on-surface hover:text-on-surface-accent transition-colors cursor-pointer"
                   >
                     {contactInfo.phone}
                   </a>
@@ -277,39 +280,42 @@ export default function Home({
             </motion.div>
 
             <motion.div
+              className="bg-surface p-10 lg:p-14"
               initial="hidden"
               whileInView="visible"
               viewport={{once: true}}
               variants={fadeInUp}
             >
-              <span className="type-label-sm uppercase text-on-surface-accent">
+              <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent">
                 {t('getToKnowUs')}
               </span>
-              <h2 className="type-headline-sm lg:type-headline-lg mt-2 mb-6">
+              <h2 className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2 mb-6">
                 {tc('planYourTrip')}
               </h2>
-              <p className="type-body-lg text-on-surface-secondary mb-6">
+              <p className="text-base text-on-surface-secondary mb-6 leading-relaxed">
                 {t('aboutDescription')}
               </p>
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 mb-8 border-y border-border-subtle divide-y divide-border-subtle">
                 {[
                   t('bulletMotorbike'),
                   t('bulletFriendly'),
                   t('bulletExperience'),
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
-                      <i className="fa fa-check text-primary text-xs" />
-                    </span>
+                  <li key={item} className="flex items-center gap-3 py-3">
+                    <span
+                      className="flex-shrink-0 w-2 h-2 bg-primary"
+                      aria-hidden="true"
+                    />
                     <span className="text-on-surface">{item}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href={routes.tours.list.path()}
-                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-light text-on-primary font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
               >
                 {t('bookWithUsNow')}
+                <i className="fa fa-arrow-right" aria-hidden="true" />
               </Link>
             </motion.div>
           </div>
