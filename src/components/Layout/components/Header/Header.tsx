@@ -9,9 +9,8 @@ import {useSession, signOut} from 'next-auth/react';
 import {routes} from '@/routes';
 import {useScrollDirection} from '@/hooks/useScrollDirection';
 import {getUrl} from '@/utils';
-import {contactInfo} from '@/utils';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
-import {TripAdvisorIcon} from '@/components/ui';
+import {SocialIcons} from '@/components/ui';
 import {LoginModal} from '@/components/Admin/LoginModal';
 
 export const Header = () => {
@@ -63,37 +62,7 @@ export const Header = () => {
       {/* Top bar */}
       <div className="bg-surface-inverse text-on-surface-inverse type-body-sm hidden lg:block">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-end py-2">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-xl">
-              <a
-                href={contactInfo.youtubeLink}
-                aria-label="YouTube"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-              >
-                <i className="fab fa-youtube" aria-hidden="true" />
-              </a>
-              <a
-                href={contactInfo.tripadvisorLink}
-                aria-label="TripAdvisor"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-              >
-                <TripAdvisorIcon className="h-[0.8em] w-auto" />
-              </a>
-              <a
-                href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
-                aria-label="WhatsApp"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-              >
-                <i className="fab fa-whatsapp" aria-hidden="true" />
-              </a>
-            </div>
-          </div>
+          <SocialIcons variant="compact" />
         </div>
       </div>
 
@@ -226,35 +195,7 @@ export const Header = () => {
           ))}
         </nav>
         <div className="p-4 mt-4">
-          <div className="flex gap-2 text-xl">
-            <a
-              href={contactInfo.youtubeLink}
-              aria-label="YouTube"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-            >
-              <i className="fab fa-youtube" aria-hidden="true" />
-            </a>
-            <a
-              href={contactInfo.tripadvisorLink}
-              aria-label="TripAdvisor"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-            >
-              <TripAdvisorIcon className="h-[0.8em] w-auto" />
-            </a>
-            <a
-              href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
-              aria-label="WhatsApp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-            >
-              <i className="fab fa-whatsapp" aria-hidden="true" />
-            </a>
-          </div>
+          <SocialIcons variant="default" />
           <div className="mt-4 pt-4 border-t border-on-surface-inverse/25">
             <LanguageSwitcher />
           </div>

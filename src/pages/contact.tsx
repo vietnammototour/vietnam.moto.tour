@@ -11,7 +11,7 @@ import {
   submitContact,
   type ContactFormData,
 } from '@/lib/contact-form-utils';
-import {Button, TextInput, Textarea, TripAdvisorIcon} from '@/components/ui';
+import {Button, TextInput, Textarea, SocialIcons} from '@/components/ui';
 
 export default function Contact() {
   const t = useTranslations('contact');
@@ -58,35 +58,7 @@ export default function Contact() {
                 {t('talkWithTeam')}
               </span>
               <h2 className="type-headline-lg mt-2 mb-6">{t('anyQuestion')}</h2>
-              <div className="flex gap-3">
-                <a
-                  href={contactInfo.youtubeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="YouTube"
-                  className="w-11 h-11 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all cursor-pointer"
-                >
-                  <i className="fab fa-youtube" aria-hidden="true" />
-                </a>
-                <a
-                  href={contactInfo.tripadvisorLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="TripAdvisor"
-                  className="w-11 h-11 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all cursor-pointer"
-                >
-                  <TripAdvisorIcon className="h-5 w-auto" />
-                </a>
-                <a
-                  href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="WhatsApp"
-                  className="w-11 h-11 bg-surface-alt hover:bg-primary hover:text-on-primary flex items-center justify-center text-on-surface-secondary transition-all cursor-pointer"
-                >
-                  <i className="fab fa-whatsapp" aria-hidden="true" />
-                </a>
-              </div>
+              <SocialIcons variant="default" />
             </div>
             <div className="lg:col-span-8">
               <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
