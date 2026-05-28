@@ -1,10 +1,9 @@
 import {useMemo, useState} from 'react';
-import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
 import type {GetStaticPropsContext} from 'next';
 import Head from 'next/head';
-import {PageHeader} from '@/components/PageHeader';
 import {
+  RentalsHero,
   VehicleCard,
   RentalsFilter,
   RentalPolicy,
@@ -17,14 +16,8 @@ type Props = {
   vehicles: Vehicle[];
 };
 
-const fadeInUp = {
-  hidden: {opacity: 0, y: 30},
-  visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
-};
-
 export default function RentalsPage({vehicles}: Props) {
   const t = useTranslations('rentals');
-  const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
   const [filter, setFilter] = useState<RentalsFilterValue>('all');
 
@@ -41,48 +34,35 @@ export default function RentalsPage({vehicles}: Props) {
         <meta name="description" content={tMeta('rentalsDescription')} />
       </Head>
 
-      <PageHeader
-        title={t('title')}
-        breadcrumbs={[
-          {label: tc('breadcrumbHome'), href: '/'},
-          {label: t('breadcrumbRental')},
-        ]}
-        backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg"
-      />
+      <div className="bg-surface text-on-surface">
+        <RentalsHero backgroundImage="https://vietnammotorcycletours.com/storage/2022/04/AR500963-1920x1280.jpg" />
 
-      <section className="py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-6 mb-10">
-            <p className="type-body-lg text-on-surface-secondary max-w-3xl">
-              {t('subtitle')}
-            </p>
-            <RentalsFilter value={filter} onChange={setFilter} />
-          </div>
+        <section className="px-6 sm:px-10 lg:px-12 pb-10">
+          <p className="type-body-lg text-white max-w-[60ch]">{t('intro')}</p>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {filtered.map((v, i) => (
-              <motion.div
-                key={v.id}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{once: true}}
-                variants={{
-                  ...fadeInUp,
-                  visible: {
-                    ...fadeInUp.visible,
-                    transition: {duration: 0.6, delay: i * 0.1},
-                  },
-                }}
-              >
-                <VehicleCard vehicle={v} />
-              </motion.div>
-            ))}
-          </div>
+        <RentalsFilter
+          value={filter}
+          onChange={setFilter}
+          count={filtered.length}
+        />
 
-          <RentalPolicy />
-          <RentalContactCta />
+        <section className="px-6 sm:px-10 lg:px-12 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((v) => (
+            <VehicleCard key={v.id} vehicle={v} />
+          ))}
+        </section>
+
+        <div className="py-8 overflow-hidden" aria-hidden>
+          <div className="h-px bg-primary w-[110%] -ml-[5%] -rotate-[1.5deg]" />
         </div>
-      </section>
+
+        <div className="px-6 sm:px-10 lg:px-12">
+          <RentalPolicy />
+        </div>
+
+        <RentalContactCta />
+      </div>
     </>
   );
 }

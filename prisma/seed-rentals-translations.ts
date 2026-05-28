@@ -65,6 +65,52 @@ const entries: Entry[] = [
   },
   {
     namespace: 'rentals',
+    key: 'intro',
+    valueEn:
+      "Vetted bikes for self-guided journeys across Vietnam's most challenging terrain. Every machine in our fleet undergoes a rigorous multi-point inspection to ensure mission readiness from the Ha Giang Loop to the Ho Chi Minh Trail.",
+    valueVi:
+      'Xe được kiểm định kỹ lưỡng cho hành trình tự lái xuyên những cung đường khó nhất Việt Nam. Mỗi chiếc xe trong đội đều trải qua quy trình kiểm tra nhiều điểm để sẵn sàng từ cung Hà Giang đến đường Hồ Chí Minh.',
+  },
+  {
+    namespace: 'rentals',
+    key: 'heroBadge',
+    valueEn: 'Vietnam · Self-guided · Scooters & Enduros',
+    valueVi: 'Việt Nam · Tự lái · Xe ga & Enduro',
+  },
+  {
+    namespace: 'rentals',
+    key: 'vehiclesCount',
+    valueEn:
+      '{count, plural, =0 {No vehicles} one {# vehicle} other {# vehicles}} · Status: Active',
+    valueVi:
+      '{count, plural, =0 {Không có xe} other {# xe}} · Trạng thái: Sẵn sàng',
+  },
+  {
+    namespace: 'rentals',
+    key: 'transmissionAuto',
+    valueEn: 'Automatic',
+    valueVi: 'Số tự động',
+  },
+  {
+    namespace: 'rentals',
+    key: 'transmissionManual',
+    valueEn: 'Manual',
+    valueVi: 'Số tay',
+  },
+  {
+    namespace: 'rentals',
+    key: 'transmissionLabel',
+    valueEn: 'Transmission',
+    valueVi: 'Hộp số',
+  },
+  {
+    namespace: 'rentals',
+    key: 'availabilityLabel',
+    valueEn: 'Availability',
+    valueVi: 'Tình trạng',
+  },
+  {
+    namespace: 'rentals',
     key: 'breadcrumbRental',
     valueEn: 'Rentals',
     valueVi: 'Cho thuê',
