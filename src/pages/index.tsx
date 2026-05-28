@@ -268,7 +268,11 @@ export default function Home({
                   className="object-cover"
                 />
               </div>
-              <div className="absolute bottom-4 left-4 bg-surface-deep border border-on-surface-tertiary p-4 flex items-center gap-3">
+              <a
+                href={`tel:${contactInfo.phone}`}
+                aria-label={`${tc('bookTourNow')} ${contactInfo.phone}`}
+                className="group absolute bottom-4 left-4 bg-surface-deep border border-on-surface-tertiary hover:border-on-surface-accent p-4 flex items-center gap-3 cursor-pointer transition-colors"
+              >
                 <i
                   className="fa fa-phone text-primary text-xl"
                   aria-hidden="true"
@@ -277,14 +281,11 @@ export default function Home({
                   <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-secondary">
                     {tc('bookTourNow')}
                   </p>
-                  <a
-                    href={`tel:${contactInfo.phone}`}
-                    className="font-mono text-base text-on-surface hover:text-on-surface-accent transition-colors cursor-pointer"
-                  >
+                  <span className="font-mono text-base text-on-surface group-hover:text-on-surface-accent transition-colors">
                     {contactInfo.phone}
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
             </motion.div>
 
             <motion.div
