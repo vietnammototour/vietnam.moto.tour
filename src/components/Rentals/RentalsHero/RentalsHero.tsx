@@ -24,7 +24,7 @@ export function RentalsHero({backgroundImage}: Props) {
           aria-hidden
         />
 
-        <div className="relative z-10 h-full flex flex-col justify-end mx-auto max-w-[1920px] px-6 sm:px-10 lg:px-12 pb-10 lg:pb-14">
+        <div className="relative z-10 h-full flex flex-col justify-end mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
           <h1 className="type-display-lg text-on-surface leading-none mb-5 max-w-[16ch]">
             {t('title')}
           </h1>
