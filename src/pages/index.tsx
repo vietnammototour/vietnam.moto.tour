@@ -151,11 +151,11 @@ export default function Home({
       <StatsStrip />
 
       {/* Destinations */}
-      <section className="relative py-16 lg:py-24 texture-grain-warm">
+      <section className="bg-surface py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="mb-12 border-l-2 border-primary pl-4">
             <motion.span
-              className="type-label-sm uppercase text-on-surface-accent block"
+              className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-secondary block"
               variants={slideFromLeft}
               initial="hidden"
               whileInView="visible"
@@ -164,7 +164,7 @@ export default function Home({
               {t('destinationLists')}
             </motion.span>
             <motion.h2
-              className="type-headline-sm lg:type-headline-lg mt-2"
+              className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2"
               variants={clipReveal}
               initial="hidden"
               whileInView="visible"
@@ -173,7 +173,7 @@ export default function Home({
               {t('goExoticPlaces')}
             </motion.h2>
           </div>
-          {/* Magazine grid: large cards span 2x2, small cards 1x1 — driven by destination.size */}
+
           {(() => {
             const usedSlots = destinations.reduce(
               (sum, d) => sum + (d.size === 'large' ? 4 : 1),
@@ -183,15 +183,13 @@ export default function Home({
             const slotsToFill = Math.max(0, minSlots - usedSlots);
             const placeholders = Array.from({length: slotsToFill});
             return (
-              <div className="grid grid-flow-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-flow-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border-subtle border border-border-subtle">
                 {destinations.map((destination, i) => {
                   const isLarge = destination.size === 'large';
                   return (
                     <motion.div
                       key={destination.id}
-                      className={
-                        isLarge ? 'sm:col-span-2 sm:row-span-2' : undefined
-                      }
+                      className={`bg-surface-alt ${isLarge ? 'sm:col-span-2 sm:row-span-2' : ''}`}
                       custom={i}
                       variants={waveStagger(0.08)}
                       initial="hidden"
@@ -208,6 +206,7 @@ export default function Home({
                 {placeholders.map((_, i) => (
                   <motion.div
                     key={`placeholder-${i}`}
+                    className="bg-surface-alt"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{once: true}}
@@ -222,9 +221,12 @@ export default function Home({
                       },
                     }}
                   >
-                    <div className="relative rounded-lg overflow-hidden bg-surface-alt aspect-[3/2] flex flex-col items-center justify-center text-on-surface-muted h-full">
-                      <i className="fa fa-motorcycle text-3xl opacity-20 mb-2" />
-                      <span className="type-label-sm uppercase opacity-40">
+                    <div className="relative aspect-[3/2] flex flex-col items-center justify-center text-on-surface-tertiary h-full">
+                      <i
+                        className="fa fa-motorcycle text-3xl opacity-40 mb-2"
+                        aria-hidden="true"
+                      />
+                      <span className="font-mono text-xs uppercase tracking-[0.05em] opacity-60">
                         {t('comingSoon')}
                       </span>
                     </div>
@@ -234,7 +236,6 @@ export default function Home({
             );
           })()}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-5 bg-[url('/textures/border-pattern.svg')] bg-repeat-x bg-[length:auto_100%] opacity-60" />
       </section>
 
       {/* About */}
