@@ -196,7 +196,7 @@ describe('Home page', () => {
         locale="en"
       />,
     );
-    expect(screen.getByLabelText('Play video')).toBeInTheDocument();
+    expect(screen.getByLabelText('watchFieldReport')).toBeInTheDocument();
   });
 
   it('renders gallery images', () => {
