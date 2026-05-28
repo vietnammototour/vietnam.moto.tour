@@ -59,42 +59,6 @@ const ENTRIES: Entry[] = [
   },
   {
     namespace: 'home',
-    key: 'toursFilterLabel',
-    valueVi: 'Lọc tour',
-    valueEn: 'Filter tours',
-  },
-  {
-    namespace: 'home',
-    key: 'tours.filterAll',
-    valueVi: 'TẤT CẢ',
-    valueEn: 'ALL',
-  },
-  {
-    namespace: 'home',
-    key: 'tours.filterMountain',
-    valueVi: 'NÚI',
-    valueEn: 'MOUNTAIN',
-  },
-  {
-    namespace: 'home',
-    key: 'tours.filterCoastal',
-    valueVi: 'BIỂN',
-    valueEn: 'COASTAL',
-  },
-  {
-    namespace: 'home',
-    key: 'tours.filterNorth',
-    valueVi: 'MIỀN BẮC',
-    valueEn: 'NORTH',
-  },
-  {
-    namespace: 'home',
-    key: 'tours.filterSouth',
-    valueVi: 'MIỀN NAM',
-    valueEn: 'SOUTH',
-  },
-  {
-    namespace: 'home',
     key: 'videoEyebrow',
     valueVi: 'Tư liệu',
     valueEn: 'Field Report',

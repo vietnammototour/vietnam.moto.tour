@@ -323,31 +323,6 @@ export default function Home({
             </h2>
           </motion.div>
 
-          {/* Tactical chip ribbon — decorative, non-interactive */}
-          <div
-            aria-hidden="true"
-            className="mb-8 flex flex-wrap gap-px bg-border-subtle border border-border-subtle"
-          >
-            {[
-              t('tours.filterAll'),
-              t('tours.filterMountain'),
-              t('tours.filterCoastal'),
-              t('tours.filterNorth'),
-              t('tours.filterSouth'),
-            ].map((label, idx) => (
-              <span
-                key={label}
-                className={`font-mono text-xs uppercase tracking-[0.05em] px-4 py-2 ${
-                  idx === 0
-                    ? 'bg-surface-alt text-on-surface-accent'
-                    : 'bg-surface text-on-surface-secondary'
-                }`}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
-
           <TourCarousel tours={tours} />
         </div>
       </section>
