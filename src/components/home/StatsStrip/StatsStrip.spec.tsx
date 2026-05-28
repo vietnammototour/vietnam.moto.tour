@@ -43,6 +43,7 @@ import {StatsStrip} from './StatsStrip';
 const messages = {
   home: {
     stats: {
+      ariaLabel: 'Headline statistics',
       years: {label: 'YEARS', value: '12'},
       routes: {label: 'ROUTES', value: '47'},
       km: {label: 'KM RIDDEN', value: '1.2M'},
