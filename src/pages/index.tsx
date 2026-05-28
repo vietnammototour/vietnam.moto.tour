@@ -1,6 +1,5 @@
-import {useEffect, useRef, useState} from 'react';
-import {motion, useMotionTemplate} from 'framer-motion';
-import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
+import {useEffect, useMemo, useRef, useState} from 'react';
+import {motion} from 'framer-motion';
 import {
   clipReveal,
   fadeInUp,
@@ -20,6 +19,8 @@ import {routes} from '@/routes';
 import {DestinationCard} from '@/components/DestinationCard';
 import {TourCarousel} from '@/components/home/TourCarousel';
 import {GalleryItem} from '@/components/home/GalleryItem';
+import {StatsStrip} from '@/components/home/StatsStrip';
+import {Testimonials} from '@/components/home/Testimonials';
 import {VideoModal} from '@/components/VideoModal';
 import {contactInfo} from '@/utils';
 
@@ -49,20 +50,21 @@ export default function Home({
   const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
 
-  const {
-    ref: spotlightRef,
-    x: spotlightX,
-    y: spotlightY,
-    onMouseMove: onSpotlightMove,
-    onMouseLeave: onSpotlightLeave,
-  } = useCursorSpotlight(200, 0.15);
-  const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlightX}px ${spotlightY}px, rgb(var(--color-spotlight-rgb) / 0.15), transparent)`;
-
   const galleryImages =
     gallery?.images.map((img) => ({
       src: img.url,
       alt: locale === 'vi' ? img.altVi : img.altEn,
     })) ?? [];
+
+  const destinationPlaceholders = useMemo(() => {
+    const gridCols = 4;
+    const usedSlots = destinations.reduce(
+      (sum, d) => sum + (d.size === 'large' ? 4 : 1),
+      0,
+    );
+    const total = Math.ceil(usedSlots / gridCols) * gridCols;
+    return Array.from({length: Math.max(0, total - usedSlots)});
+  }, [destinations]);
 
   useEffect(() => {
     const video = bannerVideoRef.current;
@@ -86,71 +88,87 @@ export default function Home({
       </Head>
 
       {/* Hero */}
-      <section
-        ref={spotlightRef as React.RefObject<HTMLElement>}
-        onMouseMove={onSpotlightMove}
-        onMouseLeave={onSpotlightLeave}
-        className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center overflow-hidden texture-grain-warm"
-      >
+      <section className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center overflow-hidden bg-[#131313]">
         <video
           autoPlay
           muted
           loop
           playsInline
+          preload="metadata"
+          aria-hidden="true"
           ref={bannerVideoRef}
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-surface/75" />
 
-        {/* Cursor spotlight overlay */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none z-10"
-          style={{background: spotlightBg}}
-        />
+        {/* Corner crosshair marks */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
+          <div className="absolute top-6 left-6 w-6 h-6 border-t border-l border-[#ffdb00]" />
+          <div className="absolute top-6 right-6 w-6 h-6 border-t border-r border-[#ffdb00]" />
+          <div className="absolute bottom-6 left-6 w-6 h-6 border-b border-l border-[#ffdb00]" />
+          <div className="absolute bottom-6 right-6 w-6 h-6 border-b border-r border-[#ffdb00]" />
+        </div>
 
-        {/* Asymmetric content — left-aligned */}
         <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
             <motion.p
               variants={slideFromLeft}
               initial="hidden"
               animate="visible"
-              className="type-label-sm uppercase tracking-wider text-primary-light mb-4"
+              className="font-mono text-xs uppercase tracking-[0.05em] text-[#ffdb00] mb-6"
             >
-              {t('heroSubtitle')}
+              {t('heroTimestamp')}
             </motion.p>
             <motion.h1
               variants={clipReveal}
               initial="hidden"
               animate="visible"
-              className="type-display-sm md:type-display-lg text-white mb-6"
+              className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05] text-on-surface mb-8"
             >
               {t('heroTitle')}
             </motion.h1>
+            <motion.p
+              variants={fadeInUp}
+              initial="hidden"
+              animate="visible"
+              className="text-base lg:text-lg text-[#cfc6ab] mb-10 max-w-xl leading-relaxed"
+            >
+              {t('heroSubtitle')}
+            </motion.p>
             <motion.div
               variants={riseWithOvershoot}
               initial="hidden"
               animate="visible"
+              className="flex flex-wrap gap-3"
             >
               <Link
                 href={routes.tours.list.path()}
-                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg cursor-pointer transition-colors elevation-2 hover:elevation-3"
+                className="inline-flex items-center gap-2 bg-[#ffdb00] hover:bg-[#e6c500] text-[#393000] font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
               >
                 {t('bookWithUsNow')}
+                <i className="fa fa-arrow-right" aria-hidden="true" />
+              </Link>
+              <Link
+                href={routes.rentals.list.path()}
+                className="inline-flex items-center gap-2 border border-[#989177] hover:border-[#ffdb00] text-[#e5e2e1] hover:text-[#ffdb00] font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
+              >
+                {t('viewFleet')}
               </Link>
             </motion.div>
           </div>
         </div>
       </section>
 
+      <StatsStrip toursCount={tours.length} />
+
       {/* Destinations */}
-      <section className="relative py-16 lg:py-24 texture-grain-warm">
+      <section className="bg-surface py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="mb-12 border-l-2 border-primary pl-4">
             <motion.span
-              className="type-label-sm uppercase text-on-surface-accent block"
+              className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-secondary block"
               variants={slideFromLeft}
               initial="hidden"
               whileInView="visible"
@@ -159,7 +177,7 @@ export default function Home({
               {t('destinationLists')}
             </motion.span>
             <motion.h2
-              className="type-headline-sm lg:type-headline-lg mt-2"
+              className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2"
               variants={clipReveal}
               initial="hidden"
               whileInView="visible"
@@ -168,141 +186,119 @@ export default function Home({
               {t('goExoticPlaces')}
             </motion.h2>
           </div>
-          {/* Magazine grid: large cards span 2x2, small cards 1x1 — driven by destination.size */}
-          {(() => {
-            const usedSlots = destinations.reduce(
-              (sum, d) => sum + (d.size === 'large' ? 4 : 1),
-              0,
-            );
-            const minSlots = 8;
-            const slotsToFill = Math.max(0, minSlots - usedSlots);
-            const placeholders = Array.from({length: slotsToFill});
-            return (
-              <div className="grid grid-flow-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {destinations.map((destination, i) => {
-                  const isLarge = destination.size === 'large';
-                  return (
-                    <motion.div
-                      key={destination.id}
-                      className={
-                        isLarge ? 'sm:col-span-2 sm:row-span-2' : undefined
-                      }
-                      custom={i}
-                      variants={waveStagger(0.08)}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{once: true}}
-                    >
-                      <DestinationCard
-                        destination={destination}
-                        className={isLarge ? 'h-full' : undefined}
-                      />
-                    </motion.div>
-                  );
-                })}
-                {placeholders.map((_, i) => (
-                  <motion.div
-                    key={`placeholder-${i}`}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{once: true}}
-                    variants={{
-                      ...fadeInUp,
-                      visible: {
-                        ...fadeInUp.visible,
-                        transition: {
-                          duration: 0.6,
-                          delay: (destinations.length + i) * 0.1,
-                        },
-                      },
-                    }}
-                  >
-                    <div className="relative rounded-lg overflow-hidden bg-surface-alt aspect-[3/2] flex flex-col items-center justify-center text-on-surface-muted h-full">
-                      <i className="fa fa-motorcycle text-3xl opacity-20 mb-2" />
-                      <span className="type-label-sm uppercase opacity-40">
-                        {t('comingSoon')}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            );
-          })()}
+
+          <div className="grid grid-flow-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border-subtle border border-border-subtle">
+            {destinations.map((destination, i) => {
+              const isLarge = destination.size === 'large';
+              return (
+                <motion.div
+                  key={destination.id}
+                  className={
+                    isLarge
+                      ? 'bg-surface-alt sm:col-span-2 sm:row-span-2'
+                      : 'bg-surface-alt'
+                  }
+                  custom={i}
+                  variants={waveStagger(0.08)}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{once: true}}
+                >
+                  <DestinationCard
+                    destination={destination}
+                    className={isLarge ? 'h-full' : undefined}
+                  />
+                </motion.div>
+              );
+            })}
+            {destinationPlaceholders.map((_, i) => (
+              <div
+                key={`placeholder-${i}`}
+                aria-hidden="true"
+                className="bg-surface-alt aspect-[3/2]"
+              />
+            ))}
+          </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-5 bg-[url('/textures/border-pattern.svg')] bg-repeat-x bg-[length:auto_100%] opacity-60" />
       </section>
 
       {/* About */}
-      <section className="py-16 lg:py-24 texture-grain-cool bg-surface-alt">
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
+      <section className="bg-surface-deep py-20 lg:py-28 border-y border-on-surface-tertiary">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-px bg-border-subtle border border-border-subtle">
             <motion.div
-              className="relative"
+              className="relative bg-surface-alt"
               initial="hidden"
               whileInView="visible"
               viewport={{once: true}}
               variants={fadeInUp}
             >
-              <div className="relative rounded-lg overflow-hidden aspect-[4/3]">
+              <div className="relative aspect-[4/3]">
                 <Image
                   src="https://i0.wp.com/jolandblog.com/wp-content/uploads/2015/11/ninh-binh-vietname.jpg?fit=1000%2C667&ssl=1"
                   alt="Vietnam landscape"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  unoptimized
                   className="object-cover"
                 />
               </div>
-              <div className="absolute bottom-6 left-6 bg-surface-elevated rounded-lg p-5 shadow-lg flex items-center gap-4">
-                <span className="icon-phone-call text-2xl text-primary" />
+              <a
+                href={`tel:${contactInfo.phone}`}
+                aria-label={`${tc('bookTourNow')} ${contactInfo.phone}`}
+                className="group absolute bottom-4 left-4 bg-surface-deep border border-on-surface-tertiary hover:border-on-surface-accent p-4 flex items-center gap-3 cursor-pointer transition-colors"
+              >
+                <i
+                  className="fa fa-phone text-primary text-xl"
+                  aria-hidden="true"
+                />
                 <div>
-                  <p className="type-label-sm font-normal text-on-surface-secondary">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-secondary">
                     {tc('bookTourNow')}
                   </p>
-                  <a
-                    href={`tel:${contactInfo.phone}`}
-                    className="text-lg font-semibold text-on-surface hover:text-on-surface-accent transition-colors cursor-pointer"
-                  >
+                  <span className="font-mono text-base text-on-surface group-hover:text-on-surface-accent transition-colors">
                     {contactInfo.phone}
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
             </motion.div>
 
             <motion.div
+              className="bg-surface p-10 lg:p-14"
               initial="hidden"
               whileInView="visible"
               viewport={{once: true}}
               variants={fadeInUp}
             >
-              <span className="type-label-sm uppercase text-on-surface-accent">
+              <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent">
                 {t('getToKnowUs')}
               </span>
-              <h2 className="type-headline-sm lg:type-headline-lg mt-2 mb-6">
+              <h2 className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2 mb-6">
                 {tc('planYourTrip')}
               </h2>
-              <p className="type-body-lg text-on-surface-secondary mb-6">
+              <p className="text-base text-on-surface-secondary mb-6 leading-relaxed">
                 {t('aboutDescription')}
               </p>
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 mb-8 border-y border-border-subtle divide-y divide-border-subtle">
                 {[
                   t('bulletMotorbike'),
                   t('bulletFriendly'),
                   t('bulletExperience'),
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
-                      <i className="fa fa-check text-primary text-xs" />
-                    </span>
+                  <li key={item} className="flex items-center gap-3 py-3">
+                    <span
+                      className="flex-shrink-0 w-2 h-2 bg-primary"
+                      aria-hidden="true"
+                    />
                     <span className="text-on-surface">{item}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href={routes.tours.list.path()}
-                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-light text-on-primary font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
               >
                 {t('bookWithUsNow')}
+                <i className="fa fa-arrow-right" aria-hidden="true" />
               </Link>
             </motion.div>
           </div>
@@ -310,47 +306,53 @@ export default function Home({
       </section>
 
       {/* Popular Tours */}
-      <section className="py-16 lg:py-24">
+      <section className="bg-surface py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="text-center mb-12"
+            className="mb-8 border-l-2 border-primary pl-4"
             initial="hidden"
             whileInView="visible"
             viewport={{once: true}}
             variants={fadeInUp}
           >
-            <h2 className="type-headline-sm lg:type-headline-lg">
+            <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-secondary block">
+              {t('toursEyebrow')}
+            </span>
+            <h2 className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2">
               {t('mostPopularTours')}
             </h2>
           </motion.div>
+
           <TourCarousel tours={tours} />
         </div>
       </section>
 
       {/* Video / CTA */}
-      <section className="relative py-24 lg:py-32">
+      <section className="relative bg-surface-deep py-24 lg:py-32 border-y border-on-surface-tertiary overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          className="absolute inset-0 bg-cover bg-center opacity-25"
           style={{
             backgroundImage: `url(${getUrl('assets/images/backgrounds/video-one-bg-0.jpeg')})`,
           }}
         />
-        <div className="absolute inset-0 bg-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-r from-surface-deep via-surface-deep/80 to-transparent" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="lg:flex lg:gap-12 lg:items-center">
-            <div className="lg:w-3/5 mb-8 lg:mb-0">
-              <div className="text-white">
-                <button
-                  onClick={() => setVideoModalOpen(true)}
-                  className="mb-6 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse cursor-pointer"
-                  aria-label="Play video"
-                >
-                  <i className="fa fa-play ml-1" />
-                </button>
-                <h2 className="type-headline-sm lg:type-headline-lg text-white drop-shadow-lg">
-                  {t('videoSectionHeading')}
-                </h2>
-              </div>
+            <div className="lg:w-3/5 mb-10 lg:mb-0">
+              <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent block mb-4">
+                {t('videoEyebrow')}
+              </span>
+              <h2 className="font-display text-3xl lg:text-5xl font-bold uppercase tracking-[0.05em] text-on-surface mb-8 max-w-2xl leading-tight">
+                {t('videoSectionHeading')}
+              </h2>
+              <button
+                onClick={() => setVideoModalOpen(true)}
+                className="inline-flex items-center gap-3 bg-primary hover:bg-primary-light text-on-primary font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
+                aria-label={t('watchFieldReport')}
+              >
+                <i className="fa fa-play" aria-hidden="true" />
+                {t('watchFieldReport')}
+              </button>
             </div>
             <div className="lg:w-2/5">
               {(() => {
@@ -363,7 +365,7 @@ export default function Home({
                   {icon: 'fas fa-hand-holding-usd', label: t('allInclusive')},
                 ];
                 return (
-                  <ul className="divide-y divide-white/20 border-y border-white/30 backdrop-blur-sm">
+                  <ul className="border border-on-surface-tertiary divide-y divide-border-subtle bg-surface/70 backdrop-blur-sm">
                     {features.map((item, index) => (
                       <motion.li
                         key={item.icon}
@@ -373,17 +375,17 @@ export default function Home({
                         whileInView="visible"
                         viewport={{once: true}}
                         data-testid="feature-card"
-                        className="grid grid-cols-[auto_auto_1fr] items-center gap-x-5 px-4 py-4 text-white"
+                        className="grid grid-cols-[auto_auto_1fr] items-center gap-x-4 px-4 py-3.5 text-on-surface"
                       >
-                        <span className="font-mono type-label-sm text-primary tabular-nums">
+                        <span className="font-mono text-xs text-on-surface-accent tabular-nums">
                           {String(index + 1).padStart(2, '0')}/
                           {String(features.length).padStart(2, '0')}
                         </span>
                         <span
-                          className={`${item.icon} text-2xl text-primary-light w-7 text-center`}
+                          className={`${item.icon} text-lg text-on-surface-secondary w-6 text-center`}
                           aria-hidden="true"
                         />
-                        <span className="type-label-lg uppercase whitespace-pre-line drop-shadow-md">
+                        <span className="font-mono text-xs uppercase tracking-[0.05em]">
                           {item.label}
                         </span>
                       </motion.li>
@@ -401,11 +403,21 @@ export default function Home({
         onClose={() => setVideoModalOpen(false)}
       />
 
+      <Testimonials />
+
       {/* Gallery */}
       {galleryImages.length > 0 && (
-        <section className="py-16 lg:py-24 bg-surface-alt">
+        <section className="bg-surface py-20 lg:py-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="mb-12 border-l-2 border-primary pl-4">
+              <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-secondary block">
+                {t('galleryEyebrow')}
+              </span>
+              <h2 className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2">
+                {t('galleryTitle')}
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border-subtle border border-border-subtle">
               {galleryImages.map(({src, alt}, index) => (
                 <GalleryItem
                   key={index}

@@ -12,7 +12,9 @@ describe('GalleryItem', () => {
       />,
     );
     const img = screen.getByAltText('Test gallery image');
-    expect(img).toHaveAttribute('src', '/gallery/test.jpg');
+    expect(img.getAttribute('src')).toContain(
+      encodeURIComponent('/gallery/test.jpg'),
+    );
   });
 
   it('renders expand icon on hover area', () => {
@@ -38,7 +40,7 @@ describe('GalleryItem', () => {
     );
     const button = screen.getByRole('button', {name: 'Test gallery image'});
     await user.click(button);
-    const closeButton = screen.getByLabelText('Close lightbox');
+    const closeButton = screen.getByLabelText('close');
     expect(closeButton).toBeInTheDocument();
     const images = document.querySelectorAll('img');
     expect(images).toHaveLength(2);
@@ -54,7 +56,7 @@ describe('GalleryItem', () => {
       />,
     );
     await user.click(screen.getByRole('button', {name: 'Test gallery image'}));
-    await user.click(screen.getByLabelText('Close lightbox'));
-    expect(screen.queryByLabelText('Close lightbox')).not.toBeInTheDocument();
+    await user.click(screen.getByLabelText('close'));
+    expect(screen.queryByLabelText('close')).not.toBeInTheDocument();
   });
 });

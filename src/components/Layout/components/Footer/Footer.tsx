@@ -3,7 +3,7 @@ import Image from 'next/image';
 import {useTranslations} from 'next-intl';
 import {routes} from '@/routes';
 import {getUrl, contactInfo} from '@/utils';
-import {TripAdvisorIcon} from '@/components/ui';
+import {SocialIcons} from '@/components/ui';
 
 export const Footer = () => {
   const t = useTranslations('footer');
@@ -81,35 +81,7 @@ export const Footer = () => {
             <p className="type-body-sm leading-none">
               {t('copyright', {year: new Date().getFullYear()})}
             </p>
-            <div className="flex items-center gap-2 text-xl">
-              <a
-                href={contactInfo.youtubeLink}
-                aria-label="YouTube"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-              >
-                <i className="fab fa-youtube" aria-hidden="true" />
-              </a>
-              <a
-                href={contactInfo.tripadvisorLink}
-                aria-label="TripAdvisor"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-              >
-                <TripAdvisorIcon className="h-[0.8em] w-auto" />
-              </a>
-              <a
-                href={`https://wa.me/${contactInfo.whatsApp.replace(/[^0-9]/g, '')}`}
-                aria-label="WhatsApp"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-              >
-                <i className="fab fa-whatsapp" aria-hidden="true" />
-              </a>
-            </div>
+            <SocialIcons variant="compact" />
           </div>
         </div>
       </div>

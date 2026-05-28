@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import Image from 'next/image';
+import {useTranslations} from 'next-intl';
 
 type Props = {
   imageSrc: string;
@@ -11,6 +12,7 @@ type Props = {
 
 export const GalleryItem = ({imageSrc, alt}: Props) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const tc = useTranslations('common');
 
   return (
     <>
@@ -18,42 +20,40 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
         data-testid="gallery-item"
         onClick={() => setLightboxOpen(true)}
         aria-label={alt}
-        className="group relative block overflow-hidden aspect-square cursor-pointer"
+        className="group relative block overflow-hidden aspect-square cursor-pointer bg-surface-alt"
       >
         <Image
           src={imageSrc}
           alt={alt}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          unoptimized
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-surface-alt/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <span className="w-12 h-12 bg-surface-elevated/90 flex items-center justify-center text-on-surface">
-            <i className="fa fa-expand" />
+        <div className="absolute inset-0 bg-surface-deep/0 group-hover:bg-surface-deep/70 transition-colors duration-300 flex items-center justify-center">
+          <span className="w-11 h-11 border border-on-surface-accent flex items-center justify-center text-on-surface-accent opacity-0 group-hover:opacity-100 transition-opacity">
+            <i className="fa fa-expand" aria-hidden="true" />
           </span>
         </div>
       </button>
 
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-overlay"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-deep/95"
           onClick={() => setLightboxOpen(false)}
         >
           <button
-            className="absolute top-6 right-6 text-white text-2xl hover:text-on-surface-secondary transition-colors cursor-pointer"
+            className="absolute top-6 right-6 w-11 h-11 border border-on-surface-accent text-on-surface-accent hover:bg-primary hover:text-on-primary transition-colors cursor-pointer flex items-center justify-center"
             onClick={() => setLightboxOpen(false)}
-            aria-label="Close lightbox"
+            aria-label={tc('close')}
           >
-            <i className="fa fa-times" />
+            <i className="fa fa-times" aria-hidden="true" />
           </button>
           <Image
             src={imageSrc}
             alt={alt}
             width={1600}
             height={1200}
-            unoptimized
-            className="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain"
+            className="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain border border-on-surface-tertiary"
             onClick={(e) => e.stopPropagation()}
           />
         </div>

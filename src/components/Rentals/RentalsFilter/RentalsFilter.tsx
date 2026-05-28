@@ -22,35 +22,37 @@ export function RentalsFilter({value, onChange, count}: Props) {
   const tr = useTranslations('rentals');
 
   return (
-    <div className="w-full bg-surface-alt border-y border-border py-4 px-6 sm:px-10 lg:px-12 flex flex-wrap items-center justify-between gap-4">
-      <div
-        role="group"
-        aria-label="Vehicle filter"
-        className="flex flex-wrap gap-3"
-      >
-        {OPTIONS.map((opt) => {
-          const active = value === opt.value;
-          const base =
-            'cursor-pointer px-6 py-2 type-mono-label border border-border transition-colors';
-          const variant = active
-            ? 'bg-primary text-on-primary border-l-4 border-l-primary'
-            : 'bg-black text-white hover:bg-surface-elevated';
-          return (
-            <button
-              key={opt.value}
-              type="button"
-              aria-pressed={active}
-              onClick={() => onChange(opt.value)}
-              className={`${base} ${variant}`}
-            >
-              {t(opt.key)}
-            </button>
-          );
-        })}
-      </div>
+    <div className="w-full bg-surface-alt border-y border-border">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+        <div
+          role="group"
+          aria-label={t('filterLabel')}
+          className="flex flex-wrap gap-3"
+        >
+          {OPTIONS.map((opt) => {
+            const active = value === opt.value;
+            const base =
+              'cursor-pointer min-h-11 px-6 py-2 type-mono-label border border-border transition-colors';
+            const variant = active
+              ? 'bg-primary text-on-primary border-primary'
+              : 'bg-surface-deep text-on-surface hover:bg-surface-elevated';
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                aria-pressed={active}
+                onClick={() => onChange(opt.value)}
+                className={`${base} ${variant}`}
+              >
+                {t(opt.key)}
+              </button>
+            );
+          })}
+        </div>
 
-      <div className="type-mono-label text-primary">
-        {tr('vehiclesCount', {count})}
+        <div className="type-mono-label text-primary" aria-live="polite">
+          {tr('vehiclesCount', {count})}
+        </div>
       </div>
     </div>
   );

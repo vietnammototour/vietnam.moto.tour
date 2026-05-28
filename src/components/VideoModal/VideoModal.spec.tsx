@@ -20,7 +20,7 @@ describe('VideoModal', () => {
 
   it('renders iframe with embed URL when isOpen is true', () => {
     render(<VideoModal {...defaultProps} isOpen={true} />);
-    const iframe = screen.getByTitle('Video');
+    const iframe = screen.getByTitle('videoIframeTitle');
     expect(iframe).toHaveAttribute(
       'src',
       'https://www.youtube.com/embed/abc123?autoplay=1',

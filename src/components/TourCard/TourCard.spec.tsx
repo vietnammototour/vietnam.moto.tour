@@ -111,7 +111,7 @@ describe('TourCard', () => {
   it('renders the tour image with correct src and alt', () => {
     render(<TourCard tour={tour} />);
     const img = screen.getByAltText('Da Lat Tour');
-    expect(img).toHaveAttribute('src', '/dalat.jpg');
+    expect(img.getAttribute('src')).toContain(encodeURIComponent('/dalat.jpg'));
   });
 
   it('renders clock icon', () => {
