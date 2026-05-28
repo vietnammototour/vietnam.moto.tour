@@ -372,29 +372,31 @@ export default function Home({
       </section>
 
       {/* Video / CTA */}
-      <section className="relative py-24 lg:py-32">
+      <section className="relative bg-black py-24 lg:py-32 border-y border-on-surface-tertiary">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          className="absolute inset-0 bg-cover bg-center bg-fixed opacity-25"
           style={{
             backgroundImage: `url(${getUrl('assets/images/backgrounds/video-one-bg-0.jpeg')})`,
           }}
         />
-        <div className="absolute inset-0 bg-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="lg:flex lg:gap-12 lg:items-center">
-            <div className="lg:w-3/5 mb-8 lg:mb-0">
-              <div className="text-white">
-                <button
-                  onClick={() => setVideoModalOpen(true)}
-                  className="mb-6 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary-light transition-colors animate-pulse cursor-pointer"
-                  aria-label="Play video"
-                >
-                  <i className="fa fa-play ml-1" />
-                </button>
-                <h2 className="type-headline-sm lg:type-headline-lg text-white drop-shadow-lg">
-                  {t('videoSectionHeading')}
-                </h2>
-              </div>
+            <div className="lg:w-3/5 mb-10 lg:mb-0">
+              <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent block mb-4">
+                {t('videoEyebrow')}
+              </span>
+              <h2 className="font-display text-3xl lg:text-5xl font-bold uppercase tracking-[0.05em] text-on-surface mb-8 max-w-2xl leading-tight">
+                {t('videoSectionHeading')}
+              </h2>
+              <button
+                onClick={() => setVideoModalOpen(true)}
+                className="inline-flex items-center gap-3 bg-primary hover:bg-primary-light text-on-primary font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
+                aria-label={t('watchFieldReport')}
+              >
+                <i className="fa fa-play" aria-hidden="true" />
+                {t('watchFieldReport')}
+              </button>
             </div>
             <div className="lg:w-2/5">
               {(() => {
@@ -407,7 +409,7 @@ export default function Home({
                   {icon: 'fas fa-hand-holding-usd', label: t('allInclusive')},
                 ];
                 return (
-                  <ul className="divide-y divide-white/20 border-y border-white/30 backdrop-blur-sm">
+                  <ul className="border border-on-surface-tertiary divide-y divide-border-subtle bg-surface/70 backdrop-blur-sm">
                     {features.map((item, index) => (
                       <motion.li
                         key={item.icon}
@@ -417,17 +419,17 @@ export default function Home({
                         whileInView="visible"
                         viewport={{once: true}}
                         data-testid="feature-card"
-                        className="grid grid-cols-[auto_auto_1fr] items-center gap-x-5 px-4 py-4 text-white"
+                        className="grid grid-cols-[auto_auto_1fr] items-center gap-x-4 px-4 py-3.5 text-on-surface"
                       >
-                        <span className="font-mono type-label-sm text-primary tabular-nums">
+                        <span className="font-mono text-xs text-on-surface-accent tabular-nums">
                           {String(index + 1).padStart(2, '0')}/
                           {String(features.length).padStart(2, '0')}
                         </span>
                         <span
-                          className={`${item.icon} text-2xl text-primary-light w-7 text-center`}
+                          className={`${item.icon} text-lg text-on-surface-secondary w-6 text-center`}
                           aria-hidden="true"
                         />
-                        <span className="type-label-lg uppercase whitespace-pre-line drop-shadow-md">
+                        <span className="font-mono text-xs uppercase tracking-[0.05em]">
                           {item.label}
                         </span>
                       </motion.li>
