@@ -323,19 +323,50 @@ export default function Home({
       </section>
 
       {/* Popular Tours */}
-      <section className="py-16 lg:py-24">
+      <section className="bg-surface py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="text-center mb-12"
+            className="mb-8 border-l-2 border-primary pl-4"
             initial="hidden"
             whileInView="visible"
             viewport={{once: true}}
             variants={fadeInUp}
           >
-            <h2 className="type-headline-sm lg:type-headline-lg">
+            <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-secondary block">
+              {t('toursEyebrow')}
+            </span>
+            <h2 className="font-display text-2xl lg:text-4xl font-bold uppercase tracking-[0.05em] text-on-surface mt-2">
               {t('mostPopularTours')}
             </h2>
           </motion.div>
+
+          {/* Tactical chip filter row — visual only */}
+          <div
+            role="list"
+            aria-label={t('toursFilterLabel')}
+            className="mb-8 flex flex-wrap gap-px bg-border-subtle border border-border-subtle"
+          >
+            {[
+              t('tours.filterAll'),
+              t('tours.filterMountain'),
+              t('tours.filterCoastal'),
+              t('tours.filterNorth'),
+              t('tours.filterSouth'),
+            ].map((label, idx) => (
+              <span
+                key={label}
+                role="listitem"
+                className={`font-mono text-xs uppercase tracking-[0.05em] px-4 py-2 ${
+                  idx === 0
+                    ? 'bg-surface-alt text-on-surface-accent'
+                    : 'bg-surface text-on-surface-secondary'
+                }`}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
           <TourCarousel tours={tours} />
         </div>
       </section>
