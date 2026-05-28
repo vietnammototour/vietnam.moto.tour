@@ -71,7 +71,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
   const cardInner = (
     <motion.div
       ref={interactive ? (ref as React.RefObject<HTMLDivElement>) : undefined}
-      className="group bg-surface-elevated border border-border transition-shadow overflow-hidden h-full flex flex-col"
+      className="group bg-surface-alt border border-on-surface-tertiary transition-colors overflow-hidden h-full flex flex-col"
       style={
         interactive
           ? {rotateX, rotateY, scale, transformPerspective: 1000}
@@ -81,7 +81,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
       onMouseLeave={interactive ? onMouseLeave : undefined}
       onMouseEnter={interactive ? onMouseEnter : undefined}
     >
-      <div className="relative overflow-hidden aspect-[3/2] bg-secondary/10">
+      <div className="relative overflow-hidden aspect-[3/2] bg-secondary/10 border-b border-border-subtle">
         {tour.status &&
           tour.status !== 'PUBLISHED' &&
           (() => {
@@ -141,7 +141,7 @@ export const TourCard = ({tour, interactive = true}: Props) => {
                 }`}
               >
                 <span
-                  className={`flex items-center gap-1.5 type-body-sm font-semibold text-white truncate ${
+                  className={`flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.05em] text-white truncate ${
                     i > 0 ? 'flex-row-reverse' : ''
                   }`}
                 >
@@ -158,11 +158,11 @@ export const TourCard = ({tour, interactive = true}: Props) => {
       </div>
       <div className="p-5 flex items-end gap-4 flex-1">
         <div className="flex flex-col min-w-0 flex-1">
-          <h3 className="type-title-lg font-semibold leading-tight text-on-surface group-hover:text-primary transition-colors truncate">
+          <h3 className="font-display text-base lg:text-lg font-bold uppercase tracking-[0.05em] leading-tight text-on-surface group-hover:text-on-surface-accent transition-colors truncate">
             {title}
           </h3>
           {tour.destinationName[locale as 'en' | 'vi'] && (
-            <p className="mt-2 flex items-center gap-1.5 type-label-sm uppercase tracking-wider text-on-surface-secondary">
+            <p className="mt-2 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-secondary">
               <i
                 className="fa fa-map-marker-alt text-[0.7rem]"
                 aria-hidden="true"
@@ -180,10 +180,10 @@ export const TourCard = ({tour, interactive = true}: Props) => {
                 key={chip.key}
                 className={`flex items-baseline gap-1.5 ${chip.textClass}`}
               >
-                <span className="type-label-sm uppercase tracking-wider text-[0.6rem] leading-none opacity-80">
+                <span className="font-mono text-[0.6rem] uppercase tracking-[0.05em] leading-none opacity-80">
                   {chip.unit}
                 </span>
-                <span className="type-title-sm font-semibold leading-none">
+                <span className="font-mono text-base font-semibold leading-none tabular-nums">
                   ${chip.price}
                 </span>
               </div>
