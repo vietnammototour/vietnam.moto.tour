@@ -15,11 +15,11 @@ export function VehicleCard({vehicle}: Props) {
     ? t('transmissionAuto')
     : t('transmissionManual');
   const available = vehicle.quantity > 0;
-  const accentBorder = isScooter ? 'border-t-white' : 'border-t-primary';
+  const accentBar = isScooter ? 'bg-white' : 'bg-primary';
 
   return (
     <article
-      className={`group flex flex-col bg-surface-alt border border-border border-t-4 ${accentBorder} transition-colors hover:bg-surface-elevated`}
+      className="group flex flex-col bg-surface-alt transition-colors hover:bg-surface-elevated"
     >
       <div className="relative aspect-[1.75] overflow-hidden bg-black">
         {vehicle.imageUrl ? (
@@ -36,7 +36,7 @@ export function VehicleCard({vehicle}: Props) {
 
       <div className="p-6 flex flex-col flex-1">
         <div className="flex items-center gap-2 mb-4">
-          <span className="h-4 w-1 bg-primary" aria-hidden />
+          <span className={`h-4 w-1 ${accentBar}`} aria-hidden />
           <span className="type-mono-label text-white">{typeLabel}</span>
         </div>
 
