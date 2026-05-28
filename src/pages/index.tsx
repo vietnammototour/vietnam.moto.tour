@@ -1,6 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {motion, useMotionTemplate} from 'framer-motion';
-import {useCursorSpotlight} from '@/hooks/use-cursor-spotlight';
+import {motion} from 'framer-motion';
 import {
   clipReveal,
   fadeInUp,
@@ -49,15 +48,6 @@ export default function Home({
   const tc = useTranslations('common');
   const tMeta = useTranslations('meta');
 
-  const {
-    ref: spotlightRef,
-    x: spotlightX,
-    y: spotlightY,
-    onMouseMove: onSpotlightMove,
-    onMouseLeave: onSpotlightLeave,
-  } = useCursorSpotlight(200, 0.15);
-  const spotlightBg = useMotionTemplate`radial-gradient(200px circle at ${spotlightX}px ${spotlightY}px, rgb(var(--color-spotlight-rgb) / 0.15), transparent)`;
-
   const galleryImages =
     gallery?.images.map((img) => ({
       src: img.url,
@@ -86,12 +76,7 @@ export default function Home({
       </Head>
 
       {/* Hero */}
-      <section
-        ref={spotlightRef as React.RefObject<HTMLElement>}
-        onMouseMove={onSpotlightMove}
-        onMouseLeave={onSpotlightLeave}
-        className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center overflow-hidden texture-grain-warm"
-      >
+      <section className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem-36px)] min-h-[600px] flex items-center overflow-hidden bg-[#131313]">
         <video
           autoPlay
           muted
@@ -102,43 +87,60 @@ export default function Home({
         >
           <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-[#131313]/65" />
 
-        {/* Cursor spotlight overlay */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none z-10"
-          style={{background: spotlightBg}}
-        />
+        {/* Corner crosshair marks */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
+          <div className="absolute top-6 left-6 w-6 h-6 border-t border-l border-[#ffdb00]" />
+          <div className="absolute top-6 right-6 w-6 h-6 border-t border-r border-[#ffdb00]" />
+          <div className="absolute bottom-6 left-6 w-6 h-6 border-b border-l border-[#ffdb00]" />
+          <div className="absolute bottom-6 right-6 w-6 h-6 border-b border-r border-[#ffdb00]" />
+        </div>
 
-        {/* Asymmetric content — left-aligned */}
         <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
             <motion.p
               variants={slideFromLeft}
               initial="hidden"
               animate="visible"
-              className="type-label-sm uppercase tracking-wider text-primary-light mb-4"
+              className="font-mono text-xs uppercase tracking-[0.05em] text-[#ffdb00] mb-6"
             >
-              {t('heroSubtitle')}
+              {t('heroTimestamp')}
             </motion.p>
             <motion.h1
               variants={clipReveal}
               initial="hidden"
               animate="visible"
-              className="type-display-sm md:type-display-lg text-white mb-6"
+              className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[1.05] text-[#e5e2e1] mb-8"
             >
               {t('heroTitle')}
             </motion.h1>
+            <motion.p
+              variants={fadeInUp}
+              initial="hidden"
+              animate="visible"
+              className="text-base lg:text-lg text-[#cfc6ab] mb-10 max-w-xl leading-relaxed"
+            >
+              {t('heroSubtitle')}
+            </motion.p>
             <motion.div
               variants={riseWithOvershoot}
               initial="hidden"
               animate="visible"
+              className="flex flex-wrap gap-3"
             >
               <Link
                 href={routes.tours.list.path()}
-                className="inline-block bg-primary hover:bg-primary-light text-on-primary type-label-sm uppercase px-8 py-3 rounded-lg cursor-pointer transition-colors elevation-2 hover:elevation-3"
+                className="inline-flex items-center gap-2 bg-[#ffdb00] hover:bg-[#e6c500] text-[#393000] font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
               >
                 {t('bookWithUsNow')}
+                <i className="fa fa-arrow-right" />
+              </Link>
+              <Link
+                href={routes.tours.list.path()}
+                className="inline-flex items-center gap-2 border border-[#989177] hover:border-[#ffdb00] text-[#e5e2e1] hover:text-[#ffdb00] font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
+              >
+                {t('viewFleet')}
               </Link>
             </motion.div>
           </div>
