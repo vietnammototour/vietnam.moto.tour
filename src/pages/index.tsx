@@ -161,7 +161,7 @@ export default function Home({
         </div>
       </section>
 
-      <StatsStrip />
+      <StatsStrip toursCount={tours.length} />
 
       {/* Destinations */}
       <section className="bg-surface py-20 lg:py-28">

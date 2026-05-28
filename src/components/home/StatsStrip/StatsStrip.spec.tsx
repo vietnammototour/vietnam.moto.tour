@@ -44,27 +44,36 @@ const messages = {
   home: {
     stats: {
       ariaLabel: 'Headline statistics',
-      years: {label: 'YEARS', value: '12'},
-      routes: {label: 'ROUTES', value: '47'},
+      years: {label: 'YEARS'},
+      routes: {label: 'ROUTES'},
       km: {label: 'KM RIDDEN', value: '1.2M'},
       riders: {label: 'RIDERS', value: '4500+'},
     },
   },
 };
 
-function renderWithIntl() {
+function renderWithIntl(toursCount = 47) {
   return render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <StatsStrip />
+      <StatsStrip toursCount={toursCount} />
     </NextIntlClientProvider>,
   );
 }
 
 describe('StatsStrip', () => {
-  it('renders all four stat values', () => {
+  it('renders dynamic years from founded year', () => {
     renderWithIntl();
-    expect(screen.getByText('12')).toBeInTheDocument();
-    expect(screen.getByText('47')).toBeInTheDocument();
+    const expectedYears = new Date().getFullYear() - 2014;
+    expect(screen.getByText(String(expectedYears))).toBeInTheDocument();
+  });
+
+  it('renders the toursCount as routes value', () => {
+    renderWithIntl(73);
+    expect(screen.getByText('73')).toBeInTheDocument();
+  });
+
+  it('renders static km and riders values from translations', () => {
+    renderWithIntl();
     expect(screen.getByText('1.2M')).toBeInTheDocument();
     expect(screen.getByText('4500+')).toBeInTheDocument();
   });

@@ -123,14 +123,12 @@ const ENTRIES: Entry[] = [
     valueVi: 'NĂM HOẠT ĐỘNG',
     valueEn: 'YEARS',
   },
-  {namespace: 'home', key: 'stats.years.value', valueVi: '12', valueEn: '12'},
   {
     namespace: 'home',
     key: 'stats.routes.label',
     valueVi: 'CUNG ĐƯỜNG',
     valueEn: 'ROUTES',
   },
-  {namespace: 'home', key: 'stats.routes.value', valueVi: '47', valueEn: '47'},
   {
     namespace: 'home',
     key: 'stats.km.label',
