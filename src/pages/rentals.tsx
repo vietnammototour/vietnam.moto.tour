@@ -37,7 +37,7 @@ export default function RentalsPage({vehicles}: Props) {
       <div className="bg-surface text-on-surface">
         <RentalsHero backgroundImage="/assets/rentals-hero.jpg" />
 
-        <section className="px-6 sm:px-10 lg:px-12 pb-10">
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10">
           <p className="type-body-lg text-white max-w-[60ch]">{t('intro')}</p>
         </section>
 
@@ -47,17 +47,19 @@ export default function RentalsPage({vehicles}: Props) {
           count={filtered.length}
         />
 
-        <section className="px-6 sm:px-10 lg:px-12 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((v) => (
-            <VehicleCard key={v.id} vehicle={v} />
-          ))}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border-subtle border border-border-subtle">
+            {filtered.map((v) => (
+              <VehicleCard key={v.id} vehicle={v} />
+            ))}
+          </div>
         </section>
 
         <div className="py-8 overflow-hidden" aria-hidden>
           <div className="h-px bg-primary w-[110%] -ml-[5%] -rotate-[1.5deg]" />
         </div>
 
-        <div className="px-6 sm:px-10 lg:px-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <RentalPolicy />
         </div>
 
