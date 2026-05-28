@@ -19,6 +19,7 @@ import {routes} from '@/routes';
 import {DestinationCard} from '@/components/DestinationCard';
 import {TourCarousel} from '@/components/home/TourCarousel';
 import {GalleryItem} from '@/components/home/GalleryItem';
+import {StatsStrip} from '@/components/home/StatsStrip';
 import {VideoModal} from '@/components/VideoModal';
 import {contactInfo} from '@/utils';
 
@@ -146,6 +147,8 @@ export default function Home({
           </div>
         </div>
       </section>
+
+      <StatsStrip />
 
       {/* Destinations */}
       <section className="relative py-16 lg:py-24 texture-grain-warm">
