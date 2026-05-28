@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import {useTranslations} from 'next-intl';
 
@@ -8,7 +7,6 @@ type Props = {
 
 export function RentalsHero({backgroundImage}: Props) {
   const t = useTranslations('rentals');
-  const tc = useTranslations('common');
 
   return (
     <section className="relative w-full">
@@ -28,17 +26,6 @@ export function RentalsHero({backgroundImage}: Props) {
         />
 
         <div className="relative z-10 h-full flex flex-col justify-end mx-auto max-w-[1920px] px-6 sm:px-10 lg:px-12 pb-10 lg:pb-14">
-          <nav
-            aria-label="Breadcrumb"
-            className="type-mono-label text-primary mb-3 flex items-center gap-2"
-          >
-            <Link href="/" className="cursor-pointer hover:underline">
-              {tc('breadcrumbHome')}
-            </Link>
-            <span aria-hidden>/</span>
-            <span aria-current="page">{t('breadcrumbRental')}</span>
-          </nav>
-
           <h1 className="type-display-lg text-white leading-none mb-5 max-w-[16ch]">
             {t('title')}
           </h1>
