@@ -13,7 +13,7 @@ export function VideoModal({videoUrl, isOpen, onClose}: Props) {
 
   return (
     <Modal open={isOpen} onClose={onClose} size="full">
-      <div className="aspect-video">
+      <div className="aspect-video border border-on-surface-tertiary bg-black">
         <iframe
           src={embedUrl}
           className="w-full h-full"
