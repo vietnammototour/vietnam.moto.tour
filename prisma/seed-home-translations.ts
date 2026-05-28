@@ -136,6 +136,36 @@ const ENTRIES: Entry[] = [
     valueVi: 'NGƯỜI ĐÃ ĐI CÙNG CHÚNG TÔI',
     valueEn: 'WHO HAS RIDDEN WITH US',
   },
+  {
+    namespace: 'rentals',
+    key: 'heroEyebrow',
+    valueVi: 'ĐỘI XE · HÀ NỘI 21.0285°N',
+    valueEn: 'FIELD FLEET · HANOI 21.0285°N',
+  },
+  {
+    namespace: 'rentals',
+    key: 'fleetEyebrow',
+    valueVi: 'Đội xe sẵn sàng',
+    valueEn: 'Available units',
+  },
+  {
+    namespace: 'rentals',
+    key: 'fleetTitle',
+    valueVi: 'CHỌN XE CỦA BẠN',
+    valueEn: 'PICK YOUR MACHINE',
+  },
+  {
+    namespace: 'rentals.policy',
+    key: 'eyebrow',
+    valueVi: 'Điều khoản',
+    valueEn: 'Operating terms',
+  },
+  {
+    namespace: 'rentals.contactCta',
+    key: 'eyebrow',
+    valueVi: 'Liên hệ',
+    valueEn: 'Need backup',
+  },
 ];
 
 async function main() {

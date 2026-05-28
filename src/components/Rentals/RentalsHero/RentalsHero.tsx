@@ -1,5 +1,7 @@
 import Image from 'next/image';
+import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
+import {clipReveal, fadeInUp, slideFromLeft} from '@/utils/motion-variants';
 
 type Props = {
   backgroundImage: string;
@@ -19,24 +21,42 @@ export function RentalsHero({backgroundImage}: Props) {
           sizes="100vw"
           className="object-cover"
         />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/55 to-transparent"
-          aria-hidden
-        />
+        <div className="absolute inset-0 bg-surface/75" aria-hidden />
 
-        <div className="relative z-10 h-full flex flex-col justify-end mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
-          <h1 className="type-display-lg text-on-surface leading-none mb-5 max-w-[16ch]">
-            {t('title')}
-          </h1>
-
-          <span className="inline-block self-start bg-primary text-on-primary px-4 py-1.5 type-mono-label">
-            {t('heroBadge')}
-          </span>
+        {/* Corner crosshair marks */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
+          <div className="absolute top-6 left-6 w-6 h-6 border-t border-l border-primary" />
+          <div className="absolute top-6 right-6 w-6 h-6 border-t border-r border-primary" />
+          <div className="absolute bottom-6 left-6 w-6 h-6 border-b border-l border-primary" />
+          <div className="absolute bottom-6 right-6 w-6 h-6 border-b border-r border-primary" />
         </div>
-      </div>
 
-      <div className="py-8 overflow-hidden" aria-hidden>
-        <div className="h-px bg-primary w-[110%] -ml-[5%] -rotate-[1.5deg]" />
+        <div className="relative z-20 h-full flex flex-col justify-end mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
+          <motion.p
+            variants={slideFromLeft}
+            initial="hidden"
+            animate="visible"
+            className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent mb-6"
+          >
+            {t('heroEyebrow')}
+          </motion.p>
+          <motion.h1
+            variants={clipReveal}
+            initial="hidden"
+            animate="visible"
+            className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05] text-on-surface mb-5 max-w-[16ch]"
+          >
+            {t('title')}
+          </motion.h1>
+          <motion.span
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            className="inline-block self-start bg-primary text-on-primary px-4 py-1.5 type-mono-label"
+          >
+            {t('heroBadge')}
+          </motion.span>
+        </div>
       </div>
     </section>
   );
