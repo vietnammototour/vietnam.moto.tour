@@ -134,10 +134,10 @@ export default function Home({
                 className="inline-flex items-center gap-2 bg-[#ffdb00] hover:bg-[#e6c500] text-[#393000] font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
               >
                 {t('bookWithUsNow')}
-                <i className="fa fa-arrow-right" />
+                <i className="fa fa-arrow-right" aria-hidden="true" />
               </Link>
               <Link
-                href={routes.tours.list.path()}
+                href={routes.rentals.list.path()}
                 className="inline-flex items-center gap-2 border border-[#989177] hover:border-[#ffdb00] text-[#e5e2e1] hover:text-[#ffdb00] font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
               >
                 {t('viewFleet')}
