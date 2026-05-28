@@ -57,16 +57,12 @@ export default function Home({
     })) ?? [];
 
   const destinationPlaceholders = useMemo(() => {
+    const gridCols = 4;
     const usedSlots = destinations.reduce(
       (sum, d) => sum + (d.size === 'large' ? 4 : 1),
       0,
     );
-    const lastIsLarge = destinations.at(-1)?.size === 'large';
-    const gridCols = 4;
-    const filled = Math.max(usedSlots, 8);
-    const padded = Math.ceil(filled / gridCols) * gridCols;
-    const trailingPadForLarge = lastIsLarge ? gridCols : 0;
-    const total = Math.max(padded, usedSlots + trailingPadForLarge);
+    const total = Math.ceil(usedSlots / gridCols) * gridCols;
     return Array.from({length: Math.max(0, total - usedSlots)});
   }, [destinations]);
 
@@ -216,33 +212,11 @@ export default function Home({
               );
             })}
             {destinationPlaceholders.map((_, i) => (
-              <motion.div
+              <div
                 key={`placeholder-${i}`}
-                className="bg-surface-alt"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{once: true}}
-                variants={{
-                  ...fadeInUp,
-                  visible: {
-                    ...fadeInUp.visible,
-                    transition: {
-                      duration: 0.6,
-                      delay: (destinations.length + i) * 0.1,
-                    },
-                  },
-                }}
-              >
-                <div className="relative aspect-[3/2] flex flex-col items-center justify-center text-on-surface-secondary h-full">
-                  <i
-                    className="fa fa-motorcycle text-3xl opacity-50 mb-2"
-                    aria-hidden="true"
-                  />
-                  <span className="font-mono text-xs uppercase tracking-[0.05em]">
-                    {t('comingSoon')}
-                  </span>
-                </div>
-              </motion.div>
+                aria-hidden="true"
+                className="bg-surface-alt aspect-[3/2]"
+              />
             ))}
           </div>
         </div>
