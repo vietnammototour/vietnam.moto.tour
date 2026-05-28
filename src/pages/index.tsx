@@ -60,7 +60,13 @@ export default function Home({
       (sum, d) => sum + (d.size === 'large' ? 4 : 1),
       0,
     );
-    return Array.from({length: Math.max(0, 8 - usedSlots)});
+    const lastIsLarge = destinations.at(-1)?.size === 'large';
+    const gridCols = 4;
+    const filled = Math.max(usedSlots, 8);
+    const padded = Math.ceil(filled / gridCols) * gridCols;
+    const trailingPadForLarge = lastIsLarge ? gridCols : 0;
+    const total = Math.max(padded, usedSlots + trailingPadForLarge);
+    return Array.from({length: Math.max(0, total - usedSlots)});
   }, [destinations]);
 
   useEffect(() => {
@@ -98,7 +104,7 @@ export default function Home({
         >
           <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-[#131313]/65" />
+        <div className="absolute inset-0 bg-surface/75" />
 
         {/* Corner crosshair marks */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
@@ -122,7 +128,7 @@ export default function Home({
               variants={clipReveal}
               initial="hidden"
               animate="visible"
-              className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[1.05] text-[#e5e2e1] mb-8"
+              className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05] text-on-surface mb-8"
             >
               {t('heroTitle')}
             </motion.h1>
@@ -226,12 +232,12 @@ export default function Home({
                   },
                 }}
               >
-                <div className="relative aspect-[3/2] flex flex-col items-center justify-center text-on-surface-tertiary h-full">
+                <div className="relative aspect-[3/2] flex flex-col items-center justify-center text-on-surface-secondary h-full">
                   <i
-                    className="fa fa-motorcycle text-3xl opacity-40 mb-2"
+                    className="fa fa-motorcycle text-3xl opacity-50 mb-2"
                     aria-hidden="true"
                   />
-                  <span className="font-mono text-xs uppercase tracking-[0.05em] opacity-60">
+                  <span className="font-mono text-xs uppercase tracking-[0.05em]">
                     {t('comingSoon')}
                   </span>
                 </div>
@@ -258,7 +264,6 @@ export default function Home({
                   alt="Vietnam landscape"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  unoptimized
                   className="object-cover"
                 />
               </div>

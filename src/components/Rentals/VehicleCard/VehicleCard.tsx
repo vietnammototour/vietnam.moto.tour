@@ -28,7 +28,6 @@ export function VehicleCard({vehicle}: Props) {
             alt={`${vehicle.brand} ${vehicle.model}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            unoptimized
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : null}

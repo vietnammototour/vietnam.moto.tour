@@ -27,7 +27,6 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
           alt={alt}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          unoptimized
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-surface-deep/0 group-hover:bg-surface-deep/70 transition-colors duration-300 flex items-center justify-center">
@@ -54,7 +53,6 @@ export const GalleryItem = ({imageSrc, alt}: Props) => {
             alt={alt}
             width={1600}
             height={1200}
-            unoptimized
             className="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain border border-on-surface-tertiary"
             onClick={(e) => e.stopPropagation()}
           />

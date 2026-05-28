@@ -12,7 +12,9 @@ describe('GalleryItem', () => {
       />,
     );
     const img = screen.getByAltText('Test gallery image');
-    expect(img).toHaveAttribute('src', '/gallery/test.jpg');
+    expect(img.getAttribute('src')).toContain(
+      encodeURIComponent('/gallery/test.jpg'),
+    );
   });
 
   it('renders expand icon on hover area', () => {

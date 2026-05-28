@@ -68,6 +68,6 @@ describe('DestinationCard', () => {
   it('renders the image with correct src and alt', () => {
     render(<DestinationCard destination={destination} />);
     const img = screen.getByAltText('Dalat');
-    expect(img).toHaveAttribute('src', '/dalat.jpg');
+    expect(img.getAttribute('src')).toContain(encodeURIComponent('/dalat.jpg'));
   });
 });
