@@ -1,6 +1,6 @@
 <!-- stitch-project: 4683768170577706110 -->
 <!-- stitch-design-system: Apex Cinematic Tactical -->
-<!-- last-synced: 2026-05-27 -->
+<!-- last-synced: 2026-05-28 -->
 
 # Vietnam Moto Tour — Design System
 
