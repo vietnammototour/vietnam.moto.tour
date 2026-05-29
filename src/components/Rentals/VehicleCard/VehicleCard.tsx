@@ -21,7 +21,7 @@ export function VehicleCard({vehicle}: Props) {
     <article
       className="group flex flex-col bg-surface-alt transition-colors hover:bg-surface-elevated"
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-surface-deep">
+      <div className="relative aspect-square overflow-hidden bg-surface-deep">
         {vehicle.imageUrl ? (
           <Image
             src={vehicle.imageUrl}
