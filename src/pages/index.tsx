@@ -102,6 +102,11 @@ export default function Home({
           <source src={getUrl('assets/videos/banner-0.MOV')} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-surface/75" />
+        {/* Subtle mesh bloom — warm mustard + cool steel, above the scrim, behind content */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-[1] mesh-bloom-hero"
+        />
 
         {/* Corner crosshair marks */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
@@ -298,8 +303,12 @@ export default function Home({
       </section>
 
       {/* Popular Tours */}
-      <section className="bg-surface py-20 lg:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-surface py-20 lg:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 mesh-bloom-section"
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             className="mb-8 border-l-2 border-primary pl-4"
             initial="hidden"
@@ -399,8 +408,12 @@ export default function Home({
 
       {/* Gallery */}
       {galleryImages.length > 0 && (
-        <section className="bg-surface py-20 lg:py-28">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="relative overflow-hidden bg-surface py-20 lg:py-28">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 mesh-bloom-section"
+          />
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-12 border-l-2 border-primary pl-4">
               <span className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-secondary block">
                 {t('galleryEyebrow')}
