@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
 import Image from 'next/image';
 import {useSession} from 'next-auth/react';
-import {Button, ConfirmModal} from '@/components/ui';
+import {Button, ConfirmModal, LocaleSwitcher} from '@/components/ui';
+import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
@@ -14,6 +15,8 @@ import type * as VMT from '@/domain';
 
 export default function UsersListPage() {
   const t = useTranslations('admin.users');
+  const tCommon = useTranslations('common');
+  const [locale, setLocale] = useState<AdminLocale>('en');
   const {data: session} = useSession();
   const {setLoading: setAdminLoading} = useAdminLoading();
   const [users, setUsers] = useState<VMT.UserAdmin[]>([]);
@@ -52,6 +55,9 @@ export default function UsersListPage() {
       header={
         <AdminPageHeader
           title={t('title')}
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
           actions={
             <Button
               variant="primary"
@@ -99,7 +105,9 @@ export default function UsersListPage() {
               <td className="p-3 text-on-surface-secondary">
                 {u.email ?? '—'}
               </td>
-              <td className="p-3">{u.orgRole.labelEn}</td>
+              <td className="p-3">
+                {locale === 'en' ? u.orgRole.labelEn : u.orgRole.labelVi}
+              </td>
               <td className="p-3">{u.isCoreTeam ? '✓' : '—'}</td>
               <td className="p-3">{u.allowAuth ? '✓' : '—'}</td>
               <td className="p-3">
@@ -110,7 +118,7 @@ export default function UsersListPage() {
                     href={routes.admin.users.edit.path({id: u.id})}
                     icon={<i className="fa fa-pencil text-xs" />}
                   >
-                    {t('edit')}
+                    {tCommon('edit')}
                   </Button>
                   {session?.user.id !== u.id && (
                     <Button
@@ -119,7 +127,7 @@ export default function UsersListPage() {
                       onClick={() => setDeleteTarget(u)}
                       icon={<i className="fa fa-trash text-xs" />}
                     >
-                      {t('delete')}
+                      {tCommon('delete')}
                     </Button>
                   )}
                 </div>
@@ -133,7 +141,7 @@ export default function UsersListPage() {
         title={
           deleteTarget ? t('deleteConfirm', {name: deleteTarget.name}) : ''
         }
-        confirmLabel={t('delete')}
+        confirmLabel={tCommon('delete')}
         variant="danger"
         loading={deleting}
         error={deleteError}

@@ -9,22 +9,25 @@ const statusOptions: {
   {
     value: 'DRAFT',
     label: 'Draft',
-    activeClasses: 'bg-amber-500 text-white border-amber-500',
+    activeClasses:
+      'bg-status-draft text-on-status-draft border-status-draft',
   },
   {
     value: 'PUBLISHED',
     label: 'Published',
-    activeClasses: 'bg-green-600 text-white border-green-600',
+    activeClasses: 'bg-primary text-on-primary border-primary',
   },
   {
     value: 'FEATURED',
     label: 'Featured',
-    activeClasses: 'bg-blue-500 text-white border-blue-500',
+    activeClasses:
+      'bg-status-featured text-on-status-featured border-status-featured',
   },
   {
     value: 'ARCHIVED',
     label: 'Archived',
-    activeClasses: 'bg-gray-500 text-white border-gray-500',
+    activeClasses:
+      'bg-status-default text-on-status-default border-status-default',
   },
 ];
 

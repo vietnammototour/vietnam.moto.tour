@@ -135,7 +135,7 @@ export default function PerksListPage() {
       setActionError(error ?? 'Failed to create perk');
       return;
     }
-    setPerks((prev) => [...prev, data]);
+    setPerks((prev) => [data, ...prev]);
     setDrafts((prev) => ({...prev, [data.id]: toDraft(data)}));
   }
 
@@ -180,7 +180,7 @@ export default function PerksListPage() {
       {Object.entries(grouped).map(([category, items]) => (
         <section key={category} className="mb-6">
           <h2 className="type-title-sm mb-2">{t(`category.${category}`)}</h2>
-          <ul className="space-y-1">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {items.map((p) => {
               const draft = drafts[p.id] ?? toDraft(p);
               const baseline = baselines[p.id] ?? toDraft(p);

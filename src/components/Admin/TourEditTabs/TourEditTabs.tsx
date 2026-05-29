@@ -173,7 +173,7 @@ export function TourEditTabs({
         </div>
         <div className="flex items-center gap-3 shrink-0">
           {generalDirty && (
-            <span className="type-label-sm text-amber-500">
+            <span className="type-label-sm text-primary">
               Unsaved changes
             </span>
           )}

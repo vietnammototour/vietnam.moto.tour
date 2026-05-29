@@ -44,7 +44,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   danger: 'bg-danger hover:bg-danger-hover text-on-danger',
   ghost: 'text-on-surface-secondary hover:bg-surface-alt',
   'ghost-primary': 'text-primary hover:bg-primary/10',
-  'ghost-danger': 'text-error hover:bg-red-500/10',
+  'ghost-danger': 'text-danger hover:bg-danger/10',
   link: 'text-primary hover:underline',
 };
 

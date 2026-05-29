@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type {GetServerSideProps} from 'next';
@@ -10,7 +10,8 @@ import {fetchToursServer} from '@/queries/fetchers/admin/tours.server';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {StatusPicker} from '@/components/Admin/StatusPicker';
 import {routes} from '@/routes';
-import {Badge, Button} from '@/components/ui';
+import {Button, LocaleSwitcher} from '@/components/ui';
+import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 import {
   AdminPageShell,
   AdminPageHeader,
@@ -33,6 +34,7 @@ export default function AdminToursList() {
   const {data: tours, isLoading} = useTours({archived: false});
   const {data: archivedTours} = useTours({archived: true});
   const toggleStatus = useToggleTourStatus();
+  const [locale, setLocale] = useState<AdminLocale>('en');
   const {setLoading} = useAdminLoading();
 
   useEffect(() => {
@@ -46,8 +48,10 @@ export default function AdminToursList() {
   const archivedCount = archivedTours?.length ?? 0;
   const tourList = (tours ?? []) as unknown as AdminTour[];
 
-  const pickTitle = (t: AdminTour) => t.titleEn || t.titleVi;
-  const pickDestination = (d: AdminTour['destination']) => d.nameEn || d.nameVi;
+  const pickTitle = (t: AdminTour) =>
+    locale === 'en' ? t.titleEn || t.titleVi : t.titleVi || t.titleEn;
+  const pickDestination = (d: AdminTour['destination']) =>
+    locale === 'en' ? d.nameEn || d.nameVi : d.nameVi || d.nameEn;
 
   const groupedByDestination = (() => {
     const groups = new Map<string, {label: string; tours: AdminTour[]}>();
@@ -72,6 +76,9 @@ export default function AdminToursList() {
       header={
         <AdminPageHeader
           title="Tours"
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
           actions={
             <>
               {archivedCount > 0 && (
@@ -180,11 +187,13 @@ export default function AdminToursList() {
                               </span>
                             );
                           }
+                          const chip =
+                            'type-label-sm uppercase tracking-wide bg-surface-alt border border-border text-on-surface-secondary px-2 py-0.5';
                           return (
                             <>
-                              {hasGroup && <Badge variant="info">Group</Badge>}
+                              {hasGroup && <span className={chip}>Group</span>}
                               {hasVehicle && (
-                                <Badge variant="success">Vehicle</Badge>
+                                <span className={chip}>Vehicle</span>
                               )}
                             </>
                           );

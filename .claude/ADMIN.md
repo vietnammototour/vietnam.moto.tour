@@ -58,6 +58,16 @@ Structural contract:
 - Active admin locale lives in URL query (`?locale=en|vi`) or per-page state — pick one and use it consistently. Default to `en`.
 - **Localized fields stored as `{en, vi}` JSON, not split columns.** See CLAUDE.md → Code Style → "Localized DB columns…" for the convention. Admin forms continue to render one field + locale switcher; the switcher mutates the `en` or `vi` key inside the same JSON value rather than two separate columns.
 
+### 2a. Translation namespacing — one namespace per page/scope
+
+The `Translation` table's `namespace` column is what the Translations editor groups by (one sidebar entry per distinct namespace). Keep that list **compact**: every page or scope gets **exactly one namespace**, and all of its strings live there.
+
+- **One namespace per admin page.** Use a single `admin.<page>` namespace (`admin.rentals`, `admin.tours`, `admin.users`). Do NOT fragment a page across many namespaces (`admin.rentals.list`, `admin.rentals.status`, `admin.rentals.tabs`, `admin.rentals.fields`, `admin.rentals.confirmDelete`). Each of those becomes a separate, near-empty sidebar entry — the anti-pattern these screenshots flagged.
+- **Same for public pages and scopes.** One namespace per surface (`rentals`, not `rentals` + `rentals.filter` + `rentals.policy` + `rentals.policy.included`). Generic/shared UI strings live in the single `common` namespace (see CLAUDE.md → `common.*` rule).
+- **Sub-sections are nested KEYS, not new namespaces.** Group within a namespace using dotted keys: `status.draft`, `tabs.general`, `policy.included.title`, `confirmDelete` — all under the one page namespace. The dots after the namespace are key structure, not additional namespaces.
+- **Access via one `useTranslations('<namespace>')`** per component, then `t('status.draft')`. Reuse `common.*` for generic labels rather than redeclaring under the page namespace.
+- **Migrating existing fragments:** consolidate the split rows into the page namespace (move `admin.rentals.list.title` → namespace `admin.rentals`, key `list.title`) in the relevant `prisma/seed-*-translations.ts`, update call sites, and re-seed. Goal: the Translations editor shows one entry per page, not a dozen.
+
 ---
 
 ## 3. Buttons

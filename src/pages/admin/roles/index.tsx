@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useTranslations} from 'next-intl';
-import {Button, ConfirmModal} from '@/components/ui';
+import {Button, ConfirmModal, LocaleSwitcher} from '@/components/ui';
+import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 import type {GetServerSidePropsContext} from 'next';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -12,6 +13,8 @@ import type * as VMT from '@/domain';
 
 export default function RolesListPage() {
   const t = useTranslations('admin.roles');
+  const tCommon = useTranslations('common');
+  const [locale, setLocale] = useState<AdminLocale>('en');
   const {setLoading: setAdminLoading} = useAdminLoading();
   const [roles, setRoles] = useState<VMT.OrgRole[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,6 +52,9 @@ export default function RolesListPage() {
       header={
         <AdminPageHeader
           title={t('title')}
+          localeSwitcher={
+            <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
           actions={
             <Button
               variant="primary"
@@ -66,8 +72,7 @@ export default function RolesListPage() {
           <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
             <th className="p-3">{t('orderLabel')}</th>
             <th className="p-3">{t('keyLabel')}</th>
-            <th className="p-3">{t('labelViLabel')}</th>
-            <th className="p-3">{t('labelEnLabel')}</th>
+            <th className="p-3">{t('labelLabel')}</th>
             <th className="p-3" />
           </tr>
         </thead>
@@ -76,8 +81,9 @@ export default function RolesListPage() {
             <tr key={r.id} className="border-t border-border">
               <td className="p-3">{r.order}</td>
               <td className="p-3 font-mono text-sm">{r.key}</td>
-              <td className="p-3">{r.labelVi}</td>
-              <td className="p-3">{r.labelEn}</td>
+              <td className="p-3">
+                {locale === 'en' ? r.labelEn : r.labelVi}
+              </td>
               <td className="p-3">
                 <div className="flex items-center gap-2">
                   <Button
@@ -86,7 +92,7 @@ export default function RolesListPage() {
                     href={routes.admin.roles.edit.path({id: r.id})}
                     icon={<i className="fa fa-pencil text-xs" />}
                   >
-                    {t('edit')}
+                    {tCommon('edit')}
                   </Button>
                   <Button
                     variant="ghost-danger"
@@ -94,7 +100,7 @@ export default function RolesListPage() {
                     onClick={() => setDeleteTarget(r)}
                     icon={<i className="fa fa-trash text-xs" />}
                   >
-                    {t('delete')}
+                    {tCommon('delete')}
                   </Button>
                 </div>
               </td>
@@ -107,7 +113,7 @@ export default function RolesListPage() {
         title={
           deleteTarget ? t('deleteConfirm', {label: deleteTarget.labelEn}) : ''
         }
-        confirmLabel={t('delete')}
+        confirmLabel={tCommon('delete')}
         variant="danger"
         loading={deleting}
         error={deleteError}

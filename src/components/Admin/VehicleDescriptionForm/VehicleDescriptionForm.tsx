@@ -57,10 +57,17 @@ export function VehicleDescriptionForm({initial, onSubmit, onCancel}: Props) {
       </div>
 
       <FormField label="Description">
+        {/*
+          key={locale} forces a fresh textarea per locale. Both branches render
+          a <Textarea> at the same position, so without a distinct key React
+          reconciles in place and reuses one uncontrolled DOM node — its .value
+          would keep the previous locale's text on toggle. Remounting lets RHF
+          re-initialize the value from form state each switch.
+        */}
         {locale === 'vi' ? (
-          <Textarea rows={8} aria-label="Description (VI)" {...viField} />
+          <Textarea key="vi" rows={8} aria-label="Description (VI)" {...viField} />
         ) : (
-          <Textarea rows={8} aria-label="Description (EN)" {...enField} />
+          <Textarea key="en" rows={8} aria-label="Description (EN)" {...enField} />
         )}
       </FormField>
 

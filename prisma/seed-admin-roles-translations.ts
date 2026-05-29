@@ -50,8 +50,8 @@ const ENTRIES: Entry[] = [
   {
     namespace: 'admin',
     key: 'roles.new',
-    valueVi: 'Vai trò mới',
-    valueEn: 'New role',
+    valueVi: 'Thêm vai trò',
+    valueEn: 'Add role',
   },
   {
     namespace: 'admin',

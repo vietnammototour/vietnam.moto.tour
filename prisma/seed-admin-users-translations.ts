@@ -51,7 +51,7 @@ const ENTRIES: Entry[] = [
     namespace: 'admin',
     key: 'users.new',
     valueVi: 'Thêm người dùng',
-    valueEn: 'New user',
+    valueEn: 'Add user',
   },
   {
     namespace: 'admin',

@@ -59,8 +59,8 @@ const entries: Entry[] = [
   {
     namespace: 'admin.imageCollections',
     key: 'new',
-    valueEn: 'New collection',
-    valueVi: 'Bộ sưu tập mới',
+    valueEn: 'Add collection',
+    valueVi: 'Thêm bộ sưu tập',
   },
   {
     namespace: 'admin.imageCollections',
