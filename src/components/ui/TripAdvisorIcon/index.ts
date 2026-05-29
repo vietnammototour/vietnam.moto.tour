@@ -1,0 +1,1 @@
+export {TripAdvisorIcon} from './TripAdvisorIcon';

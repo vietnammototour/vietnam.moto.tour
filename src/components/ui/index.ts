@@ -12,4 +12,5 @@ export {LocaleSwitcher, type AdminLocale} from './LocaleSwitcher';
 export {Tabs, TabPanel} from './Tabs';
 export {ImageUpload} from './ImageUpload';
 export {IconPicker} from './IconPicker';
+export {TripAdvisorIcon} from './TripAdvisorIcon';
 export {SocialIcons} from './SocialIcons';

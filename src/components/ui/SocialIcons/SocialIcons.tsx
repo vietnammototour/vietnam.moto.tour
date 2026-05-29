@@ -1,4 +1,5 @@
 import {contactInfo} from '@/utils';
+import {TripAdvisorIcon} from '@/components/ui/TripAdvisorIcon';
 
 type Variant = 'compact' | 'default';
 
@@ -42,7 +43,7 @@ export function SocialIcons({variant = 'default', className}: Props) {
         rel="noopener noreferrer"
         className={`${v.box} ${v.icon} flex items-center justify-center transition-colors cursor-pointer`}
       >
-        <i className="fab fa-tripadvisor" aria-hidden="true" />
+        <TripAdvisorIcon className="h-5 w-auto" />
       </a>
       <a
         href={whatsAppHref}
