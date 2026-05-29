@@ -102,8 +102,8 @@ const ENTRIES: Entry[] = [
   {
     namespace: 'home',
     key: 'stats.km.value',
-    valueVi: '48.000',
-    valueEn: '48,000',
+    valueVi: '48k+',
+    valueEn: '48k+',
   },
   {
     namespace: 'home',
@@ -114,8 +114,8 @@ const ENTRIES: Entry[] = [
   {
     namespace: 'home',
     key: 'stats.riders.value',
-    valueVi: '3700',
-    valueEn: '3700',
+    valueVi: '3.7k+',
+    valueEn: '3.7k+',
   },
   {
     namespace: 'home',
