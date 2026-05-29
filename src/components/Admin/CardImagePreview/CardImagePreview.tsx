@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {DestinationCard} from '@/components/DestinationCard';
 import {ImageUpload} from '@/components/ui';
 import {Button} from '@/components/ui';
+import {SegmentedControl} from '@/components/ui/SegmentedControl';
 import {flushImageSlots} from '@/lib/submit-with-images';
 import {savedSlot, type ImageSlot, isDirty} from '@/lib/image-slot';
 
@@ -86,24 +87,14 @@ export function CardImagePreview({
           <span className="type-label-sm text-on-surface-secondary">
             Card Size:
           </span>
-          <div className="flex border border-border overflow-hidden">
-            <Button
-              variant="secondary"
-              size="sm"
-              type="button"
-              onClick={() => onSizeChange('small')}
-            >
-              Small
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              type="button"
-              onClick={() => onSizeChange('large')}
-            >
-              Big
-            </Button>
-          </div>
+          <SegmentedControl
+            options={[
+              {value: 'small', label: 'Small'},
+              {value: 'large', label: 'Big'},
+            ]}
+            value={size}
+            onChange={onSizeChange}
+          />
         </div>
         {isDirty(slot) && destinationId && (
           <Button
