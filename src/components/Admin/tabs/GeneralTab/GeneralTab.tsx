@@ -199,12 +199,12 @@ export function GeneralTab({
         </EditableProvider>
       </AdminIntlProvider>
 
-      <div className="border-t border-border bg-surface-elevated p-4 flex items-center justify-between gap-3 sticky bottom-0">
+      <div className="sticky bottom-4 mx-4 lg:mx-8 mb-4 lg:mb-6 border border-border bg-surface-elevated px-6 py-3 flex items-center justify-between gap-3">
         {submitError && (
-          <span className="type-label-sm text-red-500">{submitError}</span>
+          <span className="type-label-sm text-danger">{submitError}</span>
         )}
         {!submitError && isDirty && (
-          <span className="type-label-sm text-amber-500">Unsaved changes</span>
+          <span className="type-label-sm text-primary">Unsaved changes</span>
         )}
         {!submitError && !isDirty && <span />}
         <Button
