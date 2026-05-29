@@ -142,6 +142,7 @@ export function GeneralTab({
     transportation: values.transportation,
     hotel: values.hotel,
     guided: values.guided,
+    tripadvisorLocationId: null,
     itinerary: [],
     pricingGroups: [],
     paymentDetails: {en: '', vi: ''},

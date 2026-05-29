@@ -29,6 +29,7 @@ const baseTour: VMT.Tour = {
   transportation: 'Car',
   hotel: '',
   guided: '',
+  tripadvisorLocationId: null,
   itinerary: [],
   pricingGroups: [],
   paymentDetails: {en: '', vi: ''},
