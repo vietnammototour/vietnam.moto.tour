@@ -113,14 +113,6 @@ export default function Home({
 
         <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
-            <motion.p
-              variants={slideFromLeft}
-              initial="hidden"
-              animate="visible"
-              className="font-mono text-xs uppercase tracking-[0.05em] text-[#ffdb00] mb-6"
-            >
-              {t('heroTimestamp')}
-            </motion.p>
             <motion.h1
               variants={clipReveal}
               initial="hidden"
