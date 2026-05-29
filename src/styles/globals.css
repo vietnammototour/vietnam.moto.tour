@@ -50,6 +50,10 @@
   /* Cursor spotlight tint — RGB triple for use inside rgba(). Aligned to primary mustard. */
   --color-spotlight-rgb: 255 219 0;
 
+  /* Mesh gradient bloom tints — RGB triples for rgb(var()/alpha). Warm mustard accent + cool steel counter-tone. */
+  --bloom-mustard-rgb: 255 219 0;
+  --bloom-steel-rgb: 90 110 130;
+
   --font-sans: var(--font-hanken-grotesk), 'Hanken Grotesk', sans-serif;
   --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
 
@@ -255,6 +259,39 @@
 
 @utility animate-lantern-sway {
   animation: lantern-sway 4s var(--ease-lantern-sway) infinite;
+}
+
+/*
+  Mesh gradient blooms — subtle layered radial gradients for tactical-but-aesthetic depth.
+  Sit behind content as absolute layers; fully transparent at the edges so the flat dark
+  surface still dominates. Warm mustard bloom + cool steel counter-tone.
+*/
+@utility mesh-bloom-hero {
+  background-image:
+    radial-gradient(
+      60% 55% at 18% 22%,
+      rgb(var(--bloom-mustard-rgb) / 0.08) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      55% 50% at 85% 80%,
+      rgb(var(--bloom-steel-rgb) / 0.07) 0%,
+      transparent 72%
+    );
+}
+
+@utility mesh-bloom-section {
+  background-image:
+    radial-gradient(
+      50% 60% at 80% 15%,
+      rgb(var(--bloom-mustard-rgb) / 0.05) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      45% 55% at 12% 90%,
+      rgb(var(--bloom-steel-rgb) / 0.045) 0%,
+      transparent 72%
+    );
 }
 
 @layer base {

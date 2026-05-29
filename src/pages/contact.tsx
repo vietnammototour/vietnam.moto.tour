@@ -66,21 +66,20 @@ export default function Contact() {
                   <TextInput
                     type="text"
                     label={t('namePlaceholder')}
-                    placeholder={t('namePlaceholder')}
+                    placeholder="John Smith"
                     error={errors.name?.message}
                     {...register('name')}
                   />
                   <TextInput
                     type="email"
                     label={t('emailPlaceholder')}
-                    placeholder={t('emailPlaceholder')}
+                    placeholder="john@example.com"
                     error={errors.email?.message}
                     {...register('email')}
                   />
                 </div>
                 <Textarea
                   label={t('messagePlaceholder')}
-                  placeholder={t('messagePlaceholder')}
                   rows={6}
                   error={errors.message?.message}
                   {...register('message')}
