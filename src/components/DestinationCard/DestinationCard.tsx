@@ -70,15 +70,6 @@ export const DestinationCard = ({
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-surface-deep/90 via-surface-deep/40 to-transparent" />
-        <div className="absolute top-3 left-3">
-          <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-on-surface-accent bg-surface-deep/80 px-2 py-1 border border-on-surface-tertiary">
-            {displayName.slice(0, 3).toUpperCase()}-
-            {String(carOnlyCount + bikeOnlyCount + bikeAndCarCount).padStart(
-              2,
-              '0',
-            )}
-          </span>
-        </div>
         <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-border-subtle/50">
           <h2 className="font-display text-lg lg:text-xl font-bold uppercase tracking-[0.05em] text-on-surface mb-2 group-hover:text-on-surface-accent transition-colors">
             {displayName}
