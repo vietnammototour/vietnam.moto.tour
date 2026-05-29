@@ -43,7 +43,7 @@ export function SocialIcons({variant = 'default', className}: Props) {
         rel="noopener noreferrer"
         className={`${v.box} ${v.icon} flex items-center justify-center transition-colors cursor-pointer`}
       >
-        <TripAdvisorIcon className="h-5 w-auto" />
+        <TripAdvisorIcon className="h-[23px] w-auto" />
       </a>
       <a
         href={whatsAppHref}
