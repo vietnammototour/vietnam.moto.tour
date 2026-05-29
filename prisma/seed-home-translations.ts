@@ -99,7 +99,12 @@ const ENTRIES: Entry[] = [
     valueVi: 'KM ĐÃ ĐI',
     valueEn: 'KM RIDDEN',
   },
-  {namespace: 'home', key: 'stats.km.value', valueVi: '1.2M', valueEn: '1.2M'},
+  {
+    namespace: 'home',
+    key: 'stats.km.value',
+    valueVi: '48.000',
+    valueEn: '48,000',
+  },
   {
     namespace: 'home',
     key: 'stats.riders.label',
@@ -109,8 +114,8 @@ const ENTRIES: Entry[] = [
   {
     namespace: 'home',
     key: 'stats.riders.value',
-    valueVi: '4500+',
-    valueEn: '4500+',
+    valueVi: '3700',
+    valueEn: '3700',
   },
   {
     namespace: 'home',
