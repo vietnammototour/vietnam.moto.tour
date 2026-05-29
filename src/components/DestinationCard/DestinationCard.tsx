@@ -69,8 +69,8 @@ export const DestinationCard = ({
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-surface-deep/90 via-surface-deep/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-border-subtle/50">
+        <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-5 bg-surface-deep/85 backdrop-blur-sm border-t border-border-subtle/50">
           <h2 className="font-display text-lg lg:text-xl font-bold uppercase tracking-[0.05em] text-on-surface mb-2 group-hover:text-on-surface-accent transition-colors">
             {displayName}
           </h2>
@@ -78,7 +78,7 @@ export const DestinationCard = ({
             {chips.map((chip) => (
               <span
                 key={chip.key}
-                className="inline-flex items-center gap-1.5 h-6 px-2 font-mono text-[10px] uppercase tracking-[0.05em] bg-surface-deep/80 border border-border-subtle text-on-surface-secondary"
+                className="inline-flex items-center gap-1.5 h-6 px-2 font-mono text-[10px] uppercase tracking-[0.05em] bg-surface-deep/90 border border-border-subtle text-on-surface"
                 aria-label={chip.ariaLabel}
               >
                 {chip.icon}
