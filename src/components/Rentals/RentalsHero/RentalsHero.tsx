@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import {motion} from 'framer-motion';
 import {useTranslations} from 'next-intl';
-import {clipReveal, fadeInUp, slideFromLeft} from '@/utils/motion-variants';
+import {clipReveal, fadeInUp} from '@/utils/motion-variants';
 
 type Props = {
   backgroundImage: string;
@@ -32,14 +32,6 @@ export function RentalsHero({backgroundImage}: Props) {
         </div>
 
         <div className="relative z-20 h-full flex flex-col justify-end mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
-          <motion.p
-            variants={slideFromLeft}
-            initial="hidden"
-            animate="visible"
-            className="font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent mb-6"
-          >
-            {t('heroEyebrow')}
-          </motion.p>
           <motion.h1
             variants={clipReveal}
             initial="hidden"
