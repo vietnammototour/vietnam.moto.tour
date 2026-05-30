@@ -69,6 +69,7 @@ model Tour {
   notes          Json        @default("[]")
   mealsInfo      Json        @default("{}")
   status         TourStatus  @default(DRAFT)
+  tripadvisorLocationId String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }

@@ -142,6 +142,7 @@ export function GeneralTab({
     transportation: values.transportation,
     hotel: values.hotel,
     guided: values.guided,
+    tripadvisorLocationId: null,
     itinerary: [],
     pricingGroups: [],
     paymentDetails: {en: '', vi: ''},
@@ -192,6 +193,16 @@ export function GeneralTab({
                 value={values.guided}
                 onChange={(e) =>
                   setValue('guided', e.target.value, {shouldDirty: true})
+                }
+              />
+              <TextInput
+                label="TripAdvisor location ID"
+                placeholder="e.g. 5501636"
+                value={values.tripadvisorLocationId ?? ''}
+                onChange={(e) =>
+                  setValue('tripadvisorLocationId', e.target.value, {
+                    shouldDirty: true,
+                  })
                 }
               />
             </section>

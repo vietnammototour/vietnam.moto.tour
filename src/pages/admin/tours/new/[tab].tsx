@@ -32,6 +32,7 @@ const emptyGeneral = {
   transportation: '',
   hotel: '',
   guided: '',
+  tripadvisorLocationId: '',
 };
 
 export default function NewTour() {

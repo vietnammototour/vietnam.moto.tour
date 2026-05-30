@@ -138,6 +138,7 @@ export function TourEditTabs({
     transportation: initialGeneral.transportation,
     hotel: initialGeneral.hotel,
     guided: initialGeneral.guided,
+    tripadvisorLocationId: null,
     itinerary: [],
     pricingGroups: [],
     paymentDetails: {en: '', vi: ''},

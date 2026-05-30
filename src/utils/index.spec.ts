@@ -27,6 +27,10 @@ describe('contactInfo', () => {
     expect(contactInfo.tripadvisorLink).toContain('tripadvisor.com');
   });
 
+  it('has a numeric TripAdvisor location id', () => {
+    expect(contactInfo.tripadvisorLocationId).toMatch(/^\d+$/);
+  });
+
   it('has a WhatsApp number', () => {
     expect(contactInfo.whatsApp).toBeTruthy();
   });

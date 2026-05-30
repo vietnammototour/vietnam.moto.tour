@@ -41,11 +41,16 @@ export default async function handler(
       'notes',
       'mealsInfo',
       'status',
+      'tripadvisorLocationId',
     ];
     for (const field of fields) {
       if (data[field] !== undefined) {
         updateData[field] = data[field];
       }
+    }
+    // Empty optional external id means "no listing" — store null, not ''.
+    if (updateData.tripadvisorLocationId === '') {
+      updateData.tripadvisorLocationId = null;
     }
     // Handle highlights relation separately — only allow highlights from the tour's destination
     if (data.highlightIds !== undefined) {

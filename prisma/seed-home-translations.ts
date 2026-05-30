@@ -171,6 +171,18 @@ const ENTRIES: Entry[] = [
     valueVi: 'Liên hệ',
     valueEn: 'Need backup',
   },
+  {
+    namespace: 'home',
+    key: 'reviewsAttribution',
+    valueVi: 'Đánh giá thực tế trên TripAdvisor',
+    valueEn: 'Real reviews on TripAdvisor',
+  },
+  {
+    namespace: 'common',
+    key: 'readReviews',
+    valueVi: 'Đọc đánh giá',
+    valueEn: 'Read reviews',
+  },
 ];
 
 async function main() {
