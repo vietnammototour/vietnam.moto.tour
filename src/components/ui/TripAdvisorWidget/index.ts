@@ -1,1 +1,0 @@
-export {TripAdvisorWidget} from './TripAdvisorWidget';

@@ -223,12 +223,6 @@ const entries: Entry[] = [
     valueEn: 'About this tour',
     valueVi: 'Về tour này',
   },
-  {
-    namespace: 'tourDetail',
-    key: 'reviewsTitle',
-    valueVi: 'Đánh giá trên TripAdvisor',
-    valueEn: 'TripAdvisor reviews',
-  },
 
   // Common
   {

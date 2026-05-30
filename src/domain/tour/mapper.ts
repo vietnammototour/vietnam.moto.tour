@@ -72,6 +72,5 @@ export function toTour(row: PrismaTourWithRelations): Tour {
     transportation: row.transportation,
     hotel: row.hotel,
     guided: row.guided,
-    tripadvisorLocationId: row.tripadvisorLocationId,
   };
 }

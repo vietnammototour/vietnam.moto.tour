@@ -27,7 +27,6 @@ function renderTab(props: Partial<React.ComponentProps<typeof CardTab>> = {}) {
           transportation: '',
           hotel: '',
           guided: '',
-          tripadvisorLocationId: null,
           itinerary: [],
           pricingGroups: [],
           paymentDetails: {en: '', vi: ''},
