@@ -63,6 +63,7 @@ export default function PerksListPage() {
   const [deleteTarget, setDeleteTarget] = useState<VMT.Perk | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
   const {setLoading: setAdminLoading} = useAdminLoading();
 
   useEffect(() => {
@@ -139,7 +140,16 @@ export default function PerksListPage() {
     setDrafts((prev) => ({...prev, [data.id]: toDraft(data)}));
   }
 
-  const grouped = perks.reduce<Record<string, VMT.Perk[]>>((acc, p) => {
+  const filteredPerks = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return perks;
+    return perks.filter((p) => {
+      const label = locale === 'en' ? p.labelEn : p.labelVi;
+      return label.toLowerCase().includes(term);
+    });
+  }, [perks, search, locale]);
+
+  const grouped = filteredPerks.reduce<Record<string, VMT.Perk[]>>((acc, p) => {
     (acc[p.category] ??= []).push(p);
     return acc;
   }, {});
@@ -151,6 +161,15 @@ export default function PerksListPage() {
           title={t('title')}
           localeSwitcher={
             <LocaleSwitcher value={locale} onChange={setLocale} />
+          }
+          search={
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search perks…"
+              className="cursor-text w-64 px-3 py-2 border border-border bg-surface-elevated"
+            />
           }
           actions={
             <Button

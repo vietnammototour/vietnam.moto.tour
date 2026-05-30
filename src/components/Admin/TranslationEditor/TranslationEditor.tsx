@@ -10,6 +10,7 @@ type TranslationEditorProps = {
   translations: VMT.Translation[];
   namespaces: string[];
   locale: AdminLocale;
+  filter: string;
 };
 
 function humanizeNamespace(ns: string): string {
@@ -45,9 +46,9 @@ export function TranslationEditor({
   translations: initial,
   namespaces,
   locale,
+  filter,
 }: TranslationEditorProps) {
   const [translations, setTranslations] = useState(initial);
-  const [filter, setFilter] = useState('');
   const [modified, setModified] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
 
@@ -170,13 +171,6 @@ export function TranslationEditor({
 
       <div className="flex-1 min-w-0">
         <div className="flex flex-wrap gap-4 mb-4">
-          <input
-            type="text"
-            placeholder="Search keys or values..."
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 border border-border bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary w-64"
-          />
           <span className="type-label-sm text-on-surface-secondary self-center">
             {filtered.length} keys
           </span>

@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
@@ -17,6 +17,7 @@ export default function AdminTranslations() {
   );
   const {setLoading} = useAdminLoading();
   const [locale, setLocale] = useAdminLocale();
+  const [filter, setFilter] = useState('');
 
   const translations = data ?? [];
   const namespaces = [...new Set(translations.map((t) => t.namespace))].sort();
@@ -30,6 +31,15 @@ export default function AdminTranslations() {
       header={
         <AdminPageHeader
           title="Translations"
+          search={
+            <input
+              type="search"
+              placeholder="Search keys or values..."
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="cursor-text w-64 px-3 py-2 border border-border bg-surface-elevated"
+            />
+          }
           localeSwitcher={
             <LocaleSwitcher value={locale} onChange={setLocale} />
           }
@@ -41,6 +51,7 @@ export default function AdminTranslations() {
           translations={translations}
           namespaces={namespaces}
           locale={locale}
+          filter={filter}
         />
       )}
     </AdminPageShell>

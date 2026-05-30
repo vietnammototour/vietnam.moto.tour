@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: {email: credentials.email},
-          include: {orgRole: true},
+          include: {orgRole: true, image: true},
         });
 
         if (!user) return null;
@@ -48,6 +48,8 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           orgRoleKey: user.orgRole?.key ?? null,
+          roleLabel: user.orgRole?.labelEn ?? user.orgRole?.key ?? null,
+          imageUrl: user.image?.url ?? null,
         };
       },
     }),
@@ -58,8 +60,16 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({token, user}) {
-      if (user)
-        token.orgRoleKey = (user as {orgRoleKey?: string}).orgRoleKey ?? null;
+      if (user) {
+        const u = user as {
+          orgRoleKey?: string | null;
+          roleLabel?: string | null;
+          imageUrl?: string | null;
+        };
+        token.orgRoleKey = u.orgRoleKey ?? null;
+        token.roleLabel = u.roleLabel ?? null;
+        token.imageUrl = u.imageUrl ?? null;
+      }
       return token;
     },
     async session({session, token}) {
@@ -67,6 +77,8 @@ export const authOptions: NextAuthOptions = {
         ...session.user,
         id: token.sub as string,
         orgRoleKey: (token.orgRoleKey as string | null) ?? null,
+        roleLabel: (token.roleLabel as string | null) ?? null,
+        imageUrl: (token.imageUrl as string | null) ?? null,
       };
       return session;
     },

@@ -11,6 +11,8 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {DataGrid} from '@/components/Admin/DataGrid';
+import type {GridColumn} from '@/components/Admin/DataGrid';
 import type * as VMT from '@/domain';
 
 type Editing = {mode: 'create'} | {mode: 'edit'; role: VMT.OrgRole};
@@ -100,6 +102,52 @@ export default function RolesListPage() {
     return label || t('edit');
   })();
 
+  const columns: GridColumn<VMT.OrgRole>[] = [
+    {
+      key: 'order',
+      header: t('orderLabel'),
+      track: '64px',
+    },
+    {
+      key: 'key',
+      header: t('keyLabel'),
+      track: 'minmax(0,1fr)',
+      render: (r) => <span className="font-mono text-sm">{r.key}</span>,
+    },
+    {
+      key: 'label',
+      header: t('labelLabel'),
+      track: 'minmax(0,1fr)',
+      render: (r) => (locale === 'en' ? r.labelEn : r.labelVi),
+    },
+    {
+      key: 'actions',
+      header: '',
+      track: '160px',
+      align: 'end',
+      render: (r) => (
+        <div className="flex gap-2 justify-end">
+          <Button
+            variant="ghost-primary"
+            size="sm"
+            onClick={() => openEdit(r)}
+            icon={<i className="fa fa-pencil text-xs" />}
+          >
+            {tCommon('edit')}
+          </Button>
+          <Button
+            variant="ghost-danger"
+            size="sm"
+            onClick={() => setDeleteTarget(r)}
+            icon={<i className="fa fa-trash text-xs" />}
+          >
+            {tCommon('delete')}
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <AdminPageShell
       header={
@@ -120,47 +168,13 @@ export default function RolesListPage() {
         />
       }
     >
-      <table className="w-full bg-surface-elevated border border-border">
-        <thead>
-          <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
-            <th className="p-3">{t('orderLabel')}</th>
-            <th className="p-3">{t('keyLabel')}</th>
-            <th className="p-3">{t('labelLabel')}</th>
-            <th className="p-3" />
-          </tr>
-        </thead>
-        <tbody>
-          {roles.map((r) => (
-            <tr key={r.id} className="border-t border-border">
-              <td className="p-3">{r.order}</td>
-              <td className="p-3 font-mono text-sm">{r.key}</td>
-              <td className="p-3">
-                {locale === 'en' ? r.labelEn : r.labelVi}
-              </td>
-              <td className="p-3">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost-primary"
-                    size="sm"
-                    onClick={() => openEdit(r)}
-                    icon={<i className="fa fa-pencil text-xs" />}
-                  >
-                    {tCommon('edit')}
-                  </Button>
-                  <Button
-                    variant="ghost-danger"
-                    size="sm"
-                    onClick={() => setDeleteTarget(r)}
-                    icon={<i className="fa fa-trash text-xs" />}
-                  >
-                    {tCommon('delete')}
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataGrid
+        columns={columns}
+        items={roles}
+        rowKey={(r) => r.id}
+        ariaLabel="Roles"
+        emptyState="No roles yet."
+      />
 
       <Modal
         open={!!editing}

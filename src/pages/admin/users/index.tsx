@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
-import Image from 'next/image';
+import {useEffect, useMemo, useState} from 'react';
 import {useSession} from 'next-auth/react';
 import {Button, ConfirmModal, LocaleSwitcher} from '@/components/ui';
+import {Avatar} from '@/components/ui';
 import type {AdminLocale} from '@/components/ui/LocaleSwitcher';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
@@ -11,7 +11,15 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {DataGrid, type GridColumn} from '@/components/Admin/DataGrid';
 import type * as VMT from '@/domain';
+
+const check = (on: boolean) =>
+  on ? (
+    <i className="fa fa-check text-primary" aria-hidden="true" />
+  ) : (
+    <span className="text-on-surface-tertiary">—</span>
+  );
 
 export default function UsersListPage() {
   const t = useTranslations('admin.users');
@@ -24,6 +32,7 @@ export default function UsersListPage() {
   const [deleteTarget, setDeleteTarget] = useState<VMT.UserAdmin | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     api.admin.users.list().then(({data}) => {
@@ -50,11 +59,110 @@ export default function UsersListPage() {
     setDeleteTarget(null);
   }
 
+  const filtered = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return users;
+    return users.filter(
+      (u) =>
+        u.name.toLowerCase().includes(term) ||
+        (u.email ?? '').toLowerCase().includes(term),
+    );
+  }, [users, search]);
+
+  const columns: GridColumn<VMT.UserAdmin>[] = useMemo(
+    () => [
+      {
+        key: 'teamOrder',
+        header: t('orderLabel'),
+        track: '64px',
+      },
+      {
+        key: 'photo',
+        header: '',
+        track: '48px',
+        render: (u) => (
+          <Avatar src={u.photo?.url ?? null} name={u.name} size="sm" />
+        ),
+      },
+      {
+        key: 'name',
+        header: t('nameLabel'),
+        track: 'minmax(0,1fr)',
+        render: (u) => <span className="font-medium">{u.name}</span>,
+      },
+      {
+        key: 'email',
+        header: t('emailLabel'),
+        track: 'minmax(0,1fr)',
+        render: (u) => u.email ?? '—',
+      },
+      {
+        key: 'role',
+        header: t('roleLabel'),
+        track: '120px',
+        render: (u) =>
+          locale === 'en'
+            ? (u.orgRole?.labelEn ?? u.orgRole?.key ?? '—')
+            : (u.orgRole?.labelVi ?? u.orgRole?.key ?? '—'),
+      },
+      {
+        key: 'isCoreTeam',
+        header: t('isCoreTeamLabel'),
+        track: '100px',
+        render: (u) => check(u.isCoreTeam),
+      },
+      {
+        key: 'allowAuth',
+        header: t('allowAuthLabel'),
+        track: '120px',
+        render: (u) => check(u.allowAuth),
+      },
+      {
+        key: 'actions',
+        header: '',
+        track: '160px',
+        align: 'end',
+        render: (u) => (
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              variant="ghost-primary"
+              size="sm"
+              href={routes.admin.users.edit.path({id: u.id})}
+              icon={<i className="fa fa-pencil text-xs" />}
+            >
+              {tCommon('edit')}
+            </Button>
+            {session?.user.id !== u.id && (
+              <Button
+                variant="ghost-danger"
+                size="sm"
+                onClick={() => setDeleteTarget(u)}
+                icon={<i className="fa fa-trash text-xs" />}
+              >
+                {tCommon('delete')}
+              </Button>
+            )}
+          </div>
+        ),
+      },
+    ],
+    [t, tCommon, locale, session],
+  );
+
   return (
     <AdminPageShell
       header={
         <AdminPageHeader
           title={t('title')}
+          search={
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name or email…"
+              className="cursor-text w-64 px-3 py-2 border border-border bg-surface-elevated"
+            />
+          }
           localeSwitcher={
             <LocaleSwitcher value={locale} onChange={setLocale} />
           }
@@ -70,72 +178,13 @@ export default function UsersListPage() {
         />
       }
     >
-      <table className="w-full bg-surface-elevated border border-border">
-        <thead>
-          <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
-            <th className="p-3">{t('orderLabel')}</th>
-            <th className="p-3" />
-            <th className="p-3">{t('nameLabel')}</th>
-            <th className="p-3">{t('emailLabel')}</th>
-            <th className="p-3">{t('roleLabel')}</th>
-            <th className="p-3">{t('isCoreTeamLabel')}</th>
-            <th className="p-3">{t('allowAuthLabel')}</th>
-            <th className="p-3" />
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((u) => (
-            <tr key={u.id} className="border-t border-border">
-              <td className="p-3">{u.teamOrder}</td>
-              <td className="p-3">
-                {u.photo?.url ? (
-                  <Image
-                    src={u.photo.url}
-                    alt=""
-                    width={48}
-                    height={48}
-                    unoptimized
-                    className="h-12 w-12 object-cover"
-                  />
-                ) : (
-                  <div className="h-12 w-12 bg-surface-alt" />
-                )}
-              </td>
-              <td className="p-3 font-medium">{u.name}</td>
-              <td className="p-3 text-on-surface-secondary">
-                {u.email ?? '—'}
-              </td>
-              <td className="p-3">
-                {locale === 'en' ? u.orgRole.labelEn : u.orgRole.labelVi}
-              </td>
-              <td className="p-3">{u.isCoreTeam ? '✓' : '—'}</td>
-              <td className="p-3">{u.allowAuth ? '✓' : '—'}</td>
-              <td className="p-3">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost-primary"
-                    size="sm"
-                    href={routes.admin.users.edit.path({id: u.id})}
-                    icon={<i className="fa fa-pencil text-xs" />}
-                  >
-                    {tCommon('edit')}
-                  </Button>
-                  {session?.user.id !== u.id && (
-                    <Button
-                      variant="ghost-danger"
-                      size="sm"
-                      onClick={() => setDeleteTarget(u)}
-                      icon={<i className="fa fa-trash text-xs" />}
-                    >
-                      {tCommon('delete')}
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataGrid
+        columns={columns}
+        items={filtered}
+        rowKey={(u) => u.id}
+        ariaLabel="Users"
+        emptyState="No users yet."
+      />
       <ConfirmModal
         open={!!deleteTarget}
         title={
