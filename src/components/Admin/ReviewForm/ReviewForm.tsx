@@ -2,7 +2,15 @@ import {useState} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useTranslations} from 'next-intl';
-import {Button, TextInput, Textarea, NumberInput, Select} from '@/components/ui';
+import {
+  Button,
+  TextInput,
+  Textarea,
+  NumberInput,
+  Select,
+  FormField,
+} from '@/components/ui';
+import {StarRating} from '@/components/reviews/StarRating';
 import {
   buildReviewSchema,
   reviewFormDefaults,
@@ -89,10 +97,18 @@ export function ReviewForm({
         {...register('avatarUrl')}
         error={errors.avatarUrl?.message}
       />
-      <NumberInput
-        label={t('ratingLabel')}
-        {...register('rating', {valueAsNumber: true})}
-        error={errors.rating?.message}
+      <Controller
+        control={control}
+        name="rating"
+        render={({field, fieldState}) => (
+          <FormField label={t('ratingLabel')} error={fieldState.error?.message}>
+            <StarRating
+              rating={field.value}
+              onRate={field.onChange}
+              size="lg"
+            />
+          </FormField>
+        )}
       />
       <TextInput
         label={t('titleLabel')}

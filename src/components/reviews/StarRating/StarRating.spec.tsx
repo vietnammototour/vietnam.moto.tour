@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import {StarRating} from './StarRating';
 
 describe('StarRating', () => {
@@ -18,5 +18,12 @@ describe('StarRating', () => {
   it('exposes an accessible label', () => {
     render(<StarRating rating={5} />);
     expect(screen.getByLabelText('5 out of 5 stars')).toBeInTheDocument();
+  });
+
+  it('calls onRate with the clicked star value when interactive', () => {
+    const onRate = jest.fn();
+    render(<StarRating rating={3} onRate={onRate} />);
+    fireEvent.click(screen.getByRole('radio', {name: '4 stars'}));
+    expect(onRate).toHaveBeenCalledWith(4);
   });
 });

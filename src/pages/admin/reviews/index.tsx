@@ -9,6 +9,7 @@ import {
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
 import {ReviewerAvatar} from '@/components/reviews/ReviewerAvatar';
+import {StarRating} from '@/components/reviews/StarRating';
 import type * as VMT from '@/domain';
 
 type ReviewRow = VMT.Review & {
@@ -85,7 +86,9 @@ export default function ReviewsListPage() {
                   <span>{r.reviewerName}</span>
                 </div>
               </td>
-              <td className="p-3 tabular-nums">{r.rating}/5</td>
+              <td className="p-3">
+                <StarRating rating={r.rating} size="sm" />
+              </td>
               <td className="p-3">{r.tour.titleEn}</td>
               <td className="p-3">{r.isFeatured ? t('featuredYes') : ''}</td>
               <td className="p-3">
