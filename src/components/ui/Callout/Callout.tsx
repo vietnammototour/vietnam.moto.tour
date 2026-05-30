@@ -12,21 +12,21 @@ type CalloutProps = {
 };
 
 const toneBox: Record<CalloutTone, string> = {
-  danger: 'border-error/40 bg-error/5',
+  danger: 'border-danger/60 border-l-4 border-l-danger bg-danger/10',
   warning: 'border-primary/40 bg-primary/5',
   info: 'border-on-surface-accent/40 bg-on-surface-accent/5',
   neutral: 'border-border-subtle bg-surface-elevated/40',
 };
 
 const toneAccent: Record<CalloutTone, string> = {
-  danger: 'text-error',
+  danger: 'text-danger',
   warning: 'text-primary',
   info: 'text-on-surface-accent',
   neutral: 'text-on-surface',
 };
 
 const toneIcon: Record<CalloutTone, string> = {
-  danger: 'fa-info-circle',
+  danger: 'fa-exclamation-circle',
   warning: 'fa-exclamation-triangle',
   info: 'fa-info-circle',
   neutral: 'fa-info-circle',

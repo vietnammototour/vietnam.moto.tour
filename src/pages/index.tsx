@@ -238,7 +238,7 @@ export default function Home({
                   alt="Vietnam landscape"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
+                  className="object-cover object-center"
                 />
               </div>
               <a
@@ -292,13 +292,6 @@ export default function Home({
                   </li>
                 ))}
               </ul>
-              <Link
-                href={routes.tours.list.path()}
-                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-light text-on-primary font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
-              >
-                {t('bookWithUsNow')}
-                <i className="fa fa-arrow-right" aria-hidden="true" />
-              </Link>
             </motion.div>
           </div>
         </div>

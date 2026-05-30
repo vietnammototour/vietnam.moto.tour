@@ -1,3 +1,5 @@
+import {useEffect, useRef, useState} from 'react';
+import Image from 'next/image';
 import type {Review} from '@/domain';
 import {useEditable, EditableText} from '@/components/Admin/EditableContext';
 import {TripAdvisorIcon} from '@/components/ui';
@@ -8,6 +10,8 @@ type ReviewCardProps = {
   review: Review;
   verifyLabel: string;
   photoLabel?: (n: number) => string;
+  readMoreLabel?: string;
+  showLessLabel?: string;
 };
 
 function shortDate(iso: string): string {
@@ -18,13 +22,29 @@ function shortDate(iso: string): string {
 const inlineInput =
   'w-full bg-surface-elevated border border-border px-2 py-1 font-mono text-xs text-on-surface outline-none focus:border-primary';
 
-export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
+export function ReviewCard({
+  review,
+  verifyLabel,
+  photoLabel,
+  readMoreLabel = 'Read more',
+  showLessLabel = 'Show less',
+}: ReviewCardProps) {
   const ctx = useEditable();
   const editable = !!ctx?.editable;
   const set = (path: string, value: string | number) =>
     ctx?.onFieldChange(path, value);
   const label = photoLabel ?? ((n: number) => `Photo ${n}`);
   const images = editable ? review.images : review.images.filter(Boolean);
+
+  const [expanded, setExpanded] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
+  const bodyRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (!el || expanded) return;
+    setOverflowing(el.scrollHeight > el.clientHeight + 1);
+  }, [review.body, expanded]);
 
   return (
     <article className="bg-surface-alt border border-border p-8 lg:p-10 flex flex-col gap-6">
@@ -37,33 +57,33 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
       </div>
 
       {/* Identity */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col gap-1">
-            <ReviewerAvatar
-              name={review.reviewerName}
-              avatarUrl={review.avatarUrl}
-              size="md"
+      <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-1">
+          <ReviewerAvatar
+            name={review.reviewerName}
+            avatarUrl={review.avatarUrl}
+            size="md"
+          />
+          {editable && (
+            <input
+              type="url"
+              defaultValue={review.avatarUrl ?? ''}
+              placeholder="Avatar URL"
+              aria-label="Avatar URL"
+              className={`${inlineInput} w-28`}
+              onBlur={(e) => set('avatarUrl', e.target.value)}
             />
-            {editable && (
-              <input
-                type="url"
-                defaultValue={review.avatarUrl ?? ''}
-                placeholder="Avatar URL"
-                aria-label="Avatar URL"
-                className={`${inlineInput} w-28`}
-                onBlur={(e) => set('avatarUrl', e.target.value)}
-              />
-            )}
-          </div>
-          <div>
-            <EditableText
-              tag="p"
-              path="reviewerName"
-              value={review.reviewerName}
-              placeholder="Reviewer name"
-              className="type-title-sm text-on-surface"
-            />
+          )}
+        </div>
+        <div className="flex flex-col gap-1">
+          <EditableText
+            tag="p"
+            path="reviewerName"
+            value={review.reviewerName}
+            placeholder="Reviewer name"
+            className="type-title-sm text-on-surface"
+          />
+          {(editable || review.reviewerLocation) && (
             <EditableText
               tag="p"
               path="reviewerLocation"
@@ -71,9 +91,7 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
               placeholder="Location"
               className="type-label-sm text-on-surface-secondary"
             />
-          </div>
-        </div>
-        <div className="flex flex-col items-end gap-1">
+          )}
           <span className="font-mono text-xs text-on-surface-secondary tabular-nums">
             {shortDate(review.reviewDate)}
           </span>
@@ -87,14 +105,14 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
             />
           )}
         </div>
+        <div className="ml-auto self-center">
+          <StarRating
+            rating={review.rating}
+            size="sm"
+            onRate={editable ? (n) => set('rating', n) : undefined}
+          />
+        </div>
       </div>
-
-      {/* Rating */}
-      <StarRating
-        rating={review.rating}
-        size="md"
-        onRate={editable ? (n) => set('rating', n) : undefined}
-      />
 
       {/* Content */}
       <EditableText
@@ -104,14 +122,43 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
         placeholder="Review title"
         className="type-title-sm text-on-surface"
       />
-      <EditableText
-        tag="p"
-        path="body"
-        value={review.body}
-        placeholder="Review text"
-        multiline
-        className="text-base text-on-surface-secondary leading-relaxed"
-      />
+      {editable ? (
+        <EditableText
+          tag="p"
+          path="body"
+          value={review.body}
+          placeholder="Review text"
+          multiline
+          className="text-base text-on-surface-secondary leading-relaxed"
+        />
+      ) : (
+        <div className="flex flex-col gap-2">
+          <p
+            ref={bodyRef}
+            className={`text-base text-on-surface-secondary leading-relaxed whitespace-pre-line ${
+              expanded ? '' : 'line-clamp-[7]'
+            }`}
+          >
+            {review.body}
+          </p>
+          {overflowing && (
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              aria-expanded={expanded}
+              className="self-start cursor-pointer font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent hover:text-primary transition-colors"
+            >
+              {expanded ? showLessLabel : readMoreLabel}
+              <i
+                className={`fa ml-1 text-xs ${
+                  expanded ? 'fa-chevron-up' : 'fa-chevron-down'
+                }`}
+                aria-hidden="true"
+              />
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Photos */}
       {(images.length > 0 || editable) && (
@@ -124,9 +171,19 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label(i + 1)}
-                  className="inline-flex h-12 w-12 items-center justify-center border border-border bg-surface-elevated text-on-surface-secondary cursor-pointer transition-colors hover:border-primary hover:text-primary"
+                  className="relative inline-flex h-20 w-20 items-center justify-center overflow-hidden border border-border bg-surface-elevated text-on-surface-secondary cursor-pointer transition-colors hover:border-primary hover:text-primary"
                 >
-                  <i className="fa fa-image" aria-hidden="true" />
+                  {url ? (
+                    <Image
+                      src={url}
+                      alt={label(i + 1)}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <i className="fa fa-image" aria-hidden="true" />
+                  )}
                 </a>
                 {editable && (
                   <div className="flex items-center gap-1">

@@ -3,6 +3,7 @@ import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
 import {toVehicle} from '@/domain/vehicle/mapper';
 import {VEHICLE_TYPES, VEHICLE_STATUSES} from '@/domain/vehicle/constants';
+import {normalizeSlug} from '@/utils';
 
 type UpdateBody = Partial<{
   slug: string;
@@ -73,7 +74,7 @@ export default async function handler(
     const row = await prisma.vehicle.update({
       where: {id},
       data: {
-        ...(body.slug !== undefined ? {slug: body.slug} : {}),
+        ...(body.slug !== undefined ? {slug: normalizeSlug(body.slug)} : {}),
         ...(body.type !== undefined
           ? {type: body.type as 'SCOOTER' | 'BIKE'}
           : {}),

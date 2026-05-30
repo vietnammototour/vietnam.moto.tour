@@ -9,6 +9,7 @@ type ReviewsSectionProps = {
 
 export function ReviewsSection({reviews}: ReviewsSectionProps) {
   const t = useTranslations('reviews');
+  const tc = useTranslations('common');
   if (reviews.length === 0) return null;
 
   return (
@@ -30,16 +31,18 @@ export function ReviewsSection({reviews}: ReviewsSectionProps) {
               review={review}
               verifyLabel={t('verifiedOn')}
               photoLabel={(n) => t('photoNth', {n})}
+              readMoreLabel={tc('readMore')}
+              showLessLabel={tc('showLess')}
             />
           ))}
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 flex justify-end">
           <a
             href={TRIPADVISOR_REVIEWS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-on-surface-tertiary hover:border-primary text-on-surface hover:text-primary font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-colors"
+            className="inline-flex items-center gap-2 border border-tripadvisor bg-tripadvisor text-on-tripadvisor hover:opacity-90 font-mono text-xs font-medium uppercase tracking-[0.05em] px-6 py-3 cursor-pointer transition-opacity"
           >
             {t('viewAllOnTripAdvisor')}
             <i className="fa fa-arrow-right" aria-hidden="true" />

@@ -1,6 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
+import {normalizeSlug} from '@/utils';
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,7 +29,7 @@ export default async function handler(
     const data = req.body;
     const destination = await prisma.destination.create({
       data: {
-        slug: data.slug,
+        slug: normalizeSlug(data.slug ?? ''),
         nameVi: data.nameVi ?? '',
         nameEn: data.nameEn ?? '',
         imageUrl: data.imageUrl ?? '',

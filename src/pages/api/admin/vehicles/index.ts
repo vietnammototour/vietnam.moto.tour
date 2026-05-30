@@ -3,6 +3,7 @@ import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
 import {toVehicle} from '@/domain/vehicle/mapper';
 import {VEHICLE_TYPES, VEHICLE_STATUSES} from '@/domain/vehicle/constants';
+import {normalizeSlug} from '@/utils';
 
 type CreateBody = {
   slug?: string;
@@ -61,7 +62,7 @@ export default async function handler(
 
     const row = await prisma.vehicle.create({
       data: {
-        slug: body.slug!,
+        slug: normalizeSlug(body.slug!),
         type: body.type as 'SCOOTER' | 'BIKE',
         brand: body.brand!,
         model: body.model!,

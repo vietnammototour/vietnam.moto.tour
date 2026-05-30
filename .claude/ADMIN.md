@@ -158,6 +158,8 @@ Table conventions:
 - Every form has a co-located `*.form-utils.ts` (Yup schema, type, defaults, submit handler) — already mandated by CLAUDE.md.
 - Form fields use shared `FormField`, `TextInput`, `Textarea`, `NumberInput`, `Select` from `src/components/ui`.
 - Form submit button lives in the **page footer**, not inline at the end of the form.
+- **Slugs are always saved lowercase.** When persisting a `slug` for any entity (tour, destination, vehicle, …), normalize it to lowercase (and trim) before writing to the DB. Use the shared `normalizeSlug` helper from `src/utils` at every create/update save site (API route or submit handler) — never persist `data.slug` raw. The slug stored in the DB MUST be lowercase regardless of how the admin typed it.
+- **Use the `{rate}` token for the exchange rate, never a literal number.** In a tour's payment content (`paymentDetails`), write the exchange rate as `{rate}` (e.g. `Exchange rate based on {rate} VND`). `TourPayment` substitutes it with the static `EXCHANGE_RATE_VND` from `src/utils`, formatted per-locale. Never type the rate figure directly — it must live only in code so a rate change is a one-line edit. Same pattern applies to any future value that is a global constant, not per-entity content.
 
 ---
 

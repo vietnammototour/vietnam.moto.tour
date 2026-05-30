@@ -62,8 +62,12 @@ export default function TourDetail({tour, isAdmin, reviews}: TourDetailProps) {
 
       <TourHero tour={tour} />
 
-      <article className="py-10 lg:py-16 pb-24 lg:pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <article className="relative overflow-hidden py-10 lg:py-16 pb-24 lg:pb-16">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 mesh-bloom-section"
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/*
             Single-render layout: each sidebar component instantiates once.
             Mobile: natural document flow — aside slots between Highlights and Itinerary.
@@ -87,7 +91,7 @@ export default function TourDetail({tour, isAdmin, reviews}: TourDetailProps) {
             {/* Sidebar — explicit row-span so sticky can scroll across both main rows */}
             <aside className="mb-10 lg:mb-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-24 lg:self-start">
               <div className="lg:p-6 lg:texture-grain-warm">
-                <div className="relative z-10">
+                <div className="relative z-10 space-y-8">
                   <TourPricing
                     pricingGroups={tour.pricingGroups}
                     locale={locale}

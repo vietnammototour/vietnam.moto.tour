@@ -1,6 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
+import {normalizeSlug} from '@/utils';
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,7 +24,7 @@ export default async function handler(
     const destination = await prisma.destination.update({
       where: {id},
       data: {
-        slug: data.slug,
+        slug: data.slug != null ? normalizeSlug(data.slug) : undefined,
         nameVi: data.nameVi,
         nameEn: data.nameEn,
         imageUrl: data.imageUrl,

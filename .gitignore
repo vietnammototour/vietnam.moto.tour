@@ -12,6 +12,9 @@
 .idea
 
 
+# playwright mcp artifacts
+/.playwright-mcp
+
 # testing
 /coverage
 
