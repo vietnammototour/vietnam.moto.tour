@@ -60,7 +60,12 @@ export function buildReviewSchema(t: (k: string) => string) {
       .max(5)
       .default(['', '', '', '', '']),
     isFeatured: yup.boolean().default(false),
-    displayOrder: yup.number().integer().min(0).default(0),
+    displayOrder: yup
+      .number()
+      .typeError(t('validation.displayOrderRange'))
+      .integer(t('validation.displayOrderRange'))
+      .min(0, t('validation.displayOrderRange'))
+      .default(0),
   });
 }
 

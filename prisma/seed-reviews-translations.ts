@@ -85,6 +85,7 @@ const entries: Entry[] = [
   {namespace: 'admin.reviews', key: 'validation.sourceRequired', valueEn: 'TripAdvisor link is required', valueVi: 'Vui lòng nhập liên kết'},
   {namespace: 'admin.reviews', key: 'validation.urlInvalid', valueEn: 'Must be a valid URL', valueVi: 'URL không hợp lệ'},
   {namespace: 'admin.reviews', key: 'validation.ratingRange', valueEn: 'Rating must be 1-5', valueVi: 'Đánh giá phải từ 1 đến 5'},
+  {namespace: 'admin.reviews', key: 'validation.displayOrderRange', valueEn: 'Display order must be 0 or greater', valueVi: 'Thứ tự hiển thị phải từ 0 trở lên'},
 
   // Admin — tour general tab
   {namespace: 'admin.tours', key: 'tripAdvisorUrlLabel', valueEn: 'TripAdvisor page URL', valueVi: 'URL trang TripAdvisor'},
