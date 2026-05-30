@@ -158,6 +158,7 @@ Table conventions:
 - Every form has a co-located `*.form-utils.ts` (Yup schema, type, defaults, submit handler) — already mandated by CLAUDE.md.
 - Form fields use shared `FormField`, `TextInput`, `Textarea`, `NumberInput`, `Select` from `src/components/ui`.
 - Form submit button lives in the **page footer**, not inline at the end of the form.
+- **Slugs are always saved lowercase.** When persisting a `slug` for any entity (tour, destination, vehicle, …), normalize it to lowercase (and trim) before writing to the DB. Use the shared `normalizeSlug` helper from `src/utils` at every create/update save site (API route or submit handler) — never persist `data.slug` raw. The slug stored in the DB MUST be lowercase regardless of how the admin typed it.
 
 ---
 

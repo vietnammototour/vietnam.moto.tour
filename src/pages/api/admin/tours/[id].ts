@@ -1,6 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {prisma} from '@/lib/prisma';
 import {requireAdmin} from '@/lib/admin-auth';
+import {normalizeSlug} from '@/utils';
 
 export default async function handler(
   req: NextApiRequest,
@@ -47,6 +48,9 @@ export default async function handler(
       if (data[field] !== undefined) {
         updateData[field] = data[field];
       }
+    }
+    if (typeof updateData.slug === 'string') {
+      updateData.slug = normalizeSlug(updateData.slug);
     }
     // Handle highlights relation separately — only allow highlights from the tour's destination
     if (data.highlightIds !== undefined) {

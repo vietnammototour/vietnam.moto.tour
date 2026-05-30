@@ -3,6 +3,13 @@ import type {ContactInfo} from './contact';
 export const getUrl = (path: string): string =>
   `${process.env.__NEXT_ROUTER_BASEPATH || ''}/${path}`;
 
+/**
+ * Normalizes an entity slug before persistence: trimmed and always lowercase.
+ * Apply at every save site (see .claude/ADMIN.md — slug rule).
+ */
+export const normalizeSlug = (slug: string): string =>
+  slug.trim().toLowerCase();
+
 export const TRIPADVISOR_REVIEWS_URL =
   'https://www.tripadvisor.com/Attraction_Review-g293928-d5501636-Reviews-Vietnam_Motorcycle_Tour-Nha_Trang_Khanh_Hoa_Province.html';
 
