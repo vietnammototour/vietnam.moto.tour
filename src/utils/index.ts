@@ -3,6 +3,9 @@ import type {ContactInfo} from './contact';
 export const getUrl = (path: string): string =>
   `${process.env.__NEXT_ROUTER_BASEPATH || ''}/${path}`;
 
+export const TRIPADVISOR_REVIEWS_URL =
+  'https://www.tripadvisor.com/Attraction_Review-g293928-d5501636-Reviews-Vietnam_Motorcycle_Tour-Nha_Trang_Khanh_Hoa_Province.html';
+
 export const contactInfo: ContactInfo = {
   phone: '+84-935-797-550',
   email: 'easyridermotorbiketour@gmail.com',
