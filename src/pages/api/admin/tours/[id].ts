@@ -48,6 +48,10 @@ export default async function handler(
         updateData[field] = data[field];
       }
     }
+    // Empty optional external id means "no listing" — store null, not ''.
+    if (updateData.tripadvisorLocationId === '') {
+      updateData.tripadvisorLocationId = null;
+    }
     // Handle highlights relation separately — only allow highlights from the tour's destination
     if (data.highlightIds !== undefined) {
       const tour = await prisma.tour.findUnique({
