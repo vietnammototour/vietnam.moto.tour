@@ -6,6 +6,7 @@ import {
 
 type AdminPageHeaderProps = {
   title: string;
+  subtitle?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   status?: ReactNode;
   actions?: ReactNode;
@@ -14,6 +15,7 @@ type AdminPageHeaderProps = {
 
 export function AdminPageHeader({
   title,
+  subtitle,
   breadcrumbs,
   status,
   actions,
@@ -26,6 +28,11 @@ export function AdminPageHeader({
           <AdminBreadcrumbs items={breadcrumbs} />
         ) : null}
         <h1 className="type-headline-sm truncate">{title}</h1>
+        {subtitle ? (
+          <div className="type-body-sm text-on-surface-secondary mt-1 truncate">
+            {subtitle}
+          </div>
+        ) : null}
       </div>
       <div className="flex items-center gap-3 shrink-0">
         {status}

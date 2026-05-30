@@ -56,19 +56,31 @@ export default function AdminDashboard() {
       icon: 'fa-language',
       href: routes.admin.translations.path(),
     },
+    {
+      label: 'Backups',
+      icon: 'fa-database',
+      href: routes.admin.backups.path(),
+    },
   ];
 
   return (
-    <AdminPageShell header={<AdminPageHeader title="Dashboard" />}>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Dashboard"
+          subtitle={
+            <>
+              Welcome back,{' '}
+              <span className="text-on-surface font-medium">
+                {session?.user.name ?? ''}
+              </span>
+              .
+            </>
+          }
+        />
+      }
+    >
       <div className="space-y-10">
-        <p className="type-body-md text-on-surface-secondary">
-          Welcome back,{' '}
-          <span className="text-on-surface font-medium">
-            {session?.user.name ?? ''}
-          </span>
-          .
-        </p>
-
         <section>
           <h2 className="type-label-sm uppercase tracking-wider text-on-surface-tertiary mb-3">
             Field readout
