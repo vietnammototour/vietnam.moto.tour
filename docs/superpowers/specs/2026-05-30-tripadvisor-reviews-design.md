@@ -29,7 +29,10 @@ TripAdvisor source so visitors can verify. Reviews are linked to tours in our sy
   - Tour page → that tour's own `tripAdvisorUrl` (e.g.
     `https://www.tripadvisor.com/AttractionProductReview-g293928-d18975102-...`).
     Hidden if unset.
-- **Per-review gallery:** up to 5 images, uploaded via existing storage pipeline.
+- **Per-review gallery:** up to 5 **TripAdvisor media URLs** (hotlinks), stored as
+  a `string[]`. No upload pipeline, no child table. The example links are TripAdvisor
+  photo-viewer page URLs (`...#/media/...`), so they render as clickable thumbnail
+  tiles that open TripAdvisor in a new tab — not inline `<img>`.
 
 ## Data Layer
 
@@ -48,7 +51,7 @@ model Review {
   body             String               // original language, verbatim
   reviewDate       DateTime             // date on TripAdvisor
   sourceUrl        String               // verification link
-  images           Json     @default("[]")    // up to 5 uploaded image paths
+  images           Json     @default("[]")    // up to 5 TripAdvisor media URLs (hotlinks)
   isFeatured       Boolean  @default(false)   // show on home
   displayOrder     Int      @default(0)       // home ordering
   createdAt        DateTime @default(now())
@@ -95,7 +98,8 @@ Follows `.claude/ADMIN.md`. New section `src/pages/admin/reviews/`.
   wires `useForm()`.
   - Fields: tour selector (dropdown of tours), reviewer name, reviewer location,
     avatar URL, rating (1–5), title, body (textarea), review date, source URL,
-    featured toggle, display order, **image gallery** (`ImageUpload`, max 5).
+    featured toggle, display order, **image links** (dynamic list of up to 5
+    TripAdvisor media URL text inputs — no upload widget).
   - No locale switcher — single-language review text, exempt from the
     localized-field rule.
   - Shared UI primitives only (`Button`, `TextInput`, `Textarea`, `NumberInput`,
@@ -110,9 +114,9 @@ Follows `.claude/ADMIN.md`. New section `src/pages/admin/reviews/`.
 ### Components (`src/components/reviews/`)
 
 - `ReviewCard` — avatar (or initials fallback), reviewer name + location, star
-  rating, title, body, review date, image thumbnail gallery (up to 5),
-  "Verified on TripAdvisor" link → `sourceUrl` (`target="_blank"`,
-  `rel="noopener noreferrer"`).
+  rating, title, body, review date, photo-thumbnail tiles (up to 5, each an anchor
+  to its TripAdvisor media URL, new tab), "Verified on TripAdvisor" link →
+  `sourceUrl` (`target="_blank"`, `rel="noopener noreferrer"`).
 - `StarRating` — small presentational FontAwesome-star sub-component, reused.
 - `ReviewsSection` (home) — 6 featured reviews + "View all reviews on TripAdvisor"
   CTA → global constant.
@@ -141,6 +145,8 @@ One component per file. `index.ts` re-exports per component folder.
 - Importing reviews automatically from TripAdvisor (manual copy/paste only).
 - Review moderation / user-submitted reviews.
 - Avatar upload pipeline (hotlink only).
+- Review image upload / hosting — image links are TripAdvisor hotlinks only; no new
+  `ReviewImage` table and no changes to the shared upload pipeline.
 
 ## Testing
 
