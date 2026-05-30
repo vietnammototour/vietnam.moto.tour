@@ -25,6 +25,7 @@ type EditReviewPageProps = {
 };
 
 function toFormValues(review: VMT.Review): ReviewFormValues {
+  const images = review.images.filter(Boolean).slice(0, 5);
   return {
     tourId: review.tourId,
     reviewerName: review.reviewerName,
@@ -35,7 +36,7 @@ function toFormValues(review: VMT.Review): ReviewFormValues {
     body: review.body,
     reviewDate: review.reviewDate.slice(0, 10),
     sourceUrl: review.sourceUrl,
-    images: review.images.filter(Boolean).slice(0, 5),
+    images: images.length ? images : [''],
     isFeatured: review.isFeatured,
     displayOrder: review.displayOrder,
   };

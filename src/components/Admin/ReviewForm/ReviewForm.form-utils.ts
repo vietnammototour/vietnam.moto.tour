@@ -25,7 +25,7 @@ export const reviewFormDefaults: ReviewFormValues = {
   body: '',
   reviewDate: '',
   sourceUrl: '',
-  images: ['', '', '', '', ''],
+  images: [''],
   isFeatured: false,
   displayOrder: 0,
 };
@@ -58,7 +58,7 @@ export function buildReviewSchema(t: (k: string) => string) {
       .array()
       .of(yup.string().default(''))
       .max(5)
-      .default(['', '', '', '', '']),
+      .default(['']),
     isFeatured: yup.boolean().default(false),
     displayOrder: yup
       .number()
