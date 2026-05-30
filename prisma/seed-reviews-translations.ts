@@ -73,6 +73,8 @@ const entries: Entry[] = [
   {namespace: 'admin.reviews', key: 'sourceUrlLabel', valueEn: 'TripAdvisor link', valueVi: 'Liên kết TripAdvisor'},
   {namespace: 'admin.reviews', key: 'imagesLabel', valueEn: 'Photo links (up to 5)', valueVi: 'Liên kết ảnh (tối đa 5)'},
   {namespace: 'admin.reviews', key: 'imageUrlNth', valueEn: 'Photo URL {n}', valueVi: 'URL ảnh {n}'},
+  {namespace: 'admin.reviews', key: 'addPhotoUrl', valueEn: 'Add photo URL', valueVi: 'Thêm URL ảnh'},
+  {namespace: 'common', key: 'remove', valueEn: 'Remove', valueVi: 'Xóa'},
   {namespace: 'admin.reviews', key: 'displayOrderLabel', valueEn: 'Display order', valueVi: 'Thứ tự hiển thị'},
   {namespace: 'admin.reviews', key: 'isFeaturedLabel', valueEn: 'Show on home page', valueVi: 'Hiển thị trên trang chủ'},
   {namespace: 'admin.reviews', key: 'featuredColumn', valueEn: 'Featured', valueVi: 'Nổi bật'},

@@ -1,7 +1,8 @@
+import {useState} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useTranslations} from 'next-intl';
-import {TextInput, Textarea, NumberInput, Select} from '@/components/ui';
+import {Button, TextInput, Textarea, NumberInput, Select} from '@/components/ui';
 import {
   buildReviewSchema,
   reviewFormDefaults,
@@ -24,15 +25,34 @@ export function ReviewForm({
   onSubmit,
 }: ReviewFormProps) {
   const t = useTranslations('admin.reviews');
+  const tCommon = useTranslations('common');
   const {
     control,
     register,
     handleSubmit,
+    getValues,
+    setValue,
     formState: {errors},
   } = useForm<ReviewFormValues>({
     resolver: yupResolver(buildReviewSchema(t)),
     defaultValues: defaults ?? reviewFormDefaults,
   });
+
+  const initialImages = defaults?.images ?? reviewFormDefaults.images;
+  const [visibleImages, setVisibleImages] = useState(() => {
+    const filled = initialImages.filter((u) => u.trim().length > 0).length;
+    return Math.min(5, Math.max(1, filled));
+  });
+
+  // Removes the field at `index`, shifting later URLs up so indices stay
+  // contiguous, and hides the now-empty trailing field.
+  function removeImage(index: number) {
+    const imgs = [...getValues('images')];
+    for (let j = index; j < 4; j++) imgs[j] = imgs[j + 1] ?? '';
+    imgs[4] = '';
+    setValue('images', imgs, {shouldDirty: true});
+    setVisibleImages((v) => Math.max(1, v - 1));
+  }
 
   return (
     <form
@@ -102,14 +122,40 @@ export function ReviewForm({
         <legend className="block type-label-sm text-on-surface-secondary mb-1">
           {t('imagesLabel')}
         </legend>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <TextInput
-            key={i}
-            label={t('imageUrlNth', {n: i + 1})}
-            {...register(`images.${i}` as const)}
-            error={errors.images?.[i]?.message}
-          />
+        {Array.from({length: visibleImages}, (_, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <div className="flex-1">
+              <TextInput
+                label={t('imageUrlNth', {n: i + 1})}
+                {...register(`images.${i}` as const)}
+                error={errors.images?.[i]?.message}
+              />
+            </div>
+            {visibleImages > 1 && (
+              <Button
+                type="button"
+                variant="ghost-danger"
+                size="sm"
+                className="mt-6"
+                icon={<i className="fa fa-times text-xs" />}
+                onClick={() => removeImage(i)}
+              >
+                {tCommon('remove')}
+              </Button>
+            )}
+          </div>
         ))}
+        {visibleImages < 5 && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            icon={<i className="fa fa-plus text-xs" />}
+            onClick={() => setVisibleImages((v) => Math.min(5, v + 1))}
+          >
+            {t('addPhotoUrl')}
+          </Button>
+        )}
       </fieldset>
 
       <NumberInput
