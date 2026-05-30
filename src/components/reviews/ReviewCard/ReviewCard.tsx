@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type {Review} from '@/domain';
 import {useEditable, EditableText} from '@/components/Admin/EditableContext';
 import {TripAdvisorIcon} from '@/components/ui';
@@ -124,9 +125,19 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label(i + 1)}
-                  className="inline-flex h-12 w-12 items-center justify-center border border-border bg-surface-elevated text-on-surface-secondary cursor-pointer transition-colors hover:border-primary hover:text-primary"
+                  className="relative inline-flex h-20 w-20 items-center justify-center overflow-hidden border border-border bg-surface-elevated text-on-surface-secondary cursor-pointer transition-colors hover:border-primary hover:text-primary"
                 >
-                  <i className="fa fa-image" aria-hidden="true" />
+                  {url ? (
+                    <Image
+                      src={url}
+                      alt={label(i + 1)}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <i className="fa fa-image" aria-hidden="true" />
+                  )}
                 </a>
                 {editable && (
                   <div className="flex items-center gap-1">
