@@ -3,55 +3,12 @@ import {useTranslations} from 'next-intl';
 import {useRef} from 'react';
 import type * as VMT from '@/domain';
 import {slideFromLeft, slideFromRight} from '@/utils/motion-variants';
-import {useEditable} from '@/components/Admin/EditableContext';
+import {useEditable, EditableText} from '@/components/Admin/EditableContext';
 
 type TourItineraryProps = {
   itinerary: VMT.ItineraryDay[];
   locale: string;
 };
-
-function EditableText({
-  value,
-  path,
-  className,
-  tag: Tag = 'span',
-}: {
-  value: string;
-  path: string;
-  className?: string;
-  tag?: 'span' | 'p' | 'h3' | 'div';
-}) {
-  const ctx = useEditable();
-  if (!ctx || !ctx.editable) {
-    return <Tag className={className}>{value}</Tag>;
-  }
-
-  const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
-    const newValue = e.currentTarget.textContent ?? '';
-    if (newValue !== value) {
-      ctx.onFieldChange(path, newValue);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      e.currentTarget.blur();
-    }
-  };
-
-  return (
-    <Tag
-      contentEditable
-      suppressContentEditableWarning
-      onBlur={handleBlur}
-      onKeyDown={handleKeyDown}
-      className={`${className ?? ''} outline-none border border-dashed border-transparent hover:border-primary/40 focus:border-primary rounded px-0.5 cursor-text`}
-    >
-      {value}
-    </Tag>
-  );
-}
 
 export function TourItinerary({itinerary, locale}: TourItineraryProps) {
   const t = useTranslations('tourDetail');

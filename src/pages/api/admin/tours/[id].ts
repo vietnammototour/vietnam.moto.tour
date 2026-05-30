@@ -34,6 +34,7 @@ export default async function handler(
       'transportation',
       'hotel',
       'guided',
+      'tripAdvisorUrl',
       'images',
       'itinerary',
       'pricingGroups',

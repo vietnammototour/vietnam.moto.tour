@@ -36,6 +36,7 @@ function renderTab(props: Partial<React.ComponentProps<typeof CardTab>> = {}) {
           highlights: [],
           included: [],
           excluded: [],
+          tripAdvisorUrl: null,
         }}
         {...props}
       />

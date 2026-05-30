@@ -46,6 +46,8 @@
   /* Brand-locked external colors */
   --color-whatsapp: #25d366;
   --color-on-whatsapp: #0a0a0a;
+  --color-tripadvisor: #34e0a1;
+  --color-on-tripadvisor: #0a0a0a;
 
   /* Cursor spotlight tint — RGB triple for use inside rgba(). Aligned to primary mustard. */
   --color-spotlight-rgb: 255 219 0;

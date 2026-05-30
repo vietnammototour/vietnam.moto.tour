@@ -37,6 +37,11 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
     },
     {href: routes.admin.tours.list.path(), label: 'Tours', icon: 'fa-route'},
     {
+      href: routes.admin.reviews.list.path(),
+      label: 'Reviews',
+      icon: 'fa-star',
+    },
+    {
       href: routes.admin.destinations.list.path(),
       label: 'Destinations',
       icon: 'fa-map-marker-alt',

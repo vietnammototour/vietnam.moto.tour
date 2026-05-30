@@ -38,6 +38,7 @@ const baseTour: VMT.Tour = {
   highlights: [],
   included: [],
   excluded: [],
+  tripAdvisorUrl: null,
 };
 
 function renderEditable(

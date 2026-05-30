@@ -151,6 +151,7 @@ export function GeneralTab({
     highlights: [],
     included: [],
     excluded: [],
+    tripAdvisorUrl: values.tripAdvisorUrl || null,
   };
 
   const destinationSelector = (
@@ -192,6 +193,18 @@ export function GeneralTab({
                 value={values.guided}
                 onChange={(e) =>
                   setValue('guided', e.target.value, {shouldDirty: true})
+                }
+              />
+            </section>
+
+            <section className="mb-10">
+              <TextInput
+                label="TripAdvisor URL"
+                value={values.tripAdvisorUrl}
+                onChange={(e) =>
+                  setValue('tripAdvisorUrl', e.target.value, {
+                    shouldDirty: true,
+                  })
                 }
               />
             </section>

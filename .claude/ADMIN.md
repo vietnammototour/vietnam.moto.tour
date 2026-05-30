@@ -128,6 +128,12 @@ Table conventions:
 - **Body**: `Tabs` (when entity has multiple sections) + active `TabPanel`. Content scrolls.
 - **Footer**: per-tab save button, right-aligned in the detached pill.
 
+### 5a. Edit on the public widget (WYSIWYG)
+
+- **Create/edit UIs are built on the public widget.** When a domain object has a public-facing component (a card, hero, row, badge), its admin create/edit screen MUST render that same component inside `EditableProvider` for inline, in-place editing. Admins edit the real thing, so what they change is exactly what visitors see.
+- **Only off-widget fields go in a slim meta bar**: relations (which tour/destination), status flags (featured/published), ordering, and similar. Everything that appears on the widget is edited on the widget — do NOT build a parallel stacked form that re-lists the widget's fields. A duplicated form hides what is actually being edited and drifts from the public layout.
+- **How it works**: the public component consumes `useEditable()` and renders `EditableText` (from `@/components/Admin/EditableContext`) or an interactive control (e.g. clickable `StarRating`) per field; the admin editor wraps it in `EditableProvider` and maps `onFieldChange(path, value)` / `onRemoveItem(path)` into react-hook-form state, validating with the entity's Yup schema on save. Reference implementations: `ReviewCardEditor` + `ReviewCard`, and `GeneralTab` + `TourHero`.
+
 ---
 
 ## 6. Destructive actions

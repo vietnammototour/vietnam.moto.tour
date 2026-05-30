@@ -216,6 +216,24 @@ export const api = {
       delete: (id: string) =>
         request<void>(`/api/admin/roles/${id}`, {method: 'DELETE'}),
     },
+    reviews: {
+      list: () => request<(VMT.Review & {tour: {id: string; slug: string; titleEn: string}})[]>(
+        '/api/admin/reviews',
+      ),
+      get: (id: string) => request<VMT.Review>(`/api/admin/reviews/${id}`),
+      create: (data: Record<string, unknown>) =>
+        request<VMT.Review>('/api/admin/reviews', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        }),
+      update: (id: string, data: Record<string, unknown>) =>
+        request<VMT.Review>(`/api/admin/reviews/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(data),
+        }),
+      delete: (id: string) =>
+        request<void>(`/api/admin/reviews/${id}`, {method: 'DELETE'}),
+    },
     translations: {
       list: () => request<VMT.Translation[]>('/api/admin/translations'),
       update: (data: Record<string, unknown>[]) =>

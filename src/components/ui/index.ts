@@ -1,6 +1,7 @@
 export {FormField} from './FormField';
 export {Button} from './Button';
 export {Badge} from './Badge';
+export {Callout, type CalloutTone} from './Callout';
 export {TextInput} from './TextInput';
 export {Select} from './Select';
 export {Textarea} from './Textarea';

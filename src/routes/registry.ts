@@ -115,6 +115,11 @@ export const routes = {
       new: {path: () => '/admin/roles/new'},
       edit: {path: (p: {id: string}) => `/admin/roles/${p.id}`},
     },
+    reviews: {
+      list: {path: () => '/admin/reviews'},
+      new: {path: () => '/admin/reviews/new'},
+      edit: {path: (p: {id: string}) => `/admin/reviews/${p.id}`},
+    },
   },
 
   isAdmin: (pathname: string) => pathname.startsWith('/admin'),

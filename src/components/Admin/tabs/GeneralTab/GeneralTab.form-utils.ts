@@ -12,6 +12,7 @@ export const generalTabSchema = yup.object({
   transportation: yup.string().defined(),
   hotel: yup.string().defined(),
   guided: yup.string().defined(),
+  tripAdvisorUrl: yup.string().defined(),
 });
 
 export type GeneralTabFormData = yup.InferType<typeof generalTabSchema>;
