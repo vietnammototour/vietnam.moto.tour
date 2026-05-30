@@ -31,3 +31,38 @@ export function parseBackupFilename(
   const [, date, hh, mm, ss, source] = m;
   return {createdAt: `${date}T${hh}:${mm}:${ss}Z`, source: source as BackupSource};
 }
+
+export async function listBackups(): Promise<BackupMeta[]> {
+  const dir = getBackupDir();
+  let names: string[];
+  try {
+    names = await fs.promises.readdir(dir);
+  } catch {
+    return [];
+  }
+  const metas: BackupMeta[] = [];
+  for (const name of names) {
+    const parsed = parseBackupFilename(name);
+    if (!parsed) continue;
+    const stat = await fs.promises.stat(path.join(dir, name));
+    metas.push({
+      filename: name,
+      createdAt: parsed.createdAt,
+      source: parsed.source,
+      byteSize: stat.size,
+    });
+  }
+  metas.sort(
+    (a, b) =>
+      b.createdAt.localeCompare(a.createdAt) ||
+      b.filename.localeCompare(a.filename),
+  );
+  return metas;
+}
+
+export async function enforceRetention(max = MAX_BACKUPS): Promise<void> {
+  const metas = await listBackups();
+  for (const m of metas.slice(max)) {
+    await fs.promises.rm(resolveBackupPath(m.filename), {force: true});
+  }
+}
