@@ -47,7 +47,7 @@ export function ReviewCard({
   }, [review.body, expanded]);
 
   return (
-    <article className="bg-surface-alt border border-border p-8 lg:p-10 flex flex-col gap-6">
+    <article className="h-full bg-surface-alt border border-border p-8 lg:p-10 flex flex-col gap-6">
       {/* Provenance */}
       <div className="flex items-center gap-2 text-tripadvisor">
         <TripAdvisorIcon className="h-4 w-4" />
@@ -233,7 +233,7 @@ export function ReviewCard({
       )}
 
       {/* Verified */}
-      <div className="flex flex-col gap-2">
+      <div className="mt-auto flex flex-col gap-2">
         <a
           href={review.sourceUrl || undefined}
           target="_blank"
