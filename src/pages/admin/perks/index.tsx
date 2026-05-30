@@ -178,8 +178,16 @@ export default function PerksListPage() {
       )}
 
       {Object.entries(grouped).map(([category, items]) => (
-        <section key={category} className="mb-6">
-          <h2 className="type-title-sm mb-2">{t(`category.${category}`)}</h2>
+        <section key={category} className="mb-10">
+          <div className="flex items-center gap-3 mb-4 pb-2 border-b border-border">
+            <span className="h-4 w-1 bg-primary" aria-hidden="true" />
+            <h2 className="type-title-md uppercase tracking-[0.1em] text-on-surface">
+              {t(`category.${category}`)}
+            </h2>
+            <span className="ml-auto inline-flex items-center justify-center min-w-6 px-2 h-6 rounded-full bg-surface-elevated border border-border type-label-sm text-on-surface-secondary tabular-nums">
+              {items.length}
+            </span>
+          </div>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {items.map((p) => {
               const draft = drafts[p.id] ?? toDraft(p);
