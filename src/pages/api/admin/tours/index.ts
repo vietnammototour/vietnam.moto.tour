@@ -37,6 +37,7 @@ export default async function handler(
         transportation: data.transportation ?? '',
         hotel: data.hotel ?? '',
         guided: data.guided ?? '',
+        tripAdvisorUrl: data.tripAdvisorUrl || null,
         images: data.images ?? [],
         itinerary: data.itinerary ?? [],
         pricingGroups: data.pricingGroups ?? [],
