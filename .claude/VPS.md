@@ -282,3 +282,45 @@ Run once after deploying the new code, before the final cleanup commit:
 10. Verify admin panel upload + delete works end to end.
 
 **Rollback:** comment out `UPLOAD_DIR` in `.env`, `pm2ci restart all`. Code falls back to `<cwd>/.uploads`. To restore service quickly: `mv /var/lib/vmt-uploads/* <repo>/public/uploads/`.
+
+## Database Backups
+
+Admin-triggered and monthly automated PostgreSQL backups (`pg_dump` custom format).
+
+- **Storage:** `BACKUP_DIR=/var/lib/vmt-backups` (outside the repo). Contains user emails + bcrypt hashes — keep `0700`.
+- **Retention:** newest 10 kept; each new backup deletes the oldest.
+- **Format:** `pg_dump -Fc` → `.dump`, restored with `pg_restore`.
+
+### Bootstrap (one-time, as root)
+
+```bash
+mkdir -p /var/lib/vmt-backups
+chown ci-cd:ci-cd /var/lib/vmt-backups
+chmod 0700 /var/lib/vmt-backups
+```
+
+Add `BACKUP_DIR=/var/lib/vmt-backups` to `/var/www/vietnam-moto-tours/.env`, then `pm2ci restart vietnam-moto-tours`.
+
+### Seed the UI translations (one-time, on the DB)
+
+```bash
+cd /var/www/vietnam-moto-tours && npx tsx prisma/seed-backups-translations.ts
+```
+
+### Monthly cron (1st of month, 03:00) — root crontab
+
+```cron
+0 3 1 * * cd /var/www/vietnam-moto-tours && /home/ci-cd/.nvm/versions/node/v24.14.0/bin/pnpm backup:db >> /var/log/vmt-backup.log 2>&1
+```
+
+`pg_dump` must be on PATH (default `/usr/bin/pg_dump` from the postgres apt package). Override with `PG_DUMP_BIN` in `.env` if it lives elsewhere.
+
+### Restore a backup
+
+```bash
+pg_restore -d vietnam_moto_tours --clean --if-exists /var/lib/vmt-backups/vmt-<timestamp>-<source>.dump
+```
+
+### Manual backup from the admin panel
+
+`/admin/backups` → **Create backup**. Lists all backups with created time, source (manual/scheduled), size, and a Download button (ADMIN only; streamed through an auth-gated route).

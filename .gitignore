@@ -64,6 +64,7 @@ next-env.d.ts
 # Uploaded user images live outside the repo (UPLOAD_DIR)
 /public/uploads/
 /.uploads/
+/.backups/
 
 # Superpowers cache
 .superpowers/
