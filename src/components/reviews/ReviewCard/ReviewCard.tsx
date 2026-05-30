@@ -27,7 +27,7 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
     <article className="bg-surface-alt p-8 lg:p-10 flex flex-col gap-6">
       <div className="flex items-center gap-4">
         {review.avatarUrl ? (
-          <span className="relative h-12 w-12 overflow-hidden rounded-full bg-surface-elevated">
+          <span className="relative h-12 w-12 shrink-0 overflow-hidden border border-border bg-surface-elevated">
             <Image
               src={review.avatarUrl}
               alt={review.reviewerName}
@@ -37,7 +37,7 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
             />
           </span>
         ) : (
-          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-elevated font-mono text-sm text-on-surface-secondary">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center border border-border bg-surface-elevated font-mono text-sm tracking-[0.05em] text-on-surface-secondary">
             {initials(review.reviewerName)}
           </span>
         )}
@@ -74,7 +74,7 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label(i + 1)}
-                className="inline-flex h-12 w-12 items-center justify-center border border-border bg-surface-elevated text-on-surface-secondary cursor-pointer hover:border-primary"
+                className="inline-flex h-12 w-12 items-center justify-center border border-border bg-surface-elevated text-on-surface-secondary cursor-pointer transition-colors hover:border-primary hover:text-primary"
               >
                 <i className="fa fa-image" aria-hidden="true" />
               </a>
@@ -87,7 +87,7 @@ export function ReviewCard({review, verifyLabel, photoLabel}: ReviewCardProps) {
         href={review.sourceUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent hover:text-primary cursor-pointer"
+        className="inline-flex items-center gap-2 self-start font-mono text-xs uppercase tracking-[0.05em] text-on-surface-accent transition-colors hover:text-primary cursor-pointer"
       >
         <i className="fa fa-external-link" aria-hidden="true" />
         {verifyLabel}
