@@ -9,10 +9,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const isAdmin = await requireAdmin(req, res);
-  if (!isAdmin) {
-    if (!res.writableEnded) res.status(401).end();
-    return;
-  }
+  if (!isAdmin) return;
 
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');

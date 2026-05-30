@@ -61,9 +61,12 @@ describe('GET /api/admin/backups/[filename]/download', () => {
   });
 
   it('blocks unauthorized callers', async () => {
-    (requireAdmin as jest.Mock).mockResolvedValueOnce(false);
+    (requireAdmin as jest.Mock).mockImplementationOnce(async (_req, res) => {
+      res.status(401).json({error: 'Unauthenticated'});
+      return false;
+    });
     const {req, res} = createMocks({method: 'GET', query: {filename: VALID}});
     await handler(req as never, res as never);
-    expect(res._getStatusCode()).not.toBe(200);
+    expect(res._getStatusCode()).toBe(401);
   });
 });
