@@ -44,7 +44,7 @@ export function RoleForm({
     <form
       id={id}
       onSubmit={handleSubmit((data) => onSubmit(data))}
-      className="max-w-2xl space-y-6 bg-surface-elevated border border-border p-6"
+      className="space-y-6"
     >
       <TextInput
         label={t('keyLabel')}
