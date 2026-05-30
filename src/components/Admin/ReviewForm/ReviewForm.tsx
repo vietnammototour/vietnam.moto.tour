@@ -58,7 +58,7 @@ export function ReviewForm({
     <form
       id={id}
       onSubmit={handleSubmit((data) => onSubmit(data))}
-      className="max-w-2xl space-y-6 bg-surface-elevated border border-border p-6"
+      className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 bg-surface-elevated border border-border p-6"
     >
       <Controller
         control={control}
@@ -74,7 +74,6 @@ export function ReviewForm({
           />
         )}
       />
-
       <TextInput
         label={t('reviewerNameLabel')}
         {...register('reviewerName')}
@@ -100,12 +99,6 @@ export function ReviewForm({
         {...register('title')}
         error={errors.title?.message}
       />
-      <Textarea
-        label={t('bodyLabel')}
-        rows={5}
-        {...register('body')}
-        error={errors.body?.message}
-      />
       <TextInput
         label={t('reviewDateLabel')}
         type="date"
@@ -117,8 +110,26 @@ export function ReviewForm({
         {...register('sourceUrl')}
         error={errors.sourceUrl?.message}
       />
+      <NumberInput
+        label={t('displayOrderLabel')}
+        {...register('displayOrder', {valueAsNumber: true})}
+        error={errors.displayOrder?.message}
+      />
+      <label className="flex items-center gap-2 cursor-pointer self-end pb-2">
+        <input type="checkbox" className="cursor-pointer" {...register('isFeatured')} />
+        <span className="type-body-sm text-on-surface">{t('isFeaturedLabel')}</span>
+      </label>
 
-      <fieldset className="space-y-3">
+      <div className="md:col-span-2">
+        <Textarea
+          label={t('bodyLabel')}
+          rows={5}
+          {...register('body')}
+          error={errors.body?.message}
+        />
+      </div>
+
+      <fieldset className="md:col-span-2 space-y-3">
         <legend className="block type-label-sm text-on-surface-secondary mb-1">
           {t('imagesLabel')}
         </legend>
@@ -157,16 +168,6 @@ export function ReviewForm({
           </Button>
         )}
       </fieldset>
-
-      <NumberInput
-        label={t('displayOrderLabel')}
-        {...register('displayOrder', {valueAsNumber: true})}
-        error={errors.displayOrder?.message}
-      />
-      <label className="flex items-center gap-2 cursor-pointer">
-        <input type="checkbox" className="cursor-pointer" {...register('isFeatured')} />
-        <span className="type-body-sm text-on-surface">{t('isFeaturedLabel')}</span>
-      </label>
     </form>
   );
 }
