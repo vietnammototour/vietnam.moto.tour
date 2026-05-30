@@ -2,9 +2,9 @@ import path from 'path';
 import {getBackupDir, resolveBackupPath} from './backup-dir';
 
 describe('getBackupDir', () => {
-  const ORIGINAL = process.env.BACKUP_DIR;
+  const ORIGINAL_ENV = process.env.BACKUP_DIR;
   afterEach(() => {
-    process.env.BACKUP_DIR = ORIGINAL;
+    process.env.BACKUP_DIR = ORIGINAL_ENV;
   });
 
   it('returns BACKUP_DIR env var when set', () => {
@@ -19,8 +19,12 @@ describe('getBackupDir', () => {
 });
 
 describe('resolveBackupPath', () => {
+  const ORIGINAL_ENV = process.env.BACKUP_DIR;
   beforeEach(() => {
     process.env.BACKUP_DIR = '/var/lib/vmt-backups';
+  });
+  afterEach(() => {
+    process.env.BACKUP_DIR = ORIGINAL_ENV;
   });
 
   it('joins a filename under BACKUP_DIR', () => {
@@ -31,6 +35,7 @@ describe('resolveBackupPath', () => {
 
   it('throws on path traversal', () => {
     expect(() => resolveBackupPath('../etc/passwd')).toThrow(/traversal/);
+    expect(() => resolveBackupPath('dumps/../../etc/passwd')).toThrow(/traversal/);
   });
 
   it('throws on absolute paths', () => {
