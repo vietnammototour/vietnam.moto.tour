@@ -57,7 +57,7 @@ export function ReviewCard({
       </div>
 
       {/* Identity */}
-      <div className="flex items-start gap-4">
+      <div className="flex items-center gap-4">
         <div className="flex flex-col gap-1">
           <ReviewerAvatar
             name={review.reviewerName}
@@ -83,13 +83,15 @@ export function ReviewCard({
             placeholder="Reviewer name"
             className="type-title-sm text-on-surface"
           />
-          <EditableText
-            tag="p"
-            path="reviewerLocation"
-            value={review.reviewerLocation ?? ''}
-            placeholder="Location"
-            className="type-label-sm text-on-surface-secondary"
-          />
+          {(editable || review.reviewerLocation) && (
+            <EditableText
+              tag="p"
+              path="reviewerLocation"
+              value={review.reviewerLocation ?? ''}
+              placeholder="Location"
+              className="type-label-sm text-on-surface-secondary"
+            />
+          )}
           <span className="font-mono text-xs text-on-surface-secondary tabular-nums">
             {shortDate(review.reviewDate)}
           </span>
@@ -103,14 +105,14 @@ export function ReviewCard({
             />
           )}
         </div>
+        <div className="ml-auto self-center">
+          <StarRating
+            rating={review.rating}
+            size="sm"
+            onRate={editable ? (n) => set('rating', n) : undefined}
+          />
+        </div>
       </div>
-
-      {/* Rating */}
-      <StarRating
-        rating={review.rating}
-        size="md"
-        onRate={editable ? (n) => set('rating', n) : undefined}
-      />
 
       {/* Content */}
       <EditableText
