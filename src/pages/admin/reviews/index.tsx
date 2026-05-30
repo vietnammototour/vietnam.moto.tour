@@ -46,6 +46,25 @@ export default function ReviewsListPage() {
     setDeleteTarget(null);
   }
 
+  const groupedByTour = (() => {
+    const groups = new Map<
+      string,
+      {id: string; label: string; reviews: ReviewRow[]}
+    >();
+    for (const r of reviews) {
+      const bucket = groups.get(r.tour.id) ?? {
+        id: r.tour.id,
+        label: r.tour.titleEn || '—',
+        reviews: [],
+      };
+      bucket.reviews.push(r);
+      groups.set(r.tour.id, bucket);
+    }
+    return Array.from(groups.values()).sort((a, b) =>
+      a.label.localeCompare(b.label),
+    );
+  })();
+
   return (
     <AdminPageShell
       header={
@@ -63,58 +82,76 @@ export default function ReviewsListPage() {
         />
       }
     >
-      <table className="w-full bg-surface-elevated border border-border">
-        <thead>
-          <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
-            <th className="p-3">{t('reviewerNameLabel')}</th>
-            <th className="p-3">{t('ratingLabel')}</th>
-            <th className="p-3">{t('tourLabel')}</th>
-            <th className="p-3">{t('featuredColumn')}</th>
-            <th className="p-3" />
-          </tr>
-        </thead>
-        <tbody>
-          {reviews.map((r) => (
-            <tr key={r.id} className="border-t border-border">
-              <td className="p-3">
-                <div className="flex items-center gap-3">
-                  <ReviewerAvatar
-                    name={r.reviewerName}
-                    avatarUrl={r.avatarUrl}
-                    size="sm"
-                  />
-                  <span>{r.reviewerName}</span>
-                </div>
-              </td>
-              <td className="p-3">
-                <StarRating rating={r.rating} size="sm" />
-              </td>
-              <td className="p-3">{r.tour.titleEn}</td>
-              <td className="p-3">{r.isFeatured ? t('featuredYes') : ''}</td>
-              <td className="p-3">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost-primary"
-                    size="sm"
-                    href={routes.admin.reviews.edit.path({id: r.id})}
-                    icon={<i className="fa fa-pencil text-xs" />}
-                  >
-                    {tCommon('edit')}
-                  </Button>
-                  <Button
-                    variant="ghost-danger"
-                    size="sm"
-                    onClick={() => setDeleteTarget(r)}
-                    icon={<i className="fa fa-trash text-xs" />}
-                  >
-                    {tCommon('delete')}
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="space-y-6">
+        {groupedByTour.map((group) => (
+          <section
+            key={group.id}
+            className="bg-surface-elevated border border-border overflow-hidden"
+          >
+            <header className="flex items-center gap-2 px-4 py-3 bg-surface-alt border-b border-border">
+              <i className="fa fa-route text-on-surface-tertiary text-xs" />
+              <h2 className="type-label-sm uppercase tracking-wide text-on-surface-secondary">
+                {group.label}
+              </h2>
+              <span className="type-body-sm text-on-surface-tertiary">
+                ({group.reviews.length})
+              </span>
+            </header>
+            <table className="w-full">
+              <thead>
+                <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
+                  <th className="p-3">{t('reviewerNameLabel')}</th>
+                  <th className="p-3">{t('ratingLabel')}</th>
+                  <th className="p-3">{t('featuredColumn')}</th>
+                  <th className="p-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {group.reviews.map((r) => (
+                  <tr key={r.id} className="border-t border-border">
+                    <td className="p-3">
+                      <div className="flex items-center gap-3">
+                        <ReviewerAvatar
+                          name={r.reviewerName}
+                          avatarUrl={r.avatarUrl}
+                          size="sm"
+                        />
+                        <span>{r.reviewerName}</span>
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <StarRating rating={r.rating} size="sm" />
+                    </td>
+                    <td className="p-3">
+                      {r.isFeatured ? t('featuredYes') : ''}
+                    </td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost-primary"
+                          size="sm"
+                          href={routes.admin.reviews.edit.path({id: r.id})}
+                          icon={<i className="fa fa-pencil text-xs" />}
+                        >
+                          {tCommon('edit')}
+                        </Button>
+                        <Button
+                          variant="ghost-danger"
+                          size="sm"
+                          onClick={() => setDeleteTarget(r)}
+                          icon={<i className="fa fa-trash text-xs" />}
+                        >
+                          {tCommon('delete')}
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        ))}
+      </div>
       <ConfirmModal
         open={!!deleteTarget}
         title={
