@@ -8,6 +8,7 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {ReviewerAvatar} from '@/components/reviews/ReviewerAvatar';
 import type * as VMT from '@/domain';
 
 type ReviewRow = VMT.Review & {
@@ -74,7 +75,16 @@ export default function ReviewsListPage() {
         <tbody>
           {reviews.map((r) => (
             <tr key={r.id} className="border-t border-border">
-              <td className="p-3">{r.reviewerName}</td>
+              <td className="p-3">
+                <div className="flex items-center gap-3">
+                  <ReviewerAvatar
+                    name={r.reviewerName}
+                    avatarUrl={r.avatarUrl}
+                    size="sm"
+                  />
+                  <span>{r.reviewerName}</span>
+                </div>
+              </td>
               <td className="p-3 tabular-nums">{r.rating}/5</td>
               <td className="p-3">{r.tour.titleEn}</td>
               <td className="p-3">{r.isFeatured ? t('featuredYes') : ''}</td>
