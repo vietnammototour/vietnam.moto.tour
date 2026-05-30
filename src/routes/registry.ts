@@ -120,6 +120,7 @@ export const routes = {
       new: {path: () => '/admin/reviews/new'},
       edit: {path: (p: {id: string}) => `/admin/reviews/${p.id}`},
     },
+    backups: {path: () => '/admin/backups'},
   },
 
   isAdmin: (pathname: string) => pathname.startsWith('/admin'),

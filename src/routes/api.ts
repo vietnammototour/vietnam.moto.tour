@@ -7,6 +7,15 @@ type AdminStats = {
   userCount: number;
 };
 
+type BackupMeta = {
+  filename: string;
+  createdAt: string;
+  source: 'manual' | 'scheduled';
+  byteSize: number;
+};
+
+type BackupList = {backups: BackupMeta[]; maxBackups: number};
+
 type ApiResult<T> = {data: T; error: null} | {data: null; error: string};
 
 async function request<T>(
@@ -243,6 +252,13 @@ export const api = {
         }),
     },
     stats: () => request<AdminStats>('/api/admin/stats'),
+    backups: {
+      list: () => request<BackupList>('/api/admin/backups'),
+      create: () =>
+        request<BackupList>('/api/admin/backups', {method: 'POST'}),
+      downloadUrl: (filename: string) =>
+        `/api/admin/backups/${encodeURIComponent(filename)}/download`,
+    },
     upload: {
       create: ({
         entityType,
