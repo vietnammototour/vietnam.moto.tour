@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-if (!process.env.DATABASE_URL || !process.env.BACKUP_DIR) {
+if (!process.env.BACKUP_DIR || !process.env.UPLOAD_DIR) {
   const candidatePaths = [
     path.join(__dirname, '..', '.env'),
     path.join(__dirname, '..', '..', '..', '.env'),
@@ -37,14 +37,14 @@ if (!process.env.DATABASE_URL || !process.env.BACKUP_DIR) {
 
 async function main() {
   const {createBackup} = await import('../src/lib/backup-core');
-  const {DB_BACKUP_KIND} = await import('../src/lib/backup-kinds');
-  const meta = await createBackup(DB_BACKUP_KIND, 'scheduled');
+  const {MEDIA_BACKUP_KIND} = await import('../src/lib/backup-kinds');
+  const meta = await createBackup(MEDIA_BACKUP_KIND, 'scheduled');
   console.log(
-    `[backup-db] created ${meta.filename} (${meta.byteSize} bytes) at ${meta.createdAt}`,
+    `[backup-media] created ${meta.filename} (${meta.byteSize} bytes) at ${meta.createdAt}`,
   );
 }
 
 main().catch((err) => {
-  console.error('[backup-db] failed:', err);
+  console.error('[backup-media] failed:', err);
   process.exit(1);
 });

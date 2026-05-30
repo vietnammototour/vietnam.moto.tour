@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
-import {Button, Badge} from '@/components/ui';
+import {Button, Badge, SegmentedControl} from '@/components/ui';
 import {api} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {
@@ -9,11 +9,14 @@ import {
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
 
+type BackupKind = 'db' | 'media';
+
 type BackupMeta = {
   filename: string;
   createdAt: string;
   source: 'manual' | 'scheduled';
   byteSize: number;
+  kind: BackupKind;
 };
 
 function formatBytes(bytes: number): string {
@@ -33,17 +36,27 @@ export default function BackupsPage() {
   const tCommon = useTranslations('common');
   const {setLoading: setAdminLoading} = useAdminLoading();
 
+  const [kind, setKind] = useState<BackupKind>('db');
   const [backups, setBackups] = useState<BackupMeta[]>([]);
+  const [maxBackups, setMaxBackups] = useState(10);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    api.admin.backups.list().then(({data}) => {
-      if (data) setBackups(data.backups);
+    api.admin.backups.list(kind).then(({data}) => {
+      if (data) {
+        setBackups(data.backups);
+        setMaxBackups(data.maxBackups);
+      }
       setLoading(false);
     });
-  }, []);
+  }, [kind]);
+
+  function handleKindChange(next: BackupKind) {
+    setLoading(true);
+    setKind(next);
+  }
 
   useEffect(() => {
     setAdminLoading(loading);
@@ -52,13 +65,14 @@ export default function BackupsPage() {
   async function handleCreate() {
     setCreating(true);
     setError(null);
-    const {data, error: err} = await api.admin.backups.create();
+    const {data, error: err} = await api.admin.backups.create(kind);
     setCreating(false);
     if (err || !data) {
       setError(err ?? t('createError'));
       return;
     }
     setBackups(data.backups);
+    setMaxBackups(data.maxBackups);
   }
 
   return (
@@ -66,16 +80,30 @@ export default function BackupsPage() {
       header={
         <AdminPageHeader
           title={t('title')}
-          subtitle={t('subtitle')}
+          subtitle={t('subtitle', {count: maxBackups})}
           actions={
-            <Button
-              variant="primary"
-              onClick={handleCreate}
-              loading={creating}
-              icon={<i className="fa fa-database text-xs" />}
-            >
-              {t('create')}
-            </Button>
+            <div className="flex items-center gap-3">
+              <SegmentedControl<BackupKind>
+                value={kind}
+                onChange={handleKindChange}
+                options={[
+                  {value: 'db', label: t('kindDb')},
+                  {value: 'media', label: t('kindMedia')},
+                ]}
+              />
+              <Button
+                variant="primary"
+                onClick={handleCreate}
+                loading={creating}
+                icon={
+                  <i
+                    className={`fa ${kind === 'media' ? 'fa-photo-film' : 'fa-database'} text-xs`}
+                  />
+                }
+              >
+                {t('create')}
+              </Button>
+            </div>
           }
         />
       }

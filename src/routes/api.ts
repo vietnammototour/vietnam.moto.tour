@@ -12,6 +12,7 @@ type BackupMeta = {
   createdAt: string;
   source: 'manual' | 'scheduled';
   byteSize: number;
+  kind: 'db' | 'media';
 };
 
 type BackupList = {backups: BackupMeta[]; maxBackups: number};
@@ -253,9 +254,15 @@ export const api = {
     },
     stats: () => request<AdminStats>('/api/admin/stats'),
     backups: {
-      list: () => request<BackupList>('/api/admin/backups'),
-      create: () =>
-        request<BackupList>('/api/admin/backups', {method: 'POST'}),
+      list: (kind?: 'db' | 'media') =>
+        request<BackupList>(
+          `/api/admin/backups${kind ? `?kind=${kind}` : ''}`,
+        ),
+      create: (kind?: 'db' | 'media') =>
+        request<BackupList>(
+          `/api/admin/backups${kind ? `?kind=${kind}` : ''}`,
+          {method: 'POST'},
+        ),
       downloadUrl: (filename: string) =>
         `/api/admin/backups/${encodeURIComponent(filename)}/download`,
     },

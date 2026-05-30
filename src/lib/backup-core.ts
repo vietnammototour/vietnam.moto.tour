@@ -2,37 +2,47 @@ import fs from 'fs';
 import {existsSync} from 'fs';
 import path from 'path';
 import {getBackupDir, resolveBackupPath} from './backup-dir';
-import {dumpDatabase} from './pg-dump';
-
-export const MAX_BACKUPS = 10;
 
 export type BackupSource = 'manual' | 'scheduled';
+export type BackupKindId = 'db' | 'media';
+
+export type BackupKind = {
+  id: BackupKindId;
+  prefix: string;
+  ext: string;
+  max: number;
+  nameRe: RegExp;
+  produce: (outPath: string) => Promise<void>;
+};
 
 export type BackupMeta = {
   filename: string;
-  createdAt: string; // ISO-8601, e.g. 2026-05-30T03:00:12Z
+  createdAt: string;
   source: BackupSource;
   byteSize: number;
+  kind: BackupKindId;
 };
 
-const NAME_RE =
-  /^vmt-(\d{4}-\d{2}-\d{2})T(\d{2})-(\d{2})-(\d{2})Z-(manual|scheduled)(?:-\d+)?\.dump$/;
-
-export function formatBackupFilename(date: Date, source: BackupSource): string {
+export function formatBackupFilename(
+  kind: BackupKind,
+  date: Date,
+  source: BackupSource,
+): string {
   const ts = date.toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/:/g, '-');
-  return `vmt-${ts}-${source}.dump`;
+  return `${kind.prefix}${ts}-${source}${kind.ext}`;
 }
 
 export function parseBackupFilename(
+  kind: BackupKind,
   name: string,
 ): {createdAt: string; source: BackupSource} | null {
-  const m = name.match(NAME_RE);
+  const m = name.match(kind.nameRe);
   if (!m) return null;
   const [, date, hh, mm, ss, source] = m;
   return {createdAt: `${date}T${hh}:${mm}:${ss}Z`, source: source as BackupSource};
 }
 
-export async function listBackups(): Promise<BackupMeta[]> {
+export async function listBackups(kind: BackupKind): Promise<BackupMeta[]> {
   const dir = getBackupDir();
   let names: string[];
   try {
@@ -42,7 +52,7 @@ export async function listBackups(): Promise<BackupMeta[]> {
   }
   const metas: BackupMeta[] = [];
   for (const name of names) {
-    const parsed = parseBackupFilename(name);
+    const parsed = parseBackupFilename(kind, name);
     if (!parsed) continue;
     const stat = await fs.promises.stat(path.join(dir, name));
     metas.push({
@@ -50,6 +60,7 @@ export async function listBackups(): Promise<BackupMeta[]> {
       createdAt: parsed.createdAt,
       source: parsed.source,
       byteSize: stat.size,
+      kind: kind.id,
     });
   }
   metas.sort(
@@ -60,52 +71,60 @@ export async function listBackups(): Promise<BackupMeta[]> {
   return metas;
 }
 
-export async function enforceRetention(max = MAX_BACKUPS): Promise<void> {
-  const metas = await listBackups();
-  for (const m of metas.slice(max)) {
+export async function enforceRetention(kind: BackupKind): Promise<void> {
+  const metas = await listBackups(kind);
+  for (const m of metas.slice(kind.max)) {
     await fs.promises.rm(resolveBackupPath(m.filename), {force: true});
   }
 }
 
-export function nextAvailableFilename(date: Date, source: BackupSource): string {
-  const base = formatBackupFilename(date, source);
+export function nextAvailableFilename(
+  kind: BackupKind,
+  date: Date,
+  source: BackupSource,
+): string {
+  const base = formatBackupFilename(kind, date, source);
   const dir = getBackupDir();
   if (!existsSync(path.join(dir, base))) return base;
-  const stem = base.replace(/\.dump$/, '');
+  const stem = base.slice(0, -kind.ext.length);
   let n = 2;
-  while (existsSync(path.join(dir, `${stem}-${n}.dump`))) n++;
-  return `${stem}-${n}.dump`;
+  while (existsSync(path.join(dir, `${stem}-${n}${kind.ext}`))) n++;
+  return `${stem}-${n}${kind.ext}`;
 }
 
-async function statToMeta(filename: string): Promise<BackupMeta> {
-  const parsed = parseBackupFilename(filename);
-  if (!parsed) throw new Error(`not a backup filename: ${filename}`);
+async function statToMeta(
+  kind: BackupKind,
+  filename: string,
+): Promise<BackupMeta> {
+  const parsed = parseBackupFilename(kind, filename);
+  if (!parsed) throw new Error(`not a ${kind.id} backup filename: ${filename}`);
   const stat = await fs.promises.stat(resolveBackupPath(filename));
   return {
     filename,
     createdAt: parsed.createdAt,
     source: parsed.source,
     byteSize: stat.size,
+    kind: kind.id,
   };
 }
 
-export async function createBackup(source: BackupSource): Promise<BackupMeta> {
-  const databaseUrl = (process.env.DATABASE_URL ?? '').split('?')[0];
-  if (!databaseUrl) throw new Error('DATABASE_URL is not set');
-
+export async function createBackup(
+  kind: BackupKind,
+  source: BackupSource,
+): Promise<BackupMeta> {
   const dir = getBackupDir();
   await fs.promises.mkdir(dir, {recursive: true});
 
-  const filename = nextAvailableFilename(new Date(), source);
+  const filename = nextAvailableFilename(kind, new Date(), source);
   const abs = resolveBackupPath(filename);
 
   try {
-    await dumpDatabase(databaseUrl, abs);
+    await kind.produce(abs);
   } catch (err) {
     await fs.promises.rm(abs, {force: true});
     throw err;
   }
 
-  await enforceRetention();
-  return statToMeta(filename);
+  await enforceRetention(kind);
+  return statToMeta(kind, filename);
 }
