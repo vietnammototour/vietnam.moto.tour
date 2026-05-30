@@ -1,14 +1,14 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
-import {Button, ConfirmModal} from '@/components/ui';
+import {Avatar, Button, ConfirmModal} from '@/components/ui';
+import {DataGrid, type GridColumn} from '@/components/Admin/DataGrid';
 import {api, routes} from '@/routes';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
-import {ReviewerAvatar} from '@/components/reviews/ReviewerAvatar';
 import {StarRating} from '@/components/reviews/StarRating';
 import type * as VMT from '@/domain';
 
@@ -65,6 +65,77 @@ export default function ReviewsListPage() {
     );
   })();
 
+  const columns = useMemo<GridColumn<ReviewRow>[]>(
+    () => [
+      {
+        key: 'reviewer',
+        header: t('reviewerNameLabel'),
+        track: 'minmax(0,1fr)',
+        render: (r) => (
+          <div className="flex items-center gap-3">
+            <Avatar src={r.avatarUrl} name={r.reviewerName} size="sm" />
+            <span>{r.reviewerName}</span>
+          </div>
+        ),
+      },
+      {
+        key: 'rating',
+        header: t('ratingLabel'),
+        track: '120px',
+        render: (r) => <StarRating rating={r.rating} size="sm" />,
+      },
+      {
+        key: 'featured',
+        header: t('featuredColumn'),
+        track: '90px',
+        render: (r) =>
+          r.isFeatured ? (
+            <i className="fa fa-check text-primary" aria-label={t('featuredYes')} />
+          ) : (
+            <span className="text-on-surface-tertiary">—</span>
+          ),
+      },
+      {
+        key: 'actions',
+        header: '',
+        track: '160px',
+        align: 'end',
+        render: (r) => (
+          <div className="flex gap-2 justify-end">
+            <Button
+              variant="ghost-primary"
+              size="sm"
+              href={routes.admin.reviews.edit.path({id: r.id})}
+              icon={<i className="fa fa-pencil text-xs" />}
+            >
+              {tCommon('edit')}
+            </Button>
+            <Button
+              variant="ghost-danger"
+              size="sm"
+              onClick={() => setDeleteTarget(r)}
+              icon={<i className="fa fa-trash text-xs" />}
+            >
+              {tCommon('delete')}
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [t, tCommon],
+  );
+
+  const sections = useMemo(
+    () =>
+      groupedByTour.map((group) => ({
+        id: group.id,
+        label: group.label,
+        count: group.reviews.length,
+        items: group.reviews,
+      })),
+    [groupedByTour],
+  );
+
   return (
     <AdminPageShell
       header={
@@ -82,76 +153,13 @@ export default function ReviewsListPage() {
         />
       }
     >
-      <div className="space-y-6">
-        {groupedByTour.map((group) => (
-          <section
-            key={group.id}
-            className="bg-surface-elevated border border-border overflow-hidden"
-          >
-            <header className="flex items-center gap-2 px-4 py-3 bg-surface-alt border-b border-border">
-              <i className="fa fa-route text-on-surface-tertiary text-xs" />
-              <h2 className="type-label-sm uppercase tracking-wide text-on-surface-secondary">
-                {group.label}
-              </h2>
-              <span className="type-body-sm text-on-surface-tertiary">
-                ({group.reviews.length})
-              </span>
-            </header>
-            <table className="w-full">
-              <thead>
-                <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
-                  <th className="p-3">{t('reviewerNameLabel')}</th>
-                  <th className="p-3">{t('ratingLabel')}</th>
-                  <th className="p-3">{t('featuredColumn')}</th>
-                  <th className="p-3" />
-                </tr>
-              </thead>
-              <tbody>
-                {group.reviews.map((r) => (
-                  <tr key={r.id} className="border-t border-border">
-                    <td className="p-3">
-                      <div className="flex items-center gap-3">
-                        <ReviewerAvatar
-                          name={r.reviewerName}
-                          avatarUrl={r.avatarUrl}
-                          size="sm"
-                        />
-                        <span>{r.reviewerName}</span>
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <StarRating rating={r.rating} size="sm" />
-                    </td>
-                    <td className="p-3">
-                      {r.isFeatured ? t('featuredYes') : ''}
-                    </td>
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost-primary"
-                          size="sm"
-                          href={routes.admin.reviews.edit.path({id: r.id})}
-                          icon={<i className="fa fa-pencil text-xs" />}
-                        >
-                          {tCommon('edit')}
-                        </Button>
-                        <Button
-                          variant="ghost-danger"
-                          size="sm"
-                          onClick={() => setDeleteTarget(r)}
-                          icon={<i className="fa fa-trash text-xs" />}
-                        >
-                          {tCommon('delete')}
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        ))}
-      </div>
+      <DataGrid
+        columns={columns}
+        sections={sections}
+        rowKey={(r) => r.id}
+        ariaLabel="Reviews"
+        emptyState="No reviews yet."
+      />
       <ConfirmModal
         open={!!deleteTarget}
         title={

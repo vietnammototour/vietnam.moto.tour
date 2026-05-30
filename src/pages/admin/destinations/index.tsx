@@ -10,6 +10,7 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {DataGrid, type GridColumn} from '@/components/Admin/DataGrid';
 
 type AdminDestination = {
   id: string;
@@ -47,6 +48,76 @@ export default function AdminDestinationsList() {
   const destList = destinations ?? [];
   const archivedCount = archivedDestinations?.length ?? 0;
 
+  const columns: GridColumn<AdminDestination>[] = [
+    {
+      key: 'name',
+      header: 'Name',
+      track: 'minmax(0,1fr)',
+      render: (dest) => (
+        <Link
+          href={routes.admin.destinations.edit.path({id: dest.id})}
+          className="group/link flex items-center gap-3 cursor-pointer"
+        >
+          {dest.imageUrl ? (
+            <Image
+              src={dest.imageUrl}
+              alt=""
+              width={75}
+              height={50}
+              unoptimized
+              className="h-[50px] w-auto object-contain shrink-0"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+          ) : null}
+          <div
+            className={`h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
+          >
+            <i className="fa fa-image text-on-surface-tertiary" />
+          </div>
+          <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
+            {dest.nameEn || dest.nameVi}
+          </span>
+        </Link>
+      ),
+    },
+    {
+      key: 'tours',
+      header: 'Tours',
+      track: '80px',
+      render: (dest) => dest._count.tours,
+    },
+    {
+      key: 'highlights',
+      header: 'Highlights',
+      track: '96px',
+      render: (dest) => dest._count.highlights,
+    },
+    {
+      key: 'size',
+      header: 'Size',
+      track: '96px',
+    },
+    {
+      key: 'actions',
+      header: '',
+      track: '140px',
+      align: 'end',
+      render: (dest) => (
+        <Button
+          variant="ghost-danger"
+          size="sm"
+          onClick={() => handleArchive(dest.id)}
+          icon={<i className="fa fa-archive text-xs" />}
+        >
+          Archive
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <AdminPageShell
       header={
@@ -75,86 +146,13 @@ export default function AdminDestinationsList() {
         />
       }
     >
-      <div className="bg-surface-elevated border border-border overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-border bg-surface-alt">
-              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                Name
-              </th>
-              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                Tours
-              </th>
-              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                Highlights
-              </th>
-              <th className="text-left px-4 py-3 type-label-sm text-on-surface-secondary">
-                Size
-              </th>
-              <th className="text-right px-4 py-3 type-label-sm text-on-surface-secondary" />
-            </tr>
-          </thead>
-          <tbody>
-            {destList.map((dest) => (
-              <tr
-                key={dest.id}
-                className="border-b border-border last:border-0 hover:bg-surface-alt/50"
-              >
-                <td className="px-4 py-3">
-                  <Link
-                    href={routes.admin.destinations.edit.path({id: dest.id})}
-                    className="group/link flex items-center gap-3 cursor-pointer"
-                  >
-                    {dest.imageUrl ? (
-                      <Image
-                        src={dest.imageUrl}
-                        alt=""
-                        width={75}
-                        height={50}
-                        unoptimized
-                        className="h-[50px] w-auto object-contain shrink-0"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling?.classList.remove(
-                            'hidden',
-                          );
-                        }}
-                      />
-                    ) : null}
-                    <div
-                      className={`h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
-                    >
-                      <i className="fa fa-image text-on-surface-tertiary" />
-                    </div>
-                    <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
-                      {dest.nameEn || dest.nameVi}
-                    </span>
-                  </Link>
-                </td>
-                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
-                  {dest._count.tours}
-                </td>
-                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
-                  {dest._count.highlights}
-                </td>
-                <td className="px-4 py-3 type-body-lg text-on-surface-secondary">
-                  {dest.size}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <Button
-                    variant="ghost-danger"
-                    size="sm"
-                    onClick={() => handleArchive(dest.id)}
-                    icon={<i className="fa fa-archive text-xs" />}
-                  >
-                    Archive
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataGrid
+        columns={columns}
+        items={destList}
+        rowKey={(dest) => dest.id}
+        ariaLabel="Destinations"
+        emptyState="No destinations yet."
+      />
     </AdminPageShell>
   );
 }

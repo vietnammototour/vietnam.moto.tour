@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import type {GetServerSidePropsContext} from 'next';
 import {useTranslations} from 'next-intl';
 import {api, routes} from '@/routes';
@@ -7,6 +7,7 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {DataGrid, type GridColumn} from '@/components/Admin/DataGrid';
 import {useAdminLoading} from '@/contexts/AdminLoadingContext';
 
 type Row = {id: string; key: string; label: string; imageCount: number};
@@ -45,6 +46,54 @@ export default function ImageCollectionsListPage() {
     setDeleteTarget(null);
   }
 
+  const columns = useMemo<GridColumn<Row>[]>(
+    () => [
+      {
+        key: 'label',
+        header: t('admin.imageCollections.label'),
+        track: 'minmax(0,1fr)',
+      },
+      {
+        key: 'key',
+        header: t('admin.imageCollections.key'),
+        track: 'minmax(0,1fr)',
+        render: (r) => <span className="font-mono text-sm">{r.key}</span>,
+      },
+      {
+        key: 'imageCount',
+        header: t('admin.imageCollections.imageCount'),
+        track: '120px',
+      },
+      {
+        key: '__actions',
+        header: '',
+        track: '160px',
+        align: 'end',
+        render: (r) => (
+          <div className="flex items-center gap-2 justify-end">
+            <Button
+              variant="ghost-primary"
+              size="sm"
+              href={routes.admin.imageCollections.edit.path({id: r.id})}
+              icon={<i className="fa fa-pencil text-xs" />}
+            >
+              {t('common.edit')}
+            </Button>
+            <Button
+              variant="ghost-danger"
+              size="sm"
+              onClick={() => setDeleteTarget(r)}
+              icon={<i className="fa fa-trash text-xs" />}
+            >
+              {t('common.delete')}
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [t, setDeleteTarget],
+  );
+
   return (
     <AdminPageShell
       header={
@@ -63,58 +112,15 @@ export default function ImageCollectionsListPage() {
       }
     >
       {loading && <p>{t('common.loading')}</p>}
-      {!loading && rows.length === 0 && (
-        <p className="text-on-surface-secondary">
-          {t('admin.imageCollections.empty')}
-        </p>
-      )}
-      {!loading && rows.length > 0 && (
-        <table className="w-full bg-surface-elevated border border-border">
-          <thead>
-            <tr className="text-left border-b border-border">
-              <th className="p-3 type-label-sm uppercase text-on-surface-secondary">
-                {t('admin.imageCollections.label')}
-              </th>
-              <th className="p-3 type-label-sm uppercase text-on-surface-secondary">
-                {t('admin.imageCollections.key')}
-              </th>
-              <th className="p-3 type-label-sm uppercase text-on-surface-secondary">
-                {t('admin.imageCollections.imageCount')}
-              </th>
-              <th className="p-3" />
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} className="border-t border-border">
-                <td className="p-3">{r.label}</td>
-                <td className="p-3 font-mono text-sm">{r.key}</td>
-                <td className="p-3">{r.imageCount}</td>
-                <td className="p-3">
-                  <div className="flex items-center gap-2 justify-end">
-                    <Button
-                      variant="ghost-primary"
-                      size="sm"
-                      href={routes.admin.imageCollections.edit.path({id: r.id})}
-                      icon={<i className="fa fa-pencil text-xs" />}
-                    >
-                      {t('common.edit')}
-                    </Button>
-                    <Button
-                      variant="ghost-danger"
-                      size="sm"
-                      onClick={() => setDeleteTarget(r)}
-                      icon={<i className="fa fa-trash text-xs" />}
-                    >
-                      {t('common.delete')}
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <DataGrid
+        columns={columns}
+        items={rows}
+        rowKey={(r) => r.id}
+        ariaLabel="Image collections"
+        emptyState={
+          !loading ? t('admin.imageCollections.empty') : undefined
+        }
+      />
       <ConfirmModal
         open={!!deleteTarget}
         title={t('admin.imageCollections.confirmDelete')}

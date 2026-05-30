@@ -87,7 +87,6 @@ export const TourCard = ({tour, interactive = true}: Props) => {
           (() => {
             const statusClass = {
               DRAFT: 'bg-status-draft text-on-status-draft',
-              FEATURED: 'bg-status-featured text-on-status-featured',
             };
             const cls =
               statusClass[tour.status as keyof typeof statusClass] ??

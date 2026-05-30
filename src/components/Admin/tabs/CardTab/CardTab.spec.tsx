@@ -33,6 +33,7 @@ function renderTab(props: Partial<React.ComponentProps<typeof CardTab>> = {}) {
           notes: [],
           mealsInfo: {en: '', vi: ''},
           status: 'PUBLISHED',
+          isFeatured: false,
           highlights: [],
           included: [],
           excluded: [],

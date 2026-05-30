@@ -31,6 +31,7 @@ type GalleryImage = {id: string; url: string; altEn: string; altVi: string};
 
 type HomeProps = {
   tours: VMT.Tour[];
+  featuredTours?: VMT.Tour[];
   destinations: VMT.DestinationWithStats[];
   isAdmin: boolean;
   gallery: {images: GalleryImage[]} | null;
@@ -40,6 +41,7 @@ type HomeProps = {
 
 export default function Home({
   tours,
+  featuredTours = [],
   destinations,
   isAdmin,
   gallery,
@@ -319,7 +321,7 @@ export default function Home({
             </h2>
           </motion.div>
 
-          <TourCarousel tours={tours} />
+          <TourCarousel tours={featuredTours} />
         </div>
       </section>
 
@@ -441,6 +443,7 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext) {
   const {
     getAllTours,
+    getFeaturedTours,
     getActiveDestinationsFromDb,
     getMessagesFromDb,
     getImageCollection,
@@ -449,17 +452,20 @@ export async function getServerSideProps({
   const session = await getServerSession(req, res, authOptions);
   const isAdmin = session?.user?.orgRoleKey === 'admin';
 
-  const [tours, destinations, dbMessages, gallery, reviews] = await Promise.all([
-    getAllTours(isAdmin),
-    getActiveDestinationsFromDb(isAdmin),
-    getMessagesFromDb(locale ?? 'vi'),
-    getImageCollection('home-gallery'),
-    getFeaturedReviews(6),
-  ]);
+  const [tours, featuredTours, destinations, dbMessages, gallery, reviews] =
+    await Promise.all([
+      getAllTours(isAdmin),
+      getFeaturedTours(),
+      getActiveDestinationsFromDb(isAdmin),
+      getMessagesFromDb(locale ?? 'vi'),
+      getImageCollection('home-gallery'),
+      getFeaturedReviews(6),
+    ]);
 
   return {
     props: {
       tours,
+      featuredTours,
       destinations,
       isAdmin,
       messages: dbMessages,

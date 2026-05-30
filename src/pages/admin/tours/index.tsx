@@ -16,6 +16,7 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {DataGrid, type GridColumn} from '@/components/Admin/DataGrid';
 import type * as VMT from '@/domain';
 
 type AdminTour = {
@@ -71,6 +72,79 @@ export default function AdminToursList() {
       .sort((a, b) => a.label.localeCompare(b.label));
   })();
 
+  const columns: GridColumn<AdminTour>[] = [
+    {
+      key: 'title',
+      header: 'Title',
+      track: 'minmax(0,1fr)',
+      render: (tour) => (
+        <Link
+          href={routes.admin.tours.edit.path({id: tour.id})}
+          className="flex items-center gap-3 cursor-pointer"
+        >
+          {tour.imageUrl ? (
+            <Image
+              src={tour.imageUrl}
+              alt=""
+              width={75}
+              height={50}
+              unoptimized
+              className="h-[50px] w-auto object-contain shrink-0"
+            />
+          ) : (
+            <span className="h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0">
+              <i className="fa fa-image text-on-surface-tertiary" />
+            </span>
+          )}
+          <span className="type-body-lg text-primary hover:underline">
+            {pickTitle(tour)}
+          </span>
+        </Link>
+      ),
+    },
+    {
+      key: 'pricing',
+      header: 'Pricing Type',
+      track: '160px',
+      render: (tour) => {
+        const types = new Set((tour.pricingGroups ?? []).map((g) => g.type));
+        const hasGroup = types.has('group-size');
+        const hasVehicle = types.has('vehicle');
+        if (!hasGroup && !hasVehicle)
+          return <span className="text-on-surface-tertiary">—</span>;
+        const chip =
+          'type-label-sm uppercase tracking-wide bg-surface-alt border border-border text-on-surface-secondary px-2 py-0.5';
+        return (
+          <div className="flex items-center gap-1.5">
+            {hasGroup && <span className={chip}>Group</span>}
+            {hasVehicle && <span className={chip}>Vehicle</span>}
+          </div>
+        );
+      },
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      track: '180px',
+      align: 'end',
+      render: (tour) => (
+        <div className="inline-flex justify-end">
+          <StatusPicker
+            value={tour.status}
+            onChange={(status) => handleStatusChange(tour.id, status)}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  const sections = groupedByDestination.map((g) => ({
+    id: g.label,
+    label: g.label,
+    count: g.tours.length,
+    items: g.tours,
+  }));
+
   return (
     <AdminPageShell
       header={
@@ -104,124 +178,13 @@ export default function AdminToursList() {
         />
       }
     >
-      <div className="space-y-6">
-        {groupedByDestination.map((group) => (
-          <section
-            key={group.label}
-            className="bg-surface-elevated border border-border overflow-hidden"
-          >
-            <header className="flex items-center justify-between px-4 py-3 bg-surface-alt border-b border-border">
-              <div className="flex items-center gap-2">
-                <i className="fa fa-map-marker-alt text-on-surface-tertiary text-xs" />
-                <h2 className="type-label-sm uppercase tracking-wide text-on-surface-secondary">
-                  {group.label}
-                </h2>
-                <span className="type-body-sm text-on-surface-tertiary">
-                  ({group.tours.length})
-                </span>
-              </div>
-            </header>
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left px-4 py-2 type-label-sm text-on-surface-tertiary">
-                    Title
-                  </th>
-                  <th className="text-left px-4 py-2 type-label-sm text-on-surface-tertiary">
-                    Pricing Type
-                  </th>
-                  <th className="text-right px-4 py-2 type-label-sm text-on-surface-tertiary">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {group.tours.map((tour) => (
-                  <tr
-                    key={tour.id}
-                    className="border-b border-border last:border-0 hover:bg-surface-alt/50"
-                  >
-                    <td className="px-4 py-3">
-                      <Link
-                        href={routes.admin.tours.edit.path({id: tour.id})}
-                        className="group/link flex items-center gap-3 cursor-pointer"
-                      >
-                        {tour.imageUrl ? (
-                          <Image
-                            src={tour.imageUrl}
-                            alt=""
-                            width={75}
-                            height={50}
-                            unoptimized
-                            className="h-[50px] w-auto object-contain shrink-0"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.nextElementSibling?.classList.remove(
-                                'hidden',
-                              );
-                            }}
-                          />
-                        ) : null}
-                        <div
-                          className={`h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0 ${tour.imageUrl ? 'hidden' : ''}`}
-                        >
-                          <i className="fa fa-image text-on-surface-tertiary" />
-                        </div>
-                        <span className="type-body-lg text-primary group-hover/link:text-primary-light group-hover/link:underline transition-colors">
-                          {pickTitle(tour)}
-                        </span>
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1.5">
-                        {(() => {
-                          const types = new Set(
-                            (tour.pricingGroups ?? []).map((g) => g.type),
-                          );
-                          const hasGroup = types.has('group-size');
-                          const hasVehicle = types.has('vehicle');
-                          if (!hasGroup && !hasVehicle) {
-                            return (
-                              <span className="type-body-sm text-on-surface-tertiary">
-                                —
-                              </span>
-                            );
-                          }
-                          const chip =
-                            'type-label-sm uppercase tracking-wide bg-surface-alt border border-border text-on-surface-secondary px-2 py-0.5';
-                          return (
-                            <>
-                              {hasGroup && <span className={chip}>Group</span>}
-                              {hasVehicle && (
-                                <span className={chip}>Vehicle</span>
-                              )}
-                            </>
-                          );
-                        })()}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="inline-flex">
-                        <StatusPicker
-                          value={tour.status}
-                          onChange={(status) =>
-                            handleStatusChange(tour.id, status)
-                          }
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        ))}
-        {groupedByDestination.length === 0 && !isLoading && (
-          <div className="bg-surface-elevated border border-border p-8 text-center type-body-md text-on-surface-secondary">
-            No tours yet.
-          </div>
-        )}
-      </div>
+      <DataGrid
+        columns={columns}
+        sections={sections}
+        rowKey={(t) => t.id}
+        ariaLabel="Tours"
+        emptyState="No tours yet."
+      />
     </AdminPageShell>
   );
 }

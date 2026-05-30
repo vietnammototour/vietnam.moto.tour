@@ -43,6 +43,7 @@ export default async function handler(
       'notes',
       'mealsInfo',
       'status',
+      'isFeatured',
     ];
     for (const field of fields) {
       if (data[field] !== undefined) {

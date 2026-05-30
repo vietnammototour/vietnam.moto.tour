@@ -33,6 +33,7 @@ const emptyGeneral = {
   hotel: '',
   guided: '',
   tripAdvisorUrl: '',
+  isFeatured: false,
 };
 
 export default function NewTour() {

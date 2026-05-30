@@ -11,6 +11,7 @@ export function buildTour(overrides?: Partial<VMT.Tour>): VMT.Tour {
     destinationId: 'dest-1',
     slug: 'test-tour',
     status: 'PUBLISHED',
+    isFeatured: false,
     description: {en: 'Test tour description', vi: 'Test tour description'},
     transportation: 'Motorbike',
     hotel: 'Pick up & Drop off',

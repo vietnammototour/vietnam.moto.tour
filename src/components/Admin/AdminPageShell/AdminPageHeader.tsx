@@ -9,6 +9,7 @@ type AdminPageHeaderProps = {
   subtitle?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   status?: ReactNode;
+  search?: ReactNode;
   actions?: ReactNode;
   localeSwitcher?: ReactNode;
 };
@@ -18,6 +19,7 @@ export function AdminPageHeader({
   subtitle,
   breadcrumbs,
   status,
+  search,
   actions,
   localeSwitcher,
 }: AdminPageHeaderProps) {
@@ -35,6 +37,7 @@ export function AdminPageHeader({
         ) : null}
       </div>
       <div className="flex items-center gap-3 shrink-0">
+        {search}
         {status}
         {localeSwitcher}
         {actions}

@@ -5,8 +5,9 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useSession, signOut} from 'next-auth/react';
 import {routes} from '@/routes';
-import {Button} from '@/components/ui';
+import {Avatar} from '@/components/ui';
 import {ProgressBar} from '../ProgressBar';
+import {adminNavGroups} from './AdminLayout.nav';
 import {
   AdminLoadingProvider,
   useAdminLoading,
@@ -29,55 +30,6 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
     return () => router.events.off('routeChangeComplete', handler);
   }, [router.events]);
 
-  const navItems = [
-    {
-      href: routes.admin.dashboard.path(),
-      label: 'Dashboard',
-      icon: 'fa-tachometer-alt',
-    },
-    {href: routes.admin.tours.list.path(), label: 'Tours', icon: 'fa-route'},
-    {
-      href: routes.admin.reviews.list.path(),
-      label: 'Reviews',
-      icon: 'fa-star',
-    },
-    {
-      href: routes.admin.destinations.list.path(),
-      label: 'Destinations',
-      icon: 'fa-map-marker-alt',
-    },
-    {
-      href: routes.admin.vehicles.list.path(),
-      label: 'Rentals',
-      icon: 'fa-motorcycle',
-    },
-    {
-      href: routes.admin.perks.list.path(),
-      label: 'Perks',
-      icon: 'fa-check-circle',
-    },
-    {
-      href: routes.admin.imageCollections.list.path(),
-      label: 'Image collections',
-      icon: 'fa-images',
-    },
-    {
-      href: routes.admin.translations.path(),
-      label: 'Translations',
-      icon: 'fa-language',
-    },
-    {
-      href: routes.admin.users.list.path(),
-      label: 'Users',
-      icon: 'fa-users',
-    },
-    {
-      href: routes.admin.roles.list.path(),
-      label: 'Roles',
-      icon: 'fa-user-shield',
-    },
-  ];
-
   const sidebarBody = (
     <>
       <div className="p-4 border-b border-border flex items-center justify-between">
@@ -96,41 +48,62 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
           <i className="fa fa-times" />
         </button>
       </div>
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
-          const isActive =
-            item.href === routes.admin.dashboard.path()
-              ? router.pathname === routes.admin.dashboard.path()
-              : router.pathname.startsWith(item.href);
+      <nav className="flex-1 p-3 overflow-y-auto">
+        {adminNavGroups.map((group) => (
+          <div key={group.label} className="mb-4">
+            <p className="px-3 pb-1.5 type-label-sm uppercase tracking-[0.14em] text-on-surface-tertiary">
+              {group.label}
+            </p>
+            <div className="space-y-1">
+              {group.items.map((item) => {
+                const isActive =
+                  item.href === routes.admin.dashboard.path()
+                    ? router.pathname === routes.admin.dashboard.path()
+                    : router.pathname.startsWith(item.href);
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 type-body-sm transition-colors cursor-pointer ${
-                isActive
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'
-              }`}
-            >
-              <i className={`fas ${item.icon} w-6 text-center`} />
-              {item.label}
-            </Link>
-          );
-        })}
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`relative flex items-center gap-3 px-3 py-2 rounded-lg type-body-sm transition-colors cursor-pointer ${
+                      isActive
+                        ? 'bg-primary/10 text-primary before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-0.5 before:rounded-r before:bg-primary'
+                        : 'text-on-surface-secondary hover:bg-surface-alt hover:text-on-surface'
+                    }`}
+                  >
+                    <i className={`fas ${item.icon} w-5 text-center`} />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
-      <div className="p-4 border-t border-border">
-        <p className="type-label-sm text-on-surface-secondary truncate">
-          {session?.user.name}
-        </p>
-        <Button
-          variant="link"
-          size="sm"
-          onClick={() => signOut({callbackUrl: '/'})}
-          className="mt-1"
-        >
-          Logout
-        </Button>
+      <div className="p-3 border-t border-border">
+        <div className="flex items-center gap-3 px-2 py-2 rounded-lg border border-border bg-surface">
+          <Avatar
+            src={session?.user.imageUrl ?? null}
+            name={session?.user.name ?? 'Admin'}
+            size="sm"
+          />
+          <div className="min-w-0 flex-1">
+            <p className="type-body-sm font-semibold text-on-surface truncate">
+              {session?.user.name ?? 'Admin'}
+            </p>
+            <p className="type-label-sm text-on-surface-tertiary truncate">
+              {session?.user.roleLabel ?? '—'}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => signOut({callbackUrl: '/'})}
+            aria-label="Logout"
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-border text-on-surface-secondary hover:text-on-surface hover:bg-surface-alt cursor-pointer"
+          >
+            <i className="fa fa-power-off text-xs" />
+          </button>
+        </div>
       </div>
     </>
   );

@@ -8,6 +8,7 @@ import {
   AdminPageShell,
   AdminPageHeader,
 } from '@/components/Admin/AdminPageShell';
+import {DataGrid, type GridColumn} from '@/components/Admin/DataGrid';
 
 type BackupKind = 'db' | 'media';
 
@@ -75,83 +76,96 @@ export default function BackupsPage() {
     setMaxBackups(data.maxBackups);
   }
 
+  const columns: GridColumn<BackupMeta>[] = [
+    {
+      key: 'createdAt',
+      header: tCommon('created'),
+      track: 'minmax(0,1fr)',
+      render: (b) => (
+        <span className="font-medium">
+          {new Date(b.createdAt).toLocaleString()}
+        </span>
+      ),
+    },
+    {
+      key: 'source',
+      header: t('sourceLabel'),
+      track: '140px',
+      render: (b) => (
+        <Badge variant={b.source === 'scheduled' ? 'info' : 'neutral'}>
+          {b.source === 'scheduled' ? t('sourceScheduled') : t('sourceManual')}
+        </Badge>
+      ),
+    },
+    {
+      key: 'byteSize',
+      header: tCommon('size'),
+      track: '120px',
+      render: (b) => (
+        <span className="text-on-surface-secondary tabular-nums">
+          {formatBytes(b.byteSize)}
+        </span>
+      ),
+    },
+    {
+      key: 'actions',
+      header: '',
+      track: '140px',
+      align: 'end',
+      render: (b) => (
+        <Button
+          variant="ghost-primary"
+          size="sm"
+          href={api.admin.backups.downloadUrl(b.filename)}
+          icon={<i className="fa fa-download text-xs" />}
+        >
+          {tCommon('download')}
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <AdminPageShell
       header={
         <AdminPageHeader
           title={t('title')}
           subtitle={t('subtitle', {count: maxBackups})}
+          search={
+            <SegmentedControl<BackupKind>
+              value={kind}
+              onChange={handleKindChange}
+              options={[
+                {value: 'db', label: t('kindDb')},
+                {value: 'media', label: t('kindMedia')},
+              ]}
+            />
+          }
           actions={
-            <div className="flex items-center gap-3">
-              <SegmentedControl<BackupKind>
-                value={kind}
-                onChange={handleKindChange}
-                options={[
-                  {value: 'db', label: t('kindDb')},
-                  {value: 'media', label: t('kindMedia')},
-                ]}
-              />
-              <Button
-                variant="primary"
-                onClick={handleCreate}
-                loading={creating}
-                icon={
-                  <i
-                    className={`fa ${kind === 'media' ? 'fa-photo-film' : 'fa-database'} text-xs`}
-                  />
-                }
-              >
-                {t('create')}
-              </Button>
-            </div>
+            <Button
+              variant="primary"
+              onClick={handleCreate}
+              loading={creating}
+              icon={
+                <i
+                  className={`fa ${kind === 'media' ? 'fa-photo-film' : 'fa-database'} text-xs`}
+                />
+              }
+            >
+              {t('create')}
+            </Button>
           }
         />
       }
     >
       {error && <p className="mb-4 text-danger type-label-sm">{error}</p>}
-      {backups.length === 0 ? (
-        <p className="text-on-surface-secondary">{t('empty')}</p>
-      ) : (
-        <table className="w-full bg-surface-elevated border border-border">
-          <thead>
-            <tr className="text-left type-label-sm uppercase text-on-surface-secondary">
-              <th className="p-3">{tCommon('created')}</th>
-              <th className="p-3">{t('sourceLabel')}</th>
-              <th className="p-3">{tCommon('size')}</th>
-              <th className="p-3" />
-            </tr>
-          </thead>
-          <tbody>
-            {backups.map((b) => (
-              <tr key={b.filename} className="border-t border-border">
-                <td className="p-3 font-medium">
-                  {new Date(b.createdAt).toLocaleString()}
-                </td>
-                <td className="p-3">
-                  <Badge variant={b.source === 'scheduled' ? 'info' : 'neutral'}>
-                    {b.source === 'scheduled'
-                      ? t('sourceScheduled')
-                      : t('sourceManual')}
-                  </Badge>
-                </td>
-                <td className="p-3 text-on-surface-secondary tabular-nums">
-                  {formatBytes(b.byteSize)}
-                </td>
-                <td className="p-3 text-right">
-                  <Button
-                    variant="ghost-primary"
-                    size="sm"
-                    href={api.admin.backups.downloadUrl(b.filename)}
-                    icon={<i className="fa fa-download text-xs" />}
-                  >
-                    {tCommon('download')}
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <DataGrid<BackupMeta>
+        columns={columns}
+        items={backups}
+        rowKey={(b) => b.filename}
+        ariaLabel="Backups"
+        emptyState={t('empty')}
+      />
     </AdminPageShell>
   );
 }

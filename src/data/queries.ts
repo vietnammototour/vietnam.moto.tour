@@ -25,7 +25,7 @@ import {toReview} from '@/domain/review/mapper';
 export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   try {
     const rows = await prisma.tour.findMany({
-      where: isAdmin ? {} : {status: {in: ['PUBLISHED', 'FEATURED']}},
+      where: isAdmin ? {} : {status: 'PUBLISHED'},
       include: {
         destination: true,
         highlights: true,
@@ -41,13 +41,32 @@ export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   }
 }
 
+export async function getFeaturedTours(): Promise<Tour[]> {
+  try {
+    const rows = await prisma.tour.findMany({
+      where: {isFeatured: true, status: 'PUBLISHED'},
+      include: {
+        destination: true,
+        highlights: true,
+        perks: {
+          include: {perk: true},
+        },
+      },
+    });
+    return rows.map(toTour);
+  } catch (error) {
+    console.error('getFeaturedTours: DB query failed', error);
+    return [];
+  }
+}
+
 export async function getTourBySlug(
   slug: string,
   isAdmin = false,
 ): Promise<Tour | undefined> {
   try {
     const row = await prisma.tour.findFirst({
-      where: isAdmin ? {slug} : {slug, status: {in: ['PUBLISHED', 'FEATURED']}},
+      where: isAdmin ? {slug} : {slug, status: 'PUBLISHED'},
       include: {
         destination: true,
         highlights: true,
@@ -66,7 +85,7 @@ export async function getTourBySlug(
 export async function getAllTourSlugs(): Promise<string[]> {
   try {
     const rows = await prisma.tour.findMany({
-      where: {status: {in: ['PUBLISHED', 'FEATURED']}},
+      where: {status: 'PUBLISHED'},
       select: {slug: true},
     });
     return rows.map((r: {slug: string}) => r.slug);
@@ -80,9 +99,7 @@ export async function getActiveDestinationsFromDb(
   isAdmin = false,
 ): Promise<DestinationWithStats[]> {
   try {
-    const tourFilter = isAdmin
-      ? {}
-      : {status: {in: ['PUBLISHED' as const, 'FEATURED' as const]}};
+    const tourFilter = isAdmin ? {} : {status: 'PUBLISHED' as const};
     const destinations = await prisma.destination.findMany({
       where: {isActive: true},
       include: {
@@ -125,9 +142,7 @@ export async function getDestinationBySlug(
   isAdmin = false,
 ): Promise<DestinationDetail | undefined> {
   try {
-    const tourFilter = isAdmin
-      ? {}
-      : {status: {in: ['PUBLISHED' as const, 'FEATURED' as const]}};
+    const tourFilter = isAdmin ? {} : {status: 'PUBLISHED' as const};
     const row = await prisma.destination.findUnique({
       where: {slug},
       include: {

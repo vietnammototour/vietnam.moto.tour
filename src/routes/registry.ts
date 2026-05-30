@@ -112,8 +112,6 @@ export const routes = {
     },
     roles: {
       list: {path: () => '/admin/roles'},
-      new: {path: () => '/admin/roles/new'},
-      edit: {path: (p: {id: string}) => `/admin/roles/${p.id}`},
     },
     reviews: {
       list: {path: () => '/admin/reviews'},
