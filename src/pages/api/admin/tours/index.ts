@@ -44,7 +44,6 @@ export default async function handler(
         notes: data.notes ?? [],
         mealsInfo: data.mealsInfo ?? {},
         status: data.status ?? 'DRAFT',
-        tripadvisorLocationId: data.tripadvisorLocationId || null,
         highlights: data.highlightIds?.length
           ? {connect: data.highlightIds.map((id: string) => ({id}))}
           : undefined,

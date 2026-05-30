@@ -13,5 +13,4 @@ export {Tabs, TabPanel} from './Tabs';
 export {ImageUpload} from './ImageUpload';
 export {IconPicker} from './IconPicker';
 export {TripAdvisorIcon} from './TripAdvisorIcon';
-export {TripAdvisorWidget} from './TripAdvisorWidget';
 export {SocialIcons} from './SocialIcons';

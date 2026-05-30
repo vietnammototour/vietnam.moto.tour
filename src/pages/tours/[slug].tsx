@@ -19,7 +19,6 @@ import {TourCTA} from '@/components/tour-detail/TourCTA';
 import {TourDetails} from '@/components/tour-detail/TourDetails';
 import {TourPayment} from '@/components/tour-detail/TourPayment';
 import {TourNotes} from '@/components/tour-detail/TourNotes';
-import {TripAdvisorWidget} from '@/components/ui';
 
 type TourDetailProps = {
   tour: VMT.Tour;
@@ -30,7 +29,6 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
   const router = useRouter();
   const locale = (router.locale ?? 'vi') as 'en' | 'vi';
   const t = useTranslations('tourDetail');
-  const tCommon = useTranslations('common');
   const tMeta = useTranslations('meta');
 
   const metaDescription = tour.description[locale].slice(0, 160);
@@ -96,11 +94,6 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
                   <div className="hidden lg:block">
                     <TourCTA tourTitle={tourTitle} />
                   </div>
-                  <TripAdvisorWidget
-                    variant="rating"
-                    locationId={tour.tripadvisorLocationId || contactInfo.tripadvisorLocationId}
-                    locale={locale}
-                  />
                   <TourDetails tour={tour} />
                   <TourPayment
                     paymentDetails={tour.paymentDetails}
@@ -123,25 +116,6 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
                 excluded={tour.excluded}
                 locale={locale}
               />
-              <section className="mt-12">
-                <h2 className="font-display text-2xl lg:text-3xl font-bold uppercase tracking-[0.05em] text-on-surface mb-6">
-                  {t('reviewsTitle')}
-                </h2>
-                <TripAdvisorWidget
-                  variant="reviews"
-                  locationId={tour.tripadvisorLocationId || contactInfo.tripadvisorLocationId}
-                  locale={locale}
-                />
-                <div className="mt-6">
-                  <TripAdvisorWidget
-                    variant="cta"
-                    locationId={tour.tripadvisorLocationId || contactInfo.tripadvisorLocationId}
-                    locale={locale}
-                    href={contactInfo.tripadvisorLink}
-                    ctaLabel={tCommon('readReviews')}
-                  />
-                </div>
-              </section>
             </div>
           </div>
         </div>
