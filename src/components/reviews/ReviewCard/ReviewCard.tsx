@@ -57,43 +57,39 @@ export function ReviewCard({
       </div>
 
       {/* Identity */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col gap-1">
-            <ReviewerAvatar
-              name={review.reviewerName}
-              avatarUrl={review.avatarUrl}
-              size="md"
+      <div className="flex items-start gap-4">
+        <div className="flex flex-col gap-1">
+          <ReviewerAvatar
+            name={review.reviewerName}
+            avatarUrl={review.avatarUrl}
+            size="md"
+          />
+          {editable && (
+            <input
+              type="url"
+              defaultValue={review.avatarUrl ?? ''}
+              placeholder="Avatar URL"
+              aria-label="Avatar URL"
+              className={`${inlineInput} w-28`}
+              onBlur={(e) => set('avatarUrl', e.target.value)}
             />
-            {editable && (
-              <input
-                type="url"
-                defaultValue={review.avatarUrl ?? ''}
-                placeholder="Avatar URL"
-                aria-label="Avatar URL"
-                className={`${inlineInput} w-28`}
-                onBlur={(e) => set('avatarUrl', e.target.value)}
-              />
-            )}
-          </div>
-          <div>
-            <EditableText
-              tag="p"
-              path="reviewerName"
-              value={review.reviewerName}
-              placeholder="Reviewer name"
-              className="type-title-sm text-on-surface"
-            />
-            <EditableText
-              tag="p"
-              path="reviewerLocation"
-              value={review.reviewerLocation ?? ''}
-              placeholder="Location"
-              className="type-label-sm text-on-surface-secondary"
-            />
-          </div>
+          )}
         </div>
-        <div className="flex flex-col items-end gap-1">
+        <div className="flex flex-col gap-1">
+          <EditableText
+            tag="p"
+            path="reviewerName"
+            value={review.reviewerName}
+            placeholder="Reviewer name"
+            className="type-title-sm text-on-surface"
+          />
+          <EditableText
+            tag="p"
+            path="reviewerLocation"
+            value={review.reviewerLocation ?? ''}
+            placeholder="Location"
+            className="type-label-sm text-on-surface-secondary"
+          />
           <span className="font-mono text-xs text-on-surface-secondary tabular-nums">
             {shortDate(review.reviewDate)}
           </span>
