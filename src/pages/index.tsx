@@ -31,7 +31,7 @@ type GalleryImage = {id: string; url: string; altEn: string; altVi: string};
 
 type HomeProps = {
   tours: VMT.Tour[];
-  featuredTours: VMT.Tour[];
+  featuredTours?: VMT.Tour[];
   destinations: VMT.DestinationWithStats[];
   isAdmin: boolean;
   gallery: {images: GalleryImage[]} | null;
@@ -41,7 +41,7 @@ type HomeProps = {
 
 export default function Home({
   tours,
-  featuredTours,
+  featuredTours = [],
   destinations,
   isAdmin,
   gallery,

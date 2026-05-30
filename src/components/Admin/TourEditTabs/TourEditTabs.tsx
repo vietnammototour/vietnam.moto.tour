@@ -144,6 +144,7 @@ export function TourEditTabs({
     notes: [],
     mealsInfo: {en: '', vi: ''},
     status: 'PUBLISHED',
+    isFeatured: false,
     highlights: [],
     included: [],
     excluded: [],

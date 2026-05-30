@@ -11,6 +11,7 @@ jest.mock('@/lib/auth', () => ({
 
 jest.mock('@/data/queries', () => ({
   getAllTours: jest.fn().mockResolvedValue([]),
+  getFeaturedTours: jest.fn().mockResolvedValue([]),
   getActiveDestinationsFromDb: jest.fn().mockResolvedValue([]),
   getMessagesFromDb: jest.fn().mockResolvedValue(null),
   getImageCollection: jest.fn().mockResolvedValue(null),

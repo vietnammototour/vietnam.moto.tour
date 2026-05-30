@@ -35,6 +35,7 @@ const baseTour: VMT.Tour = {
   notes: [],
   mealsInfo: {en: '', vi: ''},
   status: 'PUBLISHED',
+  isFeatured: false,
   highlights: [],
   included: [],
   excluded: [],
