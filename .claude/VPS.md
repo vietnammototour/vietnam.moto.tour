@@ -283,7 +283,7 @@ Run once after deploying the new code, before the final cleanup commit:
 
 **Rollback:** comment out `UPLOAD_DIR` in `.env`, `pm2ci restart all`. Code falls back to `<cwd>/.uploads`. To restore service quickly: `mv /var/lib/vmt-uploads/* <repo>/public/uploads/`.
 
-## Database Backups
+## Backups
 
 Admin-triggered and monthly automated PostgreSQL backups (`pg_dump` custom format).
 
@@ -321,6 +321,25 @@ cd /var/www/vietnam-moto-tours && npx tsx prisma/seed-backups-translations.ts
 pg_restore -d vietnam_moto_tours --clean --if-exists /var/lib/vmt-backups/vmt-<timestamp>-<source>.dump
 ```
 
+### Media (uploads) backups
+
+Media backups are gzip tarballs of `UPLOAD_DIR` (`vmt-media-<ts>-<source>.tar.gz`), stored in the same `BACKUP_DIR`, **retention 3**.
+
+- `tar` must be on PATH (override with `TAR_BIN` in `.env` if needed).
+- Monthly cron (1st of month, 03:30 — offset from the DB job) in root crontab:
+
+  ```cron
+  30 3 1 * * cd /var/www/vietnam-moto-tours && /home/ci-cd/.nvm/versions/node/v24.14.0/bin/pnpm backup:media >> /var/log/vmt-backup.log 2>&1
+  ```
+
+- Restore (extracts into `UPLOAD_DIR`, overwriting same-named files; to restore an exact snapshot, clear `UPLOAD_DIR` contents first):
+
+  ```bash
+  tar -xzf /var/lib/vmt-backups/vmt-media-<ts>-<source>.tar.gz -C "$UPLOAD_DIR"
+  ```
+
+- The existing daily `rsync` mirror to `/backup/vmt-uploads/` stays — it is a continuous latest-only mirror; these snapshots add versioned history.
+
 ### Manual backup from the admin panel
 
-`/admin/backups` → **Create backup**. Lists all backups with created time, source (manual/scheduled), size, and a Download button (ADMIN only; streamed through an auth-gated route).
+`/admin/backups` → **Create backup**. Lists all backups with created time, source (manual/scheduled), size, and a Download button (ADMIN only; streamed through an auth-gated route). Use the Database / Media toggle to switch which kind you create or download.
