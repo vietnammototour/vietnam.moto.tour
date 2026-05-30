@@ -36,8 +36,9 @@ if (!process.env.DATABASE_URL || !process.env.BACKUP_DIR) {
 }
 
 async function main() {
-  const {createBackup} = await import('../src/lib/db-backup');
-  const meta = await createBackup('scheduled');
+  const {createBackup} = await import('../src/lib/backup-core');
+  const {DB_BACKUP_KIND} = await import('../src/lib/backup-kinds');
+  const meta = await createBackup(DB_BACKUP_KIND, 'scheduled');
   console.log(
     `[backup-db] created ${meta.filename} (${meta.byteSize} bytes) at ${meta.createdAt}`,
   );
