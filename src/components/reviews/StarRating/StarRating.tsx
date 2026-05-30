@@ -17,7 +17,7 @@ export function StarRating({rating, onRate, size = 'sm'}: StarRatingProps) {
   if (!onRate) {
     return (
       <span
-        className="inline-flex items-center gap-0.5 text-primary"
+        className="inline-flex items-center gap-0.5"
         role="img"
         aria-label={`${clamped} out of 5 stars`}
       >
@@ -28,7 +28,7 @@ export function StarRating({rating, onRate, size = 'sm'}: StarRatingProps) {
               key={n}
               data-testid="star"
               data-filled={filled ? 'true' : 'false'}
-              className={`fa ${filled ? 'fa-star' : 'fa-star-o'} ${sizeClass[size]}`}
+              className={`fa fa-star ${sizeClass[size]} ${filled ? 'text-primary' : 'text-on-surface-tertiary'}`}
               aria-hidden="true"
             />
           );
@@ -40,7 +40,7 @@ export function StarRating({rating, onRate, size = 'sm'}: StarRatingProps) {
   const shown = hover > 0 ? hover : clamped;
   return (
     <span
-      className="inline-flex items-center gap-1 text-primary"
+      className="inline-flex items-center gap-1"
       role="radiogroup"
       aria-label="Rating"
       onMouseLeave={() => setHover(0)}
@@ -56,12 +56,12 @@ export function StarRating({rating, onRate, size = 'sm'}: StarRatingProps) {
             aria-label={`${n} ${n === 1 ? 'star' : 'stars'}`}
             data-testid="star"
             data-filled={filled ? 'true' : 'false'}
-            className="cursor-pointer leading-none transition-colors"
+            className="cursor-pointer leading-none"
             onMouseEnter={() => setHover(n)}
             onClick={() => onRate(n)}
           >
             <i
-              className={`fa ${filled ? 'fa-star' : 'fa-star-o'} ${sizeClass[size]}`}
+              className={`fa fa-star ${sizeClass[size]} transition-colors ${filled ? 'text-primary' : 'text-on-surface-tertiary'}`}
               aria-hidden="true"
             />
           </button>

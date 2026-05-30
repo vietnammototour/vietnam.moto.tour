@@ -1,4 +1,5 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
+import {EditableProvider} from '@/components/Admin/EditableContext';
 import {ReviewCard} from './ReviewCard';
 import type {Review} from '@/domain';
 
@@ -47,5 +48,39 @@ describe('ReviewCard', () => {
   it('shows initials when there is no avatar', () => {
     render(<ReviewCard review={review} verifyLabel="Verified on TripAdvisor" />);
     expect(screen.getByText('JD')).toBeInTheDocument();
+  });
+});
+
+describe('ReviewCard (editable mode)', () => {
+  function renderEditable(onFieldChange = jest.fn()) {
+    render(
+      <EditableProvider locale="en" onFieldChange={onFieldChange}>
+        <ReviewCard review={review} verifyLabel="Verified on TripAdvisor" />
+      </EditableProvider>,
+    );
+    return onFieldChange;
+  }
+
+  it('commits an edited reviewer name via onFieldChange', () => {
+    const onFieldChange = renderEditable();
+    const nameBox = screen
+      .getAllByRole('textbox')
+      .find((el) => el.textContent === 'Jane Doe');
+    expect(nameBox).toBeDefined();
+    nameBox!.textContent = 'Jane Smith';
+    fireEvent.blur(nameBox!);
+    expect(onFieldChange).toHaveBeenCalledWith('reviewerName', 'Jane Smith');
+  });
+
+  it('emits a rating when a star is clicked', () => {
+    const onFieldChange = renderEditable();
+    fireEvent.click(screen.getByRole('radio', {name: '3 stars'}));
+    expect(onFieldChange).toHaveBeenCalledWith('rating', 3);
+  });
+
+  it('exposes inline URL inputs for avatar and source in edit mode', () => {
+    renderEditable();
+    expect(screen.getByLabelText('Avatar URL')).toBeInTheDocument();
+    expect(screen.getByLabelText('TripAdvisor link')).toBeInTheDocument();
   });
 });

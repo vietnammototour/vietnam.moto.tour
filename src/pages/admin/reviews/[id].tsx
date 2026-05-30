@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
-import {ReviewForm} from '@/components/Admin/ReviewForm';
+import {ReviewCardEditor} from '@/components/Admin/ReviewCardEditor';
 import {
   reviewFormDefaults,
   toReviewPayload,
@@ -25,8 +25,6 @@ type EditReviewPageProps = {
 };
 
 function toFormValues(review: VMT.Review): ReviewFormValues {
-  const images = [...review.images];
-  while (images.length < 5) images.push('');
   return {
     tourId: review.tourId,
     reviewerName: review.reviewerName,
@@ -37,7 +35,7 @@ function toFormValues(review: VMT.Review): ReviewFormValues {
     body: review.body,
     reviewDate: review.reviewDate.slice(0, 10),
     sourceUrl: review.sourceUrl,
-    images: images.slice(0, 5),
+    images: review.images.filter(Boolean).slice(0, 5),
     isFeatured: review.isFeatured,
     displayOrder: review.displayOrder,
   };
@@ -100,7 +98,7 @@ export default function EditReviewPage({review, tours}: EditReviewPageProps) {
           {submitError}
         </div>
       )}
-      <ReviewForm
+      <ReviewCardEditor
         tours={tours}
         defaults={{...reviewFormDefaults, ...toFormValues(review)}}
         onSubmit={onSubmit}

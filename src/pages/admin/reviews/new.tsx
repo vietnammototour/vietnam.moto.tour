@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useRouter} from 'next/router';
 import {useTranslations} from 'next-intl';
 import type {GetServerSidePropsContext} from 'next';
-import {ReviewForm} from '@/components/Admin/ReviewForm';
+import {ReviewCardEditor} from '@/components/Admin/ReviewCardEditor';
 import {
   toReviewPayload,
   type ReviewFormValues,
@@ -71,7 +71,7 @@ export default function NewReviewPage({tours}: {tours: TourOption[]}) {
           {submitError}
         </div>
       )}
-      <ReviewForm tours={tours} onSubmit={onSubmit} />
+      <ReviewCardEditor tours={tours} onSubmit={onSubmit} />
     </AdminPageShell>
   );
 }
