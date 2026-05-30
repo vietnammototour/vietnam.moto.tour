@@ -151,6 +151,7 @@ export function GeneralTab({
     highlights: [],
     included: [],
     excluded: [],
+    tripAdvisorUrl: null,
   };
 
   const destinationSelector = (
