@@ -56,6 +56,11 @@ export default function AdminDashboard() {
       icon: 'fa-language',
       href: routes.admin.translations.path(),
     },
+    {
+      label: 'Backups',
+      icon: 'fa-database',
+      href: routes.admin.backups.path(),
+    },
   ];
 
   return (
