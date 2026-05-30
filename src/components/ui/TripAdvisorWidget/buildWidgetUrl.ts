@@ -15,11 +15,9 @@ export function buildWidgetUrl(args: {
   variant: ScriptVariant;
   locationId: string;
   locale: 'en' | 'vi';
-  uniq: string;
 }) {
   const params = new URLSearchParams({
     wtype: WTYPE[args.variant],
-    uniq: args.uniq,
     locationId: args.locationId,
     lang: LANG[args.locale],
     border: 'false',
