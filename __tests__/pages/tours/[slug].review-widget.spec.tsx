@@ -38,7 +38,7 @@ jest.mock('next-intl', () => {
 
 import {render} from '@testing-library/react';
 import {NextIntlClientProvider} from 'next-intl';
-import TourDetail from './[slug]';
+import TourDetail from '@/pages/tours/[slug]';
 import {buildTour} from '@/test-utils/factories';
 
 jest.mock('next/router', () => ({useRouter: () => ({locale: 'en'})}));
