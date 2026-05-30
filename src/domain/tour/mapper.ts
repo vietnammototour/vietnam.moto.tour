@@ -66,6 +66,7 @@ export function toTour(row: PrismaTourWithRelations): Tour {
     included,
     excluded,
     status: row.status,
+    isFeatured: row.isFeatured,
     imageUrl: row.imageUrl ?? '',
     duration: row.duration,
     distance: row.distance,

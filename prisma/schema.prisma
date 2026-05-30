@@ -10,7 +10,6 @@ enum TourStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
-  FEATURED
 }
 
 model User {
@@ -69,10 +68,13 @@ model Tour {
   notes          Json        @default("[]")
   mealsInfo      Json        @default("{}")
   status         TourStatus  @default(DRAFT)
+  isFeatured     Boolean     @default(false)
   tripAdvisorUrl String?
   reviews        Review[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+
+  @@index([isFeatured])
 }
 
 model Review {

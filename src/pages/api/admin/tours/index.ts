@@ -46,6 +46,7 @@ export default async function handler(
         notes: data.notes ?? [],
         mealsInfo: data.mealsInfo ?? {},
         status: data.status ?? 'DRAFT',
+        isFeatured: Boolean(data.isFeatured),
         highlights: data.highlightIds?.length
           ? {connect: data.highlightIds.map((id: string) => ({id}))}
           : undefined,

@@ -7,7 +7,6 @@ const variantMap: Record<
 > = {
   DRAFT: 'warning',
   PUBLISHED: 'success',
-  FEATURED: 'info',
   ARCHIVED: 'neutral',
 };
 

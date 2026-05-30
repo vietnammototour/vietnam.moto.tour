@@ -48,6 +48,7 @@ export function GeneralTab({
     setValue,
     getValues,
     control,
+    register,
     formState: {isSubmitting, isDirty},
     reset,
   } = useForm<GeneralTabFormData>({
@@ -148,6 +149,7 @@ export function GeneralTab({
     notes: [],
     mealsInfo: {en: '', vi: ''},
     status: 'PUBLISHED',
+    isFeatured: values.isFeatured,
     highlights: [],
     included: [],
     excluded: [],
@@ -207,6 +209,19 @@ export function GeneralTab({
                   })
                 }
               />
+            </section>
+
+            <section className="mb-10">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="cursor-pointer"
+                  {...register('isFeatured')}
+                />
+                <span className="type-body-sm text-on-surface">
+                  Show on home page (Most popular tours)
+                </span>
+              </label>
             </section>
           </div>
         </EditableProvider>

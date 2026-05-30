@@ -18,12 +18,6 @@ const statusOptions: {
     activeClasses: 'bg-primary text-on-primary border-primary',
   },
   {
-    value: 'FEATURED',
-    label: 'Featured',
-    activeClasses:
-      'bg-status-featured text-on-status-featured border-status-featured',
-  },
-  {
     value: 'ARCHIVED',
     label: 'Archived',
     activeClasses:

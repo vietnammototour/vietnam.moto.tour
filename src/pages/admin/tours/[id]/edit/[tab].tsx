@@ -97,6 +97,7 @@ export default function EditTour() {
     hotel: (tourRecord.hotel as string) ?? '',
     guided: (tourRecord.guided as string) ?? '',
     tripAdvisorUrl: (tourRecord.tripAdvisorUrl as string | null) ?? '',
+    isFeatured: (tourRecord.isFeatured as boolean) ?? false,
   };
 
   const initialCard = {
