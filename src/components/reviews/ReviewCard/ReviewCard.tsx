@@ -76,21 +76,32 @@ export function ReviewCard({
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <EditableText
-            tag="p"
-            path="reviewerName"
-            value={review.reviewerName}
-            placeholder="Reviewer name"
-            className="type-title-sm text-on-surface"
-          />
-          {(editable || review.reviewerLocation) && (
-            <EditableText
-              tag="p"
-              path="reviewerLocation"
-              value={review.reviewerLocation ?? ''}
-              placeholder="Location"
-              className="type-label-sm text-on-surface-secondary"
-            />
+          {editable ? (
+            <>
+              <EditableText
+                tag="p"
+                path="reviewerName"
+                value={review.reviewerName}
+                placeholder="Reviewer name"
+                className="type-title-sm text-on-surface"
+              />
+              <EditableText
+                tag="p"
+                path="reviewerLocation"
+                value={review.reviewerLocation ?? ''}
+                placeholder="Location"
+                className="type-label-sm text-on-surface-secondary"
+              />
+            </>
+          ) : (
+            <p className="type-title-sm text-on-surface">
+              {review.reviewerName}
+              {review.reviewerLocation && (
+                <span className="font-normal text-on-surface-secondary">
+                  , {review.reviewerLocation}
+                </span>
+              )}
+            </p>
           )}
           <span className="font-mono text-xs text-on-surface-secondary tabular-nums">
             {shortDate(review.reviewDate)}
