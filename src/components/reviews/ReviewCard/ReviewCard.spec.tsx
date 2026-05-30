@@ -37,12 +37,10 @@ describe('ReviewCard', () => {
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
   });
 
-  it('renders a photo link per image URL', () => {
+  it('renders a non-clickable photo thumbnail per image URL', () => {
     render(<ReviewCard review={review} verifyLabel="Verified on TripAdvisor" />);
-    expect(screen.getByRole('link', {name: /photo 1/i})).toHaveAttribute(
-      'href',
-      'https://www.tripadvisor.com/media/1',
-    );
+    expect(screen.queryByRole('link', {name: /photo 1/i})).not.toBeInTheDocument();
+    expect(screen.getByAltText(/photo 1/i)).toBeInTheDocument();
   });
 
   it('shows initials when there is no avatar', () => {

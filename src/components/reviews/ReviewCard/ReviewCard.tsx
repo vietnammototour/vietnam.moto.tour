@@ -177,12 +177,9 @@ export function ReviewCard({
           <ul className="flex flex-wrap gap-2">
             {images.map((url, i) => (
               <li key={i} className="flex flex-col gap-1">
-                <a
-                  href={url || undefined}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <div
                   aria-label={label(i + 1)}
-                  className="relative inline-flex h-20 w-20 items-center justify-center overflow-hidden border border-border bg-surface-elevated text-on-surface-secondary cursor-pointer transition-colors hover:border-primary hover:text-primary"
+                  className="relative inline-flex h-20 w-20 items-center justify-center overflow-hidden border border-border bg-surface-elevated text-on-surface-secondary"
                 >
                   {url ? (
                     <Image
@@ -195,7 +192,7 @@ export function ReviewCard({
                   ) : (
                     <i className="fa fa-image" aria-hidden="true" />
                   )}
-                </a>
+                </div>
                 {editable && (
                   <div className="flex items-center gap-1">
                     <input
