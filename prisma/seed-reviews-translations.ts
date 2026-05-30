@@ -56,6 +56,8 @@ const entries: Entry[] = [
   {namespace: 'reviews', key: 'verifiedOn', valueEn: 'Verified on TripAdvisor', valueVi: 'Xác minh trên TripAdvisor'},
   {namespace: 'reviews', key: 'viewAllOnTripAdvisor', valueEn: 'View all on TripAdvisor', valueVi: 'Xem tất cả trên TripAdvisor'},
   {namespace: 'reviews', key: 'photoNth', valueEn: 'Photo {n}', valueVi: 'Ảnh {n}'},
+  {namespace: 'common', key: 'readMore', valueEn: 'Read more', valueVi: 'Xem thêm'},
+  {namespace: 'common', key: 'showLess', valueEn: 'Show less', valueVi: 'Thu gọn'},
 
   // Admin — reviews CRUD
   {namespace: 'admin.reviews', key: 'title', valueEn: 'Reviews', valueVi: 'Đánh giá'},

@@ -9,6 +9,7 @@ type ReviewsSectionProps = {
 
 export function ReviewsSection({reviews}: ReviewsSectionProps) {
   const t = useTranslations('reviews');
+  const tc = useTranslations('common');
   if (reviews.length === 0) return null;
 
   return (
@@ -30,6 +31,8 @@ export function ReviewsSection({reviews}: ReviewsSectionProps) {
               review={review}
               verifyLabel={t('verifiedOn')}
               photoLabel={(n) => t('photoNth', {n})}
+              readMoreLabel={tc('readMore')}
+              showLessLabel={tc('showLess')}
             />
           ))}
         </div>

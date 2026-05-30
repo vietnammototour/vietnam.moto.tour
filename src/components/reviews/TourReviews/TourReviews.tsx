@@ -9,6 +9,7 @@ type TourReviewsProps = {
 
 export function TourReviews({reviews, tripAdvisorUrl}: TourReviewsProps) {
   const t = useTranslations('reviews');
+  const tc = useTranslations('common');
   if (reviews.length === 0) return null;
 
   return (
@@ -27,6 +28,8 @@ export function TourReviews({reviews, tripAdvisorUrl}: TourReviewsProps) {
                 review={review}
                 verifyLabel={t('verifiedOn')}
                 photoLabel={(n) => t('photoNth', {n})}
+                readMoreLabel={tc('readMore')}
+                showLessLabel={tc('showLess')}
               />
             </div>
           ))}
