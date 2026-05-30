@@ -13,12 +13,14 @@ import type {
   DestinationDetail,
   Highlight,
   TeamMember,
+  Review,
 } from '@/domain';
 import {HIGHLIGHTS_PAGE_SIZE} from '@/domain';
 import {toTour} from '@/domain/tour/mapper';
 import {toDestination} from '@/domain/destination/mapper';
 import {toHighlight} from '@/domain/highlight/mapper';
 import {toTeamMember} from '@/domain/team-member/mapper';
+import {toReview} from '@/domain/review/mapper';
 
 export async function getAllTours(isAdmin = false): Promise<Tour[]> {
   try {
@@ -273,3 +275,30 @@ export {
   getVehiclesForAdmin,
   getVehicleByIdForAdmin,
 } from './queries/vehicles';
+
+export async function getFeaturedReviews(limit = 6): Promise<Review[]> {
+  try {
+    const rows = await prisma.review.findMany({
+      where: {isFeatured: true},
+      orderBy: [{displayOrder: 'asc'}, {reviewDate: 'desc'}],
+      take: limit,
+    });
+    return rows.map(toReview);
+  } catch (error) {
+    console.error('getFeaturedReviews: DB query failed', error);
+    return [];
+  }
+}
+
+export async function getTourReviews(tourId: string): Promise<Review[]> {
+  try {
+    const rows = await prisma.review.findMany({
+      where: {tourId},
+      orderBy: {reviewDate: 'desc'},
+    });
+    return rows.map(toReview);
+  } catch (error) {
+    console.error('getTourReviews: DB query failed', error);
+    return [];
+  }
+}
