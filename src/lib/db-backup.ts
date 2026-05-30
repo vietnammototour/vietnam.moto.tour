@@ -66,3 +66,46 @@ export async function enforceRetention(max = MAX_BACKUPS): Promise<void> {
     await fs.promises.rm(resolveBackupPath(m.filename), {force: true});
   }
 }
+
+export function nextAvailableFilename(date: Date, source: BackupSource): string {
+  const base = formatBackupFilename(date, source);
+  const dir = getBackupDir();
+  if (!existsSync(path.join(dir, base))) return base;
+  const stem = base.replace(/\.dump$/, '');
+  let n = 2;
+  while (existsSync(path.join(dir, `${stem}-${n}.dump`))) n++;
+  return `${stem}-${n}.dump`;
+}
+
+async function statToMeta(filename: string): Promise<BackupMeta> {
+  const parsed = parseBackupFilename(filename);
+  if (!parsed) throw new Error(`not a backup filename: ${filename}`);
+  const stat = await fs.promises.stat(resolveBackupPath(filename));
+  return {
+    filename,
+    createdAt: parsed.createdAt,
+    source: parsed.source,
+    byteSize: stat.size,
+  };
+}
+
+export async function createBackup(source: BackupSource): Promise<BackupMeta> {
+  const databaseUrl = (process.env.DATABASE_URL ?? '').split('?')[0];
+  if (!databaseUrl) throw new Error('DATABASE_URL is not set');
+
+  const dir = getBackupDir();
+  await fs.promises.mkdir(dir, {recursive: true});
+
+  const filename = nextAvailableFilename(new Date(), source);
+  const abs = resolveBackupPath(filename);
+
+  try {
+    await dumpDatabase(databaseUrl, abs);
+  } catch (err) {
+    await fs.promises.rm(abs, {force: true});
+    throw err;
+  }
+
+  await enforceRetention();
+  return statToMeta(filename);
+}

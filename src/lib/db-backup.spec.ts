@@ -1,7 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import {formatBackupFilename, parseBackupFilename, listBackups, enforceRetention, MAX_BACKUPS} from './db-backup';
+import {formatBackupFilename, parseBackupFilename, listBackups, enforceRetention, MAX_BACKUPS, createBackup} from './db-backup';
 
 describe('formatBackupFilename', () => {
   it('encodes timestamp and source, filesystem-safe', () => {
@@ -80,5 +80,60 @@ describe('listBackups + enforceRetention', () => {
     expect(remaining).toHaveLength(MAX_BACKUPS);
     expect(remaining).toContain('vmt-2026-05-13T03-00-00Z-manual.dump');
     expect(remaining).not.toContain('vmt-2026-05-01T03-00-00Z-manual.dump');
+  });
+});
+
+jest.mock('./pg-dump', () => ({
+  dumpDatabase: jest.fn((_url: string, outPath: string) => {
+    require('fs').writeFileSync(outPath, 'DUMP');
+    return Promise.resolve();
+  }),
+}));
+
+describe('createBackup', () => {
+  let dir: string;
+  const ORIGINAL_DIR = process.env.BACKUP_DIR;
+  const ORIGINAL_DB = process.env.DATABASE_URL;
+
+  beforeEach(() => {
+    dir = require('fs').mkdtempSync(
+      require('path').join(require('os').tmpdir(), 'vmt-create-'),
+    );
+    process.env.BACKUP_DIR = dir;
+    process.env.DATABASE_URL = 'postgresql://u:p@h:5432/db?schema=public';
+  });
+  afterEach(() => {
+    require('fs').rmSync(dir, {recursive: true, force: true});
+    process.env.BACKUP_DIR = ORIGINAL_DIR;
+    process.env.DATABASE_URL = ORIGINAL_DB;
+    jest.clearAllMocks();
+  });
+
+  it('writes a dump file and returns its metadata', async () => {
+    const meta = await createBackup('manual');
+    expect(meta.source).toBe('manual');
+    expect(meta.byteSize).toBe(4);
+    expect(require('fs').existsSync(require('path').join(dir, meta.filename))).toBe(true);
+  });
+
+  it('passes a query-stripped DATABASE_URL to pg_dump', async () => {
+    const {dumpDatabase} = require('./pg-dump');
+    await createBackup('manual');
+    expect(dumpDatabase).toHaveBeenCalledWith(
+      'postgresql://u:p@h:5432/db',
+      expect.stringContaining('.dump'),
+    );
+  });
+
+  it('throws and cleans up the partial file when pg_dump fails', async () => {
+    const {dumpDatabase} = require('./pg-dump');
+    (dumpDatabase as jest.Mock).mockRejectedValueOnce(new Error('boom'));
+    await expect(createBackup('manual')).rejects.toThrow('boom');
+    expect(require('fs').readdirSync(dir).filter((n: string) => n.endsWith('.dump'))).toHaveLength(0);
+  });
+
+  it('throws when DATABASE_URL is unset', async () => {
+    delete process.env.DATABASE_URL;
+    await expect(createBackup('manual')).rejects.toThrow(/DATABASE_URL/);
   });
 });
