@@ -20,7 +20,7 @@ import {DestinationCard} from '@/components/DestinationCard';
 import {TourCarousel} from '@/components/home/TourCarousel';
 import {GalleryItem} from '@/components/home/GalleryItem';
 import {StatsStrip} from '@/components/home/StatsStrip';
-import {Testimonials} from '@/components/home/Testimonials';
+import {ReviewsSection} from '@/components/reviews/ReviewsSection';
 import {VideoModal} from '@/components/VideoModal';
 import {contactInfo} from '@/utils';
 
@@ -35,6 +35,7 @@ type HomeProps = {
   isAdmin: boolean;
   gallery: {images: GalleryImage[]} | null;
   locale: string;
+  reviews: VMT.Review[];
 };
 
 export default function Home({
@@ -43,6 +44,7 @@ export default function Home({
   isAdmin,
   gallery,
   locale,
+  reviews,
 }: HomeProps) {
   const bannerVideoRef = useRef<HTMLVideoElement>(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
@@ -404,7 +406,7 @@ export default function Home({
         onClose={() => setVideoModalOpen(false)}
       />
 
-      <Testimonials />
+      <ReviewsSection reviews={reviews} />
 
       {/* Gallery */}
       {galleryImages.length > 0 && (
@@ -449,15 +451,17 @@ export async function getServerSideProps({
     getActiveDestinationsFromDb,
     getMessagesFromDb,
     getImageCollection,
+    getFeaturedReviews,
   } = await import('@/data/queries');
   const session = await getServerSession(req, res, authOptions);
   const isAdmin = session?.user?.orgRoleKey === 'admin';
 
-  const [tours, destinations, dbMessages, gallery] = await Promise.all([
+  const [tours, destinations, dbMessages, gallery, reviews] = await Promise.all([
     getAllTours(isAdmin),
     getActiveDestinationsFromDb(isAdmin),
     getMessagesFromDb(locale ?? 'vi'),
     getImageCollection('home-gallery'),
+    getFeaturedReviews(6),
   ]);
 
   return {
@@ -468,6 +472,7 @@ export async function getServerSideProps({
       messages: dbMessages,
       gallery,
       locale: locale ?? 'vi',
+      reviews,
     },
   };
 }

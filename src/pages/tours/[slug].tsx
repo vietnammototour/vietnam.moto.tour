@@ -19,13 +19,15 @@ import {TourCTA} from '@/components/tour-detail/TourCTA';
 import {TourDetails} from '@/components/tour-detail/TourDetails';
 import {TourPayment} from '@/components/tour-detail/TourPayment';
 import {TourNotes} from '@/components/tour-detail/TourNotes';
+import {TourReviews} from '@/components/reviews/TourReviews';
 
 type TourDetailProps = {
   tour: VMT.Tour;
   isAdmin: boolean;
+  reviews: VMT.Review[];
 };
 
-export default function TourDetail({tour, isAdmin}: TourDetailProps) {
+export default function TourDetail({tour, isAdmin, reviews}: TourDetailProps) {
   const router = useRouter();
   const locale = (router.locale ?? 'vi') as 'en' | 'vi';
   const t = useTranslations('tourDetail');
@@ -121,6 +123,8 @@ export default function TourDetail({tour, isAdmin}: TourDetailProps) {
         </div>
       </article>
 
+      <TourReviews reviews={reviews} tripAdvisorUrl={tour.tripAdvisorUrl} />
+
       {/* Mobile sticky bottom CTA */}
       <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-surface-elevated border-t border-border">
         <div className="flex items-center justify-between px-4 py-3">
@@ -167,24 +171,27 @@ export async function getServerSideProps({
   res,
   locale,
 }: GetServerSidePropsContext) {
-  const {getTourBySlug, getMessagesFromDb} = await import('@/data/queries');
+  const {getTourBySlug, getMessagesFromDb, getTourReviews} = await import(
+    '@/data/queries'
+  );
   const session = await getServerSession(req, res, authOptions);
   const isAdmin = session?.user?.orgRoleKey === 'admin';
 
   const slug = params?.slug as string;
-  const [tour, dbMessages] = await Promise.all([
-    getTourBySlug(slug, isAdmin),
-    getMessagesFromDb(locale ?? 'vi'),
-  ]);
-
+  const tour = await getTourBySlug(slug, isAdmin);
   if (!tour) {
     return {notFound: true};
   }
+  const [dbMessages, reviews] = await Promise.all([
+    getMessagesFromDb(locale ?? 'vi'),
+    getTourReviews(tour.id),
+  ]);
 
   return {
     props: {
       tour,
       isAdmin,
+      reviews,
       messages: dbMessages,
     },
   };
