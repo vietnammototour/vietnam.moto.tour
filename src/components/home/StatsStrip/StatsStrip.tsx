@@ -11,7 +11,7 @@ export function StatsStrip({toursCount}: Props) {
   const years = new Date().getFullYear() - FOUNDED_YEAR;
 
   const stats = [
-    {key: 'years', label: t('years.label'), value: String(years)},
+    {key: 'years', label: t('years.label'), value: `${years}+`},
     {key: 'routes', label: t('routes.label'), value: String(toursCount)},
     {key: 'km', label: t('km.label'), value: t('km.value')},
     {key: 'riders', label: t('riders.label'), value: t('riders.value')},
