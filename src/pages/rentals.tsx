@@ -76,7 +76,7 @@ export default function RentalsPage({vehicles}: Props) {
           />
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border-subtle border border-border-subtle">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filtered.map((v, i) => (
                 <motion.div
                   key={v.id}
@@ -85,7 +85,6 @@ export default function RentalsPage({vehicles}: Props) {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{once: true}}
-                  className="bg-surface-alt"
                 >
                   <VehicleCard vehicle={v} />
                 </motion.div>

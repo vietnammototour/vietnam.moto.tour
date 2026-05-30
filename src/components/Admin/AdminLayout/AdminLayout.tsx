@@ -6,8 +6,11 @@ import {useRouter} from 'next/router';
 import {useSession, signOut} from 'next-auth/react';
 import {routes} from '@/routes';
 import {Avatar} from '@/components/ui';
+import {useAdminFetch} from '@/hooks/useAdminFetch';
 import {ProgressBar} from '../ProgressBar';
-import {adminNavGroups} from './AdminLayout.nav';
+import {adminNavGroups, type AdminStatKey} from './AdminLayout.nav';
+
+type AdminStats = Record<AdminStatKey, number>;
 import {
   AdminLoadingProvider,
   useAdminLoading,
@@ -21,6 +24,7 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
   const router = useRouter();
   const {data: session} = useSession();
   const {loading} = useAdminLoading();
+  const {data: stats} = useAdminFetch<AdminStats>('/api/admin/stats');
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // Close drawer on route change
@@ -61,6 +65,9 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
                     ? router.pathname === routes.admin.dashboard.path()
                     : router.pathname.startsWith(item.href);
 
+                const count =
+                  item.countKey != null ? stats?.[item.countKey] : undefined;
+
                 return (
                   <Link
                     key={item.href}
@@ -72,7 +79,18 @@ function AdminLayoutInner({children}: AdminLayoutProps) {
                     }`}
                   >
                     <i className={`fas ${item.icon} w-5 text-center`} />
-                    {item.label}
+                    <span className="flex-1 truncate">{item.label}</span>
+                    {count != null && (
+                      <span
+                        className={`ml-auto shrink-0 min-w-[1.375rem] px-1.5 py-0.5 rounded-md text-center type-label-sm tabular-nums ${
+                          isActive
+                            ? 'bg-primary/15 text-primary'
+                            : 'bg-surface-alt text-on-surface-tertiary'
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

@@ -110,7 +110,7 @@ export default function BackupsPage() {
     {
       key: 'actions',
       header: '',
-      track: '140px',
+      track: 'max-content',
       align: 'end',
       render: (b) => (
         <Button

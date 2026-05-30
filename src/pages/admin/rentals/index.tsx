@@ -75,12 +75,16 @@ export default function AdminRentalsList() {
             <Image
               src={v.imageUrl}
               alt=""
-              width={60}
-              height={40}
+              width={72}
+              height={48}
               unoptimized
-              className="h-[40px] w-auto object-cover"
+              className="h-12 w-[72px] rounded-md object-cover shrink-0"
             />
-          ) : null}
+          ) : (
+            <span className="h-12 w-[72px] rounded-md bg-surface-alt flex items-center justify-center shrink-0">
+              <i className="fa fa-motorcycle text-on-surface-tertiary" />
+            </span>
+          )}
           <span className="type-title-sm text-on-surface">
             {v.brand} {v.model}
           </span>
@@ -98,13 +102,13 @@ export default function AdminRentalsList() {
     {
       key: 'status',
       header: 'Status',
-      track: '120px',
+      track: 'max-content',
       render: (v) => <Badge>{v.status}</Badge>,
     },
     {
       key: 'actions',
       header: 'Actions',
-      track: '160px',
+      track: 'max-content',
       align: 'end',
       render: (v) => (
         <div className="flex gap-2 justify-end">

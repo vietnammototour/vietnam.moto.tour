@@ -120,7 +120,7 @@ export default function UsersListPage() {
       {
         key: 'actions',
         header: '',
-        track: '160px',
+        track: 'max-content',
         align: 'end',
         render: (u) => (
           <div className="flex items-center justify-end gap-2">

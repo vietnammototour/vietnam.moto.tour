@@ -98,7 +98,7 @@ export default function ReviewsListPage() {
       {
         key: 'actions',
         header: '',
-        track: '160px',
+        track: 'max-content',
         align: 'end',
         render: (r) => (
           <div className="flex gap-2 justify-end">

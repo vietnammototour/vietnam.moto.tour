@@ -67,7 +67,7 @@ export default function ImageCollectionsListPage() {
       {
         key: '__actions',
         header: '',
-        track: '160px',
+        track: 'max-content',
         align: 'end',
         render: (r) => (
           <div className="flex items-center gap-2 justify-end">

@@ -69,6 +69,22 @@ export const authOptions: NextAuthOptions = {
         token.orgRoleKey = u.orgRoleKey ?? null;
         token.roleLabel = u.roleLabel ?? null;
         token.imageUrl = u.imageUrl ?? null;
+      } else if (token.sub) {
+        // Subsequent requests: refresh volatile fields (avatar, role) from DB
+        // so changes appear without forcing a re-login. Tokens minted before an
+        // avatar was attached would otherwise keep a stale null imageUrl.
+        const fresh = await prisma.user.findUnique({
+          where: {id: token.sub},
+          select: {
+            orgRole: {select: {key: true, labelEn: true}},
+            image: {select: {url: true}},
+          },
+        });
+        if (fresh) {
+          token.orgRoleKey = fresh.orgRole?.key ?? null;
+          token.roleLabel = fresh.orgRole?.labelEn ?? fresh.orgRole?.key ?? null;
+          token.imageUrl = fresh.image?.url ?? null;
+        }
       }
       return token;
     },
