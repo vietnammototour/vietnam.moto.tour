@@ -62,10 +62,10 @@ export default function AdminDestinationsList() {
             <Image
               src={dest.imageUrl}
               alt=""
-              width={75}
-              height={50}
+              width={72}
+              height={48}
               unoptimized
-              className="h-[50px] w-auto object-contain shrink-0"
+              className="h-12 w-[72px] rounded-md object-cover shrink-0"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
@@ -73,7 +73,7 @@ export default function AdminDestinationsList() {
             />
           ) : null}
           <div
-            className={`h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
+            className={`h-12 w-[72px] rounded-md bg-surface-alt flex items-center justify-center shrink-0 ${dest.imageUrl ? 'hidden' : ''}`}
           >
             <i className="fa fa-image text-on-surface-tertiary" />
           </div>
@@ -103,7 +103,7 @@ export default function AdminDestinationsList() {
     {
       key: 'actions',
       header: '',
-      track: '140px',
+      track: 'max-content',
       align: 'end',
       render: (dest) => (
         <Button

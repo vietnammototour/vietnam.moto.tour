@@ -86,13 +86,13 @@ export default function AdminToursList() {
             <Image
               src={tour.imageUrl}
               alt=""
-              width={75}
-              height={50}
+              width={72}
+              height={48}
               unoptimized
-              className="h-[50px] w-auto object-contain shrink-0"
+              className="h-12 w-[72px] rounded-md object-cover shrink-0"
             />
           ) : (
-            <span className="h-[50px] w-[50px] bg-surface-alt flex items-center justify-center shrink-0">
+            <span className="h-12 w-[72px] rounded-md bg-surface-alt flex items-center justify-center shrink-0">
               <i className="fa fa-image text-on-surface-tertiary" />
             </span>
           )}
@@ -125,7 +125,7 @@ export default function AdminToursList() {
     {
       key: 'status',
       header: 'Status',
-      track: '180px',
+      track: 'max-content',
       align: 'end',
       render: (tour) => (
         <div className="inline-flex justify-end">

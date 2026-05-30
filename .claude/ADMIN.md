@@ -35,6 +35,17 @@ Structural contract:
 - Never apply `overflow-y-auto` on the page root. Only the middle `<section>` scrolls.
 - Content padding lives on the scrollable `<section>` (`p-6` or `p-8`), not on the shell root, so the header/footer can be flush.
 
+### 1c. Sidebar navigation + entity counts
+
+- Nav structure lives in `AdminLayout.nav.ts` as `adminNavGroups` (grouped `{href, label, icon, countKey?}`). Add a new admin page by adding one item there — never hard-code links elsewhere.
+- **Entity-count badges**: a nav item that points at a list of rows carries a `countKey` (an `AdminStatKey`). The sidebar fetches `/api/admin/stats` once and renders a SaaS-style count pill (right-aligned, `tabular-nums`; `bg-primary/15 text-primary` when active, muted otherwise). The pill is hidden until data loads and omitted entirely for items with no `countKey`.
+- **Add a count for a new list**: extend the `Promise.all` in `src/pages/api/admin/stats.ts` with `prisma.<model>.count()`, add the key to `AdminStatKey`, and set `countKey` on the nav item.
+- **Do not** add counts for system/utility links (Dashboard, Translations, Backups) — only for entity lists where a row count is meaningful.
+
+### 1d. Dashboard
+
+- The dashboard (`src/pages/admin/index.tsx`) shows **Quick actions** = create shortcuts only (`Add tour`, `Add destination`, `Add rental`). Do NOT duplicate plain navigation links that already exist in the sidebar (e.g. Translations, Backups) — entity counts live on the sidebar pills, navigation lives in the sidebar.
+
 ### 1a. Header
 
 - Always present.
@@ -120,6 +131,18 @@ Table conventions:
 - Row actions live in the last cell, right-aligned, `<Button variant="ghost" size="sm">` for edit and `<Button variant="ghost-danger" size="sm">` for delete/archive — separated by `gap-2`.
 - First column with a name + image: link the whole cell to the edit route via `<Link>` wrapping the image + name.
 
+### 4a. DataGrid (shared list table)
+
+All list tables use the shared `DataGrid` (`src/components/Admin/DataGrid`). Columns are declared as `GridColumn[]` with a CSS grid `track` per column.
+
+- **Architecture is subgrid.** `DataGrid` renders one parent grid that owns the column tracks; the header and every row are `grid-cols-subgrid` items spanning `col-span-full`. This is load-bearing: it makes content-sized tracks resolve **once across the whole table**, so headers and all rows stay column-aligned. Do NOT "simplify" it back to a separate `display:grid` per row — independent grids resolve `max-content`/`auto` to their own content and the columns drift out of alignment.
+- **Column `track` sizing:**
+  - The flexible name/title column: `minmax(0,1fr)` (absorbs slack, ellipsizes via the cell's `min-w-0`).
+  - Columns holding short, fixed-width values (counts, CC, qty, price, order): a fixed px track (`'64px'`, `'120px'`).
+  - Columns holding **variable-width interactive content** — a status picker/segmented control, a status `Badge`, or a row action button-group (Edit/Delete/Archive): use `track: 'max-content'`, never a guessed fixed px. A fixed track narrower than the control overflows the cell and the grid's `overflow-hidden` clips it (status control colliding with actions). `max-content` sizes the track to the widest row and — thanks to subgrid — stays aligned.
+  - Right-align action/status columns with `align: 'end'`.
+- **Row thumbnails are a fixed rounded rectangle.** First-column image (tours, destinations, rentals) renders at a fixed `72×48` box: `className="h-12 w-[72px] rounded-md object-cover shrink-0"` (with matching `width={72} height={48}` on `next/image`). The missing-image placeholder uses the **same** box (`h-12 w-[72px] rounded-md bg-surface-alt …`) so the title text starts at the same x on every row and titles align on one line. Never use `w-auto`/`object-contain` here — variable width misaligns the text column.
+
 ---
 
 ## 5. Edit / create pages
@@ -177,6 +200,9 @@ For each admin page, verify:
 - [ ] No `window.confirm()` — uses `ConfirmModal`
 - [ ] No raw native `<select>` — uses shared `Select` with `options` prop
 - [ ] List page tables show single active-locale value, not VI+EN columns
+- [ ] List tables use shared `DataGrid`; action/status columns use `track: 'max-content'`, name/title uses `minmax(0,1fr)`
+- [ ] Row thumbnail is the fixed `72×48` rounded `object-cover` box (image + placeholder share it)
+- [ ] Sidebar nav item for a new entity list has a `countKey` + matching `/api/admin/stats` count
 - [ ] Footer (if present) uses detached pill style
 - [ ] No inline styles, no hard-coded colors
 
