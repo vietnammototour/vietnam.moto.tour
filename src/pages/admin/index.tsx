@@ -59,16 +59,23 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <AdminPageShell header={<AdminPageHeader title="Dashboard" />}>
+    <AdminPageShell
+      header={
+        <AdminPageHeader
+          title="Dashboard"
+          subtitle={
+            <>
+              Welcome back,{' '}
+              <span className="text-on-surface font-medium">
+                {session?.user.name ?? ''}
+              </span>
+              .
+            </>
+          }
+        />
+      }
+    >
       <div className="space-y-10">
-        <p className="type-body-md text-on-surface-secondary">
-          Welcome back,{' '}
-          <span className="text-on-surface font-medium">
-            {session?.user.name ?? ''}
-          </span>
-          .
-        </p>
-
         <section>
           <h2 className="type-label-sm uppercase tracking-wider text-on-surface-tertiary mb-3">
             Field readout
