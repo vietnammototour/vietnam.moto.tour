@@ -41,6 +41,7 @@ export default async function handler(
       'notes',
       'mealsInfo',
       'status',
+      'tripadvisorLocationId',
     ];
     for (const field of fields) {
       if (data[field] !== undefined) {

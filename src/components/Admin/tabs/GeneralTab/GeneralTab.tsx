@@ -195,6 +195,16 @@ export function GeneralTab({
                   setValue('guided', e.target.value, {shouldDirty: true})
                 }
               />
+              <TextInput
+                label="TripAdvisor location ID"
+                placeholder="e.g. 5501636"
+                value={values.tripadvisorLocationId ?? ''}
+                onChange={(e) =>
+                  setValue('tripadvisorLocationId', e.target.value, {
+                    shouldDirty: true,
+                  })
+                }
+              />
             </section>
           </div>
         </EditableProvider>
