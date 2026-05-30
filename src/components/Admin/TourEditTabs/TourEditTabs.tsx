@@ -147,6 +147,7 @@ export function TourEditTabs({
     highlights: [],
     included: [],
     excluded: [],
+    tripAdvisorUrl: null,
   };
 
   return (

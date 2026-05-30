@@ -14,6 +14,7 @@ jest.mock('@/data/queries', () => ({
   getActiveDestinationsFromDb: jest.fn().mockResolvedValue([]),
   getMessagesFromDb: jest.fn().mockResolvedValue(null),
   getImageCollection: jest.fn().mockResolvedValue(null),
+  getFeaturedReviews: jest.fn().mockResolvedValue([]),
 }));
 
 const mockDestinations = [
@@ -93,6 +94,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByText('heroTitle')).toBeInTheDocument();
@@ -107,6 +109,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByText('destinationLists')).toBeInTheDocument();
@@ -121,6 +124,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByText('getToKnowUs')).toBeInTheDocument();
@@ -135,6 +139,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByText('bulletMotorbike')).toBeInTheDocument();
@@ -150,6 +155,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByText('mostPopularTours')).toBeInTheDocument();
@@ -163,6 +169,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByText('videoSectionHeading')).toBeInTheDocument();
@@ -176,6 +183,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByText('localExperts')).toBeInTheDocument();
@@ -194,6 +202,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     expect(screen.getByLabelText('watchFieldReport')).toBeInTheDocument();
@@ -215,6 +224,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={gallery}
         locale="en"
+        reviews={[]}
       />,
     );
     const galleryButtons = screen.getAllByRole('button');
@@ -229,6 +239,7 @@ describe('Home page', () => {
         isAdmin={false}
         gallery={null}
         locale="en"
+        reviews={[]}
       />,
     );
     const ctaElements = screen.getAllByText('bookWithUsNow');
