@@ -2,7 +2,7 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 import fs from 'fs';
 import {requireAdmin} from '@/lib/admin-auth';
 import {resolveBackupPath} from '@/lib/backup-dir';
-import {parseBackupFilename} from '@/lib/db-backup';
+import {parseAnyBackupFilename} from '@/lib/backup-kinds';
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,7 +18,7 @@ export default async function handler(
 
   const raw = req.query.filename;
   const filename = Array.isArray(raw) ? raw[0] : raw;
-  if (!filename || !parseBackupFilename(filename)) {
+  if (!filename || !parseAnyBackupFilename(filename)) {
     return res.status(400).json({error: 'Invalid backup filename'});
   }
 
