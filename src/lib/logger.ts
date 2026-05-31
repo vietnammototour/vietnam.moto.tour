@@ -7,22 +7,29 @@ export const logger = pino({
   base: undefined,
 });
 
-const SECRET_KEYS = [
+const SECRET_TOKENS = [
   'password',
   'token',
   'secret',
   'authorization',
   'apikey',
-  'accesstoken',
-  'refreshtoken',
+  'credential',
 ];
+
+// A key is sensitive if, once normalized (lowercased, non-alphanumerics
+// stripped), it CONTAINS any secret token. This catches variants like
+// `passwordHash`, `newPassword`, `api_key`, `client_secret`, `accessToken`.
+function isSecretKey(key: string): boolean {
+  const norm = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return SECRET_TOKENS.some((token) => norm.includes(token));
+}
 
 export function scrub(value: unknown): unknown {
   if (value === null || typeof value !== 'object') return value;
   if (Array.isArray(value)) return value.map(scrub);
   const out: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
-    out[k] = SECRET_KEYS.includes(k.toLowerCase()) ? '[REDACTED]' : scrub(v);
+    out[k] = isSecretKey(k) ? '[REDACTED]' : scrub(v);
   }
   return out;
 }
@@ -67,17 +74,24 @@ export async function writeLogEntry(input: WriteLogInput): Promise<void> {
   }
 }
 
+// Scrub meta before it reaches pino stdout (pm2 logs), so secrets never
+// leak there — writeLogEntry scrubs again for the DB (idempotent).
+function safeForStdout(input: Omit<WriteLogInput, 'type'>): Omit<WriteLogInput, 'type'> {
+  if (input.meta === undefined) return input;
+  return {...input, meta: scrub(input.meta)};
+}
+
 export async function logAudit(input: Omit<WriteLogInput, 'type'>): Promise<void> {
-  logger.info({...input, type: 'AUDIT'}, input.message);
+  logger.info({...safeForStdout(input), type: 'AUDIT'}, input.message);
   await writeLogEntry({...input, type: 'AUDIT'});
 }
 
 export async function logAuth(input: Omit<WriteLogInput, 'type'>): Promise<void> {
-  logger.info({...input, type: 'AUTH'}, input.message);
+  logger.info({...safeForStdout(input), type: 'AUTH'}, input.message);
   await writeLogEntry({...input, type: 'AUTH'});
 }
 
 export async function logError(input: Omit<WriteLogInput, 'type'>): Promise<void> {
-  logger.error({...input, type: 'ERROR'}, input.message);
+  logger.error({...safeForStdout(input), type: 'ERROR'}, input.message);
   await writeLogEntry({level: 'ERROR', ...input, type: 'ERROR'});
 }

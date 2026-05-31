@@ -1,4 +1,4 @@
-import {scrub, writeLogEntry} from './logger';
+import {logAudit, logger, scrub, writeLogEntry} from './logger';
 import {prisma} from './prisma';
 
 jest.mock('./prisma', () => ({
@@ -18,6 +18,25 @@ describe('scrub', () => {
       password: '[REDACTED]',
       nested: {token: '[REDACTED]', keep: 1},
       Authorization: '[REDACTED]',
+    });
+  });
+
+  it('redacts secret-key variants (substring, mixed separators)', () => {
+    const input = {
+      passwordHash: 'h',
+      newPassword: 'n',
+      api_key: 'k',
+      client_secret: 'c',
+      accessToken: 't',
+      keep: 1,
+    };
+    expect(scrub(input)).toEqual({
+      passwordHash: '[REDACTED]',
+      newPassword: '[REDACTED]',
+      api_key: '[REDACTED]',
+      client_secret: '[REDACTED]',
+      accessToken: '[REDACTED]',
+      keep: 1,
     });
   });
 
@@ -52,5 +71,21 @@ describe('writeLogEntry', () => {
     await expect(
       writeLogEntry({type: 'ERROR', message: 'x'}),
     ).resolves.toBeUndefined();
+  });
+});
+
+describe('logAudit', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it('scrubs meta before writing to pino stdout', async () => {
+    (prisma.logEntry.create as jest.Mock).mockResolvedValue({});
+    const infoSpy = jest.spyOn(logger, 'info').mockImplementation(() => {});
+    await logAudit({
+      message: 'POST tours',
+      meta: {requestBody: {slug: 'x', password: 'p'}},
+    });
+    const [logged] = infoSpy.mock.calls[0] as [{meta: {requestBody: unknown}}];
+    expect(logged.meta).toEqual({requestBody: {slug: 'x', password: '[REDACTED]'}});
+    infoSpy.mockRestore();
   });
 });
