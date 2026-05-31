@@ -266,6 +266,17 @@ export const api = {
       downloadUrl: (filename: string) =>
         `/api/admin/backups/${encodeURIComponent(filename)}/download`,
     },
+    logs: {
+      list: (params: VMT.LogFilters & {page?: number; pageSize?: number}) => {
+        const qs = new URLSearchParams();
+        for (const [k, v] of Object.entries(params)) {
+          if (v !== undefined && v !== '') qs.set(k, String(v));
+        }
+        return request<{rows: VMT.LogEntryDTO[]; total: number}>(
+          `/api/admin/logs?${qs.toString()}`,
+        );
+      },
+    },
     upload: {
       create: ({
         entityType,
