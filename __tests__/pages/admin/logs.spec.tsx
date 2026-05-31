@@ -1,5 +1,5 @@
 import {render, screen, waitFor, fireEvent} from '@testing-library/react';
-import LogsPage from './index';
+import LogsPage from '@/pages/admin/logs';
 import {api} from '@/routes';
 
 jest.mock('@/routes', () => ({
