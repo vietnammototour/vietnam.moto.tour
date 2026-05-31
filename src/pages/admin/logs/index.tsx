@@ -44,9 +44,12 @@ export default function LogsPage() {
   const [selected, setSelected] = useState<LogEntryDTO | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
-  const load = useCallback(async () => {
-    const {data} = await api.admin.logs.list({...filters, page: 1, pageSize: 100});
-    if (data) setRows(data.rows);
+  const load = useCallback(() => {
+    api.admin.logs
+      .list({...filters, page: 1, pageSize: 100})
+      .then(({data}) => {
+        if (data) setRows(data.rows);
+      });
   }, [filters]);
 
   useEffect(() => {
