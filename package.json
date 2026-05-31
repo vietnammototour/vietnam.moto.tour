@@ -41,6 +41,7 @@
     "sweep:uploads": "npx tsx scripts/sweep-orphan-uploads.ts",
     "backup:db": "npx tsx scripts/backup-db.ts",
     "backup:media": "npx tsx scripts/backup-media.ts",
+    "logs:prune": "npx tsx scripts/prune-logs.ts",
     "i18n:scan": "npx tsx scripts/scan-common-translations.ts",
     "i18n:apply": "npx tsx scripts/apply-common-translations.ts",
     "i18n:apply:write": "npx tsx scripts/apply-common-translations.ts --apply",
