@@ -1,15 +1,9 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {prisma} from '@/lib/prisma';
-import {requireAdmin} from '@/lib/admin-auth';
+import {withApiHandler} from '@/lib/api-handler';
 import {normalizeSlug} from '@/utils';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const isAuthed = await requireAdmin(req, res);
-  if (!isAuthed) return;
-
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const archivedParam = req.query.archived;
     const filters = (() => {
@@ -59,3 +53,5 @@ export default async function handler(
   res.setHeader('Allow', 'GET, POST');
   return res.status(405).json({error: 'Method not allowed'});
 }
+
+export default withApiHandler(handler, {requireAdmin: true});

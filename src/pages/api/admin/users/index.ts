@@ -1,15 +1,10 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import bcrypt from 'bcrypt';
 import {prisma} from '@/lib/prisma';
-import {requireAdmin} from '@/lib/admin-auth';
+import {withApiHandler} from '@/lib/api-handler';
 import {toUserAdmin} from '@/domain/user/mapper';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const isAuthed = await requireAdmin(req, res);
-  if (!isAuthed) return;
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'GET') {
     const rows = await prisma.user.findMany({
@@ -91,3 +86,5 @@ export default async function handler(
   res.setHeader('Allow', 'GET, POST');
   return res.status(405).json({error: 'Method not allowed'});
 }
+
+export default withApiHandler(handler, {requireAdmin: true});

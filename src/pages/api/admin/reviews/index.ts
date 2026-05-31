@@ -1,6 +1,6 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {prisma} from '@/lib/prisma';
-import {requireAdmin} from '@/lib/admin-auth';
+import {withApiHandler} from '@/lib/api-handler';
 
 function sanitizeImages(input: unknown): string[] {
   if (!Array.isArray(input)) return [];
@@ -9,12 +9,7 @@ function sanitizeImages(input: unknown): string[] {
     .slice(0, 5);
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const isAuthed = await requireAdmin(req, res);
-  if (!isAuthed) return;
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'GET') {
     const reviews = await prisma.review.findMany({
@@ -70,3 +65,5 @@ export default async function handler(
   res.setHeader('Allow', 'GET, POST');
   return res.status(405).json({error: 'Method not allowed'});
 }
+
+export default withApiHandler(handler, {requireAdmin: true});
