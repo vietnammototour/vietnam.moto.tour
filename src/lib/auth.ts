@@ -2,6 +2,7 @@ import type {NextAuthOptions} from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 import {prisma} from './prisma';
+import {logAuth} from './logger';
 
 const nextAuthSecret = process.env.NEXTAUTH_SECRET;
 if (!nextAuthSecret) {
@@ -97,6 +98,22 @@ export const authOptions: NextAuthOptions = {
         imageUrl: (token.imageUrl as string | null) ?? null,
       };
       return session;
+    },
+  },
+  events: {
+    async signIn(message) {
+      await logAuth({
+        message: 'login success',
+        userId: message.user?.id ?? null,
+        userEmail: message.user?.email ?? null,
+      });
+    },
+    async signOut(message) {
+      await logAuth({
+        message: 'logout',
+        userId: (message.token?.sub as string) ?? null,
+        userEmail: (message.token?.email as string) ?? null,
+      });
     },
   },
   pages: {
