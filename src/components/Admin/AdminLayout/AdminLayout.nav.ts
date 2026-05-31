@@ -38,6 +38,7 @@ export const adminNavGroups: AdminNavGroup[] = [
       {href: routes.admin.users.list.path(), label: 'Users', icon: 'fa-users', countKey: 'userCount'},
       {href: routes.admin.roles.list.path(), label: 'Roles', icon: 'fa-user-shield', countKey: 'roleCount'},
       {href: routes.admin.backups.path(), label: 'Backups', icon: 'fa-database'},
+      {href: routes.admin.logs.list.path(), label: 'Logs', icon: 'fa-clipboard-list'},
     ],
   },
 ];

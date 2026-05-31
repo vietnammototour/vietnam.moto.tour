@@ -230,3 +230,37 @@ model Vehicle {
   @@index([status, order])
   @@index([type])
 }
+
+enum LogType {
+  AUDIT
+  AUTH
+  ERROR
+}
+
+enum LogLevel {
+  INFO
+  WARN
+  ERROR
+}
+
+model LogEntry {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now()) @db.Timestamptz
+  type       LogType
+  level      LogLevel @default(INFO)
+  message    String
+  userId     String?
+  userEmail  String?
+  method     String?
+  path       String?
+  statusCode Int?
+  resource   String?
+  resourceId String?
+  durationMs Int?
+  ip         String?
+  meta       Json?
+
+  @@index([createdAt])
+  @@index([type, createdAt])
+  @@index([userId])
+}

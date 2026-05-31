@@ -343,3 +343,13 @@ Media backups are gzip tarballs of `UPLOAD_DIR` (`vmt-media-<ts>-<source>.tar.gz
 ### Manual backup from the admin panel
 
 `/admin/backups` → **Create backup**. Lists all backups with created time, source (manual/scheduled), size, and a Download button (ADMIN only; streamed through an auth-gated route). Use the Database / Media toggle to switch which kind you create or download.
+
+## Log retention cron
+
+The app persists high-value events (AUDIT / AUTH / ERROR) to the `LogEntry` table (visible at `/admin/logs`). Request-traffic logs go to pm2 stdout files, not the DB. To bound table growth, `pnpm logs:prune` deletes AUTH/AUDIT rows older than 90 days and ERROR rows older than 30 days (`scripts/prune-logs.ts`).
+
+Install as a daily system cron on the VPS (manual step — **not** part of `deploy.yml`). Run as the app user, using the same absolute `pnpm` path the backup crons use:
+
+```cron
+0 4 * * * cd /var/www/vietnam-moto-tours && /home/ci-cd/.nvm/versions/node/v24.14.0/bin/pnpm logs:prune >> /var/log/vmt-logs-prune.log 2>&1
+```
